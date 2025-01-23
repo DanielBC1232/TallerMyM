@@ -1,0 +1,25 @@
+{
+  "name": "tallermym",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "mssql": "^11.0.1",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.18.0",
+    "nodemon": "^3.1.9"
+  }
+}

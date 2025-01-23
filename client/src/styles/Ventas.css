@@ -1,0 +1,12 @@
+.table-background {
+    align-self:center;
+    width: 1300px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 4 o 5 columnas por fila */
+    gap: 1rem;
+    padding: 1rem;
+    background-color: white;
+    
+}
+
+

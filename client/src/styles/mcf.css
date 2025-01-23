@@ -1,0 +1,93 @@
+/* Flujo */
+body {
+    background: #ffffff;
+  }
+
+.article-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 4 o 5 columnas por fila */
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.card{
+    border: 0;
+}
+
+.article {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.article:hover {
+    transform: scale(1.05);
+}
+
+
+/*Para visualizar detalles de pieza o agregar pieza*/
+.grid-container-item{
+    display: grid;
+    gap: 20px;
+    grid-template:
+    "header"
+    "main"
+    "footer"
+    ;
+
+    .header{
+        grid-area: header;
+    }
+
+    .main{
+        grid-area: main;
+        background-color: #eaf4fc;
+
+    }
+
+    .footer{
+        background-color: #d9e2e9;
+        grid-area: footer;
+        padding: 2%;
+    }
+
+    @media (min-width:992px){
+        grid-template:
+        "header header header" 55px
+        "main main" 100px
+        "footer footer footer" auto/
+        0px auto 200px;
+    }
+}
+
+.col-heigh {
+    height: 75vh;
+}
+
+.bg-card{
+    background-color: #edf3f7;
+}
+
+.card{
+    overflow: hidden;
+    width: 95%;
+    height: 90px;
+}
+
+.card p,h5{
+    margin: 0;
+    padding: 0;
+}
+
+.card hr{
+    margin: 3px;
+}
+
+.btn-card{
+    border: 0;
+    background: transparent;
+    border: none; 
+}

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Historial</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link rel="stylesheet" href="/scss/custom.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/inv.css" />
+  </head>
+  <body class="grid-container-item">
+    <header class="header">
+      <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                      <img src="/Imagenes/logo.png" alt="Logo" style="height: 40px; width: auto;" />
+                    </a>
+                  </li>
+      
+                <li class="nav-item">
+                    <a class="nav-link" href="/Administrativo/usuarios.html">Administrativo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Trabajadores/index.html">Trabajadores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Clientes/Index.html">Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Reporteria/index.html">Reporteria</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Inventario/index.html">Inventario</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Finanzas/index.html">Finanzas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Ventas/Index.html">Ventas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Flujo/Index.html">Control de Flujo</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><i class="bi bi-box-arrow-in-left"></i> Logout</a></li>
+              </ul>
+        </div>
+    </nav>
+    </header>
+
+    <div class="container bg-white main mx-auto p-5">
+      <div class="row">
+        <!--columna filtro-->
+        <div class="col col-4 bg-primary rounded-3 p-4">
+          <div class="row">
+            <div class="col col-9">
+              <input
+                type="text"
+                class="form-control form-control-sm border-0 mb-4"
+                placeholder="Filtro"
+              />
+            </div>
+            <div class="col col-2">
+              <button class="btn btn-success text-white btn-sm">Buscar</button>
+            </div>
+          </div>
+
+          <!--rango fecha-->
+
+          <div class="row d-flex justify-content-start mb-4">
+            <div class="col col-4">
+              <span class="text-white">Inicio:</span>
+              <input
+                type="date"
+                class="form-control form-control-sm border-0"
+                placeholder=""
+                style="width: 120px"
+              />
+            </div>
+            <div class="col col-4">
+              <span class="text-white">Fin:</span>
+              <input
+                type="date"
+                class="form-control form-control-sm border-0"
+                placeholder=""
+                style="width: 120px"
+              />
+            </div>
+            <div class="col col-2">
+              <span class="text-primary">d</span>
+              <!--este btn reinicia fecha-->
+              <button class="btn btn-light btn-sm text-dark">Todo</button>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <span class="text-white">Movimiento:</span>
+            <span>
+              <select
+                id=""
+                class="form-select form-select-sm"
+                style="width: 50%"
+              >
+                <option value="todo">Todo</option>
+                <option value="entrada">Entrada</option>
+                <option value="salida">Salida</option>
+                <option value="devuelto">Devuelto</option>
+              </select></span
+            >
+          </div>
+
+          <div class="">
+            <button class="btn btn-dark text-white">Atras</button>
+          </div>
+        </div>
+
+        <!--Columna-->
+        <div
+          class="col container bg-body-tertiary ms-5 d-grid gap-5"
+          style="position: relative"
+        >
+          <table class="table table-borderless table-hover">
+            <thead>
+              <tr>
+                <th>Repuesto / Servicio</th>
+                <th>Fecha</th>
+                <th>Movimiento</th>
+                <th>Usuario</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>[nombre]</td>
+                <td>[fecha]</td>
+                <td>[movimiento]</td>
+                <td>[usuario]</td>
+              </tr>
+              <tr>
+                <td>[nombre]</td>
+                <td>[fecha]</td>
+                <td>[movimiento]</td>
+                <td>[usuario]</td>
+              </tr>
+              <tr>
+                <td>[nombre]</td>
+                <td>[fecha]</td>
+                <td>[movimiento]</td>
+                <td>[usuario]</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <section
+        class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom"
+      ></section>
+      <!-- Section: Social media -->
+
+      <section class="">
+        <div class="container text-center text-md-start mt-5">
+          <div
+            class="d-flex justify-content-start flex-column align-items-start ms-4 mb-5"
+          >
+            <h5>Estamos en</h5>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem
+              ipsum dolor sit amet, consectetur adipisicing elit.
+            </p>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+              <h6 class="text-uppercase fw-bold mb-4">Taller Mecánico</h6>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem
+                ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum
+                dolor sit amet, consectetur adipisicing elit.
+              </p>
+            </div>
+
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+              <h6 class="text-uppercase fw-bold mb-4">Productos y servicios</h6>
+              <p>
+                <a href="#!" class="text-reset">Mantenimiento</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Reparación</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Modificaciones</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset">Peronalización</a>
+              </p>
+            </div>
+
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+              <h6 class="text-uppercase fw-bold mb-4">Redes sociales</h6>
+              <p>
+                <a href="#" class="text-reset">Facebook</a>
+              </p>
+              <p>
+                <a href="#" class="text-reset">Instagram</a>
+              </p>
+              <p>
+                <a href="#" class="text-reset">TikTok</a>
+              </p>
+            </div>
+
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+              <h6 class="text-uppercase fw-bold mb-4">Contacto</h6>
+              <p>info@example.com</p>
+              <p>+506 888 888</p>
+              <p>+01 2420 2440</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="text-center p-4">
+        <h6>
+          © 2024 Derechos Reservados - Analisis y Modelado de Requerimientos
+        </h6>
+      </div>
+    </footer>
+
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  </body>
+</html>
