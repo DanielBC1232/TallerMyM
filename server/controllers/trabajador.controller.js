@@ -2,6 +2,7 @@ const { connectToDB, sql } = require('../config/db.config');
 
 // Obtener todos los trabajadores
 const getTrabajadores = async (req, res) => {
+  /*
   try {
     const pool = await connectToDB();
     const result = await pool.request().query('SELECT * FROM TRABAJADOR');
@@ -10,23 +11,13 @@ const getTrabajadores = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los trabajadores' });
   }
 };
-
-// Agregar un trabajador
-const addTrabajador = async (req, res) => {
-  const { nombreCompleto, cedula, salario, seguroSocial } = req.body;
-  try {
-    const pool = await connectToDB();
-    await pool.request()
-      .input('nombreCompleto', sql.VarChar, nombreCompleto)
-      .input('cedula', sql.VarChar, cedula)
-      .input('salario', sql.Decimal(10, 2), salario)
-      .input('seguroSocial', sql.VarChar, seguroSocial)
-      .query(`INSERT INTO TRABAJADOR (nombreCompleto, cedula, salario, seguroSocial)
-              VALUES (@nombreCompleto, @cedula, @salario, @seguroSocial)`);
-    res.status(201).json({ message: 'Trabajador agregado correctamente' });
-  } catch (err) {
-    res.status(500).json({ error: 'Error al agregar el trabajador' });
-  }
+*/
+  // Simulando una respuesta de trabajadores
+  const trabajadores = [
+    { idTrabajador: 1, nombreCompleto: 'Juan Pérez', cedula: '123456', salario: '5000', seguroSocial: 'SS12345' },
+    { idTrabajador: 2, nombreCompleto: 'Ana Gómez', cedula: '987654', salario: '6000', seguroSocial: 'SS67890' }
+  ];
+  res.json(trabajadores);  // Devuelve la lista de trabajadores en formato JSON
 };
 
-module.exports = { getTrabajadores, addTrabajador };
+module.exports = { getTrabajadores };

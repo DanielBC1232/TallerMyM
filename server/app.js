@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const trabajadorRoutes = require('./routes/trabajador.routes');
@@ -16,4 +17,5 @@ app.use('/api', trabajadorRoutes);
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
 
