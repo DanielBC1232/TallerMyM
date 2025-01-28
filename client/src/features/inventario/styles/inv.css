@@ -1,0 +1,170 @@
+/* Inventario */
+.article-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 4 o 5 columnas por fila */
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.article-scroll {
+  height: 85vh;
+  width: 100%;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 8px;
+  scrollbar-width: none;
+}
+
+.card {
+  border: 0;
+}
+
+.article {
+  background-color: #fff;
+  border-radius: 10px;
+  text-align: start;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  width: 220px;
+  height: 245px;
+
+}
+
+.imgFrame {
+  width: 100%;
+  height: 135px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  padding-top: 5px;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.article:hover {
+  transform: scale(1.05);
+}
+
+/*Para visualizar detalles de pieza o agregar pieza*/
+.grid-container-item {
+  display: grid;
+  gap: 20px;
+  grid-template:
+    "header"
+    "main"
+    "footer";
+
+  .header {
+    grid-area: header;
+  }
+
+  .main {
+    grid-area: main;
+    background-color: #f2f3f5;
+    margin-right: 20px;
+  }
+
+  .footer {
+    background-color: #d9e2e9;
+    grid-area: footer;
+    padding: 2%;
+  }
+
+  @media (min-width: 992px) {
+    grid-template:
+      "header header header" 55px
+      "navbar main main" auto
+      "footer footer footer" auto/
+      0px auto 200px;
+  }
+}
+
+/* IMG */
+.img-container {
+  width: 400px;
+  height: 350px;
+  overflow: hidden;
+  padding: 10px;
+  position: relative;
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-container svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 50%;
+  justify-self: center;
+  align-self: center;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.upload-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.img-container:hover .upload-btn {
+  opacity: 1;
+  border: 0;
+}
+
+.img-container:hover .delete-btn {
+  opacity: 1;
+}
+
+/*BTN esquina*/
+.edit-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  margin: 3rem;
+  width: 85px;
+}
+
+.return-btn {
+  position: absolute;
+  bottom: 45px;
+  right: 8px;
+  margin: 3rem;
+  width: 85px;
+}
+
+.del-btn {
+  position: absolute;
+  top: 55px;
+  right: 8px;
+  margin: 3rem;
+  width: 85px;
+}
+

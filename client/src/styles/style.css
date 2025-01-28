@@ -1,5 +1,5 @@
 body {
-  background: #eaf4fc;
+  background: #f2f3f5;
   min-height: 100vh;
 }
 
@@ -59,8 +59,9 @@ button:active {
 }
 
 .btn {
-  white-space: nowrap; /* Evita que el texto se divida en varias lineas */
-  overflow: hidden; /* Oculta el texto que se sale*/
+  white-space: nowrap;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
 @keyframes click {
@@ -100,12 +101,14 @@ button:active {
     margin-left: 20px;
     overflow: hidden;
     align-items: center;
+    height: 80vh;
   }
 
   .main {
     grid-area: main;
-    background-color: #eaf4fc;
+    background-color: #f2f3f5;
     margin-right: 20px;
+    min-height: 85vh;
   }
 
   .footer {
@@ -135,4 +138,20 @@ button:active {
   }
 }
 
+
+::-webkit-scrollbar {
+  width: 13px;
+}
+
+::-webkit-scrollbar-track {
+  
+  -webkit-box-shadow: inset 0 0 16px rgba(200,200,200,1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color:#fff;
+  -webkit-box-shadow: inset 0 0 70px #00294bfb;
+}
 

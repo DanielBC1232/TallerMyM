@@ -1,21 +1,25 @@
-import './styles/custom.scss';
+import Header from './components/Header';
+import Footer from './components/Footer';
+
+import './styles/custom.css';
 import './styles/style.css'
 
-export function App() {
+import IndexInventario from './features/inventario/pages';
+
+const App = () => {
   return (
-    <article className='md-followCard'>
-      <header>
-        <img alt="Avatar" src="https://img.icons8.com/color/128/vite.png" />
-        <div className={''}>
-          <strong>Nombre Apellido Apellido</strong>
-          <span>@usuario</span>
-        </div>
-      </header>
-      <aside>
-        <button className={'btn btn-primary'}>
-            Seguir
-        </button>
-      </aside>
-    </article>
-  );
+    <div className="app">
+      <Header />
+      <main>
+{/*
+        <IndexInventario />
+        */
 }
+        
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default App;
