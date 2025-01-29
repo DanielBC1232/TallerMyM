@@ -6,6 +6,15 @@ body {
 footer {
   background-color: #d9e2e9;
   text-align: center;
+  height: 550px;
+  position:relative;
+  background: linear-gradient(to right, #004680, #005ba5);
+  backdrop-filter: blur(10px); /* Efecto blur (vidrio esmerilado) */
+}
+
+footer.footer-white-text{
+
+ color: #fff 
 }
 
 a {
@@ -62,6 +71,7 @@ button:active {
   white-space: nowrap;
   overflow: hidden;
   border-radius: 8px;
+  min-width: 80px;
 }
 
 @keyframes click {
@@ -138,7 +148,7 @@ button:active {
   }
 }
 
-
+/*Scroll Bar*/
 ::-webkit-scrollbar {
   width: 13px;
 }
@@ -152,6 +162,7 @@ button:active {
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color:#fff;
-  -webkit-box-shadow: inset 0 0 70px #00294bfb;
+  -webkit-box-shadow: inset 0 0 70px #005aa3;
 }
+
 

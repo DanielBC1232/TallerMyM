@@ -1,58 +1,69 @@
-import React from "react";
-import "../../../../node_modules/bootstrap/dist/js/bootstrap";
 import Articulo from "../components/Articulo";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectStock from "../components/SelectStock";
 import SelectMarca from "../components/SelectMarca";
-import FiltroNombre from "../components/FiltroNombre";
 import VehiculosCompatibles from "../components/VehiculosCompatibles";
 import RangoPrecio from "../components/RangoPrecio";
 
+import {Button ,Grid, Row, Col, FlexboxGrid, Input, Divider} from "rsuite";
+
 import "../styles/inv.css";
+
+import "../pages/Detalles";
 
 const IndexInventario = () => {
   return (
     <div className="grid-container">
-      <nav className="sidebar p-4 rounded-3">
-        <FiltroNombre />
-
-        <div className="my-4 d-flex gap-3 column-gap-5">
-          <div className="col row">
-            <SelectCategoria />
-            <SelectMarca />
-          </div>
-          <div className="col row">
-            <SelectStock />
-            <VehiculosCompatibles />
-          </div>
-        </div>
-        <div className="col row mb-4">
+      <nav className="sidebar p-4 rounded-3 shadow-sm">
+        <div className="mt-3">
+        <Input id="idNombre" placeholder="Buscar por nombre" />
+      </div>
+        <br/>
+        <div className="row my-2 d-flex justify-content-center">
+          <Grid fluid>
+            <FlexboxGrid justify="start">
+              <Row className="show-grid">
+                <Col xs={12}>
+                  <SelectCategoria />
+                </Col>
+                <Col xs={12}>
+                  <SelectMarca />
+                </Col>
+              </Row>
+            </FlexboxGrid>
+            <br/>
+            <FlexboxGrid justify="start">
+              <Row className="show-grid">
+                <Col xs={12}>
+                  <SelectStock />
+                </Col>
+                <Col xs={12}>
+                  <VehiculosCompatibles />
+                </Col>
+              </Row>
+            </FlexboxGrid>
+          </Grid>
+            </div>
+            <br/>
+        <div className="row mb-4">
           <RangoPrecio />
         </div>
 
         <div className="d-flex flex-column gap-4 mb-4">
-          <button className="btn btn-sm btn-primary px-5 text-white">
+          <Button className="btn btn-sm btn-primary px-5 text-white">
             Buscar
-          </button>
+          </Button>
         </div>
 
         <div className="row mx-1">
-          <hr />
-          <button className="btn btn-sm btn-primary px-5 text-white">
+          <Divider />
+          <Button className="btn btn-sm btn-primary px-5 text-white">
             Agregar Repuesto/Servicio
-          </button>
+          </Button>
         </div>
       </nav>
       <div className="main rounded-3 p-3">
         <div className="article-container article-scroll">
-          <Articulo />
-          <Articulo />
-          <Articulo />
-          <Articulo />
-          <Articulo />
-          <Articulo />
-          <Articulo />
-          <Articulo />
           <Articulo />
           <Articulo />
           <Articulo />

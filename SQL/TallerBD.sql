@@ -152,7 +152,7 @@ CREATE TABLE ASISTENCIA_DIARIA(
 
     idAsistencia INT IDENTITY(1,1) PRIMARY KEY,
     usuario VARCHAR(50) NOT NULL,
-    fecha DATETIME NOT NULL,
+    fecha DATE NOT NULL,
 
     --FK
     idTrabajador INT NOT NULL,
@@ -184,7 +184,7 @@ CREATE TABLE CLIENTE(
     cedula VARCHAR(10) NOT NULL UNIQUE,
     correo VARCHAR(100) NOT NULL,
     telefono VARCHAR(50) NOT NULL,
-    fechaRegistro DATETIME NOT NULL
+    fechaRegistro DATE NOT NULL
 
 )
 GO
@@ -227,7 +227,7 @@ CREATE TABLE PRODUCTO_SERVICIO(
     descripcion NVARCHAR(MAX) NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
     cantidadDisponible INT NOT NULL,
-    fechaIngreso DATETIME NOT NULL,
+    fechaIngreso DATE NOT NULL,
     ubicacionAlmacen VARCHAR(100) NOT NULL,
     cantidadInventario INT NOT NULL,
     tipo VARCHAR(50) NOT NULL, --SERVICIO O PRODUCTO
@@ -236,7 +236,7 @@ CREATE TABLE PRODUCTO_SERVICIO(
     -- Opcional - Descuentos
     porcentajeDescuento DECIMAL(10,2) NULL,
     fechaInicio DATETIME NULL,
-    fechafin DATETIME NULL,
+    fechaFin DATETIME NULL,
 
     --FK
     idCategoria INT NOT NULL,
@@ -322,10 +322,9 @@ CREATE TABLE INGRESO(
 
     idIngreso INT IDENTITY(1,1) PRIMARY KEY,
     monto DECIMAL(10,2) NOT NULL,
-    fecha DATETIME NOT NULL
+    fecha DATE NOT NULL
 )
 GO
-
 
 -- MODULO CONTROL DE FLUJO --
 

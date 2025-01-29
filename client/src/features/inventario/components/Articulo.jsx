@@ -1,6 +1,6 @@
 const Articulo = () => {
   return (
-    <div className="card article">
+    <div className="card article border-0">
       <div className="imgFrame">
         <a href="#">
           <img

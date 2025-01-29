@@ -1,15 +1,15 @@
+import { CheckPicker, VStack } from "rsuite";
+
+const data = ["Opcion1", "Opcion2", "Opcion3"].map(
+  (item) => ({ label: item, value: item })
+);
 const VehiculosCompatibles = () => {
   return (
-    <div className="mb-4">
-      <label htmlFor="" className="form-label">
-        <h6 className="">Compatible:</h6>
-      </label>
-      <select id="" className="form-select form-select-sm shadow-sm">
-        <option value="todo">Todo</option>
-        <option value="">[vehiculo]</option>
-        <option value="">[vehiculo]</option>
-        <option value="">[vehiculo]</option>
-      </select>
+    <div>
+      <span>Compatible:</span>
+      <VStack>
+        <CheckPicker data={data} style={{ width: 224 }} placeholder="Seleccionar"/>
+      </VStack>
     </div>
   );
 };

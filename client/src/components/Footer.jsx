@@ -2,7 +2,7 @@
 const Footer = () => {
 return (
 
-<footer className="footer">
+<footer className="footer footer-white-text">
 <section
   className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom"
 ></section>

@@ -1,21 +1,33 @@
-import Header from './components/Header';
-import Footer from './components/Footer';
+import React from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
-import './styles/custom.css';
-import './styles/style.css'
+import Detalles from "./features/inventario/pages/Detalles";
+import IndexInventario from "./features/inventario/pages";
+import Editar from "./features/inventario/pages/Editar";
+import Agregar from "./features/inventario/pages/Agregar";
 
-import IndexInventario from './features/inventario/pages';
+import "rsuite/dist/rsuite.min.css";
+
+import "./styles/custom.css";
+import "./styles/style.css";
 
 const App = () => {
   return (
+    
     <div className="app">
       <Header />
-      <main>
-{/*
+      <main style={{ minHeight: "95vh" }}>
+        {/*
         <IndexInventario />
-        */
-}
-        
+        <Detalles />
+        <Agregar/>
+
+        */}
+        <Detalles />
+
+
+
       </main>
       <Footer />
     </div>
