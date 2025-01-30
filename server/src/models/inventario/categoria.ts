@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize";
+/*import { DataTypes, Model } from "sequelize";
 
 export interface ICategoria {
   idCategoria?: number;  // Opcional porque es autoincremental
@@ -27,3 +27,4 @@ export class Categoria implements ICategoria {
     return true;
   }
 }
+  */

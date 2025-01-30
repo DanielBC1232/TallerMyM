@@ -1,4 +1,4 @@
-import express from 'express';
+/*import express from 'express';
 import getCategorias from '../../controllers/inventario/categoriaController';
   
 const router = express.Router();
@@ -8,3 +8,4 @@ router.get('/', getCategorias);  // Obtener todas las categorías
 
 export default router;
 
+*/

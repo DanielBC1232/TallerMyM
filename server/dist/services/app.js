@@ -5,13 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 //import categoriaRoutes from './routes/inventario/categoriaRoutes';
+require("../config/database");
 const app = (0, express_1.default)();
 // Middleware
 app.use(express_1.default.json());
 const PORT = 3000;
 app.get('/ping', (_req, res) => {
     console.log("Ping");
-    res.send("respuesta ping");
+    res.send("respuesta ping Awa");
 });
 //app.use('/api/categorias', categoriaRoutes);
 // Iniciar servidor

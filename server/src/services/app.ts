@@ -1,12 +1,31 @@
 import express from 'express';
-//import categoriaRoutes from './routes/inventario/categoriaRoutes';
-
 const app = express();
+
+//import { connect } from 'tedious';
+
+//Database connection
+const { connect } = require("../config/database");
 
 // Middleware
 app.use(express.json());
 
 const PORT = 3000
+// Iniciar servidor
+app.listen(3000, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
+});
+
+//prueba conexion
+connect()
+  .then(() => console.log("Conectado a la base de datos"))
+  .catch((err) => {
+    if (err instanceof Error) {
+      console.error("Error en la conexión:", err.message);
+    } else {
+      console.error("Error en la conexión:", err);
+    }
+  });
+
 
 app.get('/ping', (_req, res) => {
   console.log("Ping");
@@ -15,7 +34,4 @@ app.get('/ping', (_req, res) => {
 
 //app.use('/api/categorias', categoriaRoutes);
 
-// Iniciar servidor
-app.listen(3000, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-});
+

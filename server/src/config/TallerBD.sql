@@ -8,17 +8,8 @@ GO
 
 --CREAR USUARIO (para conexion)
 
-USE master;
-GO
-CREATE LOGIN MYM_User
-WITH PASSWORD = 'T4ll3RMyM-'
-GO
-
-USE MYM_DB;
-GO
-CREATE USER MYM_DeveloperUser
-FOR LOGIN MYM_User;
-GO
+CREATE LOGIN MYM_User WITH PASSWORD = 'T4ll3RMyM-';
+go
 
 --************  TABLAS  ***********--
 
