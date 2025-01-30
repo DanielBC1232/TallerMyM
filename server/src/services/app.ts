@@ -1,15 +1,21 @@
 import express from 'express';
-import categoriaRoutes from './routes/inventario/categoriaRoutes';
+//import categoriaRoutes from './routes/inventario/categoriaRoutes';
 
 const app = express();
 
 // Middleware
-app.use(express.json());  // Para manejar cuerpos JSON en las solicitudes
+app.use(express.json());
 
-// Enlazar las rutas de categorías
-app.use('/api/categorias', categoriaRoutes);
+const PORT = 3000
+
+app.get('/ping', (_req, res) => {
+  console.log("Ping");
+  res.send("respuesta ping");
+})
+
+//app.use('/api/categorias', categoriaRoutes);
 
 // Iniciar servidor
 app.listen(3000, () => {
-  console.log('Servidor corriendo en puerto 3000');
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });

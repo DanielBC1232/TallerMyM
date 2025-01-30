@@ -1,29 +1,29 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../../config/database";
 
-class Categoria extends Model {
-
+export interface ICategoria {
+  idCategoria?: number;  // Opcional porque es autoincremental
+  nombreCategoria: string;
 }
 
-Categoria.init(
-  {
-    idCategoria: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-      allowNull: false
-    },
-    nombreCategoria: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    }
-  },
-  {
-    sequelize,
-    modelName: "Categoria",
-    tableName: "Categoria",
-    timestamps: false
-  }
-);
+export class Categoria implements ICategoria {
+  public idCategoria?: number;
+  public nombreCategoria: string;
 
-export default Categoria;
+  constructor(nombreCategoria: string, idCategoria?: number) {
+    this.nombreCategoria = nombreCategoria;
+    this.idCategoria = idCategoria;
+  }
+
+  // Validación básica del modelo
+  validar(): boolean {
+    if (!this.nombreCategoria || this.nombreCategoria.trim().length === 0) {
+      throw new Error('El nombre de la categoría es requerido');
+    }
+
+    if (this.nombreCategoria.length > 100) {
+      throw new Error('El nombre no puede exceder los 100 caracteres');
+    }
+
+    return true;
+  }
+}
