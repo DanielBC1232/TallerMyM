@@ -1,5 +1,5 @@
 import { DataTypes,Model } from "sequelize";
-import db from '../../database/db';
+import db from '../../config/database';
 
 class ProductoServicio extends Model {}
 
