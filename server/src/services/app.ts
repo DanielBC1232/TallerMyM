@@ -10,7 +10,7 @@ const PORT = 3000
 
 app.get('/ping', (_req, res) => {
   console.log("Ping");
-  res.send("respuesta ping");
+  res.send("respuesta ping Awa");
 })
 
 //app.use('/api/categorias', categoriaRoutes);
