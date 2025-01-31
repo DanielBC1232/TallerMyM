@@ -24,8 +24,7 @@ const App = () => {
         <Agregar/>
 
         */}
-        <Detalles />
-
+        <Agregar/>
 
 
       </main>

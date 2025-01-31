@@ -58,7 +58,7 @@ const Editar = () => {
                 <span>
                   <span>Precio:</span>
                   <InputGroup inside style={styles}>
-                    <InputGroup.Addon>$</InputGroup.Addon>
+                    <InputGroup.Addon>₡</InputGroup.Addon>
                     <InputNumber
                       id="idPrecio"
                       min={0}

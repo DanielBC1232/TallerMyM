@@ -1,4 +1,4 @@
-import { CheckPicker, VStack } from "rsuite";
+import { InputPicker, VStack } from "rsuite";
 
 const data = ["Opcion1", "Opcion2", "Opcion3"].map((item) => ({
   label: item,
@@ -10,7 +10,7 @@ const SelectProveedor = () => {
     <div>
       <span>Proveedor:</span>
       <VStack>
-        <CheckPicker
+        <InputPicker
           data={data}
           style={{ width: 224 }}
           placeholder="Seleccionar"
