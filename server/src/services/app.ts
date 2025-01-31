@@ -1,22 +1,19 @@
 import express from 'express';
+import categoriaRoutes from '../routes/inventario/categoriaRoutes'
+import { connectDB } from '../config/database';
 const app = express();
-
-//import { connect } from 'tedious';
-
-//Database connection
-const { connect } = require("../config/database");
 
 // Middleware
 app.use(express.json());
 
-const PORT = 3000
 // Iniciar servidor
+const PORT = 3000
 app.listen(3000, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
 
 //prueba conexion
-connect()
+connectDB()
   .then(() => console.log("Conectado a la base de datos"))
   .catch((err) => {
     if (err instanceof Error) {
@@ -26,11 +23,7 @@ connect()
     }
   });
 
-
-app.get('/ping', (_req, res) => {
-  console.log("Ping");
-  res.send("respuesta ping Awa");
-})
+app.use("/api/categorias", categoriaRoutes);
 
 //app.use('/api/categorias', categoriaRoutes);
 

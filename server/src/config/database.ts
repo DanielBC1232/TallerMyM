@@ -1,6 +1,6 @@
-const sql = require("mssql");
+import sql from "mssql";
 
-const config = {
+const dbConfig = {
   server: "DAN",
   database: "MYM_DB",
   user: "MYM_User",
@@ -11,9 +11,23 @@ const config = {
     trustServerCertificate: true,
   },
 };
-
+/*
 module.exports = {
 
   connect: () => sql.connect(config),
   sql,
-}
+}*/
+
+// Función de conexión
+export const connectDB = async (): Promise<sql.ConnectionPool> => {
+  try {
+    const pool = await sql.connect(dbConfig);
+    console.log("✅ Conectado a la base de datos");
+    return pool;
+  } catch (error) {
+    console.error("❌ Error al conectar a la BD:", error);
+    throw error;
+  }
+};
+
+export { sql };

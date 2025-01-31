@@ -1,11 +1,9 @@
-/*import express from 'express';
-import getCategorias from '../../controllers/inventario/categoriaController';
-  
+import express from "express";
+import { getAllCategorias, getCategoriaById } from "../../controllers/inventario/categoriaController";
+
 const router = express.Router();
 
-// Rutas para manejar las categorías
-router.get('/', getCategorias);  // Obtener todas las categorías
+router.get("/", getAllCategorias); // GET /api/categorias
+router.get("/:id", getCategoriaById); // GET /api/categorias/:id
 
 export default router;
-
-*/

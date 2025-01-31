@@ -1,30 +1,42 @@
-/*import { DataTypes, Model } from "sequelize";
+import sql from "mssql";
+import { connectDB } from "../../config/database";
 
-export interface ICategoria {
-  idCategoria?: number;  // Opcional porque es autoincremental
+export class Categoria {
+
+  idCategoria: number;
   nombreCategoria: string;
-}
 
-export class Categoria implements ICategoria {
-  public idCategoria?: number;
-  public nombreCategoria: string;
-
-  constructor(nombreCategoria: string, idCategoria?: number) {
-    this.nombreCategoria = nombreCategoria;
+  constructor(idCategoria: number, nombreCategoria: string){
     this.idCategoria = idCategoria;
-  }
-
-  // Validación básica del modelo
-  validar(): boolean {
-    if (!this.nombreCategoria || this.nombreCategoria.trim().length === 0) {
-      throw new Error('El nombre de la categoría es requerido');
-    }
-
-    if (this.nombreCategoria.length > 100) {
-      throw new Error('El nombre no puede exceder los 100 caracteres');
-    }
-
-    return true;
+    this.nombreCategoria = nombreCategoria;
   }
 }
-  */
+
+export class CategoriaRepository {
+  // Obtener todas las categorias
+  async getAll(): Promise<any[]> {
+    try {
+      const pool = await connectDB();
+      const result = await pool.request().query("SELECT * FROM categoria");
+      return result.recordset;
+    } catch (error) {
+      console.error("Error en getAll:", error);
+      throw new Error("Error al obtener categorías");
+    }
+  }
+
+  async findById(idCategoria: number): Promise<any | null> {
+    try {
+      const pool = await connectDB();
+      const result = await pool
+        .request()
+        .input("idCategoria", sql.Int, idCategoria) // Parametros
+        .query("SELECT * FROM categoria WHERE idCategoria = @idCategoria");
+
+      return result.recordset.length > 0 ? result.recordset[0] : null;
+    } catch (error) {
+      console.error(" Error en findById:", error);
+      throw new Error("Error al obtener categoría por ID");
+    }
+  }
+}
