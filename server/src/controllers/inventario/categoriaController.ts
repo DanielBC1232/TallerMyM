@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { CategoriaRepository } from "../../models/inventario/categoria";
 
-
 const categoriaRepo = new CategoriaRepository();
 
 // Obtener todas las categorías

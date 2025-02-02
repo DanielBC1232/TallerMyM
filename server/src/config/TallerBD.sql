@@ -222,7 +222,7 @@ CREATE TABLE PRODUCTO_SERVICIO(
     ubicacionAlmacen VARCHAR(100) NOT NULL,
     cantidadInventario INT NOT NULL,
     tipo VARCHAR(50) NOT NULL, --SERVICIO O PRODUCTO
-    img VARCHAR(255) NULL,
+    img VARCHAR(255) NOT NULL,
 
     -- Opcional - Descuentos
     porcentajeDescuento DECIMAL(10,2) NULL,

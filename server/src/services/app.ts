@@ -25,6 +25,4 @@ connectDB()
 
 app.use("/api/categorias", categoriaRoutes);
 
-//app.use('/api/categorias', categoriaRoutes);
-
 
