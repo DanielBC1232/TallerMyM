@@ -2,12 +2,10 @@ import DropdownVehiculos from "../components/DropDownVehiculos";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectMarca from "../components/SelectMarca";
 import SelectProveedor from "../components/SelectProveedor";
-import ImagenArticulo from "../components/ImagenArticulo";
-import SelectStock from "../components/SelectStock";
+import SubirImagen from "../components/SubirImagen";
 
 import {
   Button,
-  Image,
   DateInput,
   Stack,
   Input,
@@ -15,8 +13,7 @@ import {
   InputNumber,
   Grid,
   Row,
-  Col,
-  IconButton,
+  Col
 } from "rsuite";
 
 import "../styles/inv.css";
@@ -30,12 +27,12 @@ const Editar = () => {
     <div className="container main mx-auto p-5">
       <Grid fluid>
         <Row className="show-grid" gutter={16}>
-          <Col xs={8}>
-            <ImagenArticulo />
+          <Col xs={6}>
+            <SubirImagen />
           </Col>
 
           <Col
-            xs={12}
+            xs={16}
             className="d-grid gap-5 bg-white shadow-sm p-5 rounded-3"
           >
             <Row className="show-grid" gutter={16}>
