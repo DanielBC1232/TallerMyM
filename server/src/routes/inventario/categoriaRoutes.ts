@@ -3,7 +3,7 @@ import { getAllCategorias, getCategoriaById } from "../../controllers/inventario
 
 const router = express.Router();
 
-router.get("/", getAllCategorias); // GET /api/categorias
-router.get("/:id", getCategoriaById); // GET /api/categorias/:id
+router.get("/", getAllCategorias); // GET /categorias
+router.get("/:id", getCategoriaById); // GET /categorias/:id
 
 export default router;

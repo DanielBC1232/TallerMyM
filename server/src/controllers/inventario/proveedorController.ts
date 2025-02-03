@@ -18,8 +18,7 @@ export const getAllProveedor = async (_req: Request, res: Response) => {
 // Obtener una categoría por ID
 export const getProveedorById = async (req: Request, res: Response) => {
   try {
-    const id = parseInt(req.params.idProveedor);
-    //if (isNaN(id)) return res.status(400).json({ error: "ID inválido" });
+    const id = parseInt(req.params.id);
 
     const proveedor = await proveedorRepo.findById(id); // Get
 
