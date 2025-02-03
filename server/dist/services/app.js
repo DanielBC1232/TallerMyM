@@ -1,4 +1,7 @@
 "use strict";
+const express = require('express');
+const usuarioRoutes = require('../routes/usuarioRoutes');
+
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -14,6 +17,7 @@ app.get('/ping', (_req, res) => {
     console.log("Ping");
     res.send("respuesta ping Awa");
 });
+app.use('/api/usuarios', usuarioRoutes); 
 //app.use('/api/categorias', categoriaRoutes);
 // Iniciar servidor
 app.listen(3000, () => {

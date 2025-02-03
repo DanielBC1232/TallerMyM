@@ -26,3 +26,5 @@ const testConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 testConnection();
+
+module.exports = sequelize;
