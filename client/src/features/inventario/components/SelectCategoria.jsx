@@ -1,16 +1,36 @@
-import { InputPicker, VStack } from "rsuite";
-const data = ["Opcion1", "Opcion2", "Opcion3"].map(
-  (item) => ({ label: item, value: item })
-);
-const SelectCategoria = () => {
-  
-  return (
+import React, { useState, useEffect } from "react";
 
-    <div>
-      <span>Categoria:</span>
-      <VStack>
-        <InputPicker data={data} style={{ width: 224 }} placeholder="Seleccionar"/>
-      </VStack>
+//constante de opciones
+const SelectCategoria = ({ value, onChange }) => {
+  const [opciones, setOpciones] = useState([]);
+
+  useEffect(() => {
+    const obtenerCategorias = async () => {
+      try {
+        const respuesta = await fetch("http://localhost:3000/categorias", {
+          headers: { "Content-Type": "application/json" },
+        });
+        const datos = await respuesta.json();
+        //console.log(datos);
+        setOpciones(datos);
+      } catch (error) {
+        console.error("Error obteniendo las categorias:", error);
+      }
+    };
+
+    obtenerCategorias();
+  }, []);
+
+  return (
+    <div className="">
+      <select name="proveedor" className="form-select" value={value} onChange={onChange}>
+        <option value="">Seleccione...</option>
+        {opciones.map((categoria) => (
+          <option key={categoria.idCategoria} value={categoria.nombreCategoria}>
+            {categoria.nombreCategoria}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };

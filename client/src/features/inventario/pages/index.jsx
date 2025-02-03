@@ -9,6 +9,11 @@ import {Button ,Grid, Row, Col, FlexboxGrid, Input, Divider} from "rsuite";
 
 import "../styles/inv.css";
 
+const onSubmit = (data) => {
+  console.log(data);
+};
+
+
 const IndexInventario = () => {
   return (
     <div className="grid-container">

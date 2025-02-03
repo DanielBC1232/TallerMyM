@@ -1,4 +1,4 @@
-import DropdownVehiculos from "../components/DropDownVehiculos";
+import SelectVehiculos from "../components/SelectVehiculos";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectMarca from "../components/SelectMarca";
 import SelectProveedor from "../components/SelectProveedor";
