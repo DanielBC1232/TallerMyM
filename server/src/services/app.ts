@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import categoriaRoutes from '../routes/inventario/categoriaRoutes'
 import marcaRoutes from '../routes/inventario/marcaRoutes'
 import proveedorRoutes from '../routes/inventario/proveedorRoute'
@@ -13,6 +14,7 @@ const PORT = 3000 // Iniciar servidor
 app.listen(3000, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
+app.use(cors());
 
 connectDB() // conexion BD
   .then(() => console.log("Conectado a la base de datos"))
