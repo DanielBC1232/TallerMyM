@@ -6,6 +6,7 @@ import Detalles from "./features/inventario/pages/Detalles";
 import IndexInventario from "./features/inventario/pages";
 import Editar from "./features/inventario/pages/Editar";
 import Agregar from "./features/inventario/pages/Agregar";
+import CrearPerfil from "./features/perfil/pages/CrearPerfil"
 
 import "rsuite/dist/rsuite.min.css";
 
@@ -24,7 +25,7 @@ const App = () => {
         <Agregar/>
 
         */}
-        <Agregar/>
+        <CrearPerfil/>
 
 
       </main>
