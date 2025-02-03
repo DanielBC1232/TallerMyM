@@ -3,7 +3,7 @@ import { ProveedorRepository } from "../../models/inventario/proveedor";
 
 const proveedorRepo = new ProveedorRepository();
 
-// Obtener todas las categorías
+// Obtener todas los proverdores
 export const getAllProveedor = async (_req: Request, res: Response) => {
   try {
     const proveedor = await proveedorRepo.getAll(); // Get
@@ -11,11 +11,11 @@ export const getAllProveedor = async (_req: Request, res: Response) => {
     //validaciones
     res.json(proveedor);
   } catch (error) {
-    res.status(500).json({ error: "Error al obtener las categorías" });
+    res.status(500).json({ error: "Error al obtener los proveedores" });
   }
 };
 
-// Obtener una categoría por ID
+// Obtener un proveedor por ID
 export const getProveedorById = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
@@ -24,12 +24,12 @@ export const getProveedorById = async (req: Request, res: Response) => {
 
     // Validaciones - return
     if (!proveedor){
-      res.status(404).json({ error: "Categoría no encontrada" }); // Return
+      res.status(404).json({ error: "Proveedor no encontrado" }); // Return
     }
     res.json(proveedor); //Return exitoso
 
   } catch (error) {
     console.error("Error en getProveedorById:", error);
-    res.status(500).json({ error: "Error al obtener la categoría" });
+    res.status(500).json({ error: "Error al obtener la proveedor" });
   }
 };

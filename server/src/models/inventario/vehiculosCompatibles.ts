@@ -5,18 +5,14 @@ export class VehiculosCompatibles {
 
   idVehiculos: number;
   modelo: string;
-  marca: string;
-  anno: number;
 
-  constructor(idVehiculos: number, modelo: string, marca: string, anno: number){
+  constructor(idVehiculos: number, modelo: string){
     this.idVehiculos = idVehiculos;
     this.modelo = modelo;
-    this.marca = marca;
-    this.anno = anno;
   }
 }
 
-export class VehiculosCompatiblesRepository {
+export class VehiculoRepository {
   // Obtener todas los vehiculos
   async getAll(): Promise<any[]> {
     try {
@@ -25,7 +21,7 @@ export class VehiculosCompatiblesRepository {
       return result.recordset;
     } catch (error) {
       console.error("Error en getAll:", error);
-      throw new Error("Error al obtener categorías");
+      throw new Error("Error al obtener vehiculos");
     }
   }
 
