@@ -1,5 +1,8 @@
 import express from 'express';
 import categoriaRoutes from '../routes/inventario/categoriaRoutes'
+import marcaRoutes from '../routes/inventario/marcaRoutes'
+
+
 import { connectDB } from '../config/database';
 const app = express();
 
@@ -23,6 +26,9 @@ connectDB()
     }
   });
 
-app.use("/api/categorias", categoriaRoutes);
+app.use("/categorias", categoriaRoutes);
+app.use("/marcas", marcaRoutes);
+
+
 
 
