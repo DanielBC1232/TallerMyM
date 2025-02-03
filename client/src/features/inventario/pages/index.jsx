@@ -2,7 +2,6 @@ import Articulo from "../components/Articulo";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectStock from "../components/SelectStock";
 import SelectMarca from "../components/SelectMarca";
-import VehiculosCompatibles from "../components/VehiculosCompatibles";
 import RangoPrecio from "../components/RangoPrecio";
 
 import {Button ,Grid, Row, Col, FlexboxGrid, Input, Divider} from "rsuite";
