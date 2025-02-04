@@ -4,8 +4,9 @@ import SelectMarca from "../components/SelectMarca";
 import SelectProveedor from "../components/SelectProveedor";
 import SubirImagen from "../components/SubirImagen";
 import SelectVehiculos from "../components/SelectVehiculos";
-import { Grid, Row, Col } from "rsuite";
+import { Grid, Row, Col, Notification } from "rsuite";
 import "../styles/inv.css";
+import Swal from "sweetalert2";
 
 const Agregar = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +22,14 @@ const Agregar = () => {
     vehiculosCompatibles: [],
   });
 
+  const errorNotification = (message) => {
+    Swal.fire({
+      text: message,
+      icon: "error",
+      showConfirmButton: false,
+    });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -29,9 +38,203 @@ const Agregar = () => {
     });
   };
 
+  //Verificaciones de campos
+  const verificarNombre = () => {
+    var pass = false;
+    //Campo Nombre
+    if (!formData.nombre.trim()) {
+      nombre.classList.remove("is-valid");
+      nombre.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Campo de nombre vacío");
+    } else if (formData.nombre.trim()) {
+      nombre.classList.remove("is-invalid");
+      nombre.classList.add("is-valid");
+      pass = true;
+    }
+
+    return pass;
+  };
+
+  const verificarMarca = () => {
+    var pass = false;
+    //Campo Marca
+    if (!formData.marca.trim()) {
+      marca.classList.remove("is-valid");
+      marca.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Seleccione una marca");
+    } else if (formData.marca.trim()) {
+      marca.classList.remove("is-invalid");
+      marca.classList.add("is-valid");
+      pass = true;
+    }
+    return pass;
+  };
+
+  const verificarPrecio = () => {
+    var pass = false;
+    //Campo Precio
+    if (!formData.precio) {
+      precio.classList.remove("is-valid");
+      precio.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Digite el precio");
+    } else if (formData.precio) {
+      precio.classList.remove("is-invalid");
+      precio.classList.add("is-valid");
+      pass = true;
+    }
+    return pass;
+  };
+
+  const verificarFechaIngreso = () => {
+    var pass = false;
+    //Campo Fecha Ingreso
+    if (!formData.fechaIngreso.trim()) {
+      fechaIngreso.classList.remove("is-valid");
+      fechaIngreso.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Digite la fecha de ingreso");
+    } else if (formData.marca.trim()) {
+      fechaIngreso.classList.remove("is-invalid");
+      fechaIngreso.classList.add("is-valid");
+      pass = true;
+    }
+    return pass;
+  };
+
+  const verificarVehiculosCompatibles = () => {
+    var pass = false;
+    //Campo Fecha Vehiculos compatibles
+    if (formData.vehiculosCompatibles.length == 0) {
+      pass = false;
+      errorNotification("Seleccione al menos un vehiculo compatible");
+    } else if (formData.vehiculosCompatibles.length > 0) {
+      pass = true;
+    }
+    return pass;
+  };
+
+  const verificarUbicacion = () => {
+    var pass = false;
+    //Campo Ubicacion en almacen
+    if (!formData.ubicacion.trim()) {
+      ubicacion.classList.remove("is-valid");
+      ubicacion.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Escriba la ubicación en almacén");
+    } else if (formData.ubicacion.trim()) {
+      ubicacion.classList.remove("is-invalid");
+      ubicacion.classList.add("is-valid");
+      pass = true;
+    }
+    return pass;
+  };
+
+  const verificarCategoria = () => {
+    var pass = false;
+    //Campo Categoria
+    if (!formData.categoria.trim()) {
+      categoria.classList.remove("is-valid");
+      categoria.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Seleccione una categoria");
+    } else if (formData.categoria.trim()) {
+      categoria.classList.remove("is-invalid");
+      categoria.classList.add("is-valid");
+      pass = true;
+    }
+
+    return pass;
+  };
+
+  const verificarStock = () => {
+    var pass = false;
+    //Campo Stock
+    if (!formData.stock) {
+      stock.classList.remove("is-valid");
+      stock.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Digite el stock");
+    } else if (formData.stock) {
+      stock.classList.remove("is-invalid");
+      stock.classList.add("is-valid");
+      pass = true;
+    }
+
+    return pass;
+  };
+
+  const verificarProveedor = () => {
+    var pass = false;
+    //Campo Proveedor
+    if (!formData.proveedor.trim()) {
+      proveedor.classList.remove("is-valid");
+      proveedor.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Seleccione el proveedor");
+    } else if (formData.proveedor.trim()) {
+      proveedor.classList.remove("is-invalid");
+      proveedor.classList.add("is-valid");
+      pass = true;
+    }
+    return pass;
+  };
+
+  const verificarDescripcion = () => {
+    var pass = false;
+    //Campo Descripcion
+    if (!formData.descripcion.trim()) {
+      descripcion.classList.remove("is-valid");
+      descripcion.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Campo de descripcion vacío");
+    } else if (formData.descripcion.trim()) {
+      descripcion.classList.remove("is-invalid");
+      descripcion.classList.add("is-valid");
+      pass = true;
+    }
+    return pass;
+  };
+
+  // VERIFICACION GENERAL
+  const verificacion = () => {
+    var pass = false;
+    //Verificar que todos los campos sean validos
+    if (
+      verificarNombre() &&
+      verificarPrecio() &&
+      verificarMarca() &&
+      verificarFechaIngreso() &&
+      verificarVehiculosCompatibles() &&
+      verificarUbicacion() &&
+      verificarCategoria() &&
+      verificarStock() &&
+      verificarProveedor() &&
+      verificarDescripcion()
+    ) {
+      pass = true;
+    } else {
+      pass = false;
+    }
+    return pass;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Datos del formulario:", formData);
+    console.log(formData);
+
+    if(verificacion()){
+      //Enviar datos
+
+
+    }else{
+      //No enviar datos
+
+      
+    }
+
   };
 
   return (
@@ -85,15 +288,19 @@ const Agregar = () => {
                     <label htmlFor="categoria" className="form-label">
                       Categoría:
                     </label>
-                    <SelectCategoria value={formData.categoria}
-                      onChange={handleChange}/>
+                    <SelectCategoria
+                      value={formData.categoria}
+                      onChange={handleChange}
+                    />
                   </div>
                   <div className="mb-3">
                     <label htmlFor="proveedor" className="form-label">
                       Proveedor:
                     </label>
-                    <SelectProveedor value={formData.proveedor}
-                      onChange={handleChange}/>
+                    <SelectProveedor
+                      value={formData.proveedor}
+                      onChange={handleChange}
+                    />
                   </div>
                 </Col>
                 <Col xs={12} className="column">
