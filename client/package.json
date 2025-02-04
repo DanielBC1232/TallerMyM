@@ -19,7 +19,8 @@
     "react-router-dom": "^7.1.5",
     "react-select": "^5.10.0",
     "rsuite": "^5.77.0",
-    "sass": "^1.83.4"
+    "sass": "^1.83.4",
+    "sweetalert2": "^11.15.10"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
