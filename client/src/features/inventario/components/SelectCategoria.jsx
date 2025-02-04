@@ -23,7 +23,7 @@ const SelectCategoria = ({ value, onChange }) => {
 
   return (
     <div className="">
-      <select name="proveedor" className="form-select" value={value} onChange={onChange}>
+      <select id="categoria" name="categoria" className="form-select" value={value} onChange={onChange}>
         <option value="">Seleccione...</option>
         {opciones.map((categoria) => (
           <option key={categoria.idCategoria} value={categoria.nombreCategoria}>

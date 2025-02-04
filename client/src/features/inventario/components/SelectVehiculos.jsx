@@ -35,8 +35,9 @@ const SelectVehiculos = ({ value, onChange }) => {
   };
 
   return (
-    <div className="">
+    <div>
       <Select
+        id="vehiculosCompatibles"
         isMulti
         options={opciones}
         value={opciones.filter((opcion) => value.includes(opcion.value))} // Filtramos las opciones seleccionadas

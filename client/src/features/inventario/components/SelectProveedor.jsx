@@ -11,7 +11,7 @@ const SelectProveedor = ({ value, onChange }) => {
           headers: { "Content-Type": "application/json" },
         });
         const datos = await respuesta.json();
-        console.log(datos);
+        //console.log(datos);
         setOpciones(datos);
       } catch (error) {
         console.error("Error obteniendo las Proveedors:", error);
@@ -23,7 +23,7 @@ const SelectProveedor = ({ value, onChange }) => {
 
   return (
     <div className="">
-      <select name="Proveedor" className="form-select" value={value} onChange={onChange}>
+      <select id="proveedor" name="proveedor" className="form-select" value={value} onChange={onChange}>
         <option value="">Seleccione...</option>
         {opciones.map((Proveedor) => (
           <option key={Proveedor.idProveedor} value={Proveedor.nombreProveedor}>
