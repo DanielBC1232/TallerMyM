@@ -8,8 +8,12 @@ import { Grid, Row, Col } from "rsuite";
 import "../styles/inv.css";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+
 
 const Agregar = () => {
+  const navigate = useNavigate(); // Hook para navegar
   const [formData, setFormData] = useState({
     nombre: "",
     marca: "",
@@ -17,7 +21,7 @@ const Agregar = () => {
     precio: 0,
     stock: 0,
     fechaIngreso: "",
-    ubicacion: "",
+    ubicacionAlmacen: "",
     proveedor: "",
     categoria: "",
     vehiculosCompatibles: [],
@@ -37,9 +41,15 @@ const Agregar = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]:
+        name === "precio" || name === "stock"
+          ? Number(value)
+          : name === "vehiculosCompatibles"
+            ? JSON.stringify(value)
+            : value,
     });
   };
+  
 
   //Verificaciones de campos
   const verificarNombre = () => {
@@ -122,14 +132,14 @@ const Agregar = () => {
   const verificarUbicacion = () => {
     var pass = false;
     //Campo Ubicacion en almacen
-    if (!formData.ubicacion.trim()) {
-      ubicacion.classList.remove("is-valid");
-      ubicacion.classList.add("is-invalid");
+    if (!formData.ubicacionAlmacen.trim()) {
+      ubicacionAlmacen.classList.remove("is-valid");
+      ubicacionAlmacen.classList.add("is-invalid");
       pass = false;
       errorNotification("Escriba la ubicación en almacén");
-    } else if (formData.ubicacion.trim()) {
-      ubicacion.classList.remove("is-invalid");
-      ubicacion.classList.add("is-valid");
+    } else if (formData.ubicacionAlmacen.trim()) {
+      ubicacionAlmacen.classList.remove("is-invalid");
+      ubicacionAlmacen.classList.add("is-valid");
       pass = true;
     }
     return pass;
@@ -243,16 +253,22 @@ const Agregar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    //console.log(formData);
 
     if (verificacion()) {
-      //Enviar post
       axios
-        .post("URL_DE_TU_API", formData)
-        .then((res) => console.log(res.data))
+        .post("http://localhost:3000/productos/agregar-producto/", formData)
+        .then((res) => {
+          Swal.fire({
+            icon: "success",
+            title: "Producto agregado correctamente",
+            showConfirmButton: false,
+            timer: 1000,
+          }).then(() => {
+            navigate("/inventario");
+          });
+        })
         .catch((error) => console.error("Post error:", error));
-    } else {
-      //No enviar datos
     }
   };
 
@@ -353,7 +369,7 @@ const Agregar = () => {
                         min={0}
                         step={100}
                         className="form-control"
-                        value={formData.precio}
+                        value={Number(formData.precio)}
                         onChange={handleChange}
                       />
                     </div>
@@ -376,8 +392,8 @@ const Agregar = () => {
                       Ubicación en almacén:
                     </label>
                     <input
-                      id="ubicacion"
-                      name="ubicacion"
+                      id="ubicacionAlmacen"
+                      name="ubicacionAlmacen"
                       type="text"
                       className="form-control"
                       value={formData.ubicacion}

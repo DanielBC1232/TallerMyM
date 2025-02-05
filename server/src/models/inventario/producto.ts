@@ -146,7 +146,7 @@ export class ProductoRepository {
     }
   }
 
-  // Insertar producto
+  // Actualizar producto
   async updateProducto(
     idProducto: number,
     nombre: string,
