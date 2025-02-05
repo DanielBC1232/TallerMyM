@@ -234,7 +234,7 @@ CREATE TABLE PRODUCTO_SERVICIO(
     ubicacionAlmacen VARCHAR(100) NOT NULL,
     proveedor VARCHAR(50) NOT NULL,
     categoria VARCHAR(50) NOT NULL,
-    vehiculosCompatibles NVARCHAR(MAX) NOT NULL,
+    vehiculosCompatibles NVARCHAR(MAX) NOT NULL,--array
 
     tipo VARCHAR(50) NOT NULL, --SERVICIO O PRODUCTO
     img VARCHAR(255) NULL,
