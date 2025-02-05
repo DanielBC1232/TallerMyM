@@ -10,8 +10,6 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
-
 const Agregar = () => {
   const navigate = useNavigate(); // Hook para navegar
   const [formData, setFormData] = useState({
@@ -45,11 +43,10 @@ const Agregar = () => {
         name === "precio" || name === "stock"
           ? Number(value)
           : name === "vehiculosCompatibles"
-            ? JSON.stringify(value)
-            : value,
+          ? JSON.stringify(value)
+          : value,
     });
   };
-  
 
   //Verificaciones de campos
   const verificarNombre = () => {
@@ -268,7 +265,15 @@ const Agregar = () => {
             navigate("/inventario");
           });
         })
-        .catch((error) => console.error("Post error:", error));
+        .catch((error) =>
+          Swal.fire({
+            icon: "error",
+            title: "Error al agregar un producto / servicio:",
+            text: error,
+            showConfirmButton: false,
+            timer: 1000,
+          })
+        );
     }
   };
 
