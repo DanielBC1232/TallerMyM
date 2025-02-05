@@ -61,7 +61,7 @@ const IndexInventario = () => {
         <div className="row mx-1">
           <Divider />
           <Button className="btn btn-sm btn-primary px-5 text-white">
-            <Link to="/Agregar" className="btn-link">Agregar Repuesto/Servicio</Link>
+            <Link to="/inventario-agregar" className="btn-link">Agregar Repuesto/Servicio</Link>
           </Button>
         </div>
       </nav>

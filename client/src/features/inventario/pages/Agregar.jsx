@@ -4,9 +4,10 @@ import SelectMarca from "../components/SelectMarca";
 import SelectProveedor from "../components/SelectProveedor";
 import SubirImagen from "../components/SubirImagen";
 import SelectVehiculos from "../components/SelectVehiculos";
-import { Grid, Row, Col, Notification } from "rsuite";
+import { Grid, Row, Col } from "rsuite";
 import "../styles/inv.css";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const Agregar = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,8 @@ const Agregar = () => {
     proveedor: "",
     categoria: "",
     vehiculosCompatibles: [],
+    img: "",
+    tipo: "",
   });
 
   const errorNotification = (message) => {
@@ -198,6 +201,22 @@ const Agregar = () => {
     return pass;
   };
 
+  const verificarTipo = () => {
+    var pass = false;
+    //Campo Descripcion
+    if (!formData.tipo.trim()) {
+      tipo.classList.remove("is-valid");
+      tipo.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Debe seleccionar el tipo");
+    } else if (formData.tipo.trim()) {
+      tipo.classList.remove("is-invalid");
+      tipo.classList.add("is-valid");
+      pass = true;
+    }
+    return pass;
+  };
+
   // VERIFICACION GENERAL
   const verificacion = () => {
     var pass = false;
@@ -212,7 +231,8 @@ const Agregar = () => {
       verificarCategoria() &&
       verificarStock() &&
       verificarProveedor() &&
-      verificarDescripcion()
+      verificarDescripcion() &&
+      verificarTipo()
     ) {
       pass = true;
     } else {
@@ -225,16 +245,15 @@ const Agregar = () => {
     e.preventDefault();
     console.log(formData);
 
-    if(verificacion()){
-      //Enviar datos
-
-
-    }else{
+    if (verificacion()) {
+      //Enviar post
+      axios
+        .post("URL_DE_TU_API", formData)
+        .then((res) => console.log(res.data))
+        .catch((error) => console.error("Post error:", error));
+    } else {
       //No enviar datos
-
-      
     }
-
   };
 
   return (
@@ -243,7 +262,8 @@ const Agregar = () => {
         <Grid fluid>
           <Row className="show-grid" gutter={16}>
             <Col xs={6}>
-              <SubirImagen />
+              {/* AUN FALTA COMPONENTE SUBIR IMAGEN */}
+              <SubirImagen value={formData.img} onChange={handleChange} />
             </Col>
             <Col
               xs={16}
@@ -301,6 +321,22 @@ const Agregar = () => {
                       value={formData.proveedor}
                       onChange={handleChange}
                     />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="serviceProduct" className="form-label">
+                      Servicio o Producto
+                    </label>
+                    <select
+                      id="tipo"
+                      name="tipo"
+                      className="form-select"
+                      value={formData.tipo}
+                      onChange={handleChange}
+                    >
+                      <option value="">Seleccione el tipo</option>
+                      <option value="producto">Producto</option>
+                      <option value="servicio">Servicio</option>
+                    </select>
                   </div>
                 </Col>
                 <Col xs={12} className="column">
