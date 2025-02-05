@@ -1,9 +1,18 @@
 import express from "express";
-import { getAllProductos, getProductoById} from "../../controllers/inventario/productoController";
+import {
+  getAllProductos,
+  getProductoById,
+  addProducto,
+  updateProducto,
+  deleteProducto,
+} from "../../controllers/inventario/productoController";
 
 const router = express.Router();
 
-router.get("/", getAllProductos); // GET /marca
-router.get("/:id", getProductoById); // GET /marca/:id
+router.get("/", getAllProductos); 
+router.get("/:id", getProductoById); 
+router.post("/agregar-producto/", addProducto);
+router.patch("/actualizar-producto/:id", updateProducto);
+router.delete("/eliminar-producto/:id", deleteProducto);
 
 export default router;

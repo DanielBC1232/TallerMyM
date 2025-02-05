@@ -88,7 +88,6 @@ export class ProductoRepository {
       throw new Error("Error al obtener producto por ID");
     }
   }
-
   // Insertar producto
   async insertProducto(
     nombre: string,
@@ -223,10 +222,7 @@ export class ProductoRepository {
   async deleteProducto(idProducto: number): Promise<any> {
     try {
       const pool = await connectDB();
-      await pool
-        .request()
-        .input("idProducto", sql.Int, idProducto)
-        .query(`
+      await pool.request().input("idProducto", sql.Int, idProducto).query(`
           DELETE FROM PRODUCTO_SERVICIO WHERE idProducto = @idProducto
         `);
     } catch (error) {
@@ -234,5 +230,4 @@ export class ProductoRepository {
       throw new Error("Error al eliminar el producto");
     }
   }
-  
 }

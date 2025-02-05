@@ -49,10 +49,7 @@ export const addProducto = async (req: Request, res: Response) => {
       categoria,
       vehiculosCompatibles,
       tipo,
-      img,
-      porcentajeDescuento,
-      fechaInicio,
-      fechaFin,
+      img
     } = req.body;
 
     // Llamar al método insertProducto para insertar el nuevo producto en la base de datos
@@ -68,10 +65,7 @@ export const addProducto = async (req: Request, res: Response) => {
       categoria,
       vehiculosCompatibles,
       tipo,
-      img,
-      porcentajeDescuento,
-      fechaInicio,
-      fechaFin
+      img
     );
 
     // Respuesta exitosa con el producto insertado
@@ -86,7 +80,7 @@ export const addProducto = async (req: Request, res: Response) => {
   }
 };
 
-// Actuializar un producto
+// Actualizar un producto
 export const updateProducto = async (req: Request, res: Response) => {
   try {
     // Obtener los datos del cuerpo de la solicitud
