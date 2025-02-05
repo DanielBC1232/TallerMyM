@@ -1,10 +1,10 @@
 const express = require('express');
-const Usuario = require('../models/usuario/usuario'); // Asegúrate de importar correctamente el modelo
+const Usuario = require('../../models/usuario/usuario'); 
 
 const router = express.Router();
 
 // Ruta para verificar si el correo está registrado
-router.post('/check-email', async (req, res) => {
+router.post('/send-email', async (req, res) => {
   const { email } = req.body;
 
   if (!email) {

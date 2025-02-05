@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Variable del email
+EMAIL_USER=paolabellanero13@gmail.com
+EMAIL_PASS=nvek qghj rcak mmcb
+
+# Variable 
+DB_NAME=MYM_DB
+DB_USER=MYM_User
+DB_PASS=T4ll3RMyM-
+DB_SERVER=DAN

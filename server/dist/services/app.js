@@ -1,6 +1,7 @@
 "use strict";
 const express = require('express');
-const usuarioRoutes = require('../routes/usuarioRoutes');
+const usuarioRoutes = require('../routes/perfil/usuarioRoutes');
+const emailRoutes = require("../routes/perfil/emailRoutes");
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -17,7 +18,9 @@ app.get('/ping', (_req, res) => {
     console.log("Ping");
     res.send("respuesta ping Awa");
 });
+//Ruta API
 app.use('/api/usuarios', usuarioRoutes); 
+app.use('/api/email', emailRoutes);
 //app.use('/api/categorias', categoriaRoutes);
 // Iniciar servidor
 app.listen(3000, () => {

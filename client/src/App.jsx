@@ -28,7 +28,7 @@ const App = () => {
 
 
         <Routes>
-          <Route path="/" element={<IndexInventario />} />
+          <Route path="/" element={<CrearPerfil />} />
 
           {/* Rutas para inventario */}
           <Route path="/inventario-agregar" element={<Agregar />} />

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/services/app.js",
     "tsc": "tsc",
-    "dev": "ts-node-dev src/services/app.ts"
+    "dev-ts": "ts-node-dev src/services/app.ts"
   },
   "keywords": [],
   "author": "",
