@@ -24,9 +24,9 @@ const IndexInventario = () => {
     nombre: "",
     marca: "",
     categoria: "",
-    vehiculosCompatibles: [],
-    precio: 0,
     stock: 0,
+    vehiculosCompatibles: [],
+    rangoPrecio:[]
   });
 
   const handleChange = (e) => {
@@ -37,14 +37,14 @@ const IndexInventario = () => {
         name === "precio" || name === "stock"
           ? Number(value)
           : name === "vehiculosCompatibles"
-          ? JSON.stringify(value)
+          ? value
           : value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    //console.log(formData);
   };
 
   return (
@@ -55,7 +55,8 @@ const IndexInventario = () => {
       >
         <form onSubmit={handleSubmit}>
           <div className="row my-4">
-            <RangoPrecio />
+            <RangoPrecio value={[formData.precioMin, formData.precioMax]}
+              onChange={handleChange}/>
           </div>
           <div className="mt-3">
             <input
@@ -144,7 +145,7 @@ const IndexInventario = () => {
 
       <div className="main rounded-3 p-3">
         <div className="article-container article-scroll">
-          <ContenedorProductos />
+          <ContenedorProductos formData={formData}/>
         </div>
       </div>
     </div>

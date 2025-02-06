@@ -2,14 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+console.log()
+
 //constante de Productos
-const ContenedorProductos = () => {
+const ContenedorProductos = (formData) => {
+
+  console.log("Datos filtro:", JSON.stringify(formData));//parametros de filtro
+
   const [listado, setLista] = useState([]);
 
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/productos");
+        const { data } = await axios.get(`http://localhost:3000/productos`);
         setLista(data);
       } catch (error) {
         console.error("Error obteniendo las categorías:", error);
