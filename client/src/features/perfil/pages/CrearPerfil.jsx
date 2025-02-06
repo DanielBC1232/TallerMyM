@@ -3,26 +3,20 @@ import FormularioPerfil from "../components/FormularioPerfil";
 
 const CrearPerfil = () => {
   const handleFormSubmit = async (data) => {
-    if (!data.email) {
-      alert("Por favor, ingrese un correo electrónico válido.");
-      return;
-    }
     try {
-      const response = await fetch("http://127.0.0.1:3000/api/email/send-email", {
+      const response = await fetch("http://localhost:3000/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email : data.email}),
+        body: JSON.stringify(data),
       });
-    
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(errorMessage || "Error al verificar el correo.");
+
+      if (response.ok) {
+        alert("Perfil creado y correo enviado correctamente.");
+      } else {
+        alert("Error al enviar el correo.");
       }
-    
-      alert("Correo verificado correctamente.");
     } catch (error) {
       console.error("Error en la solicitud:", error);
-      alert(`Hubo un error al intentar enviar el correo: ${error.message}`);
     }
   };
 
@@ -41,3 +35,4 @@ const CrearPerfil = () => {
 };
 
 export default CrearPerfil;
+

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
 //constante de opciones
 const SelectMarca = ({ value, onChange }) => {
@@ -8,8 +7,12 @@ const SelectMarca = ({ value, onChange }) => {
   useEffect(() => {
     const obtenerMarcas = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/marcas/");
-        setOpciones(data);
+        const respuesta = await fetch("http://localhost:3000/marcas", {
+          headers: { "Content-Type": "application/json" },
+        });
+        const datos = await respuesta.json();
+        //console.log(datos);
+        setOpciones(datos);
       } catch (error) {
         console.error("Error obteniendo las Marcas:", error);
       }
