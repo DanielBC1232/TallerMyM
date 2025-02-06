@@ -11,8 +11,12 @@ const express_1 = __importDefault(require("express"));
 //import categoriaRoutes from './routes/inventario/categoriaRoutes';
 require("../config/database");
 const app = (0, express_1.default)();
-const cors = require('cors');
-app.use(cors());
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
+}));
 // Middleware
 app.use(express_1.default.json());
 const PORT = 3000;
