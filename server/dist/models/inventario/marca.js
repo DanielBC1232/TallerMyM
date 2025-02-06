@@ -12,23 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CategoriaRepository = exports.Categoria = void 0;
+exports.MarcaRepository = exports.Marca = void 0;
 const mssql_1 = __importDefault(require("mssql"));
 const database_1 = require("../../config/database");
-class Categoria {
-    constructor(idCategoria, nombreCategoria) {
-        this.idCategoria = idCategoria;
-        this.nombreCategoria = nombreCategoria;
+class Marca {
+    constructor(idMarca, nombreMarca) {
+        this.idMarca = idMarca;
+        this.nombreMarca = nombreMarca;
     }
 }
-exports.Categoria = Categoria;
-class CategoriaRepository {
-    // Obtener todas las categorias
+exports.Marca = Marca;
+class MarcaRepository {
+    // Obtener todas las marcas
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
-                const result = yield pool.request().query("SELECT * FROM categoria");
+                const result = yield pool.request().query("SELECT * FROM MARCA_PRODUCTO");
                 return result.recordset;
             }
             catch (error) {
@@ -37,21 +37,21 @@ class CategoriaRepository {
             }
         });
     }
-    findById(idCategoria) {
+    findById(idMarca) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
                 const result = yield pool
                     .request()
-                    .input("idCategoria", mssql_1.default.Int, idCategoria) // Parametros
-                    .query("SELECT * FROM categoria WHERE idCategoria = @idCategoria");
+                    .input("idMarca", mssql_1.default.Int, idMarca) // Parametros
+                    .query("SELECT * FROM MARCA_PRODUCTO WHERE idMarca = @idMarca");
                 return result.recordset.length > 0 ? result.recordset[0] : null;
             }
             catch (error) {
                 console.error(" Error en findById:", error);
-                throw new Error("Error al obtener categoría por ID");
+                throw new Error("Error al obtener marca por ID");
             }
         });
     }
 }
-exports.CategoriaRepository = CategoriaRepository;
+exports.MarcaRepository = MarcaRepository;

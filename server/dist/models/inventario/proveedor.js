@@ -12,23 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CategoriaRepository = exports.Categoria = void 0;
+exports.ProveedorRepository = exports.proveedor = void 0;
 const mssql_1 = __importDefault(require("mssql"));
 const database_1 = require("../../config/database");
-class Categoria {
-    constructor(idCategoria, nombreCategoria) {
-        this.idCategoria = idCategoria;
-        this.nombreCategoria = nombreCategoria;
+class proveedor {
+    constructor(idProveedor, nombreProveedor) {
+        this.idProveedor = idProveedor;
+        this.nombreProveedor = nombreProveedor;
     }
 }
-exports.Categoria = Categoria;
-class CategoriaRepository {
+exports.proveedor = proveedor;
+class ProveedorRepository {
     // Obtener todas las categorias
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
-                const result = yield pool.request().query("SELECT * FROM categoria");
+                const result = yield pool.request().query("SELECT * FROM PROVEEDOR");
                 return result.recordset;
             }
             catch (error) {
@@ -37,14 +37,14 @@ class CategoriaRepository {
             }
         });
     }
-    findById(idCategoria) {
+    findById(idProveedor) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
                 const result = yield pool
                     .request()
-                    .input("idCategoria", mssql_1.default.Int, idCategoria) // Parametros
-                    .query("SELECT * FROM categoria WHERE idCategoria = @idCategoria");
+                    .input("idProveedor", mssql_1.default.Int, idProveedor) // Parametros
+                    .query("SELECT * FROM PROVEEDOR WHERE idProveedor = @idProveedor");
                 return result.recordset.length > 0 ? result.recordset[0] : null;
             }
             catch (error) {
@@ -54,4 +54,4 @@ class CategoriaRepository {
         });
     }
 }
-exports.CategoriaRepository = CategoriaRepository;
+exports.ProveedorRepository = ProveedorRepository;

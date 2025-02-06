@@ -8,23 +8,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const { Sequelize } = require('sequelize');
-// Option 3: Passing parameters separately (other dialects)
-const sequelize = new Sequelize('MYM_DB', 'MYM_User', 'T4ll3RMyM-', {
-    host: 'DAN',
-    dialect: 'mssql',
-    logging: false,
-});
-// Función para probar la conexión
-const testConnection = () => __awaiter(void 0, void 0, void 0, function* () {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sql = exports.connectDB = void 0;
+const mssql_1 = __importDefault(require("mssql"));
+exports.sql = mssql_1.default;
+const dbConfig = {
+    server: "DAN",
+    database: "MYM_DB",
+    user: "MYM_User",
+    password: "T4ll3RMyM-",
+    options: {
+        //trustedConnection: true,
+        enableArithAbort: true,
+        trustServerCertificate: true,
+    },
+};
+// Función de conexión
+const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield sequelize.authenticate();
-        console.log('Connection has been established successfully MYM-DB.');
+        const pool = yield mssql_1.default.connect(dbConfig);
+        console.log("Conectado a la base de datos");
+        return pool;
     }
     catch (error) {
-        console.error('Unable to connect to the database:', error);
+        console.error("Error al conectar a la BD:", error);
+        throw error;
     }
 });
-testConnection();
-
-module.exports = sequelize;
+exports.connectDB = connectDB;

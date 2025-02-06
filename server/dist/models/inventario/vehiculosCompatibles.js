@@ -12,39 +12,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CategoriaRepository = exports.Categoria = void 0;
+exports.VehiculoRepository = exports.VehiculosCompatibles = void 0;
 const mssql_1 = __importDefault(require("mssql"));
 const database_1 = require("../../config/database");
-class Categoria {
-    constructor(idCategoria, nombreCategoria) {
-        this.idCategoria = idCategoria;
-        this.nombreCategoria = nombreCategoria;
+class VehiculosCompatibles {
+    constructor(idVehiculos, modelo) {
+        this.idVehiculos = idVehiculos;
+        this.modelo = modelo;
     }
 }
-exports.Categoria = Categoria;
-class CategoriaRepository {
-    // Obtener todas las categorias
+exports.VehiculosCompatibles = VehiculosCompatibles;
+class VehiculoRepository {
+    // Obtener todas los vehiculos
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
-                const result = yield pool.request().query("SELECT * FROM categoria");
+                const result = yield pool.request().query("SELECT * FROM VEHICULOS_COMPATIBLES");
                 return result.recordset;
             }
             catch (error) {
                 console.error("Error en getAll:", error);
-                throw new Error("Error al obtener categorías");
+                throw new Error("Error al obtener vehiculos");
             }
         });
     }
-    findById(idCategoria) {
+    findById(idVehiculos) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
                 const result = yield pool
                     .request()
-                    .input("idCategoria", mssql_1.default.Int, idCategoria) // Parametros
-                    .query("SELECT * FROM categoria WHERE idCategoria = @idCategoria");
+                    .input("idVehiculos", mssql_1.default.Int, idVehiculos) // Parametros
+                    .query("SELECT * FROM VEHICULOS_COMPATIBLES WHERE idVehiculos = @idVehiculos");
                 return result.recordset.length > 0 ? result.recordset[0] : null;
             }
             catch (error) {
@@ -54,4 +54,4 @@ class CategoriaRepository {
         });
     }
 }
-exports.CategoriaRepository = CategoriaRepository;
+exports.VehiculoRepository = VehiculoRepository;

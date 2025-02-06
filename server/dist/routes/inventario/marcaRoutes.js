@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const categoriaController_1 = require("../../controllers/inventario/categoriaController");
+const marcaController_1 = require("../../controllers/inventario/marcaController");
 const router = express_1.default.Router();
-router.get("/", categoriaController_1.getAllCategorias); // GET /categorias
-router.get("/:id", categoriaController_1.getCategoriaById); // GET /categorias/:id
+router.get("/", marcaController_1.getAllMarcas); // GET /marca
+router.get("/:id", marcaController_1.getMarcaById); // GET /marca/:id
 exports.default = router;

@@ -34,6 +34,7 @@ export const getProductoById = async (req: Request, res: Response) => {
 
     // Si se encuentra el producto, se responde con JSON
     return res.json(producto);
+    
   } catch (error) {
     console.error("Error en obtener producto por id:", error);
     return res.status(500).json({ error: "Error al obtener el producto" });
