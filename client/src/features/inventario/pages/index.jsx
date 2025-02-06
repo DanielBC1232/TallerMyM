@@ -14,10 +14,9 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 
-import { Button, Grid, Row, Col, FlexboxGrid, Input, Divider } from "rsuite";
+import { Button, Grid, Row, Col, FlexboxGrid, Divider } from "rsuite";
 
 import "../styles/inv.css";
-
 
 const IndexInventario = () => {
   const navigate = useNavigate(); // Hook para navegar
@@ -55,7 +54,6 @@ const IndexInventario = () => {
         style={{ maxWidth: "550px" }}
       >
         <form onSubmit={handleSubmit}>
-
           <div className="row my-4">
             <RangoPrecio />
           </div>
@@ -124,13 +122,14 @@ const IndexInventario = () => {
           <div className="row mx-1">
             <Divider />
             <div className="d-flex flex-column gap-4 my-3">
-            <Button
-            type="submit"
-              className="btn btn-sm btn-primary px-5 text-white"
-              style={{ minWidth: "50px", maxWidth: "350px" }}>
-              Buscar
-            </Button>
-          </div>
+              <Button
+                type="submit"
+                className="btn btn-sm btn-primary px-5 text-white"
+                style={{ minWidth: "50px", maxWidth: "350px" }}
+              >
+                Buscar
+              </Button>
+            </div>
             <Button
               className="btn btn-sm btn-secondary px-5 text-white"
               style={{ minWidth: "50px", maxWidth: "350px" }}
@@ -145,10 +144,7 @@ const IndexInventario = () => {
 
       <div className="main rounded-3 p-3">
         <div className="article-container article-scroll">
-
-
           <ContenedorProductos />
-
         </div>
       </div>
     </div>

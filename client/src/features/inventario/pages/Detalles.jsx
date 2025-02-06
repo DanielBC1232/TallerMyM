@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { data, useParams } from "react-router-dom";
 import axios from "axios";
-import {
-  Grid,
-  Row,
-  Col,
-} from "rsuite";
+import { Grid, Row, Col } from "rsuite";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 import "../styles/inv.css";
 
@@ -14,6 +12,7 @@ const styles = {
 };
 
 const Detalles = () => {
+  const navigate = useNavigate(); // Hook para navegar
   const { idProducto } = useParams();
   const [producto, setProducto] = useState(null);
 
@@ -24,7 +23,7 @@ const Detalles = () => {
           `http://localhost:3000/productos/${idProducto}`
         ); //consumir api en backend por id
         setProducto(data);
-        console.log(data); // imprimir JSON en consola
+        //console.log(data); // imprimir JSON en consola
       } catch (error) {
         console.error("Error al obtener el producto:", error);
       }
@@ -34,6 +33,59 @@ const Detalles = () => {
   }, [idProducto]);
 
   if (!producto) return <p>Cargando...</p>;
+
+  const normalizarVehiculosCompatibles = (vehiculos) => {
+    if (Array.isArray(vehiculos)) {
+      //si es array (mas de un elemento)
+      return vehiculos.replace(/[\[\]"]/g, "").replace(/,/g, ", "); //expresion regular para convertir a string
+    } else {
+      try {
+        //si es string (un solo elemento)
+        return vehiculos.replace(/[\[\]"]/g, "").replace(/,/g, ", "); //expresion regular para convertir a string
+      } catch (error) {
+        return []; // Si falla, un array vacío
+      }
+    }
+    //Se usa expresion regular en lugar de parseos porque cuando el array tiene un solo elemento es string normal pero cuando
+    //tiene mas de uno es un array, es decir que el tipo cambia dependiendo si es uno o mas elementos en el array, y esto da problemas al parsear.
+  };
+
+  //toma el valor del array y usa la funcion para pasar a string legible.
+  const vehiculos = normalizarVehiculosCompatibles(
+    producto.vehiculosCompatibles
+  );
+
+  //Eliminar
+  const Eliminar = () => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "¡Este producto o servicio será eliminado permanentemente!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d9534f",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:3000/productos/eliminar-producto/${idProducto}`)
+          .then(() => {
+            // Redirigir a la pagina de inventario despues de eliminar
+            navigate("/inventario");
+          })
+          .catch((error) => {
+            // error
+            Swal.fire({
+              title: "Error",
+              text: "Error al eliminar producto o servicio: " + error.message, // Usar error.message para mostrar un mensaje claro
+              icon: "error",
+              showCancelButton: false,
+            });
+            console.error("Error al eliminar producto:", error);
+          });
+      }
+    });
+  };
+
   return (
     <div className="container main mx-auto p-5">
       <Grid fluid>
@@ -75,13 +127,7 @@ const Detalles = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={
-                      Array.isArray(producto.vehiculosCompatibles) // verifica si es un array
-                        ? producto.vehiculosCompatibles.join(", ") // si es un array usa join()
-                        : typeof producto.vehiculosCompatibles === "string" // si es una cadena
-                        ? JSON.parse(producto.vehiculosCompatibles).join(", ") // Conviértela a array y usa join()
-                        : "No hay vehículos compatibles"
-                    }
+                    value={vehiculos}
                     readOnly
                   />
                 </div>
@@ -128,11 +174,11 @@ const Detalles = () => {
                   <div className="input-group">
                     <span className="input-group-text">₡</span>
                     <input
-                    type="number"
-                    className="form-control"
-                    value={producto.precio}
-                    readOnly
-                  />
+                      type="number"
+                      className="form-control"
+                      value={producto.precio}
+                      readOnly
+                    />
                   </div>
                 </div>
                 <div className="mb-3">
@@ -142,11 +188,14 @@ const Detalles = () => {
                   <input
                     type="text"
                     className="form-control"
-                    value={new Date(producto.fechaIngreso).toLocaleDateString('es-CR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
+                    value={new Date(producto.fechaIngreso).toLocaleDateString(
+                      "es-CR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
                     readOnly
                   />
                 </div>
@@ -185,24 +234,24 @@ const Detalles = () => {
                     rows={6}
                   />
                 </div>
-                
               </Col>
-              
             </Row>
             <div className="d-flex d-grid justify-content-end gap-4">
-                  <button
-                    className="btn btn-danger text-white"
-                    style={{ maxWidth: "120px" }}>
-                    Eliminar
-                  </button>
-                  <button
-                    className="btn btn-warning text-white"
-                    style={{ maxWidth: "120px" }}>
-                    Editar
-                  </button>
-                </div>
+              <button
+                onClick={Eliminar}
+                className="btn btn-danger text-white"
+                style={{ maxWidth: "120px" }}
+              >
+                Eliminar
+              </button>
+              <button
+                className="btn btn-warning text-white"
+                style={{ maxWidth: "120px" }}
+              >
+                Editar
+              </button>
+            </div>
           </Col>
-          
         </Row>
       </Grid>
     </div>
