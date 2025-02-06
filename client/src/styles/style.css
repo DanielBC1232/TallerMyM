@@ -21,6 +21,17 @@ a {
   text-decoration: none;
 }
 
+nav a {
+  color: inherit;
+  text-decoration: none;
+
+}
+
+nav a:hover{
+  text-decoration: none;
+  color: inherit;
+}
+
 .table {
   margin: 0;
   width: 100%;
@@ -165,4 +176,12 @@ button:active {
   -webkit-box-shadow: inset 0 0 70px #005aa3;
 }
 
+.btn-link{
+  text-decoration: none;
+  color: inherit;
+}
 
+.btn-link:hover{
+  text-decoration: none;
+  color: inherit;
+}

@@ -209,6 +209,18 @@ CREATE TABLE PROVEEDOR(
 )
 GO
 
+CREATE TABLE MARCA_PRODUCTO(
+    idMarca INT IDENTITY(1,1) PRIMARY KEY,
+    nombreMarca VARCHAR(100) NOT NULL
+)
+GO
+
+CREATE TABLE VEHICULOS_COMPATIBLES(
+    idVehiculos INT IDENTITY(1,1) PRIMARY KEY,
+    modelo VARCHAR (100) NOT NULL,
+)
+GO
+
 --producto o servicio
 CREATE TABLE PRODUCTO_SERVICIO(
 
@@ -217,10 +229,13 @@ CREATE TABLE PRODUCTO_SERVICIO(
     marca VARCHAR(100) NOT NULL,
     descripcion NVARCHAR(MAX) NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
-    cantidadDisponible INT NOT NULL,
+    stock INT NOT NULL,
     fechaIngreso DATE NOT NULL,
     ubicacionAlmacen VARCHAR(100) NOT NULL,
-    cantidadInventario INT NOT NULL,
+    proveedor VARCHAR(50) NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    vehiculosCompatibles NVARCHAR(MAX) NOT NULL,--array
+
     tipo VARCHAR(50) NOT NULL, --SERVICIO O PRODUCTO
     img VARCHAR(255) NULL,
 
@@ -228,34 +243,6 @@ CREATE TABLE PRODUCTO_SERVICIO(
     porcentajeDescuento DECIMAL(10,2) NULL,
     fechaInicio DATETIME NULL,
     fechaFin DATETIME NULL,
-
-    --FK
-    idCategoria INT NOT NULL,
-    idProveedor INT NOT NULL,
-    FOREIGN KEY (idCategoria) REFERENCES CATEGORIA(idCategoria) ON DELETE CASCADE,
-    FOREIGN KEY (idProveedor) REFERENCES PROVEEDOR(idProveedor) ON DELETE CASCADE,
-
-)
-GO
-
-CREATE TABLE VEHICULOS_COMPATIBLES(
-
-    idVehiculos INT IDENTITY(1,1) PRIMARY KEY,
-    modelo VARCHAR (100) NOT NULL,
-    marca VARCHAR (50) NOT NULL,
-    anno INT NOT NULL
-
-)
-GO
-
-CREATE TABLE VEHICULOS_COMPATIBLES_POR_REPUESTO(
-
-    idVehiculoRepuesto INT IDENTITY(1,1) PRIMARY KEY,
-    idProducto INT NOT NULL,
-    idVehiculos INT NOT NULL,
-
-    FOREIGN KEY (idProducto) REFERENCES PRODUCTO_SERVICIO(idProducto) ON DELETE CASCADE,
-    FOREIGN KEY (idVehiculos) REFERENCES VEHICULOS_COMPATIBLES(idVehiculos) ON DELETE CASCADE
 )
 GO
 
@@ -291,10 +278,7 @@ CREATE TABLE GASTO_OPERATIVO(
     idGastoOperativo INT IDENTITY(1,1) PRIMARY KEY,
     monto DECIMAL(10,2) NOT NULL,
     fecha DATETIME NOT NULL,
-
-    idCategoria INT NOT NULL,
     idProveedor INT NOT NULL,
-    FOREIGN KEY (idCategoria) REFERENCES CATEGORIA(idCategoria),
     FOREIGN KEY (idProveedor) REFERENCES PROVEEDOR(idProveedor)
 )
 GO

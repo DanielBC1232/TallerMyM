@@ -1,9 +1,8 @@
-import DropdownVehiculos from "../components/DropDownVehiculos";
+import SelectVehiculos from "../components/SelectVehiculos";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectMarca from "../components/SelectMarca";
 import SelectProveedor from "../components/SelectProveedor";
-import ImagenArticulo from "../components/ImagenArticulo";
-import SelectStock from "../components/SelectStock";
+import SubirImagen from "../components/SubirImagen";
 
 import {
   Button,
@@ -31,7 +30,7 @@ const Editar = () => {
       <Grid fluid>
         <Row className="show-grid" gutter={16}>
           <Col xs={8}>
-            <ImagenArticulo />
+            <SubirImagen />
           </Col>
 
           <Col
@@ -47,7 +46,7 @@ const Editar = () => {
 
                 <SelectMarca />
 
-                <DropdownVehiculos />
+                <SelectVehiculos />
 
                 <SelectCategoria />
 

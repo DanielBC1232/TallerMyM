@@ -2,12 +2,17 @@ import Articulo from "../components/Articulo";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectStock from "../components/SelectStock";
 import SelectMarca from "../components/SelectMarca";
-import VehiculosCompatibles from "../components/VehiculosCompatibles";
 import RangoPrecio from "../components/RangoPrecio";
+import SelectVehiculos from "../components/SelectVehiculos";
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import {Button ,Grid, Row, Col, FlexboxGrid, Input, Divider} from "rsuite";
 
 import "../styles/inv.css";
+
+const onSubmit = (data) => {
+  console.log(data);
+};
 
 const IndexInventario = () => {
   return (
@@ -36,7 +41,7 @@ const IndexInventario = () => {
                   <SelectStock />
                 </Col>
                 <Col xs={12}>
-                  <VehiculosCompatibles />
+                  SelectVehiculos
                 </Col>
               </Row>
             </FlexboxGrid>
@@ -56,7 +61,7 @@ const IndexInventario = () => {
         <div className="row mx-1">
           <Divider />
           <Button className="btn btn-sm btn-primary px-5 text-white">
-            Agregar Repuesto/Servicio
+            <Link to="/Agregar" className="btn-link">Agregar Repuesto/Servicio</Link>
           </Button>
         </div>
       </nav>

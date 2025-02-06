@@ -1,19 +1,30 @@
-import express from 'express';
-import categoriaRoutes from '../routes/inventario/categoriaRoutes'
-import { connectDB } from '../config/database';
+import express from "express";
+import cors from "cors";
+import categoriaRoutes from "../routes/inventario/categoriaRoutes";
+import marcaRoutes from "../routes/inventario/marcaRoutes";
+import proveedorRoutes from "../routes/inventario/proveedorRoute";
+import vehiculosCompatiblesRoute from "../routes/inventario/vehiculosCompatiblesRoutes";
+import productoRoutes from "../routes/inventario/productoRoutes";
+//import usuarioRoutes from "../routes/perfil/usuarioRoutes";
+import emailRoutes from "../routes/perfil/emailRoutes";
+
+
+import { connectDB } from "../config/database";
 const app = express();
 
-// Middleware
-app.use(express.json());
+app.use(express.json()); // Middleware
 
-// Iniciar servidor
-const PORT = 3000
+const PORT = 3000; // Iniciar servidor
 app.listen(3000, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 
-//prueba conexion
-connectDB()
+connectDB() // conexion BD
   .then(() => console.log("Conectado a la base de datos"))
   .catch((err) => {
     if (err instanceof Error) {
@@ -23,8 +34,13 @@ connectDB()
     }
   });
 
-app.use("/api/categorias", categoriaRoutes);
+//* Rutas Inventario
+app.use("/categorias", categoriaRoutes);
+app.use("/marcas", marcaRoutes);
+app.use("/proveedor", proveedorRoutes);
+app.use("/vehiculos-compatibles", vehiculosCompatiblesRoute);
+app.use("/productos", productoRoutes);
 
-//app.use('/api/categorias', categoriaRoutes);
-
-
+//* Rutas Perfil
+//app.use("/usuario", usuarioRoutes);
+app.use("/email", emailRoutes);
