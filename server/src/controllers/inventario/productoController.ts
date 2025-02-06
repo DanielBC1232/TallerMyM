@@ -20,18 +20,27 @@ export const getProductoById = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
 
-    const producto = await ProductoRepo.findById(id); // Get
-
-    // Validaciones - return
-    if (!producto) {
-      res.status(404).json({ error: "Producto no encontrado" }); // Return
+    // Verificar si el ID es válido
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "El parámetro id debe ser un número válido" });
     }
-    res.json(producto); //Return exitoso
+
+    const producto = await ProductoRepo.findById(id);
+
+    // Si no se encuentra el producto, se detiene la ejecución con return
+    if (!producto) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+
+    // Si se encuentra el producto, se responde con JSON
+    return res.json(producto);
   } catch (error) {
     console.error("Error en obtener producto por id:", error);
-    res.status(500).json({ error: "Error al obtener el producto" });
+    return res.status(500).json({ error: "Error al obtener el producto" });
   }
 };
+
+
 
 // Registrar nuevo producto
 export const addProducto = async (req: Request, res: Response) => {

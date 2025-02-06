@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.get("/", getAllProductos); 
-router.get("/:id", getProductoById); 
+router.get("/:id", getProductoById);
 router.post("/agregar-producto/", addProducto);
 router.patch("/actualizar-producto/:id", updateProducto);
 router.delete("/eliminar-producto/:id", deleteProducto);

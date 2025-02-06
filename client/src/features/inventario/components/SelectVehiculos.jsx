@@ -43,6 +43,7 @@ const SelectVehiculos = ({ value, onChange }) => {
         onChange={handleChange}
         placeholder="Seleccione..."
         noOptionsMessage={() => "No hay vehículos disponibles"}
+        maxMenuHeight={185}
       />
     </div>
   );

@@ -26,13 +26,13 @@ const App = () => {
 
           ****************** */}
 
-
         <Routes>
           <Route path="/" element={<CrearPerfil />} />
 
           {/* Rutas para inventario */}
           <Route path="/inventario-agregar" element={<Agregar />} />
           <Route path="/inventario" element={<IndexInventario />} />
+          <Route path="/inventario-detalles/:idProducto" element={<Detalles />} />{/* :id para esperar recibir un id */}
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
