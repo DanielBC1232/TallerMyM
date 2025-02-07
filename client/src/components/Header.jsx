@@ -26,9 +26,19 @@ const Header = ({ onSelect, activeKey, ...props }) => {
           <Nav.Item className="li" eventKey="2">Historial</Nav.Item>
         </Nav.Menu>
         <Nav.Item eventKey="3">Trabajadores</Nav.Item>
-        <Nav.Item eventKey="4">Clientes</Nav.Item>
+
+         <Nav.Item eventKey="3">Trabajadores</Nav.Item>
+        <Nav.Menu title="Clientes">
+          <Nav.Item as={Link} to="/cliente/registrar" eventKey="4"> Registrar Cliente</Nav.Item>
+          <Nav.Item as={Link} to="/cliente/consulta" eventKey="5"> Consultar Cliente </Nav.Item>
+          <Nav.Item as={Link} to="/cliente/editar" eventKey="6"> Modificar Cliente </Nav.Item>
+          <Nav.Item as={Link} to="/cliente/eliminar" eventKey="7"> Eliminar Cliente </Nav.Item>
+          <Nav.Item as={Link} to="/cliente/agregar-vehiculo" eventKey="8"> Agregar vehiculo a Cliente </Nav.Item>
+          <Nav.Item as={Link} to="/cliente/eliminar-vehiculo" eventKey="9"> Eliminar vehiculo a Cliente </Nav.Item>
+        </Nav.Menu>
         <Nav.Item as={Link} to="/perfil" eventKey="5">Administrativo</Nav.Item>
       </Nav>
+
       <Nav pullRight>
         <Nav.Menu icon={<CogIcon />} title="Ajustes">
           <Nav.Item eventKey="2">

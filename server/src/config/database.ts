@@ -1,7 +1,7 @@
 import sql from "mssql";
 
 const dbConfig = {
-  server: "DAN",
+  server: "...",
   database: "MYM_DB",
   user: "MYM_User",
   password: "T4ll3RMyM-",

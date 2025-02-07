@@ -5,6 +5,8 @@ import marcaRoutes from "../routes/inventario/marcaRoutes";
 import proveedorRoutes from "../routes/inventario/proveedorRoute";
 import vehiculosCompatiblesRoute from "../routes/inventario/vehiculosCompatiblesRoutes";
 import productoRoutes from "../routes/inventario/productoRoutes";
+import clienteRoutes from "../routes/inventario/clienteRoutes";
+
 
 import { connectDB } from "../config/database";
 const app = express();
@@ -37,6 +39,7 @@ app.use("/marcas", marcaRoutes);
 app.use("/proveedor", proveedorRoutes);
 app.use("/vehiculos-compatibles", vehiculosCompatiblesRoute);
 app.use("/productos", productoRoutes);
+app.use("/clientes", clienteRoutes);
 
 //* Rutas Perfil
 //app.use("/usuario", usuarioRoutes);

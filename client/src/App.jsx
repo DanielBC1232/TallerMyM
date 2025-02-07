@@ -12,6 +12,13 @@ import Editar from "./features/inventario/pages/Editar";
 import Agregar from "./features/inventario/pages/Agregar";
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
 
+import AgregarCliente from "./features/clientes/pages/Agregar";
+import ConsultarCliente from "./features/clientes/pages/Consulta";
+import EditarCliente from "./features/clientes/pages/Editar";
+import EliminarCliente from "./features/clientes/pages/Eliminar";
+import AgregarVehiculoCliente from "./features/clientes/pages/AgregarVehiculo";
+import EliminarVehiculoCliente from "./features/clientes/pages/EliminarVehiculo";
+
 const App = () => {
   return (
     <div className="app">
@@ -33,6 +40,16 @@ const App = () => {
           <Route path="/inventario-agregar" element={<Agregar />} />
           <Route path="/inventario" element={<IndexInventario />} />
           <Route path="/inventario-detalles/:idProducto" element={<Detalles />} />{/* :id para esperar recibir un id */}
+
+          <Route path="/" element={<App />} />
+          <Route path="/agregar" element={<Agregar />} />
+          <Route path="/inventario" element={<IndexInventario />} />
+          <Route path="/cliente/registrar" element={<AgregarCliente />} />
+          <Route path="/cliente/consulta" element={<ConsultarCliente />} />
+          <Route path="/cliente/editar" element={<EditarCliente />} />
+          <Route path="/cliente/eliminar" element={<EliminarCliente />} />
+          <Route path="/cliente/agregar-vehiculo" element={<AgregarVehiculoCliente />} />
+          <Route path="/cliente/eliminar-vehiculo" element={<EliminarVehiculoCliente />} />
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
