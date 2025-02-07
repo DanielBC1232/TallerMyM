@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import axios from "axios";
+
 
 const SelectVehiculos = ({ value, onChange }) => {
   const [opciones, setOpciones] = useState([]);
@@ -7,22 +9,19 @@ const SelectVehiculos = ({ value, onChange }) => {
   useEffect(() => {
     const obtenerVehiculos = async () => {
       try {
-        const respuesta = await fetch("http://localhost:3000/vehiculos-compatibles", {
-          headers: { "Content-Type": "application/json" },
-        });
-        const datos = await respuesta.json();
-        const opcionesFormateadas = datos.map((vehiculo) => ({
-          value: vehiculo.modelo,  // Guardamos el modelo como el valor
-          label: vehiculo.modelo,  // Mostramos el modelo en la opción
+        const { data } = await axios.get("http://localhost:3000/vehiculos-compatibles");
+        const opcionesFormateadas = data.map((vehiculo) => ({
+          value: vehiculo.modelo,
+          label: vehiculo.modelo,
         }));
         setOpciones(opcionesFormateadas);
       } catch (error) {
-        console.error("Error obteniendo los vehiculos:", error);
+        console.error("Error obteniendo los vehículos:", error);
       }
     };
-
+  
     obtenerVehiculos();
-  }, []);
+  }, []);  
 
   const handleChange = (selectedOptions) => {
     // Si no se selecciona nada, pasamos un arreglo vacío
@@ -44,6 +43,7 @@ const SelectVehiculos = ({ value, onChange }) => {
         onChange={handleChange}
         placeholder="Seleccione..."
         noOptionsMessage={() => "No hay vehículos disponibles"}
+        maxMenuHeight={185}
       />
     </div>
   );

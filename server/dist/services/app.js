@@ -11,8 +11,6 @@ const proveedorRoute_1 = __importDefault(require("../routes/inventario/proveedor
 const vehiculosCompatiblesRoutes_1 = __importDefault(require("../routes/inventario/vehiculosCompatiblesRoutes"));
 const productoRoutes_1 = __importDefault(require("../routes/inventario/productoRoutes"));
 const database_1 = require("../config/database");
-const email_1 = __importDefault(require("../routes/perfil/emailRoutes"));
-const usuario_1 = __importDefault(require("../routes/perfil/usuarioRoutes"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json()); // Middleware
 const PORT = 3000; // Iniciar servidor
@@ -38,6 +36,5 @@ app.use("/marcas", marcaRoutes_1.default);
 app.use("/proveedor", proveedorRoute_1.default);
 app.use("/vehiculos-compatibles", vehiculosCompatiblesRoutes_1.default);
 app.use("/productos", productoRoutes_1.default);
-//* Rutas Crear Perfil
-app.use("/email",email_1.default);
-app.use("/usuario", usuario_1.default);
+//* Rutas Perfil
+//app.use("/usuario", usuarioRoutes);
