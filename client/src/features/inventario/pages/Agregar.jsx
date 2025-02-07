@@ -4,11 +4,14 @@ import SelectMarca from "../components/SelectMarca";
 import SelectProveedor from "../components/SelectProveedor";
 import SubirImagen from "../components/SubirImagen";
 import SelectVehiculos from "../components/SelectVehiculos";
-import { Grid, Row, Col, Notification } from "rsuite";
+import { Grid, Row, Col } from "rsuite";
 import "../styles/inv.css";
 import Swal from "sweetalert2";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Agregar = () => {
+  const navigate = useNavigate(); // Hook para navegar
   const [formData, setFormData] = useState({
     nombre: "",
     marca: "",
@@ -16,10 +19,12 @@ const Agregar = () => {
     precio: 0,
     stock: 0,
     fechaIngreso: "",
-    ubicacion: "",
+    ubicacionAlmacen: "",
     proveedor: "",
     categoria: "",
     vehiculosCompatibles: [],
+    img: "",
+    tipo: "",
   });
 
   const errorNotification = (message) => {
@@ -34,7 +39,12 @@ const Agregar = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]:
+        name === "precio" || name === "stock"
+          ? Number(value)
+          : name === "vehiculosCompatibles"
+          ? JSON.stringify(value)
+          : value,
     });
   };
 
@@ -119,14 +129,14 @@ const Agregar = () => {
   const verificarUbicacion = () => {
     var pass = false;
     //Campo Ubicacion en almacen
-    if (!formData.ubicacion.trim()) {
-      ubicacion.classList.remove("is-valid");
-      ubicacion.classList.add("is-invalid");
+    if (!formData.ubicacionAlmacen.trim()) {
+      ubicacionAlmacen.classList.remove("is-valid");
+      ubicacionAlmacen.classList.add("is-invalid");
       pass = false;
       errorNotification("Escriba la ubicación en almacén");
-    } else if (formData.ubicacion.trim()) {
-      ubicacion.classList.remove("is-invalid");
-      ubicacion.classList.add("is-valid");
+    } else if (formData.ubicacionAlmacen.trim()) {
+      ubicacionAlmacen.classList.remove("is-invalid");
+      ubicacionAlmacen.classList.add("is-valid");
       pass = true;
     }
     return pass;
@@ -198,6 +208,22 @@ const Agregar = () => {
     return pass;
   };
 
+  const verificarTipo = () => {
+    var pass = false;
+    //Campo Descripcion
+    if (!formData.tipo.trim()) {
+      tipo.classList.remove("is-valid");
+      tipo.classList.add("is-invalid");
+      pass = false;
+      errorNotification("Debe seleccionar el tipo");
+    } else if (formData.tipo.trim()) {
+      tipo.classList.remove("is-invalid");
+      tipo.classList.add("is-valid");
+      pass = true;
+    }
+    return pass;
+  };
+
   // VERIFICACION GENERAL
   const verificacion = () => {
     var pass = false;
@@ -212,7 +238,8 @@ const Agregar = () => {
       verificarCategoria() &&
       verificarStock() &&
       verificarProveedor() &&
-      verificarDescripcion()
+      verificarDescripcion() &&
+      verificarTipo()
     ) {
       pass = true;
     } else {
@@ -223,18 +250,31 @@ const Agregar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    //console.log(formData);
 
-    if(verificacion()){
-      //Enviar datos
-
-
-    }else{
-      //No enviar datos
-
-      
+    if (verificacion()) {
+      axios
+        .post("http://localhost:3000/productos/agregar-producto/", formData)
+        .then((res) => {
+          Swal.fire({
+            icon: "success",
+            title: "Producto agregado correctamente",
+            showConfirmButton: false,
+            timer: 1000,
+          }).then(() => {
+            navigate("/inventario");
+          });
+        })
+        .catch((error) =>
+          Swal.fire({
+            icon: "error",
+            title: "Error al agregar un producto / servicio:",
+            text: error,
+            showConfirmButton: false,
+            timer: 1000,
+          })
+        );
     }
-
   };
 
   return (
@@ -243,7 +283,8 @@ const Agregar = () => {
         <Grid fluid>
           <Row className="show-grid" gutter={16}>
             <Col xs={6}>
-              <SubirImagen />
+              {/* AUN FALTA COMPONENTE SUBIR IMAGEN */}
+              <SubirImagen value={formData.img} onChange={handleChange} />
             </Col>
             <Col
               xs={16}
@@ -302,6 +343,22 @@ const Agregar = () => {
                       onChange={handleChange}
                     />
                   </div>
+                  <div className="mb-3">
+                    <label htmlFor="serviceProduct" className="form-label">
+                      Servicio o Producto
+                    </label>
+                    <select
+                      id="tipo"
+                      name="tipo"
+                      className="form-select"
+                      value={formData.tipo}
+                      onChange={handleChange}
+                    >
+                      <option value="">Seleccione el tipo</option>
+                      <option value="producto">Producto</option>
+                      <option value="servicio">Servicio</option>
+                    </select>
+                  </div>
                 </Col>
                 <Col xs={12} className="column">
                   <div className="mb-3">
@@ -317,7 +374,7 @@ const Agregar = () => {
                         min={0}
                         step={100}
                         className="form-control"
-                        value={formData.precio}
+                        value={Number(formData.precio)}
                         onChange={handleChange}
                       />
                     </div>
@@ -340,8 +397,8 @@ const Agregar = () => {
                       Ubicación en almacén:
                     </label>
                     <input
-                      id="ubicacion"
-                      name="ubicacion"
+                      id="ubicacionAlmacen"
+                      name="ubicacionAlmacen"
                       type="text"
                       className="form-control"
                       value={formData.ubicacion}

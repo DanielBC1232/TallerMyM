@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 //constante de opciones
 const SelectProveedor = ({ value, onChange }) => {
@@ -7,19 +8,16 @@ const SelectProveedor = ({ value, onChange }) => {
   useEffect(() => {
     const obtenerProveedors = async () => {
       try {
-        const respuesta = await fetch("http://localhost:3000/proveedor", {
-          headers: { "Content-Type": "application/json" },
-        });
-        const datos = await respuesta.json();
-        //console.log(datos);
-        setOpciones(datos);
+        const { data } = await axios.get("http://localhost:3000/proveedor");
+        setOpciones(data);
       } catch (error) {
         console.error("Error obteniendo las Proveedors:", error);
       }
     };
-
+  
     obtenerProveedors();
   }, []);
+  
 
   return (
     <div className="">
