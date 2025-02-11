@@ -3,7 +3,11 @@ import { data, useParams } from "react-router-dom";
 import axios from "axios";
 import { Grid, Row, Col } from "rsuite";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  useNavigate,
+} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import "../styles/inv.css";
 
@@ -244,12 +248,13 @@ const Detalles = () => {
               >
                 Eliminar
               </button>
-              <button
+              <Link
+                to={`/inventario-editar/${idProducto}`}
                 className="btn btn-warning text-white"
                 style={{ maxWidth: "120px" }}
               >
                 Editar
-              </button>
+              </Link>
             </div>
           </Col>
         </Row>

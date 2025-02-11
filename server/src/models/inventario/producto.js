@@ -155,8 +155,8 @@ class ProductoRepository {
                 return result.rowsAffected[0];
             }
             catch (error) {
-                console.error("Error en insertar producto o servicio:", error);
-                throw new Error("Error al insertar producto o servicio");
+                console.error("Error en actualizar producto o servicio:", error);
+                throw new Error("Error al actualizar producto o servicio");
             }
         });
     }

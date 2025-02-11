@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 import { Route, Routes } from "react-router-dom";
 
 import Detalles from "./features/inventario/pages/Detalles";
-import IndexInventario from "./features/inventario/pages/Index";
+import IndexInventario from "./features/inventario/pages/index";
 import Editar from "./features/inventario/pages/Editar";
 import Agregar from "./features/inventario/pages/Agregar";
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
@@ -33,6 +33,7 @@ const App = () => {
           <Route path="/inventario-agregar" element={<Agregar />} />
           <Route path="/inventario" element={<IndexInventario />} />
           <Route path="/inventario-detalles/:idProducto" element={<Detalles />} />{/* :id para esperar recibir un id */}
+          <Route path="/inventario-editar/:idProducto" element={<Editar />} />{/* :id para esperar recibir un id */}
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
