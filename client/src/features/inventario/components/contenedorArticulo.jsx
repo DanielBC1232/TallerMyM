@@ -43,7 +43,7 @@ const ContenedorProductos = (formData) => {
               <Image
                 className="card-img-top"
                 src={getImg+productos.img}
-                fallbackSrc="public/noResult.png"
+                fallbackSrc="/noResult.png"
                 alt=""
                 style={{ width: "100%", minHeight: "120px" }}
               />
