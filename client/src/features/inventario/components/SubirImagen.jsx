@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Uploader, Message, Loader, toaster } from "rsuite";
 import FileUploadIcon from "@rsuite/icons/FileUpload";
-import axios from "axios";
 
 // Función para subir la imagen al backend
 const SubirImagen = ({ value, onChange }) => {
@@ -13,7 +12,7 @@ const SubirImagen = ({ value, onChange }) => {
       console.error("Archivo inválido en previewFile:", file);
       return;
     }
-  
+
     const reader = new FileReader();
     reader.onloadend = () => {
       callback(reader.result);
@@ -32,7 +31,7 @@ const SubirImagen = ({ value, onChange }) => {
         previewFile(file.blobFile, (value) => {
           setFileInfo(value);
         });
-        value=file.name;
+        value = file.name;
       }}
       onSuccess={(response, file) => {
         setUploading(false);
