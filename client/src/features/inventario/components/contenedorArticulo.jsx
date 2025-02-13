@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Image } from "rsuite";
 
 console.log()
 
@@ -24,6 +25,9 @@ const ContenedorProductos = (formData) => {
     obtenerProductos();
   }, []);
 
+   //url get imagen
+   const getImg = `http://localhost:3000/img/`;
+
   return (
     <div className="article-container article-scroll">
       {listado.map((productos) => (
@@ -36,11 +40,12 @@ const ContenedorProductos = (formData) => {
               to={`/inventario-detalles/${productos.idProducto}`}
               className="btn-link"
             >
-              <img
+              <Image
                 className="card-img-top"
-                src="https://www.autofixpr.com/wp-content/uploads/2017/12/3p-disco-freno.jpg"
-                alt="Card image"
-                style={{ width: "90%", minHeight: "120px" }}
+                src={getImg+productos.img}
+                fallbackSrc="public/noResult.png"
+                alt=""
+                style={{ width: "100%", minHeight: "120px" }}
               />
             </Link>
           </div>

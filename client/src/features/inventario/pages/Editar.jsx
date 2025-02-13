@@ -272,9 +272,9 @@ const Editar = () => {
     //console.log(formData);
 
     if (verificacion()) {
-      //console.log(formData)
+      console.log(formData)
       axios
-        .put("http://localhost:3000/productos/actualizar-producto/", formData)
+        .patch("http://localhost:3000/productos/actualizar-producto/", formData)
         .then((res) => {
           
           Swal.fire({
@@ -290,14 +290,20 @@ const Editar = () => {
     }
   };
 
+console.log(formData)
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="container main mx-auto p-5">
         <Grid fluid>
           <Row className="show-grid" gutter={16}>
             <Col xs={6}>
-              {/* AUN FALTA COMPONENTE SUBIR IMAGEN */}
-              <SubirImagen value={formData.img} onChange={handleChange} />
+            <SubirImagen
+                value={formData.img}
+                onChange={(newPath) =>
+                  setFormData((prev) => ({ ...prev, img: newPath }))
+                }
+              />
             </Col>
             <Col
               xs={16}
@@ -444,7 +450,10 @@ const Editar = () => {
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="d-grid justify-content-center">
+                  
+                </Col>
+              </Row>
+              <div className="d-grid justify-content-end me-5">
                     <button
                       type="submit"
                       className="btn btn-primary"
@@ -453,8 +462,6 @@ const Editar = () => {
                       Guardar
                     </button>
                   </div>
-                </Col>
-              </Row>
             </Col>
           </Row>
         </Grid>

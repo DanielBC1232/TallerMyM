@@ -237,7 +237,7 @@ CREATE TABLE PRODUCTO_SERVICIO(
     vehiculosCompatibles NVARCHAR(MAX) NOT NULL,--array
 
     tipo VARCHAR(50) NOT NULL, --SERVICIO O PRODUCTO
-    img VARCHAR(255) NULL,
+    img NVARCHAR(255) NULL,
 
     -- Opcional - Descuentos
     porcentajeDescuento DECIMAL(10,2) NULL,

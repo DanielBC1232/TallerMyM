@@ -113,7 +113,7 @@ class ProductoRepository {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
-                const result = yield 
+                const result = yield pool.request()
                 //Query update
                 pool
                     //PARAMETROS
@@ -130,7 +130,7 @@ class ProductoRepository {
                     .input("categoria", mssql_1.default.VarChar, categoria)
                     .input("vehiculosCompatibles", mssql_1.default.NVarChar, vehiculosCompatibles)
                     .input("tipo", mssql_1.default.VarChar, tipo)
-                    .input("img", mssql_1.default.VarChar, img || null)
+                    .input("img", mssql_1.default.NVarChar, img || null)
                     .input("porcentajeDescuento", mssql_1.default.Decimal(10, 2), porcentajeDescuento || null)
                     .input("fechaInicio", mssql_1.default.DateTime, fechaInicio || null)
                     .input("fechaFin", mssql_1.default.DateTime, fechaFin || null).query(`
@@ -155,8 +155,7 @@ class ProductoRepository {
                 return result.rowsAffected[0];
             }
             catch (error) {
-                console.error("Error en actualizar producto o servicio:", error);
-                throw new Error("Error al actualizar producto o servicio");
+                console.error("Server - Error en actualizar producto o servicio:", error);
             }
         });
     }

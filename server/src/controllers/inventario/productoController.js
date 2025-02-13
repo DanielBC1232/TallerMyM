@@ -72,7 +72,7 @@ exports.addProducto = addProducto;
 const updateProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Obtener los datos del cuerpo de la solicitud
-        const {idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin, } = req.body;
+        const {idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin} = req.body;
         // Llamar al metodo update Producto
         const actualizarProducto = yield ProductoRepo.updateProducto(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin);
         // Respuesta exitosa con el producto insertado
@@ -83,8 +83,8 @@ const updateProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
         // Manejo de errores
     }
     catch (error) {
-        console.error("Error al actualizar producto:", error);
-        res.status(500).json({ error: "Error al actualizar el producto" });
+        console.error("Controller - Error al actualizar producto:", error);
+        res.status(500).json({ error: "Controller - Error al actualizar el producto" });
     }
 });
 exports.updateProducto = updateProducto;
@@ -95,17 +95,17 @@ const deleteProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
         // Verificamos si el producto existe o id valido
         const producto = yield ProductoRepo.findById(id);
         if (!producto) {
-            res.status(404).json({ error: "Producto no encontrado" }); // Si no existe o no se encontro con id
+            res.status(404).json({ error: "Controller - Producto no encontrado" }); // Si no existe o no se encontro con id
         }
         // Llama el metodo de borrado
         yield ProductoRepo.deleteProducto(id);
         // Respuesta exitosa
-        res.status(200).json({ message: "Producto eliminado exitosamente" });
+        res.status(200).json({ message: "Controller - Producto eliminado exitosamente" });
     }
     catch (error) {
         //Manejo de errores
-        console.error("Error al eliminar producto:", error);
-        res.status(500).json({ error: "Error al eliminar el producto" });
+        console.error("Controller - Error al eliminar producto:", error);
+        res.status(500).json({ error: "Controller - Error al eliminar el producto" });
     }
 });
 exports.deleteProducto = deleteProducto;

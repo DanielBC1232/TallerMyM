@@ -48,7 +48,7 @@ const Agregar = () => {
     });
   };
 
-  //Verificaciones de campos
+  // --- Verificaciones de campos ---
   const verificarNombre = () => {
     var pass = false;
     //Campo Nombre
@@ -250,7 +250,7 @@ const Agregar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //console.log(formData);
+    console.log(formData);
 
     if (verificacion()) {
       axios
@@ -283,8 +283,12 @@ const Agregar = () => {
         <Grid fluid>
           <Row className="show-grid" gutter={16}>
             <Col xs={6}>
-              {/* AUN FALTA COMPONENTE SUBIR IMAGEN */}
-              <SubirImagen value={formData.img} onChange={handleChange} />
+              <SubirImagen
+                value={formData.img}
+                onChange={(newPath) =>
+                  setFormData((prev) => ({ ...prev, img: newPath }))
+                }
+              />
             </Col>
             <Col
               xs={16}
@@ -372,7 +376,7 @@ const Agregar = () => {
                         name="precio"
                         type="number"
                         min={0}
-                        step={100}
+                        step={0.01}
                         className="form-control"
                         value={Number(formData.precio)}
                         onChange={handleChange}
@@ -431,17 +435,17 @@ const Agregar = () => {
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="d-grid justify-content-center">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      style={{ maxWidth: "120px" }}
-                    >
-                      Agregar
-                    </button>
-                  </div>
                 </Col>
               </Row>
+              <div className="d-grid justify-content-end me-5">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ maxWidth: "120px" }}
+                >
+                  Agregar
+                </button>
+              </div>
             </Col>
           </Row>
         </Grid>

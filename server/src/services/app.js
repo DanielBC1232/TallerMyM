@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const imgRoutes_1 = __importDefault(require("../routes/inventario/imgRoutes"));
 const categoriaRoutes_1 = __importDefault(require("../routes/inventario/categoriaRoutes"));
 const marcaRoutes_1 = __importDefault(require("../routes/inventario/marcaRoutes"));
 const proveedorRoute_1 = __importDefault(require("../routes/inventario/proveedorRoute"));
@@ -36,5 +37,6 @@ app.use("/marcas", marcaRoutes_1.default);
 app.use("/proveedor", proveedorRoute_1.default);
 app.use("/vehiculos-compatibles", vehiculosCompatiblesRoutes_1.default);
 app.use("/productos", productoRoutes_1.default);
+app.use("/img", imgRoutes_1.default);
 //* Rutas Perfil
 //app.use("/usuario", usuarioRoutes);

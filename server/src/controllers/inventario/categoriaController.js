@@ -36,8 +36,8 @@ const getCategoriaById = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.json(categoria); //Return exitoso
     }
     catch (error) {
-        console.error("Error en getCategoriaById:", error);
-        res.status(500).json({ error: "Error al obtener la categoría" });
+        console.error("controller - Error en getCategoriaById:", error);
+        res.status(500).json({ error: "controller - Error al obtener la categoría" });
     }
 });
 exports.getCategoriaById = getCategoriaById;
