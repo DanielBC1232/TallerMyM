@@ -23,6 +23,7 @@ const Header = ({ onSelect, activeKey, ...props }) => {
       <Nav onSelect={onSelect} activeKey={activeKey}>
         <Nav.Menu title="Inventario">
         <Nav.Item as={Link} to="/inventario" eventKey="1">Productos y Servicios</Nav.Item>
+        <Nav.Item as={Link} to="/solicitudes" eventKey="1">Solicitudes</Nav.Item>
           <Nav.Item className="li" eventKey="2">Historial</Nav.Item>
         </Nav.Menu>
         <Nav.Item eventKey="3">Trabajadores</Nav.Item>

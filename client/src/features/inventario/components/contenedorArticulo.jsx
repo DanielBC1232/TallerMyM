@@ -3,12 +3,10 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Image } from "rsuite";
 
-console.log()
-
 //constante de Productos
 const ContenedorProductos = (formData) => {
 
-  console.log("Datos filtro:", JSON.stringify(formData));//parametros de filtro
+  //console.log("Datos filtro:", JSON.stringify(formData));//parametros de filtro
 
   const [listado, setLista] = useState([]);
 

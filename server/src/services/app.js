@@ -11,6 +11,8 @@ const marcaRoutes_1 = __importDefault(require("../routes/inventario/marcaRoutes"
 const proveedorRoute_1 = __importDefault(require("../routes/inventario/proveedorRoute"));
 const vehiculosCompatiblesRoutes_1 = __importDefault(require("../routes/inventario/vehiculosCompatiblesRoutes"));
 const productoRoutes_1 = __importDefault(require("../routes/inventario/productoRoutes"));
+const solicitudRoutes_1 = __importDefault(require("../routes/inventario/solicitudRoutes"));
+
 const database_1 = require("../config/database");
 const app = (0, express_1.default)();
 app.use(express_1.default.json()); // Middleware
@@ -38,5 +40,6 @@ app.use("/proveedor", proveedorRoute_1.default);
 app.use("/vehiculos-compatibles", vehiculosCompatiblesRoutes_1.default);
 app.use("/productos", productoRoutes_1.default);
 app.use("/img", imgRoutes_1.default);
+app.use("/inventario", solicitudRoutes_1.default);
 //* Rutas Perfil
 //app.use("/usuario", usuarioRoutes);

@@ -10,6 +10,8 @@ import Detalles from "./features/inventario/pages/Detalles";
 import IndexInventario from "./features/inventario/pages/index";
 import Editar from "./features/inventario/pages/Editar";
 import Agregar from "./features/inventario/pages/Agregar";
+import Solicitudes from "./features/inventario/pages/Solicitudes";
+
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
 
 const App = () => {
@@ -34,6 +36,7 @@ const App = () => {
           <Route path="/inventario" element={<IndexInventario />} />
           <Route path="/inventario-detalles/:idProducto" element={<Detalles />} />{/* :id para esperar recibir un id */}
           <Route path="/inventario-editar/:idProducto" element={<Editar />} />{/* :id para esperar recibir un id */}
+          <Route path="/solicitudes/" element={<Solicitudes />} />
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
