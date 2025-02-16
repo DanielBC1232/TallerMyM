@@ -1,11 +1,12 @@
 const express = require('express');
 const Usuario = require('../../models/usuario/usuario'); 
+const { sendEmail } = require('../../services/emailServices'); 
 
 const router = express.Router();
 
 // Ruta para verificar si el correo está registrado
 router.post('/send-email', async (req, res) => {
-  const { email } = req.body;
+  const { email, nombre } = req.body;
 
   if (!email) {
     return res.status(400).json({ success: false, message: 'El correo es obligatorio' });
@@ -20,6 +21,8 @@ router.post('/send-email', async (req, res) => {
     if (user) {
       return res.json({ success: false, message: 'El correo ya está registrado' });
     }
+
+    await sendEmail(email, nombre);
 
     return res.json({ success: true, message: 'El correo está disponible' });
   } catch (error) {

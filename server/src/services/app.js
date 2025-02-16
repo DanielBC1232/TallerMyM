@@ -12,10 +12,11 @@ const proveedorRoute_1 = __importDefault(require("../routes/inventario/proveedor
 const vehiculosCompatiblesRoutes_1 = __importDefault(require("../routes/inventario/vehiculosCompatiblesRoutes"));
 const productoRoutes_1 = __importDefault(require("../routes/inventario/productoRoutes"));
 const database_1 = require("../config/database");
+const emailServices_1 = require("../services/emailServices"); 
 const app = (0, express_1.default)();
 app.use(express_1.default.json()); // Middleware
 const PORT = 3000; // Iniciar servidor
-app.listen(3000, () => {
+app.listen(PORT, () => { ////
     console.log(`Servidor corriendo en puerto ${PORT}`);
 });
 app.use((0, cors_1.default)({
