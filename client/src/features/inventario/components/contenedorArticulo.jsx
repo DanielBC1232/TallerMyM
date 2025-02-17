@@ -6,21 +6,21 @@ import { Image } from "rsuite";
 //constante de Productos
 const ContenedorProductos = ({formData}) => {
 
-  console.log("Datos filtro:", formData);//parametros de filtro
+  //console.log("Datos filtro:", formData);//parametros de filtro
 
   const [listado, setLista] = useState([]);
 
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:3000/productos`,formData);
+        const { data } = await axios.post(`http://localhost:3000/productos`,formData);
         setLista(data);
       } catch (error) {
         console.error("Error obteniendo las categorías:", error);
       }
     };
 
-    if (formData) {  // Asegúrate de que formData no sea vacío o undefined
+    if (formData) {
       obtenerProductos();
     }
   }, [formData]);

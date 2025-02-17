@@ -9,24 +9,13 @@ CREATE OR ALTER PROCEDURE SP_FILTRO_PRODUCTOS
     @marca VARCHAR(50),
     @categoria VARCHAR(50),
     @stock INT,
-    @rangoPrecio NVARCHAR(100)
+    @precioMin DECIMAL(18,2),
+	@precioMax DECIMAL(18,2)
 )
 AS
 BEGIN
-    DECLARE @precioMin DECIMAL(18,2), @precioMax DECIMAL(18,2);
     DECLARE @SQL NVARCHAR(MAX);
 
-    -- Extraer los valores del JSON
-    IF @rangoPrecio IS NOT NULL AND @rangoPrecio != ''
-	BEGIN
-		SELECT @precioMin = [value]
-		FROM OPENJSON(@rangoPrecio)
-		WHERE [key] = '0';
-
-		SELECT @precioMax = [value]
-		FROM OPENJSON(@rangoPrecio)
-		WHERE [key] = '1';
-	END;
     SET @SQL = 'SELECT * FROM PRODUCTO_SERVICIO WHERE 1=1';
 
     -- Condiciones para cada par�metro
@@ -57,6 +46,3 @@ BEGIN
         @precioMax = @precioMax;
 END;
 GO
-
-EXEC SP_FILTRO_PRODUCTOS @nombre = 'aceit', @marca = '', @categoria = '', @stock = null, @rangoPrecio = '';
-

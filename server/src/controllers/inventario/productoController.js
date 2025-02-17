@@ -15,7 +15,7 @@ const ProductoRepo = new producto_1.ProductoRepository();
 // Obtener todas las producto - filtros y paginacion
 const getAllProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(req.body);
+        //console.log(req.body);
         const { nombre, marca, categoria, stock, rangoPrecio } = req.body;
 
         const producto = yield ProductoRepo.getAll(nombre, marca, categoria, stock, rangoPrecio); // Get
@@ -112,3 +112,18 @@ const deleteProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deleteProducto = deleteProducto;
+
+const getMinMax = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const producto = yield ProductoRepo.getMinMax();
+        if (!producto) {
+            return res.status(404).json({ error: "No se encontraron datos de precios" });
+        }
+        res.json(producto[0]);
+    } catch (error) {
+        console.error("Error en getMinMax:", error.message);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+exports.getMinMax = getMinMax;
+

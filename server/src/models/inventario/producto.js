@@ -40,10 +40,8 @@ class ProductoRepository {
     // Obtener todos los productos
     getAll(nombre, marca, categoria, stock, rangoPrecio) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("Modelo: "+nombre, marca, categoria, stock, rangoPrecio)
             try {
                 const pool = yield (0, database_1.connectDB)();
-    
                 // llamada al procedimiento almacenado
                 const result = yield pool
                     .request()
@@ -51,9 +49,10 @@ class ProductoRepository {
                     .input('marca', mssql_1.default.VarChar(50), marca)
                     .input('categoria', mssql_1.default.VarChar(50), categoria)
                     .input('stock', mssql_1.default.Int, stock)
-                    .input('rangoPrecio', mssql_1.default.NVarChar(100), rangoPrecio)
+                    .input('precioMin', mssql_1.default.Decimal(18, 2), rangoPrecio[0])
+                    .input('precioMax', mssql_1.default.Decimal(18, 2), rangoPrecio[1])
                     .execute('SP_FILTRO_PRODUCTOS');  // Ejecutar el procedimiento
-    
+
                 // Retorno de los resultados
                 return result.recordset;
             }
@@ -180,6 +179,21 @@ class ProductoRepository {
             catch (error) {
                 console.error("Error en delete:", error);
                 throw new Error("Error al eliminar el producto");
+            }
+        });
+    }
+
+    getMinMax() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const pool = yield (0, database_1.connectDB)();
+                const result = yield pool.request().query(`
+                    SELECT MIN(precio) AS precioMin, MAX(precio) AS precioMax
+                    FROM PRODUCTO_SERVICIO`);
+                return result.recordset;
+            } catch (error) {
+                console.error("Error en obtener:", error);
+                throw new Error(error);
             }
         });
     }

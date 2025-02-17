@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ContenedorProductos from "../components/contenedorArticulo";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectMarca from "../components/SelectMarca";
@@ -10,6 +10,7 @@ import {
   Route,
   Link,
   useNavigate,
+  data,
 } from "react-router-dom";
 import axios from "axios";
 
@@ -18,14 +19,39 @@ import { Button, Grid, Row, Col, FlexboxGrid, Divider } from "rsuite";
 import "../styles/inv.css";
 
 const IndexInventario = () => {
-  const navigate = useNavigate(); // Hook para navegar
+  const [precios, setPrecios] = useState([]);
+  //console.log(precios)
   const [formData, setFormData] = useState({
     nombre: "",
     marca: "",
     categoria: "",
     stock: 0,
-    rangoPrecio: [],
+    rangoPrecio: [precios.precioMin, precios.precioMax],
   });
+  //console.log(formData)
+  const navigate = useNavigate(); // Hook para navegar
+
+  useEffect(() => {
+    async function obtenerPrecios() {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/productos/precios"
+        );
+        setPrecios(response.data);
+        if (response.data) {
+          // Actualiza formData solo después de obtener los precios
+          setFormData((prevState) => ({
+            ...prevState,
+            rangoPrecio: [response.data.precioMin, response.data.precioMax],
+          }));
+        }
+      } catch (error) {
+        console.error("Error obteniendo precios:", error);
+      }
+    }
+
+    obtenerPrecios();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,7 +78,6 @@ const IndexInventario = () => {
         style={{ maxWidth: "550px" }}
       >
         <form onSubmit={handleSubmit}>
-          
           <br />
           <div className="row my-2 d-flex justify-content-center">
             <Grid fluid>

@@ -25,8 +25,8 @@ CREATE TABLE USUARIO(
     estadoCuenta BIT DEFAULT 1 NOT NULL, --activo, bloquedo
 	intentosFallidos INT DEFAULT 5 NOT NULL,
 
-    fechaRegistro DATE DEFAULT GETDATE(),
-    fechaUltimaSesion DATE NOT NULL,
+    fechaRegistro DATE DEFAULT GETDATE(),--al crear cuenta
+    fechaUltimaSesion DATE NOT NULL, --cada vez que hace login
 
 )
 GO
