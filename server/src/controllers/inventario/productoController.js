@@ -13,9 +13,12 @@ exports.deleteProducto = exports.updateProducto = exports.addProducto = exports.
 const producto_1 = require("../../models/inventario/producto");
 const ProductoRepo = new producto_1.ProductoRepository();
 // Obtener todas las producto - filtros y paginacion
-const getAllProductos = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const producto = yield ProductoRepo.getAll(); // Get
+        console.log(req.body);
+        const { nombre, marca, categoria, stock, rangoPrecio } = req.body;
+
+        const producto = yield ProductoRepo.getAll(nombre, marca, categoria, stock, rangoPrecio); // Get
         //validaciones
         res.json(producto);
     }
@@ -72,7 +75,7 @@ exports.addProducto = addProducto;
 const updateProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Obtener los datos del cuerpo de la solicitud
-        const {idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin} = req.body;
+        const { idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin } = req.body;
         // Llamar al metodo update Producto
         const actualizarProducto = yield ProductoRepo.updateProducto(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin);
         // Respuesta exitosa con el producto insertado

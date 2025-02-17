@@ -38,19 +38,28 @@ class ProductoServicio {
 exports.ProductoServicio = ProductoServicio;
 class ProductoRepository {
     // Obtener todos los productos
-    getAll() {
+    getAll(nombre, marca, categoria, stock, rangoPrecio) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("Modelo: "+nombre, marca, categoria, stock, rangoPrecio)
             try {
-                const pool = yield (0, database_1.connectDB)(); //conexion BD
+                const pool = yield (0, database_1.connectDB)();
+    
+                // llamada al procedimiento almacenado
                 const result = yield pool
                     .request()
-                    .query("SELECT * FROM PRODUCTO_SERVICIO"); //QUERY
+                    .input('nombre', mssql_1.default.VarChar(50), nombre)
+                    .input('marca', mssql_1.default.VarChar(50), marca)
+                    .input('categoria', mssql_1.default.VarChar(50), categoria)
+                    .input('stock', mssql_1.default.Int, stock)
+                    .input('rangoPrecio', mssql_1.default.NVarChar(100), rangoPrecio)
+                    .execute('SP_FILTRO_PRODUCTOS');  // Ejecutar el procedimiento
+    
+                // Retorno de los resultados
                 return result.recordset;
             }
             catch (error) {
-                //Manejo de errores
                 console.error("Error en getAll:", error);
-                throw new Error("Error al obtener producto");
+                throw new Error("Error al obtener productos");
             }
         });
     }

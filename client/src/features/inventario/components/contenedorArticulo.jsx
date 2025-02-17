@@ -4,26 +4,28 @@ import { Link } from "react-router-dom";
 import { Image } from "rsuite";
 
 //constante de Productos
-const ContenedorProductos = (formData) => {
+const ContenedorProductos = ({formData}) => {
 
-  //console.log("Datos filtro:", JSON.stringify(formData));//parametros de filtro
+  console.log("Datos filtro:", formData);//parametros de filtro
 
   const [listado, setLista] = useState([]);
 
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:3000/productos`);
+        const { data } = await axios.get(`http://localhost:3000/productos`,formData);
         setLista(data);
       } catch (error) {
         console.error("Error obteniendo las categorías:", error);
       }
     };
 
-    obtenerProductos();
-  }, []);
+    if (formData) {  // Asegúrate de que formData no sea vacío o undefined
+      obtenerProductos();
+    }
+  }, [formData]);
 
-   //url get imagen
+   //url get imagen para las previsualizaciones
    const getImg = `http://localhost:3000/img/`;
 
   return (

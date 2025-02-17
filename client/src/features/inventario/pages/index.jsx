@@ -24,7 +24,6 @@ const IndexInventario = () => {
     marca: "",
     categoria: "",
     stock: 0,
-    vehiculosCompatibles: [],
     rangoPrecio: [],
   });
 

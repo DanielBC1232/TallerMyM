@@ -4,7 +4,7 @@ import "react-range-slider-input/dist/style.css";
 
 
 export default function RangoPrecio({ value, onChange }) {
-  const [localValue, setLocalValue] = useState([0, 99999]);
+  const [localValue, setLocalValue] = useState([0, 9999999]);
 
   // Actualiza el valor cuando el slider cambia
   const handleSliderChange = (newValue) => {
