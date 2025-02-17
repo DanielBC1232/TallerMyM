@@ -22,7 +22,8 @@ CREATE TABLE USUARIO(
     email VARCHAR(100) NOT NULL UNIQUE,
     cedula VARCHAR(10) NOT NULL UNIQUE,
     contrasenaHash VARBINARY(256) NOT NULL,
-    estadoCuenta VARCHAR(25) NOT NULL, --activo, bloquedo
+    estadoCuenta BIT DEFAULT 1 NOT NULL, --activo, bloquedo
+	intentosFallidos INT DEFAULT 5 NOT NULL,
 
     fechaRegistro DATE DEFAULT GETDATE(),
     fechaUltimaSesion DATE NOT NULL,
