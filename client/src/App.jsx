@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Route, Routes } from "react-router-dom";
 
+import Index from './components/Index.jsx'
 import Detalles from "./features/inventario/pages/Detalles";
 import IndexInventario from "./features/inventario/pages/index";
 import Editar from "./features/inventario/pages/Editar";
@@ -29,7 +30,7 @@ const App = () => {
           ****************** */}
 
         <Routes>
-          <Route path="/" element={<CrearPerfil />} />
+          <Route path="/" element={<Index />} />
 
           {/* Rutas para inventario */}
           <Route path="/inventario-agregar" element={<Agregar />} />
@@ -40,6 +41,7 @@ const App = () => {
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
+          
         </Routes>
       </main>
 

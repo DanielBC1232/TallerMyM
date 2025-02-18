@@ -60,6 +60,9 @@ const ContenedorProductos = ({formData}) => {
             <br />
             <span className="card-text">
               <strong>Stock:</strong> {productos.stock}
+            </span><br />
+            <span className="card-text">
+              <strong>Precio:</strong> ₡{productos.precio}
             </span>
           </div>
         </div>

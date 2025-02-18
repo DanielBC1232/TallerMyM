@@ -13,7 +13,6 @@ import {
   data,
 } from "react-router-dom";
 import axios from "axios";
-
 import { Button, Grid, Row, Col, FlexboxGrid, Divider } from "rsuite";
 
 import "../styles/inv.css";
