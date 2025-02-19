@@ -77,7 +77,7 @@ const Detalles = () => {
             // error
             Swal.fire({
               title: "Error",
-              text: "Error al eliminar producto o servicio: " + error.message, // Usar error.message para mostrar un mensaje claro
+              text: "Error al eliminar producto o servicio",
               icon: "error",
               showCancelButton: false,
             });

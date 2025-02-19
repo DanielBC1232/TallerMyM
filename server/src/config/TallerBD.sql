@@ -230,6 +230,7 @@ CREATE TABLE INV_REPUESTO_SOLICITUD(
     fecha DATE DEFAULT GETDATE() NOT NULL,
     aprobado BIT NULL
 );
+GO
 
 --producto o servicio
 CREATE TABLE PRODUCTO_SERVICIO(
@@ -256,14 +257,22 @@ CREATE TABLE PRODUCTO_SERVICIO(
 )
 GO
 
-CREATE TABLE HISTORIAL_REPUESTO(
+CREATE TABLE AUDITORIA_TABLAS(
 
-    idHistorialRepuesto INT IDENTITY(1,1) PRIMARY KEY,
-    Repuesto VARCHAR(200) NOT NULL,
-    fecha DATETIME NOT NULL,
-    movimiento VARCHAR(50),
-    usuario VARCHAR(100)
+    idAuditoria INT IDENTITY(1,1) PRIMARY KEY,
+    tipo CHAR(1) NOT NULL,
+    tabla VARCHAR(50) NOT NULL,
+    registro INT,
+	campo VARCHAR(50),
+	valorAntes VARCHAR(50),
+	valorDespues VARCHAR(50),
+	fecha DATETIME,
+    usuario VARCHAR(50),
+	PC VARCHAR(50)
 )
+GO
+
+select * from AUDITORIA_TABLAS;
 GO
 
 -- MODULO FINANZAS --

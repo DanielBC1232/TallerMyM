@@ -18,7 +18,7 @@ BEGIN
 
     SET @SQL = 'SELECT * FROM PRODUCTO_SERVICIO WHERE 1=1';
 
-    -- Condiciones para cada par�metro
+    -- Condiciones para cada parametro
     IF (@nombre IS NOT NULL AND @nombre <> '')
         SET @SQL = @SQL + ' AND (nombre LIKE ''%' + @nombre + '%'' OR DIFFERENCE(nombre, ''' + @nombre + ''') >= 3)';--tolerancia a mayus, minus y errores de escritura.
 
@@ -34,7 +34,7 @@ BEGIN
     IF (@precioMin IS NOT NULL AND @precioMax IS NOT NULL)
         SET @SQL = @SQL + ' AND precio BETWEEN @precioMin AND @precioMax';
 
-    -- Ejecutar la consulta din�mica con los par�metros correctamente pasados
+    -- Ejecutar la consulta dinamica con los parametros correctamente pasados
     EXEC sp_executesql 
         @SQL, 
         N'@nombre VARCHAR(50), @marca VARCHAR(50), @categoria VARCHAR(50), @stock INT, @precioMin DECIMAL(18,2), @precioMax DECIMAL(18,2)',
