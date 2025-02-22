@@ -12,6 +12,8 @@ const proveedorRoute_1 = __importDefault(require("../routes/inventario/proveedor
 const vehiculosCompatiblesRoutes_1 = __importDefault(require("../routes/inventario/vehiculosCompatiblesRoutes"));
 const productoRoutes_1 = __importDefault(require("../routes/inventario/productoRoutes"));
 const solicitudRoutes_1 = __importDefault(require("../routes/inventario/solicitudRoutes"));
+//clientes--
+const cliente_1 = __importDefault(require("../routes/clientes/clienteRoutes"));
 
 const database_1 = require("../config/database");
 const emailServices_1 = require("../services/emailServices"); 
@@ -43,4 +45,8 @@ app.use("/productos", productoRoutes_1.default);
 app.use("/img", imgRoutes_1.default);
 app.use("/inventario", solicitudRoutes_1.default);
 //* Rutas Perfil
+
+//rutas clientes
+app.use("/clientes", cliente_1.default);
+
 //app.use("/usuario", usuarioRoutes);

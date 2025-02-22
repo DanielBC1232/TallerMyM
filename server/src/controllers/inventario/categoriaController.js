@@ -8,10 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCategoriaById = exports.getAllCategorias = void 0;
 const categoria_1 = require("../../models/inventario/categoria");
 const categoriaRepo = new categoria_1.CategoriaRepository();
+
 // Obtener todas las categorías
 const getAllCategorias = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

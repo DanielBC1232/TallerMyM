@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductoRepository = exports.ProductoServicio = void 0;
 const mssql_1 = __importDefault(require("mssql"));
 const database_1 = require("../../config/database");
+
+
 class ProductoServicio {
     constructor(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin) {
         this.idProducto = idProducto;
@@ -34,8 +36,10 @@ class ProductoServicio {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
     }
-}
+} 
+
 exports.ProductoServicio = ProductoServicio;
+
 class ProductoRepository {
     // Obtener todos los productos
     getAll(nombre, marca, categoria, stock, rangoPrecio) {
@@ -62,6 +66,7 @@ class ProductoRepository {
             }
         });
     }
+    
     findById(idProducto) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
