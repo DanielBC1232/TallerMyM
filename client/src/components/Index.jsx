@@ -29,7 +29,7 @@ const Index = () => {
         </div>
 
         <div className="col-sm-3 align-self-center">
-          <Link className="btn-link text-decoration-none">
+          <Link to="/ventas" className="btn-link text-decoration-none">
             <Card width={300}direction="row" className="p-2">
               <Card.Header><FaShoppingCart size={55} color="#005ba5" className="d-flex align-self-baseline"/></Card.Header>
               <Card.Body as="h4" className="d-flex align-self-baseline">Módulo Ventas</Card.Body>
@@ -74,7 +74,7 @@ const Index = () => {
         </div>
 
         <div className="col-sm-3 align-self-center">
-          <Link className="btn-link text-decoration-none">
+          <Link to="/flujo" className="btn-link text-decoration-none">
             <Card width={300} direction="row" className="p-2">
               <Card.Header><FaCarRear  size={55} color="#005ba5" className="d-flex align-self-baseline"/></Card.Header>
               <Card.Body as="h4" className="d-flex align-self-baseline">Control de Flujo</Card.Body>
