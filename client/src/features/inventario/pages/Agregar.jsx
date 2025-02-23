@@ -10,6 +10,9 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const Agregar = () => {
   const navigate = useNavigate(); // Hook para navegar
   const [formData, setFormData] = useState({
@@ -254,7 +257,7 @@ const Agregar = () => {
 
     if (verificacion()) {
       axios
-        .post("http://localhost:3000/productos/agregar-producto/", formData)
+        .post(`${BASE_URL}/productos/agregar-producto/`, formData)
         .then((res) => {
           Swal.fire({
             icon: "success",

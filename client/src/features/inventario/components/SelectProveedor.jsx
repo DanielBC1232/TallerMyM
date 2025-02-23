@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
 
 //constante de opciones
 const SelectProveedor = ({ value, onChange }) => {
@@ -8,7 +10,7 @@ const SelectProveedor = ({ value, onChange }) => {
   useEffect(() => {
     const obtenerProveedors = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/proveedor");
+        const { data } = await axios.get(`${BASE_URL}/proveedor`);
         setOpciones(data);
       } catch (error) {
         console.error("Error obteniendo las Proveedors:", error);

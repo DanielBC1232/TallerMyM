@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api/email/send-email': 'http://localhost:3000',
+      '/api/email/send-email': process.env.VITE_API_URL || 'http://localhost:3000',  // Usamos la variable de entorno para definir el proxy
     }
   }
+
 })

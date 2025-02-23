@@ -3,17 +3,18 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Image } from "rsuite";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 //constante de Productos
 const ContenedorProductos = ({formData}) => {
-
-  //console.log("Datos filtro:", formData);//parametros de filtro
 
   const [listado, setLista] = useState([]);
 
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const { data } = await axios.post(`http://localhost:3000/productos`,formData);
+        const { data } = await axios.post(`${BASE_URL}/productos`,formData);
         setLista(data);
       } catch (error) {
         console.error("Error obteniendo las categorías:", error);
@@ -26,7 +27,7 @@ const ContenedorProductos = ({formData}) => {
   }, [formData]);
 
    //url get imagen para las previsualizaciones
-   const getImg = `http://localhost:3000/img/`;
+   const getImg = `${BASE_URL}/img/`;
 
   return (
     <div className="article-container article-scroll">

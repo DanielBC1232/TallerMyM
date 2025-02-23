@@ -4,6 +4,9 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const ModalSolicitarProducto = () => {
   const [open, setOpen] = useState(false);
   const [titulo, setTitulo] = useState("");
@@ -68,7 +71,7 @@ const ModalSolicitarProducto = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/inventario/agregar-solicitud",
+        `${BASE_URL}/inventario/agregar-solicitud`,
         { titulo, cuerpo, usuario }
       );
       console.log(response);

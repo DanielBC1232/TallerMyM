@@ -3,6 +3,9 @@ import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
 import axios from "axios";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 export default function RangoPrecio({ value, onChange }) {
   const [precios, setPrecios] = useState([]);
   const [localValue, setLocalValue] = useState([0, 999999]);
@@ -11,7 +14,7 @@ export default function RangoPrecio({ value, onChange }) {
     // traer min y max de api
     async function obtenerPrecios() {
       try {
-        const response = await axios.get("http://localhost:3000/productos/precios");
+        const response = await axios.get(`${BASE_URL}/productos/precios`);
         setPrecios(response.data);
       } catch (error) {
         console.error("Error obteniendo precios:", error);

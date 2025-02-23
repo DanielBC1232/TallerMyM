@@ -17,6 +17,9 @@ import { Button, Grid, Row, Col, FlexboxGrid, Divider } from "rsuite";
 
 import "../styles/inv.css";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const IndexInventario = () => {
   const [precios, setPrecios] = useState([]);
   //console.log(precios)
@@ -34,7 +37,7 @@ const IndexInventario = () => {
     async function obtenerPrecios() {
       try {
         const response = await axios.get(
-          "http://localhost:3000/productos/precios"
+          `${BASE_URL}/productos/precios`
         );
         setPrecios(response.data);
         if (response.data) {
@@ -167,7 +170,7 @@ const IndexInventario = () => {
         </form>
       </nav>
 
-      <div className="main rounded-3 p-3">
+      <div className="main rounded-3">
         <div className="article-container article-scroll">
           <ContenedorProductos formData={formData} />
         </div>

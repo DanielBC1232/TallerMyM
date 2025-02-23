@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Uploader, Message, Loader, toaster } from "rsuite";
 import FileUploadIcon from "@rsuite/icons/FileUpload";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 // Función para subir la imagen al backend
 const SubirImagen = ({ value, onChange }) => {
   const [uploading, setUploading] = React.useState(false);
@@ -19,13 +22,13 @@ const SubirImagen = ({ value, onChange }) => {
     };
     reader.readAsDataURL(file);
   }
-
+const urlImg = BASE_URL+`/img/upload`
   return (
     <Uploader
       name="img"
       fileListVisible={false}
       listType="picture"
-      action="http://localhost:3000/img/upload"
+      action={urlImg}
       onUpload={(file) => {
         setUploading(true);
         previewFile(file.blobFile, (value) => {

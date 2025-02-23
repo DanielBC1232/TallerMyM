@@ -10,6 +10,8 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Editar = () => {
   const navigate = useNavigate(); // Hook para navegar
@@ -33,7 +35,7 @@ const Editar = () => {
   useEffect(() => {
     const cargarDatos = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/productos/${idProducto}`);
+        const res = await axios.get(`${BASE_URL}/productos/${idProducto}`);
         const fechaFormateada = res.data.fechaIngreso.split("T")[0]; //formateo de fecha 
         setFormData({ ...res.data, fechaIngreso: fechaFormateada });//toma los datos de BD y los percarga en inputs
 
@@ -274,7 +276,7 @@ const Editar = () => {
     if (verificacion()) {
       console.log(formData)
       axios
-        .patch("http://localhost:3000/productos/actualizar-producto/", formData)
+        .patch(`${BASE_URL}/productos/actualizar-producto/`, formData)
         .then((res) => {
           
           Swal.fire({
@@ -289,8 +291,6 @@ const Editar = () => {
         )
     }
   };
-
-console.log(formData)
 
   return (
     <form onSubmit={handleSubmit}>

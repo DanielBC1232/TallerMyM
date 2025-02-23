@@ -9,6 +9,9 @@ import { Image } from "rsuite";
 
 import "../styles/inv.css";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const Detalles = () => {
   const navigate = useNavigate(); // Hook para navegar
   const { idProducto } = useParams();
@@ -18,7 +21,7 @@ const Detalles = () => {
     const obtenerProducto = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/productos/${idProducto}`
+         `${BASE_URL}/productos/${idProducto}`
         ); //consumir api en backend por id
         setProducto(data);
         //console.log(data); // imprimir JSON en consola
@@ -67,7 +70,7 @@ const Detalles = () => {
       if (result.isConfirmed) {
         axios
           .delete(
-            `http://localhost:3000/productos/eliminar-producto/${idProducto}`
+            `${BASE_URL}/productos/eliminar-producto/${idProducto}`
           )
           .then(() => {
             // Redirigir a la pagina de inventario despues de eliminar
@@ -88,7 +91,7 @@ const Detalles = () => {
   };
 
   //url get imagen
-  const getImg = `http://localhost:3000/img/${producto.img}`;
+  const getImg = `${BASE_URL}/img/${producto.img}`;
 
   return (
     <div className="container main mx-auto p-5">

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 //constante de opciones
 const SelectMarca = ({ value, onChange }) => {
   const [opciones, setOpciones] = useState([]);
@@ -8,7 +11,7 @@ const SelectMarca = ({ value, onChange }) => {
   useEffect(() => {
     const obtenerMarcas = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/marcas/");
+        const { data } = await axios.get(`${BASE_URL}/marcas/`);
         setOpciones(data);
       } catch (error) {
         console.error("Error obteniendo las Marcas:", error);

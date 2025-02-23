@@ -4,6 +4,9 @@ import axios from "axios";
 import Swal from "sweetalert2";
 const { Column, HeaderCell, Cell } = Table;
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 //al dar al boton aprovar o rechazar trae el id del elemento mas el bool de true o false del boton
 //donde envia un post para hace un update put donde se cambie su estado de aprobado.
 const handleDecision = async (idSolicitud, aprobado) => {
@@ -11,7 +14,7 @@ const handleDecision = async (idSolicitud, aprobado) => {
 
   try {
     const response = await axios.put(
-      `http://localhost:3000/inventario/procesar-solicitud`,{ idSolicitud, aprobado });
+      `${BASE_URL}/inventario/procesar-solicitud`,{ idSolicitud, aprobado });
     console.log(response);
     Swal.fire({
       icon: "success",
@@ -40,7 +43,7 @@ const TablaSolicitudes = () => {
   // Obtener listado
   useEffect(() => {
     axios
-      .get("http://localhost:3000/inventario/solicitud")
+      .get(`${BASE_URL}/inventario/solicitud`)
       .then((response) => {
         setData(response.data);
       })
@@ -59,12 +62,12 @@ const TablaSolicitudes = () => {
   };
 
   return (
-    <div className="mt-5 container-fluid">
+    <div className="mt-5 d-flex justify-content-center align-items-center min-vh-100">
       <Table
         height={800}
         width={1000}
         data={data}
-        className="rounded-3 shadow"
+        className="rounded-3 shadow-sm"
         onRowClick={(rowData) => console.log()}
       >
         <Column width={200} align="center" fixed>

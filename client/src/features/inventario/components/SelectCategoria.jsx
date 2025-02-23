@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 //constante de opciones
 const SelectCategoria = ({ value, onChange }) => {
   const [opciones, setOpciones] = useState([]);
@@ -8,7 +11,7 @@ const SelectCategoria = ({ value, onChange }) => {
   useEffect(() => {
     const obtenerCategorias = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/categorias");
+        const { data } = await axios.get(`${BASE_URL}/categorias`);
         setOpciones(data);
       } catch (error) {
         console.error("Error obteniendo las categorías:", error);
