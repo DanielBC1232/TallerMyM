@@ -27,7 +27,9 @@ const Header = ({ onSelect, activeKey, ...props }) => {
         </Nav.Menu>
         <Nav.Item eventKey="3">Trabajadores</Nav.Item>
         <Nav.Item eventKey="4">Clientes</Nav.Item>
-        <Nav.Item as={Link} to="/perfil" eventKey="5">Administrativo</Nav.Item>
+        <Nav.Menu title="Administrativo">
+        <Nav.Item as={Link} to="/perfil-crear" eventKey="5">CrearPerfil</Nav.Item>
+        </Nav.Menu>
       </Nav>
       <Nav pullRight>
         <Nav.Menu icon={<CogIcon />} title="Ajustes">
