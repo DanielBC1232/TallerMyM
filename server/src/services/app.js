@@ -1,4 +1,5 @@
 "use strict";
+require('dotenv').config();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -12,6 +13,7 @@ const proveedorRoute_1 = __importDefault(require("../routes/inventario/proveedor
 const vehiculosCompatiblesRoutes_1 = __importDefault(require("../routes/inventario/vehiculosCompatiblesRoutes"));
 const productoRoutes_1 = __importDefault(require("../routes/inventario/productoRoutes"));
 const solicitudRoutes_1 = __importDefault(require("../routes/inventario/solicitudRoutes"));
+const usuarioRoutes_1 = __importDefault(require("../routes/perfil/usuarioRoutes"));
 
 const database_1 = require("../config/database");
 const emailServices_1 = require("../services/emailServices"); 
@@ -43,4 +45,10 @@ app.use("/productos", productoRoutes_1.default);
 app.use("/img", imgRoutes_1.default);
 app.use("/inventario", solicitudRoutes_1.default);
 //* Rutas Perfil
-//app.use("/usuario", usuarioRoutes);
+app.use("/perfil-crear", emailServices_1.default);
+// Ruta de Usuario Api
+app.use("/api/usuario", usuarioRoutes_1.default);
+
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://127.0.0.1:${PORT}`);
+});

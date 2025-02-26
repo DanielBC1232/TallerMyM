@@ -26,10 +26,7 @@ const CrearPerfil = () => {
         return;
       }
 
-      
-      alert(verifyData.message);
 
- 
       const response = await fetch("http://127.0.0.1:3000/api/email/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -47,6 +44,8 @@ const CrearPerfil = () => {
     } catch (error) {
       console.error("Error en la solicitud:", error);
       alert(`Hubo un error al intentar enviar el correo: ${error.message}`);
+    }finally{
+      setIsSubmitting(false);
     }
   };
 
@@ -58,7 +57,7 @@ const CrearPerfil = () => {
           <p className="lead">Complete el formulario para crear un perfil de usuario</p>
         </div>
 
-        <FormularioPerfil onSubmit={handleFormSubmit} />
+        <FormularioPerfil onSubmit={handleFormSubmit} isSubmitting={isSubmitting} />
       </main>
     </div>
   );

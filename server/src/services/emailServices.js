@@ -1,12 +1,14 @@
 const nodemailer = require('nodemailer');
 const emailConfig = require('../config/emailConfig');
-require('dotenv').config();
 
-const transporter = nodemailer.createTransport(emailConfig);
+const transporter = nodemailer.createTransport({
+    service: emailConfig.service,
+    auth: emailConfig.auth
+});
 
 const sendEmail = async (email, nombre) => {
     const mailOptions = {
-        from: `"Taller Mecánico MYM" <${process.env.EMAIL_USER}>`,
+        from: `"Taller Mecánico MYM" <${emailConfig.auth.user}>`,
         to: email,
         subject: '¡Perfil Creado con Éxito!',
         text: `Hola ${nombre},\n\nTu perfil ha sido creado exitosamente en nuestro sistema.\n\nSaludos,\nEquipo del Taller Mecánico MYM`,

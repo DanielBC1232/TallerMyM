@@ -3,8 +3,8 @@ require('dotenv').config();
 const emailConfig = {
     service: 'gmail',
     auth: {
-        user: 'paolabellanero13@gmail.com',
-        pass: 'nvek qghj rcak mmcb',
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
     },
 };
 
