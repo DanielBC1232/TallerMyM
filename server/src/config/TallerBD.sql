@@ -184,7 +184,7 @@ GO
 CREATE TABLE CLIENTE_VEHICULO(
 
     idVehiculo INT IDENTITY(1,1) PRIMARY KEY,
-    placaVehiculo VARCHAR(20) NOT NULL,
+    placaVehiculo VARCHAR(20) NOT NULL UNIQUE,
     modeloVehiculo VARCHAR (100) NOT NULL,
     marcaVehiculo VARCHAR (50) NOT NULL,
     annoVehiculo INT NOT NULL,
@@ -264,15 +264,12 @@ CREATE TABLE AUDITORIA_TABLAS(
     tabla VARCHAR(50) NOT NULL,
     registro INT,
 	campo VARCHAR(50),
-	valorAntes VARCHAR(50),
-	valorDespues VARCHAR(50),
+	valorAntes VARCHAR(100),
+	valorDespues VARCHAR(100),
 	fecha DATETIME,
     usuario VARCHAR(50),
 	PC VARCHAR(50)
-)
-GO
-
-select * from AUDITORIA_TABLAS;
+);
 GO
 
 -- MODULO FINANZAS --
@@ -286,6 +283,7 @@ CREATE TABLE PAGO_CLIENTE(
     estado VARCHAR(50),--cancelado, pendiente, atrasado
     descripcion NVARCHAR(MAX) NOT NULL,
 
+    FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta)
     idCliente INT NOT NULL,
     FOREIGN KEY (idCliente) REFERENCES CLIENTE(idCliente),
 
@@ -326,40 +324,22 @@ CREATE TABLE ORDEN(
 
     idOrden INT IDENTITY(1,1) PRIMARY KEY,
     codigoOrden VARCHAR(9) NOT NULL UNIQUE, --Codigo unico de orden
-    estadoOrden VARCHAR(30) NOT NULL DEFAULT 'pendiente', --pendiente, en proceso, en reparacion, Listo
-    fechaIngreso DATE NULL DEFAULT GETDATE(),--al ingresar en una nueva orden en el flujo
-    estadoAtrasado BIT NOT NULL DEFAULT 0,--
+    estadoOrden INT NOT NULL DEFAULT 1, --Cancelado 0 (Delete), Pendiente 1, En proceso 2, Listo 3, Venta 4 (no se ve en flujo)
+    fechaIngreso DATE NOT NULL DEFAULT GETDATE(),--al ingresar en una nueva orden en el flujo
     tiempoEstimado DATETIME NOT NULL,
+    estadoAtrasado BIT NOT NULL DEFAULT 0,
 
     --FK
-
-    idTrabajador INT NOT NULL,
+    --Se puede reasignar otro trabajador (update)
+    idTrabajador INT,
     FOREIGN KEY (idTrabajador) REFERENCES TRABAJADOR(idTrabajador),
 
-    idVehiculo INT NOT NULL,
-    FOREIGN KEY (idVehiculo) REFERENCES CLIENTE_VEHICULO(idVehiculo),
-
-    idCliente INT NOT NULL
+    --Al crear orden se ingresa cliente, pero no se puede actualziar ni borrar
+    --ya que la orden es por cliente
+    idCliente INT,
     FOREIGN KEY (idCliente) REFERENCES CLIENTE(idCliente)
+    --Y del cliente, se asigna el vehiculo
 
-)
-GO
-
---Repuesto por solicitud
-CREATE TABLE FLUJO_REPUESTO_SOLICITUD(
-    --cada repuesto por orden
-
-    idSolicitud INT IDENTITY(1,1) PRIMARY KEY,
-    cantidad INT NOT NULL,
-    aprobado BIT NOT NULL DEFAULT 0,
-    detalle NVARCHAR(MAX) NULL, --opcional
-
-    --FK
-    idOrden INT NOT NULL,
-    FOREIGN KEY (idOrden) REFERENCES ORDEN(idOrden),
-
-    idProducto INT NOT NULL,
-    FOREIGN KEY (idProducto) REFERENCES PRODUCTO_SERVICIO(idProducto)
 )
 GO
 
@@ -368,13 +348,13 @@ GO
 CREATE TABLE COTIZACION(
 
     idCotizacion INT IDENTITY(1,1) PRIMARY KEY,
-    nombreCliente VARCHAR(100) NOT NULL,
-    correo VARCHAR(100) NOT NULL,
-    telefono VARCHAR(30) NOT NULL,
-    direccion NVARCHAR(1000) NOT NULL,
     montoTotal DECIMAL(10,2) NOT NULL,
     montoManoObra DECIMAL(10,2) NOT NULL,
     tiempoEstimado VARCHAR(100) NOT NULL,
+    fecha DATETIME DEFAULT GETDATE(),
+
+    idCliente INT,
+    FOREIGN KEY (idCliente) REFERENCES CLIENTE(idCliente)
 
 )
 GO
@@ -431,8 +411,9 @@ CREATE TABLE NOTIFICACION(
 
     idNotificacion INT IDENTITY(1,1) PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
-    cuerpo VARCHAR(150) NOT NULL,
+    cuerpo NVARCHAR(2048) NOT NULL,
     fecha DATETIME DEFAULT GETDATE() NOT NULL,
+    modulo VARCHAR(50) NOT NULL,
 
     idUsuario INT NOT NULL,
     FOREIGN KEY (idUsuario) REFERENCES USUARIO(idUsuario)

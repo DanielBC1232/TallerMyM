@@ -75,7 +75,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Campo idProducto (normalmente no se actualiza, pero se incluye por consistencia)
+    -- Campo idProducto
     INSERT INTO AUDITORIA_TABLAS (tabla, campo, valorAntes, valorDespues, usuario, PC, fecha, tipo, registro)
     SELECT 
          'PRODUCTO_SERVICIO',

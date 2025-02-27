@@ -46,7 +46,7 @@ app.use("/productos", productoRoutes_1.default);
 app.use("/img", imgRoutes_1.default);
 app.use("/inventario", solicitudRoutes_1.default);
 //* Rutas Perfil
-app.use("/perfil-crear", emailServices_1.default);
+
 // Ruta de Usuario Api
 app.use("/api/usuario", usuarioRoutes_1.default);
 app.use("/usuario", Usuario_1.default);

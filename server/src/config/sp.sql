@@ -3,6 +3,7 @@ go
 
 --Modulo INVENTARIO
 
+--SP listar productos con filtro
 CREATE OR ALTER PROCEDURE SP_FILTRO_PRODUCTOS
 (
     @nombre VARCHAR(50),
@@ -46,3 +47,6 @@ BEGIN
         @precioMax = @precioMax;
 END;
 GO
+
+
+
