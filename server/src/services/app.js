@@ -14,7 +14,7 @@ const vehiculosCompatiblesRoutes_1 = __importDefault(require("../routes/inventar
 const productoRoutes_1 = __importDefault(require("../routes/inventario/productoRoutes"));
 const solicitudRoutes_1 = __importDefault(require("../routes/inventario/solicitudRoutes"));
 const usuarioRoutes_1 = __importDefault(require("../routes/perfil/usuarioRoutes"));
-
+const Usuario_1 = __importDefault(require("../models/usuario/usuario"));
 const database_1 = require("../config/database");
 const emailServices_1 = require("../services/emailServices"); 
 const app = (0, express_1.default)();
@@ -25,6 +25,7 @@ app.listen(PORT, () => { ////
 });
 app.use((0, cors_1.default)({ 
     origin: "http://localhost:5173",
+    methods: 'GET, POST, PUT, DELETE',
 }));
 (0, database_1.connectDB)() // conexion BD
     .then(() => console.log("Conectado a la base de datos"))
@@ -48,7 +49,4 @@ app.use("/inventario", solicitudRoutes_1.default);
 app.use("/perfil-crear", emailServices_1.default);
 // Ruta de Usuario Api
 app.use("/api/usuario", usuarioRoutes_1.default);
-
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://127.0.0.1:${PORT}`);
-});
+app.use("/usuario", Usuario_1.default);

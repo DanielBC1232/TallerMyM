@@ -4,22 +4,25 @@ const { sendEmail } = require('../../services/emailServices');
 
 const router = express.Router();
 
+
 // Ruta para verificar si el correo está registrado
-router.post('/send-email', async (req, res) => {
+router.post('/api/usuario/send-email', async (req, res) => {
   const { email, nombre } = req.body;
 
+  // Validación de entrada
   if (!email || !nombre) {
-    return res.status(400).json({ success: false, message: 'El correo y nombre es obligatorio' });
+    return res.status(400).json({ success: false, message: 'El correo y nombre son obligatorios' });
   }
 
   try {
     // Buscar el correo en la base de datos
-    const user = await getUsuarioByEmail(email);
+    const user = await Usuario.findOne({ email: email });  // Uso de Usuario.findOne para buscar por email
 
     if (user) {
       return res.json({ success: false, message: 'El correo ya está registrado' });
     }
 
+    // Enviar correo si el usuario no está registrado
     await sendEmail(email, nombre);
 
     return res.json({ success: true, message: 'El correo enviado correctamente' });

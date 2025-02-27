@@ -12,7 +12,7 @@ const CrearPerfil = () => {
     setIsSubmitting(true);
     try {
      
-      const verifyResponse = await fetch("http://127.0.0.1:3000/api/usuario/send-email", {
+      const verifyResponse = await fetch("http:/localhost:3000/api/usuario/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: data.email, nombre: data.nombre }),
@@ -27,7 +27,7 @@ const CrearPerfil = () => {
       }
 
 
-      const response = await fetch("http://127.0.0.1:3000/api/email/send-email", {
+      const response = await fetch("localhost:3000/api/email/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email : data.email, nombre: data.nombre}),
@@ -42,7 +42,6 @@ const CrearPerfil = () => {
     
       alert("Correo verificado correctamente.");
     } catch (error) {
-      console.error("Error en la solicitud:", error);
       alert(`Hubo un error al intentar enviar el correo: ${error.message}`);
     }finally{
       setIsSubmitting(false);
