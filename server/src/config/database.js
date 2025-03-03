@@ -1,6 +1,6 @@
 const sql = require('mssql');
 const dbConfig = {
-    server: "DESKTOP-PG0PB0E",
+    server: "DAN",
     database: "MYM_DB",
     user: "MYM_User",
     password: "T4ll3RMyM-",
