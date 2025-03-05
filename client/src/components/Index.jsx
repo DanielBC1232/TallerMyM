@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import React from "react";
 import { Card, Text, Button, TagGroup, Tag } from "rsuite";
 import { Link } from "react-router-dom";
-import "../styles/custom.css";
+
 import "../styles/style.css";
 
 import { FaInbox } from "react-icons/fa6";
@@ -47,7 +47,7 @@ const Index = () => {
         </div>
 
         <div className="col-sm-3 align-self-center">
-          <Link to="/perfil" className="btn-link text-decoration-none">
+          <Link to="/clientes/Index" className="btn-link text-decoration-none">
             <Card width={300} direction="row" className="p-2">
               <Card.Header><FaUserFriends size={55} color="#005ba5" className="d-flex align-self-baseline"/></Card.Header>
               <Card.Body as="h4" className="d-flex align-self-baseline">Módulo Clientes</Card.Body>

@@ -1,4 +1,5 @@
-const { sql, connectDB } = require("../../config/database");
+const { connectDB } = require("../../config/database");
+const sql = require('mssql');
 
 class Cliente {
   constructor(nombre, apellido, cedula, correo, telefono, fechaRegistro) {
@@ -130,44 +131,14 @@ class ClienteRepository {
       const pool = await connectDB();
       const result = await pool
         .request()
-        .input("cedula", sql.VarChar, cedula)
+        .input("cedula", sql.VarChar(10), cedula)
         .query("SELECT * FROM CLIENTE WHERE cedula = @cedula");
 
-      if (result.recordset.length === 0) {
-        return null;
-      }
-
-      return result.recordset[0];
+      return result.recordset;
+      
     } catch (error) {
       console.error("Error al consultar cliente:", error);
       throw new Error("Error al consultar cliente");
-    }
-  }
-
-  // Agregar vehículos a un cliente
-  async agregarVehiculos(idCliente, vehiculos) {
-    try {
-      const pool = await connectDB();
-
-      for (const vehiculo of vehiculos) {
-        await pool
-          .request()
-          .input("placaVehiculo", sql.VarChar, vehiculo.placaVehiculo)
-          .input("modeloVehiculo", sql.VarChar, vehiculo.modeloVehiculo)
-          .input("marcaVehiculo", sql.VarChar, vehiculo.marcaVehiculo)
-          .input("annoVehiculo", sql.Int, vehiculo.annoVehiculo)
-          .input("tipoVehiculo", sql.VarChar, vehiculo.tipoVehiculo)
-          .input("idCliente", sql.Int, idCliente)
-          .query(`
-            INSERT INTO CLIENTE_VEHICULO (placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente)
-            VALUES (@placaVehiculo, @modeloVehiculo, @marcaVehiculo, @annoVehiculo, @tipoVehiculo, @idCliente)
-          `);
-      }
-
-      console.log("Vehículos agregados exitosamente");
-    } catch (error) {
-      console.error("Error al agregar vehículos:", error);
-      throw new Error("Error al agregar vehículos");
     }
   }
 }

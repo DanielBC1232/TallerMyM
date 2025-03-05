@@ -1,21 +1,12 @@
-const { Cliente, ClienteRepository } = require("../../models/clientes/cliente");
-const { VehiculosRepository } = require("../../models/inventario/vehiculo");
+const { Cliente, ClienteRepository } = require("../../models/clientes/cliente.js");
 
 const clienteRepo = new ClienteRepository();
-const vehiculoRepo = new VehiculosRepository();
 
 // Insertar un cliente
 const insertCliente = async (req, res) => {
   try {
     const { nombre, apellido, cedula, correo, telefono, fechaRegistro } = req.body;
-    const newCliente = new Cliente(
-      nombre,
-      apellido,
-      cedula,
-      correo,
-      telefono,
-      fechaRegistro
-    );
+    const newCliente = new Cliente(nombre, apellido, cedula, correo, telefono, fechaRegistro);
 
     await clienteRepo.insert(newCliente);
     res.status(201).json(newCliente);
@@ -25,7 +16,7 @@ const insertCliente = async (req, res) => {
   }
 };
 
-// Obtener Historial de Ordenes de Cliente
+// Obtener Historial de Órdenes de Cliente
 const getHistorialOrdenesByCedula = async (req, res) => {
   try {
     const cedula = req.params.cedula;
@@ -77,7 +68,7 @@ const eliminarCliente = async (req, res) => {
   }
 };
 
-// Obtener cliente por cedula
+// Obtener cliente por cédula
 const obtenerClientePorCedula = async (req, res) => {
   try {
     const cedula = req.params.cedula;
@@ -94,73 +85,10 @@ const obtenerClientePorCedula = async (req, res) => {
   }
 };
 
-// Obtener vehiculos por cedula del cliente
-const obtenerVehiculos = async (req, res) => {
-  try {
-    const cedula = req.params.cedula;
-    const cliente = await clienteRepo.getByCedula(cedula);
-
-    if (!cliente) {
-      res.status(404).json({ error: "Cliente no encontrado" });
-    } else {
-      const vehiculos = await vehiculoRepo.getVehiculosByCliente(cliente.idCliente);
-
-      if (vehiculos.length === 0) {
-        res.status(404).json({ message: "No se encontraron vehículos para este cliente" });
-      } else {
-        res.status(200).json(vehiculos);
-      }
-    }
-  } catch (error) {
-    console.error("Error al obtener vehículos:", error);
-    res.status(500).json({ error: "Error al obtener vehículos" });
-  }
-};
-
-// Agregar un nuevo vehiculo a cliente
-const agregarVehiculos = async (req, res) => {
-  try {
-    const vehiculos = req.body.vehiculos;
-    const cliente = await clienteRepo.getByCedula(req.params.cedula);
-
-    if (!cliente) {
-      res.status(404).json({ error: "Cliente no encontrado" });
-    } else {
-      await vehiculoRepo.agregarVehiculos(cliente.idCliente, vehiculos);
-      res.status(200).json({ message: "Vehículos agregados exitosamente" });
-    }
-  } catch (error) {
-    console.error("Error al agregar vehículos:", error);
-    res.status(500).json({ error: "Error al agregar vehículos" });
-  }
-};
-
-// Eliminar vehículo
-const eliminarVehiculo = async (req, res) => {
-  try {
-    const idVehiculo = parseInt(req.params.idVehiculo);
-    const cliente = await clienteRepo.getByCedula(req.params.cedula);
-    const vehiculo = await vehiculoRepo.getVehiculoById(idVehiculo, cliente.idCliente);
-
-    if (!vehiculo) {
-      res.status(404).json({ error: "Vehículo no encontrado o no pertenece al cliente" });
-    }
-
-    await vehiculoRepo.eliminarVehiculo(idVehiculo);
-    res.status(200).json({ message: "Vehículo eliminado exitosamente" });
-  } catch (error) {
-    console.error("Error al eliminar vehículo:", error);
-    res.status(500).json({ error: "Error al eliminar vehículo" });
-  }
-};
-
-module.exports = {
-  insertCliente,
-  getHistorialOrdenesByCedula,
-  actualizarCliente,
-  eliminarCliente,
-  obtenerClientePorCedula,
-  obtenerVehiculos,
-  agregarVehiculos,
-  eliminarVehiculo
+module.exports = { 
+  insertCliente, 
+  obtenerClientePorCedula, 
+  getHistorialOrdenesByCedula, 
+  actualizarCliente, 
+  eliminarCliente 
 };

@@ -1,39 +1,21 @@
 import express from "express";
-import { 
-  insertCliente, 
-  getHistorialOrdenesByCedula, 
-  actualizarCliente, 
-  eliminarCliente, 
-  agregarVehiculos, 
-  eliminarVehiculo, 
-  obtenerClientePorCedula, 
-  obtenerVehiculos 
-} from "../../controllers/inventario/clienteController"; 
+import clienteController from "../../controllers/clientes/clienteController.js";
 
 const router = express.Router();
 
 // Ruta para registrar un cliente
-router.post("/registrar", insertCliente);
+router.post("/registrar", clienteController.insertCliente);
 
 // Ruta para obtener un cliente por su cédula
-router.get("/:cedula", obtenerClientePorCedula);
+router.get("/:cedula", clienteController.obtenerClientePorCedula);
 
 // Ruta para obtener el historial de órdenes de un cliente
-router.get("/ordenes/:cedula", getHistorialOrdenesByCedula);
+router.get("/ordenes/:cedula", clienteController.getHistorialOrdenesByCedula);
 
 // Ruta para actualizar los datos de un cliente
-router.put('/:idCliente', actualizarCliente);
+router.put('/:idCliente', clienteController.actualizarCliente);
 
 // Ruta para eliminar un cliente por cédula
-router.delete('/:cedula', eliminarCliente);
-
-// Ruta para obtener los vehículos de un cliente
-router.get("/:cedula/vehiculos", obtenerVehiculos);
-
-// Ruta para agregar vehículos a un cliente
-router.post('/:cedula/Agreg_vehiculos', agregarVehiculos);
-
-// Ruta para eliminar un vehículo de un cliente
-router.delete('/:cedula/vehiculos/:idVehiculo', eliminarVehiculo);
+router.delete('/:cedula', clienteController.eliminarCliente);
 
 export default router;

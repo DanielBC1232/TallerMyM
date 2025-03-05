@@ -21,7 +21,7 @@ import AgregarOrden from './features/flujo/pages/Agregar.jsx';
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
 
 //imports clientes
-
+import IndexCli from "./features/clientes/pages/IndexCli.jsx";
 import AgregarCliente from "./features/clientes/pages/Agregar";
 import ConsultarCliente from "./features/clientes/pages/Consulta";
 import EditarCliente from "./features/clientes/pages/Editar";
@@ -61,6 +61,7 @@ const App = () => {
           <Route path="/perfil-crear" element={<CrearPerfil />} />
           
           {/* Rutas para clientes */}
+          <Route path="/clientes/Index" element={<IndexCli />} />
           <Route path="/clientes/registrar" element={<AgregarCliente />} />
           <Route path="/clientes/consulta" element={<ConsultarCliente />} />
           <Route path="/clientes/editar" element={<EditarCliente />} />
