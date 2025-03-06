@@ -21,7 +21,7 @@ const IndexCli = () => {
     <div className="row gap-5 justify-content-center">
 
     <div className="col-sm-3 align-self-center">
-        <Link to="/clientes/consulta" className="btn-link text-decoration-none">
+        <Link to="/clientes/obtenerclientes" className="btn-link text-decoration-none">
           <Card width={300} direction="row" className="p-2">
             <Card.Header><MdPersonSearch  size={55} color="#005ba5" className="d-flex align-self-baseline"/></Card.Header>
             <Card.Body as="h4" className="d-flex align-self-baseline">Buscar Cliente</Card.Body>

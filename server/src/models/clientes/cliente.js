@@ -16,6 +16,7 @@ class Cliente {
 class ClienteRepository {
   // Insertar nuevos clientes
   async insert(cliente) {
+    console.log(cliente)
     try {
       const pool = await connectDB();
       await pool

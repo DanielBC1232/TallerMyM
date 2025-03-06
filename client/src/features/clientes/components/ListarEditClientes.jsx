@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Para redirigir a la página de edición
 
-const ListarClientes = () => {
-  const [clientes, setClientes] = useState([]); // Todos los clientes
+const ListarEditClientes = () => {
+  const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [filtroCedula, setFiltroCedula] = useState(""); // Estado para el filtro de cédula
+  const [filtroCedula, setFiltroCedula] = useState("");
+  const navigate = useNavigate(); // Hook para redirigir
 
   // Función para obtener todos los clientes
   const obtenerClientes = async () => {
@@ -31,6 +33,11 @@ const ListarClientes = () => {
     cliente.cedula.includes(filtroCedula)
   );
 
+  // Función para redirigir a la página de edición
+  const handleEditar = (idCliente) => {
+    navigate(`/clientes/editar/${idCliente}`); // Redirige a la página de edición
+  };
+
   if (loading) {
     return <p>Cargando clientes...</p>;
   }
@@ -42,8 +49,6 @@ const ListarClientes = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Lista de Clientes</h1>
-
-      {/* Campo de búsqueda por cédula */}
       <div className="mb-4">
         <input
           type="text"
@@ -53,7 +58,6 @@ const ListarClientes = () => {
           className="border p-2 rounded"
         />
       </div>
-
       {/* Tabla de clientes */}
       <table className="min-w-full bg-white border">
         <thead>
@@ -63,6 +67,7 @@ const ListarClientes = () => {
             <th className="py-2 px-4 border">Cédula</th>
             <th className="py-2 px-4 border">Correo</th>
             <th className="py-2 px-4 border">Teléfono</th>
+            <th className="py-2 px-4 border">Acciones</th> {/* Nueva columna */}
           </tr>
         </thead>
         <tbody>
@@ -73,12 +78,19 @@ const ListarClientes = () => {
               <td className="py-2 px-4 border">{cliente.cedula}</td>
               <td className="py-2 px-4 border">{cliente.correo}</td>
               <td className="py-2 px-4 border">{cliente.telefono}</td>
+              <td className="py-2 px-4 border">
+                {/* Botón de editar */}
+                <button
+                  onClick={() => handleEditar(cliente.idCliente)}
+                  className="bg-blue-500 text-white p-2 rounded"
+                >
+                  Editar
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* Mensaje si no hay coincidencias */}
       {clientesFiltrados.length === 0 && filtroCedula && (
         <p className="text-red-500 mt-4">No se encontraron clientes con esa cédula.</p>
       )}
@@ -86,4 +98,4 @@ const ListarClientes = () => {
   );
 };
 
-export default ListarClientes;
+export default ListarEditClientes;

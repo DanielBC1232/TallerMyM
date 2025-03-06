@@ -66,9 +66,10 @@ const App = () => {
           <Route path="/clientes/obtenerclientes" element={<ListarClientesPage />} />
           <Route path="/clientes/Index" element={<IndexCli />} />
           <Route path="/clientes/registrar" element={<AgregarCliente />} />
-          <Route path="/clientes/consulta" element={<ConsultarCliente />} />
           <Route path="/clientes/:idCliente" element={<EditarCliente />} />
           <Route path="/clientes/eliminar" element={<EliminarCliente />} />
+
+          <Route path="/clientes/consulta" element={<ConsultarCliente />} />
           <Route path="/clientes/agregar-vehiculo" element={<AgregarVehiculoCliente />} />
           <Route path="/clientes/eliminar-vehiculo" element={<EliminarVehiculoCliente />} />
 
