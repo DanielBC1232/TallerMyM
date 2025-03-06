@@ -14,6 +14,10 @@ import Editar from "./features/inventario/pages/Editar";
 import Agregar from "./features/inventario/pages/Agregar";
 import Solicitudes from "./features/inventario/pages/Solicitudes";
 
+//vemtas
+import IndexVentas from './features/ventas/pages/index.jsx'
+import Cotizar from "./features/ventas/pages/cotizar.jsx";
+
 //flujo
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
 import AgregarOrden from './features/flujo/pages/Agregar.jsx';
@@ -38,7 +42,7 @@ const App = () => {
 
       <main style={{ minHeight: "95vh" }}>
 
-          {/* ******************
+        {/* ******************
           
           Usar el url:
           /[modulo]-acción 
@@ -55,13 +59,17 @@ const App = () => {
           <Route path="/inventario-editar/:idProducto" element={<Editar />} />{/* :id para esperar recibir un id */}
           <Route path="/solicitudes/" element={<Solicitudes />} />
 
-            {/* FLUJO */}
-            <Route path="/flujo" element={<IndexFlujo/>}/>
-            <Route path="/flujo-agregar" element={<AgregarOrden/>}/>
+          {/* FLUJO */}
+          <Route path="/flujo" element={<IndexFlujo />} />
+          <Route path="/flujo-agregar" element={<AgregarOrden />} />
+
+          {/* Ventas */}
+          <Route path="/ventas" element={<IndexVentas />} />
+          <Route path="/ventas-cotizar" element={<Cotizar />} />
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
-          
+
           {/* Rutas para clientes */}
           <Route path="/clientes/obtenerclientes" element={<ListarClientesPage />} />
           <Route path="/clientes/Index" element={<IndexCli />} />
