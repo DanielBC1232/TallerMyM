@@ -18,10 +18,12 @@ const EditForm = () => {
     setCliente(null);
 
     try {
-      const response = await fetch(`http://localhost:3000/clientes/${cedula}`);
-
+      const response = await fetch(`http://localhost:3000/clientes/${cedula}`,{
+        method:"GET"
+      });
+      
       if (response.status === 404) {
-        alert("Cliente no encontrado");
+        alert("Cliente noooo encontrado");
         setCliente(null);
         return;
       }
@@ -42,7 +44,7 @@ const EditForm = () => {
       setLoading(false);
     }
   };
-
+//------------------------------------
   const handleUpdate = async () => {
     if (!cliente) {
       alert("No hay cliente cargado");

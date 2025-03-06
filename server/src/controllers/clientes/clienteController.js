@@ -15,27 +15,10 @@ const insertCliente = async (req, res) => {
     res.status(500).json({ error: "Error al insertar el cliente" });
   }
 };
-
-// Obtener Historial de Órdenes de Cliente
-const getHistorialOrdenesByCedula = async (req, res) => {
-  try {
-    const cedula = req.params.cedula;
-    const historialOrdenes = await clienteRepo.getHistorialOrdenesByCedula(cedula);
-
-    if (!historialOrdenes || historialOrdenes.length === 0) {
-      res.status(404).json({ error: "No se encontraron órdenes para este cliente" });
-      return;
-    }
-    res.json(historialOrdenes);
-  } catch (error) {
-    console.error("Error en getHistorialOrdenesByCedula:", error);
-    res.status(500).json({ error: "Error al obtener el historial de órdenes" });
-  }
-};
-
 // Actualizar cliente
 const actualizarCliente = async (req, res) => {
   try {
+    
     const id = parseInt(req.params.idCliente);
     const datosActualizados = req.body;
     const actualizacionExitosa = await clienteRepo.updateCliente(id, datosActualizados);
@@ -50,7 +33,6 @@ const actualizarCliente = async (req, res) => {
     res.status(500).json({ error: "Error al actualizar los datos del cliente" });
   }
 };
-
 // Eliminar cliente
 const eliminarCliente = async (req, res) => {
   try {
@@ -58,7 +40,7 @@ const eliminarCliente = async (req, res) => {
     const clienteEliminado = await clienteRepo.deleteCliente(cedula);
 
     if (!clienteEliminado) {
-      res.status(404).json({ error: "Cliente no encontrado o no se pudo eliminar" });
+      res.status(404).json({ error: "Cliente no encontrado oooo no se pudo eliminar" });
     } else {
       res.status(200).json({ message: "Cliente eliminado exitosamente" });
     }
@@ -68,27 +50,71 @@ const eliminarCliente = async (req, res) => {
   }
 };
 
-// Obtener cliente por cédula
-const obtenerClientePorCedula = async (req, res) => {
+// Obtener todos los clientes
+const obtenerTodosLosClientes = async (req, res) => {
   try {
-    const cedula = req.params.cedula;
-    const cliente = await clienteRepo.getByCedula(cedula);
+    // Usar el método getAll del repositorio
+    const clientes = await clienteRepo.getAll();
 
-    if (!cliente) {
-      res.status(404).json({ error: "Cliente no encontrado" });
-    } else {
-      res.status(200).json(cliente);
-    }
+    res.status(200).json(clientes);
   } catch (error) {
-    console.error("Error al obtener cliente:", error);
-    res.status(500).json({ error: "Error al obtener cliente" });
+    console.error("Error al obtener todos los clientes:", error);
+    res.status(500).json({ error: "Error al obtener todos los clientes" });
   }
 };
 
+// Obtener un cliente por cédula
+const obtenerClientePorCedula = async (req, res) => {
+  try {
+    const { cedula } = req.query; // Obtener la cédula del query string
+
+    if (!cedula) {
+      return res.status(400).json({ error: "La cédula es requerida" });
+    }
+
+    const cliente = await clienteRepo.getByCedula(cedula);
+
+    if (!cliente || cliente.length === 0) {
+      res.status(404).json({ error: "Cliente no encontrado" });
+    } else {
+      res.status(200).json(cliente[0]); // Devuelve el primer cliente encontrado
+    }
+  } catch (error) {
+    console.error("Error al obtener cliente por cédula:", error);
+    res.status(500).json({ error: "Error al obtener cliente por cédula" });
+  }
+};
+//-----IGNORARF Obtener Historial de Órdenes de Cliente
+const getHistorialOrdenesByCedula = async (req, res) => {
+  try {
+    const cedula = req.params.cedula;
+    const historialOrdenes = await clienteRepo.getHistorialOrdenesByCedula(cedula);
+
+    if (!historialOrdenes || historialOrdenes.length === 0) {
+      res.status(404).json({ error: "No se encontraron (backendControll) órdenes para este cliente" });
+      return;
+    }
+    res.json(historialOrdenes);
+  } catch (error) {
+    console.error("Error en getHistorialOrdenesByCedula:", error);
+    res.status(500).json({ error: "Error al obtener el historial de órdenes" });
+  }
+};
 module.exports = { 
-  insertCliente, 
+  insertCliente,
+  obtenerTodosLosClientes, 
   obtenerClientePorCedula, 
   getHistorialOrdenesByCedula, 
   actualizarCliente, 
   eliminarCliente 
 };
+
+
+
+
+
+
+
+
+
+

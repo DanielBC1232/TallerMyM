@@ -12,7 +12,7 @@ class Cliente {
     this.fechaRegistro = fechaRegistro;
   }
 }
-
+//------------
 class ClienteRepository {
   // Insertar nuevos clientes
   async insert(cliente) {
@@ -37,41 +37,6 @@ class ClienteRepository {
     }
   }
 
-  // Obtener historial por cédula
-  async getHistorialOrdenesByCedula(cedula) {
-    try {
-      const pool = await connectDB();
-      const result = await pool
-        .request()
-        .input("cedula", sql.VarChar, cedula)
-        .query(`
-          SELECT 
-            o.idOrden,
-            o.codigoOrden,
-            o.estadoOrden,
-            o.fechaIngreso,
-            o.estadoAtrasado,
-            o.tiempoEstimado,
-            v.placaVehiculo,
-            v.modeloVehiculo,
-            v.marcaVehiculo,
-            c.nombre AS nombreCliente,
-            c.telefono AS telefonoCliente
-          FROM ORDEN o
-          JOIN CLIENTE_VEHICULO v ON o.idVehiculo = v.idVehiculo
-          JOIN CLIENTE c ON o.idCliente = c.idCliente
-          WHERE c.cedula = @cedula
-          ORDER BY o.fechaIngreso DESC
-        `);
-      if (result.recordset.length === 0) {
-        return null;
-      }
-      return result.recordset;
-    } catch (error) {
-      console.error("Error al consultar historial de órdenes:", error);
-      throw new Error("Error al consultar historial de órdenes");
-    }
-  }
 
   // Actualizar cliente
   async updateCliente(id, datosActualizados) {
@@ -124,6 +89,18 @@ class ClienteRepository {
       throw new Error("Error al eliminar cliente");
     }
   }
+  //----CED
+//select todos
+  async getAll() {
+    try {
+      const pool = await connectDB();
+      const result = await pool.request().query("SELECT * FROM CLIENTE");
+      return result.recordset;
+    } catch (error) {
+      console.error("Error al obtener todos los clientes:", error);
+      throw new Error("Error al obtener clientes");
+    }
+  }
 
   // Obtener cliente por cédula
   async getByCedula(cedula) {
@@ -144,3 +121,41 @@ class ClienteRepository {
 }
 
 module.exports = { Cliente, ClienteRepository };
+
+
+  /* Obtener historial por cédula
+  async getHistorialOrdenesByCedula(cedula) {
+    try {
+      const pool = await connectDB();
+      const result = await pool
+        .request()
+        .input("cedula", sql.VarChar, cedula)
+        .query(`
+          SELECT 
+            o.idOrden,
+            o.codigoOrden,
+            o.estadoOrden,
+            o.fechaIngreso,
+            o.estadoAtrasado,
+            o.tiempoEstimado,
+            v.placaVehiculo,
+            v.modeloVehiculo,
+            v.marcaVehiculo,
+            c.nombre AS nombreCliente,
+            c.telefono AS telefonoCliente
+          FROM ORDEN o
+          JOIN CLIENTE_VEHICULO v ON o.idVehiculo = v.idVehiculo
+          JOIN CLIENTE c ON o.idCliente = c.idCliente
+          WHERE c.cedula = @cedula
+          ORDER BY o.fechaIngreso DESC
+        `);
+      if (result.recordset.length === 0) {
+        return null;
+      }
+      return result.recordset;
+    } catch (error) {
+      console.error("Error al consultar historial de órdenes:", error);
+      throw new Error("Error al consultar historial de órdenes");
+    }
+  }
+*/
