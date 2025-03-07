@@ -27,7 +27,8 @@ const ContenedorProductos = ({formData}) => {
   }, [formData]);
 
    //url get imagen para las previsualizaciones
-   const getImg = `${BASE_URL}/img/`;
+   const getImg = (img) => img ? `${BASE_URL}/img/${img}` : "/noResult.png";
+
 
   return (
     <div className="article-container article-scroll">
@@ -43,7 +44,8 @@ const ContenedorProductos = ({formData}) => {
             >
               <Image
                 className="card-img-top"
-                src={getImg+productos.img}
+                //src={getImg+productos.img}
+                src={getImg(productos.img)}
                 fallbackSrc="/noResult.png"
                 alt=""
                 style={{ width: "100%", minHeight: "120px" }}

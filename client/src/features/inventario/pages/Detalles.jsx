@@ -91,7 +91,8 @@ const Detalles = () => {
   };
 
   //url get imagen
-  const getImg = `${BASE_URL}/img/${producto.img}`;
+  const getImg = (img) => img ? `${BASE_URL}/img/${img}` : "/noResult.png";
+
 
   return (
     <div className="container main mx-auto p-5">
@@ -99,7 +100,7 @@ const Detalles = () => {
         <Row className="show-grid" gutter={16}>
           <Col xs={6}>
           <Image
-            src={getImg}
+            src={getImg(producto.img)}
             fallbackSrc="https://placehold.co/300x200"
             alt="nonexistent-image"
             width={300}

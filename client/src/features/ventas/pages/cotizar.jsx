@@ -32,6 +32,7 @@ const Cotizar = () => {
     }));
   };
 
+  
   const errorNotification = (message) => {
     Swal.fire({
       text: message,
@@ -150,11 +151,10 @@ const Cotizar = () => {
             icon: "success",
             title: "Cotizacion generada correctamente",
             showConfirmButton: false,
-            timer: 1000,
+            timer: 1500,
           }).then(() => {
 
           });
-
 
         }).finally(
           navigate(`/ventas`)

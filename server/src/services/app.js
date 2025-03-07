@@ -30,7 +30,7 @@ app.listen(PORT, () => { ////
 });
 app.use((0, cors_1.default)({ 
     origin: "http://localhost:5173",
-    methods: 'GET, POST, PUT, DELETE',
+    methods: 'GET, POST, PUT, PATCH, DELETE',
 }));
 (0, database_1.connectDB)() // conexion BD
     .then(() => console.log("Conectado a la base de datos"))
