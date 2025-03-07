@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Select from "react-select";
 import axios from "axios";
 
-
-//URL Base
+// URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const SelectClientes = ({ value, onChange }) => {
@@ -15,35 +14,38 @@ const SelectClientes = ({ value, onChange }) => {
         const { data } = await axios.get(`${BASE_URL}/clientes/obtenerclientes`);
         const opcionesFormateadas = data.map((cliente) => ({
           value: cliente.idCliente,
-          label: cliente.nombre,
+          label: `${cliente.nombre} ${cliente.apellido}`,//Nombre + apellido
         }));
         setOpciones(opcionesFormateadas);
       } catch (error) {
-        console.error("Error obteniendo los clientes:", error);
+        console.error("Error obteniendo los clientes:", error.message);
       }
     };
-  
-    obtenerClientes();
-  }, []);  
 
-  const handleChange = (selectedOptions) => {
-    // Si no se selecciona nada, pasamos un arreglo vacío
-    onChange({
-      target: {
-        name: "selectClientes", // El nombre del campo que se actualiza
-        value: selectedOptions ? selectedOptions.map(option => option.value) : [], // Solo guardamos el modelo
-      },
-    });
-  };
+    obtenerClientes();
+  }, []);
+
+  const handleChange = useCallback(
+    (selectedOption) => {
+      onChange({
+        target: {
+          name: "idCliente",
+          value: selectedOption ? selectedOption.value : null,
+        },
+      });
+    },
+    [onChange]
+  );
 
   return (
     <div>
       <Select
-        id="vehiculselectClientes"
+        id="idCliente"
+        name="idCliente"
         options={opciones}
-        value={opciones.filter((opcion) => value.includes(opcion.value))} // Filtramos las opciones seleccionadas
+        value={opciones.find((opcion) => opcion.value === value) || null} // Buscar el objeto correctamente
         onChange={handleChange}
-        placeholder="Seleccione..."
+        placeholder="Seleccione un cliente..."
         noOptionsMessage={() => "No hay clientes disponibles"}
         maxMenuHeight={185}
       />

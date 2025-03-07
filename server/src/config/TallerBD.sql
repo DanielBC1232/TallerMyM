@@ -351,6 +351,7 @@ CREATE TABLE COTIZACION(
     montoTotal DECIMAL(10,2) NOT NULL,
     montoManoObra DECIMAL(10,2) NOT NULL,
     tiempoEstimado VARCHAR(100) NOT NULL,
+    detalles NVARCHAR(1024) NOT NULL,
     fecha DATETIME DEFAULT GETDATE(),
 
     idCliente INT,

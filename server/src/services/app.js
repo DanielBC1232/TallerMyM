@@ -15,6 +15,8 @@ const productoRoutes_1 = __importDefault(require("../routes/inventario/productoR
 const solicitudRoutes_1 = __importDefault(require("../routes/inventario/solicitudRoutes"));
 const usuarioRoutes_1 = __importDefault(require("../routes/perfil/usuarioRoutes"));
 
+const cotizacionRoutes = require("../routes/ventas/cotizacionRoutes")
+
 const ClienteRoutes_1 = __importDefault(require("../routes/clientes/clienteRoutes"));
 
 const Usuario_1 = __importDefault(require("../models/usuario/usuario"));
@@ -48,6 +50,10 @@ app.use("/vehiculos-compatibles", vehiculosCompatiblesRoutes_1.default);
 app.use("/productos", productoRoutes_1.default);
 app.use("/img", imgRoutes_1.default);
 app.use("/inventario", solicitudRoutes_1.default);
+
+//Rutas Ventas
+app.use("/cotizacion",cotizacionRoutes)
+
 //* Rutas Perfil
 
 // Ruta de Usuario Api
