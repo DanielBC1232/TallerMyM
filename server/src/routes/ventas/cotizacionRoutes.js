@@ -4,6 +4,9 @@ const router = express.Router();
 
 // Ruta para agregar cotización
 router.post("/agregar-cotizacion/", cotizacionController.insertCotizacion);
+router.get("/obtener-cotizaciones",cotizacionController.getCotizacion);
+router.put("/actualizar-cotizacion/",cotizacionController.updateCotizacion);
+router.delete("/eliminar-cotizacion/:id",cotizacionController.deleteCotizacion);
 
 // Exporta el router usando CommonJS
 module.exports = router;

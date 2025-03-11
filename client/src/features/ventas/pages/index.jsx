@@ -10,6 +10,8 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 
+import ListaCotizaciones from "../components/ListaCotizaciones";
+
 const Index = () => {
   return (
     <div className="grid-container">
@@ -76,9 +78,10 @@ const Index = () => {
       </nav>
 
       <div className="main rounded-3">
-        <div className="article-container article-scroll">
+        <div className="article-scroll">
           {/* consultar historial de ventas (filtros)  */}
-          
+          {/* mover cotizacion a otra parte y poner listado ventas  */}
+          <ListaCotizaciones />
         </div>
       </div>
     </div>
