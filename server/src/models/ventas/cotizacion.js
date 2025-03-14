@@ -43,7 +43,8 @@ export class CotizacionRepository {
         try {
             const pool = await connectDB();
             const result = await pool
-                .request().query(`
+                .request()
+                .query(`
                     SELECT TOP 10
                     CO.idCotizacion, CO.montoTotal, CO.montoManoObra,CO.tiempoEstimado, CO.detalles, CO.fecha,CO.idCliente AS CO_idCliente,
                     CL.idCliente as idCliente, CL.nombre, CL.apellido
@@ -51,6 +52,25 @@ export class CotizacionRepository {
                     INNER JOIN CLIENTE CL on CO.idCliente = CL.idCliente
                     ORDER BY fecha DESC`);
             return result.recordset; // Devuelve el listado (15 mas recientes)
+        } catch (error) {
+            console.error('Error en obtener cotizacion:', error);
+            throw new Error('Error en obtener cotizacion');
+        }
+    }
+
+    //obtener listado por ID
+    async getCotizacionById(idCotizacion) {
+        try {
+            const pool = await connectDB();
+            const result = await pool
+                .request()
+                .input('idCotizacion', sql.Float, idCotizacion)
+                .query(`
+                        SELECT
+                        idCotizacion, montoTotal, montoManoObra,tiempoEstimado, detalles, fecha
+                        FROM COTIZACION
+                        WHERE idCotizacion = @idCotizacion`);
+            return result.recordset; // Devuelve el registro
         } catch (error) {
             console.error('Error en obtener cotizacion:', error);
             throw new Error('Error en obtener cotizacion');
@@ -72,7 +92,7 @@ export class CotizacionRepository {
                     SET montoTotal = @montoTotal,
                         montoManoObra = @montoManoObra,
                         tiempoEstimado= @tiempoEstimado,
-                        detalles= @detalles,
+                        detalles= @detalles
                     WHERE idCotizacion = @idCotizacion
                 `);
             return result.rowsAffected[0]; // Devuelve el número de filas afectadas
@@ -90,8 +110,8 @@ export class CotizacionRepository {
             const result = await pool
                 .request()
                 .input('idCotizacion', sql.Int, idCotizacion)
-                .query(`DELETE COTIZACION WHERE idCotizacion = @idCotizacion`);
-            return result.rowsAffected; // Devuelve el listado (15 mas recientes)
+                .query(`DELETE FROM COTIZACION WHERE idCotizacion = @idCotizacion`);
+            return result.rowsAffected;
         } catch (error) {
             console.error('Error en eliminar cotizacion:', error);
             throw new Error('Error en eliminar cotizacion');

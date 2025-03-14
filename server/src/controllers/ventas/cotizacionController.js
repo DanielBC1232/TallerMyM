@@ -33,6 +33,22 @@ const getCotizacion = async (_req, res) => {
     }
 };
 
+const getCotizacionById = async (req, res) => {
+    try {
+
+        const id = parseInt(req.params.id);
+
+        // Usar el método de listado del repositorio
+        const cotizacion = await CotizacionRepo.getCotizacionById(id);
+
+        // Enviar la respuesta
+        res.status(200).json(cotizacion);
+    } catch (error) {
+        console.error("Error al obtener cotización:", error);
+        res.status(500).json({ error: "Error al obtener cotización" });
+    }
+};
+
 const updateCotizacion = async (req, res) => {
     try {
         // Requerir parámetros desde el cuerpo de la solicitud
@@ -51,18 +67,22 @@ const updateCotizacion = async (req, res) => {
 
 const deleteCotizacion = async (req, res) => {
     try {
-        // Requerir parámetros desde el cuerpo de la solicitud
-        const { idCotizacion } = req.body;
+        const id = parseInt(req.params.id);
 
-        // Usar el método de eliminar del repositorio
-        const cotizacion = await CotizacionRepo.deleteCotizacion(idCotizacion);
+        if (!id) {
+            return res.status(400).json({ error: "ID de cotización no proporcionado" });
+        }
 
-        // Enviar la respuesta
-        res.status(200).json({ message: "Cotización eliminada correctamente", rowsAffected: cotizacion });
+        const rowsAffected = await CotizacionRepo.deleteCotizacion(id);
+        if (rowsAffected > 0) {
+            res.status(200).json({ message: "Cotización eliminada correctamente" });
+        } else {
+            res.status(404).json({ error: "Cotización no encontrada" });
+        }
     } catch (error) {
-        console.error("Error al eliminar cotización:", error);
-        res.status(500).json({ error: "Error al eliminar cotización" });
+        console.error("Error eliminando cotización:", error);
+        res.status(500).json({ error: "Error eliminando cotización" });
     }
 };
 
-export { insertCotizacion, getCotizacion, updateCotizacion, deleteCotizacion };
+export { insertCotizacion, getCotizacion,getCotizacionById, updateCotizacion, deleteCotizacion };

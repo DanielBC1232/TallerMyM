@@ -14,9 +14,9 @@ import Editar from "./features/inventario/pages/Editar";
 import Agregar from "./features/inventario/pages/Agregar";
 import Solicitudes from "./features/inventario/pages/Solicitudes";
 
-//vemtas
 import IndexVentas from './features/ventas/pages/index.jsx'
-import Cotizar from "./features/ventas/pages/cotizar.jsx";
+import IndexCotizacion from "./features/ventas/pages/IndexCotizacion.jsx";
+import Cotizar from "./features/ventas/pages/Cotizar.jsx";
 
 //flujo
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
@@ -66,7 +66,9 @@ const App = () => {
 
           {/* Ventas */}
           <Route path="/ventas" element={<IndexVentas />} />
-          <Route path="/ventas-cotizar" element={<Cotizar />} />
+          <Route path="/cotizacion" element={<IndexCotizacion />} />
+          <Route path="/cotizacion-cotizar" element={<Cotizar />} />
+          <Route path="/cotizacion-editar/:idCotizacion" element={<EditarCotizacion />} />
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />

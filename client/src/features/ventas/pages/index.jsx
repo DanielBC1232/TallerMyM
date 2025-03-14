@@ -68,7 +68,7 @@ const Index = () => {
                     type="button"
                     className="btn btn-sm btn-secondary text-white"
                     style={{ minWidth: "50px", width: "135px" }}>
-                    <Link to="/ventas-cotizar" className="btn-link">Generar Cotización</Link>
+                    <Link to="/cotizacion" className="btn-link">Cotizacion</Link>
                   </Button>
                 </Col>
               </Row>
@@ -80,8 +80,8 @@ const Index = () => {
       <div className="main rounded-3">
         <div className="article-scroll">
           {/* consultar historial de ventas (filtros)  */}
-          {/* mover cotizacion a otra parte y poner listado ventas  */}
-          <ListaCotizaciones />
+
+          
         </div>
       </div>
     </div>
