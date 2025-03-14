@@ -35,7 +35,7 @@ const EliminarCliente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.delete(`http://localhost:3000/clientes/eliminar/cliente?cedula=${cedula}`);//!!
+      await axios.delete(`http://localhost:3000/clientes/eliminar/${cedula}`);//!!
       alert("Cliente Eliminado exitosamente");
       navigate("/clientes/listar-edit"); // Redirigir a la lista de clientes (edición)
     } catch (error) {

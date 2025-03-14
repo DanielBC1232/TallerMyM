@@ -8,7 +8,7 @@ router.post("/registrar", clienteController.insertCliente);
 // Ruta para actualizar los datos de un cliente
 router.put('/editar/:cedula', clienteController.actualizarCliente);
 // Ruta para eliminar un cliente por cédula
-router.delete('eliminar/:cedula', clienteController.eliminarCliente);
+router.delete('/eliminar/:cedula', clienteController.eliminarCliente);
 
 //Obtener
 router.get("/obtenerclientes", clienteController.obtenerTodosLosClientes);

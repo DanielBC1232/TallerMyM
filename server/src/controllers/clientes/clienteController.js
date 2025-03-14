@@ -36,7 +36,7 @@ const actualizarCliente = async (req, res) => {
 // Eliminar cliente
 const eliminarCliente = async (req, res) => {
   try {
-    const cedula = parseInt(req.params.cedula);
+    const cedula = req.params.cedula;
     const clienteEliminado = await clienteRepo.deleteCliente(cedula);
 
     if (!clienteEliminado) {
@@ -45,8 +45,8 @@ const eliminarCliente = async (req, res) => {
       res.status(200).json({ message: "Cliente eliminado exitosamente" });
     }
   } catch (error) {
-    console.error("Errorrrr al eliminar cliente:", error);
-    res.status(500).json({ error: "Error rrrr al eliminar cliente" });
+    console.error("Error al eliminar cliente:", error);
+    res.status(500).json({ error: "Error al eliminar cliente" });
   }
 };
 
