@@ -38,7 +38,7 @@ const EditarCliente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/clientes/editar/cliente?cedula=${cedula}`, cliente);//!!
+      await axios.put(`http://localhost:3000/clientes/editar/${cedula}`, cliente);//!!
       alert("Cliente actualizado exitosamente");
       navigate("/clientes/listar-edit"); // Redirigir a la lista de clientes (edición)
     } catch (error) {
