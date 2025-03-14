@@ -1,11 +1,11 @@
 import React from "react";
-import DeleteBar from "../components/DeleteBar";
+import ElimForm from "../components/ElimForm";
 import "../styles/eliminar.css";
 
 const EliminarCliente = () => {
   return (
     <div className="p-6">
-      <DeleteBar />
+      <ElimForm />
     </div>
   );
 };

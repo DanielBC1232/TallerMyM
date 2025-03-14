@@ -39,7 +39,7 @@ const IndexCli = () => {
       </div>
 
       <div className="col-sm-3 align-self-center">
-        <Link to="/clientes/:idCliente" className="btn-link text-decoration-none">
+        <Link to="/clientes/list-edit" className="btn-link text-decoration-none">
           <Card width={300} direction="row" className="p-2">
             <Card.Header><FaUserEdit size={55} color="#005ba5" className="d-flex align-self-baseline"/></Card.Header>
             <Card.Body as="h4" className="d-flex align-self-baseline">Editar<br/>Cliente</Card.Body>
@@ -48,7 +48,7 @@ const IndexCli = () => {
       </div>
 
       <div className="col-sm-3 align-self-center">
-        <Link to="#" className="btn-link text-decoration-none">
+        <Link to="/clientes/list-elim" className="btn-link text-decoration-none">
           <Card width={300} direction="row" className="p-2">
             <Card.Header><AiOutlineUserDelete size={55} color="#005ba5" className="d-flex align-self-baseline"/></Card.Header>
             <Card.Body as="h4" className="d-flex align-self-baseline">Eliminar Cliente</Card.Body>

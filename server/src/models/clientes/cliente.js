@@ -40,10 +40,10 @@ class ClienteRepository {
 
 
   // Actualizar cliente
-  async updateCliente(id, datosActualizados) {
+  async updateCliente(cedula, datosActualizados) {
     try {
       const pool = await connectDB();
-      const { cedula, nombre, apellido, correo, telefono } = datosActualizados;
+      const { id,cedula, nombre, apellido, correo, telefono } = datosActualizados;
 
       const result = await pool
         .request()
@@ -56,7 +56,7 @@ class ClienteRepository {
         .query(`
           UPDATE CLIENTE
           SET cedula = @cedula, nombre = @nombre, apellido = @apellido, correo = @correo, telefono = @telefono
-          WHERE idCliente = @idCliente
+          WHERE cedula = @cedula
         `);
 
       return result.rowsAffected[0] > 0;
@@ -69,11 +69,11 @@ class ClienteRepository {
   // Eliminar cliente
   async deleteCliente(cedula) {
     try {
-      console.log("Iniciando conexión con la base de datos...");
+      
       const pool = await connectDB();
       console.log("Conexión establecida con la base de datos.");
 
-      console.log("Ejecutando consulta de eliminación para cédula:", cedula);
+    
       const result = await pool
         .request()
         .input("cedula", sql.VarChar, cedula)
@@ -86,8 +86,8 @@ class ClienteRepository {
 
       return result.rowsAffected[0] > 0;
     } catch (error) {
-      console.error("Error al eliminar cliente:", error);
-      throw new Error("Error al eliminar cliente");
+      console.error("Error444 al eliminar cliente:", error);
+      throw new Error("Error444 al eliminar cliente");
     }
   }
   //----CED

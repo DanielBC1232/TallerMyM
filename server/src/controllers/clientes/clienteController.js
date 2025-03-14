@@ -19,9 +19,9 @@ const insertCliente = async (req, res) => {
 const actualizarCliente = async (req, res) => {
   try {
     
-    const id = parseInt(req.params.idCliente);
+    const cedula = parseInt(req.params.cedula);
     const datosActualizados = req.body;
-    const actualizacionExitosa = await clienteRepo.updateCliente(id, datosActualizados);
+    const actualizacionExitosa = await clienteRepo.updateCliente(cedula, datosActualizados);
 
     if (!actualizacionExitosa) {
       res.status(404).json({ error: "Cliente no encontrado o no se pudo actualizar" });
@@ -36,7 +36,7 @@ const actualizarCliente = async (req, res) => {
 // Eliminar cliente
 const eliminarCliente = async (req, res) => {
   try {
-    const cedula = req.params.cedula;
+    const cedula = parseInt(req.params.cedula);
     const clienteEliminado = await clienteRepo.deleteCliente(cedula);
 
     if (!clienteEliminado) {
@@ -45,8 +45,8 @@ const eliminarCliente = async (req, res) => {
       res.status(200).json({ message: "Cliente eliminado exitosamente" });
     }
   } catch (error) {
-    console.error("Error al eliminar cliente:", error);
-    res.status(500).json({ error: "Error al eliminar cliente" });
+    console.error("Errorrrr al eliminar cliente:", error);
+    res.status(500).json({ error: "Error rrrr al eliminar cliente" });
   }
 };
 

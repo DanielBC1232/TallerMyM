@@ -25,15 +25,16 @@ import AgregarOrden from './features/flujo/pages/Agregar.jsx';
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
 
 //imports clientes
-import ListarClientes from "./features/clientes/components/ListarClientes.jsx";
 import IndexCli from "./features/clientes/pages/IndexCli.jsx";
-import AgregarCliente from "./features/clientes/pages/Agregar";
-import ConsultarCliente from "./features/clientes/pages/Consulta";
-import EditarCliente from "./features/clientes/pages/Editar";
-import EliminarCliente from "./features/clientes/pages/Eliminar";
-import AgregarVehiculoCliente from "./features/clientes/pages/AgregarVehiculo.jsx";
-import EliminarVehiculoCliente from "./features/clientes/pages/EliminarVehiculo.jsx";
 import ListarClientesPage from "./features/clientes/pages/ListarClientesPage.jsx";
+import ListarEditClientesPage from "./features/clientes/pages/ListarEditClientePage.jsx";
+import ListarElimClientesPage from "./features/clientes/pages/ListarElimClientePage.jsx";
+
+import AgregarCliente from "./features/clientes/pages/AgregarCli.jsx";
+import EditarCliente from "./features/clientes/pages/EditarCli.jsx";
+import EliminarCliente from "./features/clientes/pages/Eliminar.jsx";
+
+
 
 const App = () => {
   return (
@@ -71,16 +72,14 @@ const App = () => {
           <Route path="/perfil-crear" element={<CrearPerfil />} />
 
           {/* Rutas para clientes */}
-          <Route path="/clientes/obtenerclientes" element={<ListarClientesPage />} />
           <Route path="/clientes/Index" element={<IndexCli />} />
+          <Route path="/clientes/obtenerclientes" element={<ListarClientesPage />} />
+          <Route path="/clientes/list-edit" element={<ListarEditClientesPage />} />
+          <Route path="/clientes/list-elim" element={<ListarElimClientesPage />} />
+
           <Route path="/clientes/registrar" element={<AgregarCliente />} />
-          <Route path="/clientes/:idCliente" element={<EditarCliente />} />
-          <Route path="/clientes/eliminar" element={<EliminarCliente />} />
-
-          <Route path="/clientes/consulta" element={<ConsultarCliente />} />
-          <Route path="/clientes/agregar-vehiculo" element={<AgregarVehiculoCliente />} />
-          <Route path="/clientes/eliminar-vehiculo" element={<EliminarVehiculoCliente />} />
-
+          <Route path="/clientes/editar/:cedula" element={<EditarCliente />} />
+          <Route path="/clientes/eliminar/:cedula" element={<EliminarCliente />} />
 
         </Routes>
       </main>

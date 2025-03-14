@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Para redirigir a la página de edición
 
-const ListarEditClientes = () => {
+const ListarElimClientes = () => {
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -34,8 +34,8 @@ const ListarEditClientes = () => {
   );
 
   // Función para redirigir a la página de edición
-  const handleEditar = (cedula) => {
-    navigate(`/clientes/editar/${cedula}`); // Redirige a la página de edición
+  const handleEliminar = (cedula) => {
+    navigate(`/clientes/eliminar/${cedula}`); // Redirige a la página de edición
   };
 
   if (loading) {
@@ -81,10 +81,10 @@ const ListarEditClientes = () => {
               <td className="py-2 px-4 border">
                 {/* Botón de editar */}
                 <button
-                  onClick={() => handleEditar(cliente.cedula)}
+                  onClick={() => handleEliminar(cliente.cedula)}
                   className="bg-blue-500 text-white p-2 rounded"
                 >
-                  Editar
+                  Eliminar
                 </button>
               </td>
             </tr>
@@ -98,4 +98,4 @@ const ListarEditClientes = () => {
   );
 };
 
-export default ListarEditClientes;
+export default ListarElimClientes;
