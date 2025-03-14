@@ -18,7 +18,7 @@ const EliminarCliente = () => {
     const obtenerCliente = async () => {
       try {
         //implementar obtener un cliente por id /ocupo primero cargar los datos
-        const response = await axios.get(`http://localhost:3000/clientes/cliente?cedula=${cedula}`);
+        const response = await axios.get(`http://localhost:3000/clientes/${cedula}`);
         setCliente(response.data);
       } catch (error) {
         console.error("Error al obtener el cliente:", error);

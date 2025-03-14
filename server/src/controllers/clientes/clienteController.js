@@ -66,7 +66,7 @@ const obtenerTodosLosClientes = async (req, res) => {
 // Obtener un cliente por cédula
 const obtenerClientePorCedula = async (req, res) => {
   try {
-    const { cedula } = req.query; // Obtener la cédula del query string
+    const { cedula } = req.params; // Obtener la cédula del query string /params 268570349 y /query cliente?cedula=268570349
 
     if (!cedula) {
       return res.status(400).json({ error: "La cédula es requerida" });

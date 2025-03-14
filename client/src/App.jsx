@@ -34,6 +34,9 @@ import AgregarCliente from "./features/clientes/pages/AgregarCli.jsx";
 import EditarCliente from "./features/clientes/pages/EditarCli.jsx";
 import EliminarCliente from "./features/clientes/pages/Eliminar.jsx";
 
+//imports vehiculos
+import IndexVehi from "./features/vehiculos/pages/IndexVehi.jsx";
+import AgregarVehiculo from "./features/vehiculos/pages/AgregarCli.jsx";
 
 
 const App = () => {
@@ -82,6 +85,9 @@ const App = () => {
           <Route path="/clientes/registrar" element={<AgregarCliente />} />
           <Route path="/clientes/editar/:cedula" element={<EditarCliente />} />
           <Route path="/clientes/eliminar/:cedula" element={<EliminarCliente />} />
+          {/* Rutas para Vehiculos */}
+          <Route path="/vehiculo/Index" element={<IndexVehi />} />
+          <Route path="/vehiculo/registrar" element={<AgregarVehiculo />} />
 
         </Routes>
       </main>
