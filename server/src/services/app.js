@@ -16,6 +16,7 @@ const solicitudRoutes_1 = __importDefault(require("../routes/inventario/solicitu
 const usuarioRoutes_1 = __importDefault(require("../routes/perfil/usuarioRoutes"));
 
 const cotizacionRoutes = require("../routes/ventas/cotizacionRoutes")
+const trabajadoresRoutes = require("../routes/trabajadores/trabajadoresRoutes")
 
 const ClienteRoutes_1 = __importDefault(require("../routes/clientes/clienteRoutes"));
 
@@ -52,7 +53,10 @@ app.use("/img", imgRoutes_1.default);
 app.use("/inventario", solicitudRoutes_1.default);
 
 //Rutas Ventas
-app.use("/cotizacion",cotizacionRoutes)
+app.use("/cotizacion",cotizacionRoutes);
+
+//trabajadores
+app.use("/trabajadores",trabajadoresRoutes);
 
 //* Rutas Perfil
 

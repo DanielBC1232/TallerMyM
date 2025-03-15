@@ -14,14 +14,22 @@ import Editar from "./features/inventario/pages/Editar";
 import Agregar from "./features/inventario/pages/Agregar";
 import Solicitudes from "./features/inventario/pages/Solicitudes";
 
+//ventas
 import IndexVentas from './features/ventas/pages/index.jsx'
 import IndexCotizacion from "./features/ventas/pages/IndexCotizacion.jsx";
 import Cotizar from "./features/ventas/pages/Cotizar.jsx";
+import EditarCotizacion from "./features/ventas/pages/EditarCotizarcion.jsx";
 
 //flujo
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
 import AgregarOrden from './features/flujo/pages/Agregar.jsx';
 
+//Trabajadores
+import TrabajadoresIndex from "./features/trabajadores/pages/Index.jsx";
+import AgregarTrabajador from "./features/trabajadores/pages/Agregar.jsx";
+import EditarTrabajador from "./features/trabajadores/pages/Editar.jsx";
+
+//administracion
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
 
 //imports clientes
@@ -69,6 +77,11 @@ const App = () => {
           <Route path="/cotizacion" element={<IndexCotizacion />} />
           <Route path="/cotizacion-cotizar" element={<Cotizar />} />
           <Route path="/cotizacion-editar/:idCotizacion" element={<EditarCotizacion />} />
+
+          {/* Ruta para trabajadores*/}
+          <Route path="/trabajadores" element={<TrabajadoresIndex />} />
+          <Route path="/trabajadores-agregar" element={<AgregarTrabajador />} />
+          <Route path="/trabajadores-editar/:idTrabajador" element={<EditarTrabajador />} />
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
