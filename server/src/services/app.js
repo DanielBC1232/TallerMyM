@@ -19,6 +19,7 @@ const cotizacionRoutes = require("../routes/ventas/cotizacionRoutes")
 const trabajadoresRoutes = require("../routes/trabajadores/trabajadoresRoutes")
 
 const ClienteRoutes_1 = __importDefault(require("../routes/clientes/clienteRoutes"));
+const VehiculoRoute_1 = __importDefault(require("../routes/vehiculos/vehiculosRoutes"));
 
 const Usuario_1 = __importDefault(require("../models/usuario/usuario"));
 const database_1 = require("../config/database");
@@ -65,3 +66,5 @@ app.use("/api/usuario", usuarioRoutes_1.default);
 app.use("/usuario", Usuario_1.default);
 //Ruta modulo de clientes
 app.use("/clientes", ClienteRoutes_1.default);
+//Ruta modulo Vehiculos
+app.use("/vehiculos", VehiculoRoute_1.default);
