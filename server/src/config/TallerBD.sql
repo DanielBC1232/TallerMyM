@@ -328,18 +328,16 @@ CREATE TABLE ORDEN(
     fechaIngreso DATE NOT NULL DEFAULT GETDATE(),--al ingresar en una nueva orden en el flujo
     tiempoEstimado DATETIME NOT NULL,
     estadoAtrasado BIT NOT NULL DEFAULT 0,
-
+	idVehiculo INT NOT NULL,
     --FK
     --Se puede reasignar otro trabajador (update)
     idTrabajador INT,
     FOREIGN KEY (idTrabajador) REFERENCES TRABAJADOR(idTrabajador),
 
-    --Al crear orden se ingresa cliente, pero no se puede actualziar ni borrar
+    --Al crear orden se ingresa cliente, pero no se puede actualizar ni borrar
     --ya que la orden es por cliente
     idCliente INT,
     FOREIGN KEY (idCliente) REFERENCES CLIENTE(idCliente)
-    --Y del cliente, se asigna el vehiculo
-
 )
 GO
 

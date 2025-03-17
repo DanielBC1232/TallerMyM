@@ -23,9 +23,7 @@ const IndexFlujo = () => {
         className="sidebar p-4 rounded-3 shadow-sm p-2"
         style={{ maxWidth: "550px" }}
       >
-
-      
-
+        <a className="btn btn-secondary btn-sm text-white">Agregar orden</a>
       </nav>
 
       {/* FLUJO */}

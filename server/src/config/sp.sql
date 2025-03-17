@@ -48,6 +48,36 @@ BEGIN
 END;
 GO
 
+-- SP para generar el codigo de orden
+CREATE OR ALTER PROCEDURE GenerarCodigoOrden
+    @CodigoOrden VARCHAR(9) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    SET @CodigoOrden = UPPER(REPLACE(CONVERT(VARCHAR(36), NEWID()), '-', ''))
+    SET @CodigoOrden = LEFT(@CodigoOrden, 9)
+END;
+GO
 
+-- SP para insertar la orden
+CREATE OR ALTER PROCEDURE SP_INSERTAR_ORDEN
+    @tiempoEstimado DATETIME,
+	@idVehiculo INT,
+    @idTrabajador INT,
+    @idCliente INT
+AS
+BEGIN
+    DECLARE @codigoOrden VARCHAR(9)
+    
+    -- Genera el código único
+    EXEC GenerarCodigoOrden @CodigoOrden = @codigoOrden OUTPUT
 
+    -- Inserta la orden con el código generado
+    INSERT INTO ORDEN (codigoOrden,tiempoEstimado, idVehiculo, idTrabajador, idCliente)
+    VALUES (@codigoOrden,@tiempoEstimado, @idVehiculo, @idTrabajador, @idCliente)
+    
+END;
+GO
 
+select * from ORDEN;

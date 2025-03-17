@@ -7,25 +7,25 @@ import SpinnerIcon from '@rsuite/icons/Spinner';
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
-const SelectClientes = ({ value, onChange }) => {
+const SelectTrabajadores = ({ value, onChange }) => {
   const [opciones, setOpciones] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
-      const fetchClientes = async () => {
+      const fetchTrabajadores = async () => {
           try {
-              const { data } = await axios.get(`${BASE_URL}/clientes/obtenerclientes`);
-              const opcionesFormateadas = data.map(cliente => ({
-                  value: cliente.idCliente,
-                  label: `${cliente.nombre} ${cliente.apellido}`,
+              const { data } = await axios.get(`${BASE_URL}/trabajadores/obtener-trabajadores`);
+              const opcionesFormateadas = data.map(trabajador => ({
+                  value: trabajador.idTrabajador,
+                  label: `${trabajador.nombreCompleto}`,
               }));
               setOpciones(opcionesFormateadas);
           } catch (error) {
-              console.error("Error obteniendo los clientes:", error);
+              console.error("Error obteniendo los Trabajadores:", error);
           }
       };
       
-      fetchClientes();
+      fetchTrabajadores();
   }, []);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const SelectClientes = ({ value, onChange }) => {
     if (typeof onChange === "function") {
         onChange({
             target: {
-                name: "clienteSeleccionado",
+                name: "trabajadorSeleccionado",
                 value: selectedOption ? selectedOption.value : "",
             },
         });
@@ -50,15 +50,15 @@ const SelectClientes = ({ value, onChange }) => {
 
   return (
       <Select
-          id="clienteSeleccionado"
+          id="trabajadorSeleccionado"
           options={opciones}
           value={selectedOption}
           onChange={handleChange}
-          placeholder="Seleccionar Cliente"
-          noOptionsMessage={() => "No hay clientes disponibles"}
+          placeholder="Seleccionar Mecánico"
+          noOptionsMessage={() => "No hay Trabajadores disponibles"}
           maxMenuHeight={140}
       />
   );
 };
 
-export default SelectClientes;
+export default SelectTrabajadores;

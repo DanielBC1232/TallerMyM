@@ -6,6 +6,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import SelectClientes from "../components/SelectClientes";
+import SelectTrabajadores from "../components/SelectTrabajadores";
+import SelectVehiculos from "../components/SelectVehiculos";
+
+//URL BASE
+export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Agregar = () => {
   const navigate = useNavigate(); // Hook para navegar
@@ -23,35 +28,21 @@ const Agregar = () => {
       showConfirmButton: false,
     });
   };
-
   // --- Verificaciones de campos ---
   const VerificarTiempoEstimado = () => {
-    var pass = false;
-    //Campo Nombre
-    if (!formData.tiempoEstimado.trim()) {
-      tiempoEstimado.classList.remove("is-valid");
-      tiempoEstimado.classList.add("is-invalid");
-      pass = false;
-      errorNotification("Campo de timepo estimado vacío");
-    } else if (formData.tiempoEstimado.trim()) {
-      tiempoEstimado.classList.remove("is-invalid");
-      tiempoEstimado.classList.add("is-valid");
-      pass = true;
+    if (!formData.tiempoEstimado) {
+      errorNotification("Campo de tiempo estimado vacío");
+      return false;
     }
-
-    return pass;
+    return true;
   };
   const verificarTrabajador = () => {
     var pass = false;
     //Campo Marca
     if (!formData.idTrabajador) {
-      idTrabajador.classList.remove("is-valid");
-      idTrabajador.classList.add("is-invalid");
       pass = false;
       errorNotification("Debe asignar un mecanico encargado");
     } else if (formData.idTrabajador) {
-      idTrabajador.classList.remove("is-invalid");
-      idTrabajador.classList.add("is-valid");
       pass = true;
     }
     return pass;
@@ -60,13 +51,9 @@ const Agregar = () => {
     var pass = false;
     //Campo Precio
     if (!formData.idCliente) {
-      idCliente.classList.remove("is-valid");
-      idCliente.classList.add("is-invalid");
       pass = false;
       errorNotification("Debe asignar un cliente");
     } else if (formData.idCliente) {
-      idCliente.classList.remove("is-invalid");
-      idCliente.classList.add("is-valid");
       pass = true;
     }
     return pass;
@@ -74,14 +61,10 @@ const Agregar = () => {
   const verificarVehiculo = () => {
     var pass = false;
     //Campo Fecha Ingreso
-    if (!formData.idVehiculo.trim()) {
-      idVehiculo.classList.remove("is-valid");
-      idVehiculo.classList.add("is-invalid");
+    if (!formData.idVehiculo) {
       pass = false;
       errorNotification("Debe asignar un vehiculo");
-    } else if (formData.marca.trim()) {
-      idVehiculo.classList.remove("is-invalid");
-      idVehiculo.classList.add("is-valid");
+    } else if (formData.idVehiculo) {
       pass = true;
     }
     return pass;
@@ -102,34 +85,61 @@ const Agregar = () => {
     }
     return pass;
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    //console.log(formData);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
     if (verificacion()) {
-      axios
-        .post("http://localhost:3000/orden/agregar", formData)
-        .then((res) => {
-          Swal.fire({
+      try {
+        const res = await axios.post(`${BASE_URL}/flujo/agregar-orden/`, formData);
+        //console.log(res.data);
+  
+        if (res.status === 201) {
+          await Swal.fire({
             icon: "success",
             title: "Orden agregada correctamente",
             showConfirmButton: false,
             timer: 1300,
-          }).then(() => {
-            navigate("/flujo");
           });
-        })
-        .catch((error) =>
+          navigate("/flujo");
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: "Ocurrió un problema al procesar la solicitud",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      } catch (error) {
+        console.error("Error al agregar la orden:", error);
+        if (error.response) {
+          const { status } = error.response;
+          let message = "Error al agregar la orden";
+          if (status === 400) {
+            message = "Solicitud incorrecta, por favor verifique los datos ingresados";
+          } else if (status === 404) {
+            message = "No se encontró el recurso solicitado";
+          } else if (status === 500) {
+            message = "Error interno del servidor, por favor intente más tarde";
+          }
           Swal.fire({
             icon: "error",
-            title: "Error al agregar una orden",
-            text: error,
+            title: message,
             showConfirmButton: false,
-            timer: 1000,
-          })
-        );
+            timer: 1500,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error desconocido, por favor intente más tarde",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      }
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit}>
@@ -147,17 +157,27 @@ const Agregar = () => {
                 <Col xs={12} className="column">
                   <span>
                     Seleccionar un cliente
-                    <SelectClientes />
+                    <SelectClientes
+                      value={formData.idCliente}
+                      onChange={(e) => setFormData(prev => ({ ...prev, idCliente: e.target.value }))}
+                    />
                   </span>
                   <span>
                     Seleccionar un mecánico
-                    <SelectClientes />
+                    <SelectTrabajadores
+                      value={formData.idTrabajador}
+                      onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))}
+                    />
                   </span>
                 </Col>
                 <Col xs={12} className="column">
                   <span>
                     Seleccionar un vehiculo
-                    <SelectClientes />
+                    <SelectVehiculos
+                      idCliente={formData.idCliente}
+                      value={formData.idVehiculo}
+                      onChange={(e) => setFormData(prev => ({ ...prev, idVehiculo: e.target.value }))}
+                    />
                   </span>
                   <span>
                     Estimado de finalización:
@@ -166,6 +186,8 @@ const Agregar = () => {
                       className="form-control"
                       style={{ maxWidth: "225px" }}
                       name="tiempoEstimado"
+                      value={formData.tiempoEstimado}
+                      onChange={(e) => setFormData(prev => ({ ...prev, tiempoEstimado: e.target.value }))}
                     />
                   </span>
                 </Col>
