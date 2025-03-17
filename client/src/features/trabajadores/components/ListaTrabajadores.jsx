@@ -8,7 +8,6 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const ListaTrabajadores = ({formData, trigger}) => {
 
-    console.log("Ejecutando filtro con:", formData); 
     const [datos, setDatos] = useState([]);
     useEffect(() => {
         const getTrabajadores = async () => {

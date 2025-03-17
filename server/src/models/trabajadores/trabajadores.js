@@ -66,7 +66,7 @@ export class TrabajadorRepository {
                 .input('cedula',sql.VarChar, cedula)
                 .input('salarioMin',sql.Decimal(10, 2), salarioMin)
                 .input('salarioMax',sql.Decimal(10, 2), salarioMax)
-                .execute(`SP_FILTRO_TRABAJADORES`);
+                .query(`SELECT * FROM TRABAJADOR`);
             return result.recordset; // Devuelve el listado (10 más recientes)
         } catch (error) {
             console.error('Error en obtener trabajadores:', error);
