@@ -12,7 +12,7 @@ const ListaTrabajadores = ({formData, trigger}) => {
     useEffect(() => {
         const getTrabajadores = async () => {
           try {
-            const { data } = await axios.post(`${BASE_URL}/trabajadores/obtener-trabajadores/`, formData);
+            const { data } = await axios.get(`${BASE_URL}/trabajadores/obtener-trabajadores/`);
             setDatos(data);
           } catch (error) {
             console.error("Error al obtener trabajadores:", error);

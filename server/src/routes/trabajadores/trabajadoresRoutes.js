@@ -6,7 +6,7 @@ const router = express.Router();
 router.post("/agregar-trabajador/", trabajadorController.insertTrabajador);
 
 // Ruta para obtener todos los trabajadores
-router.post("/obtener-trabajadores", trabajadorController.getTrabajadores);
+router.get("/obtener-trabajadores", trabajadorController.getTrabajadores);
 
 // Ruta para obtener trabajador por ID
 router.get("/obtener-trabajador/:id", trabajadorController.getTrabajadorById);
