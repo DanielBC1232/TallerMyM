@@ -8,6 +8,7 @@ router.post("/registrar", vehiculoController.insertarVehiculo);
 router.put("/editar/:idVehiculo", vehiculoController.actualizarVehiculo);
 router.delete("/eliminar/:idVehiculo", vehiculoController.eliminarVehiculo);
 
+router.get("/cliente-vehiculos/:idCliente", vehiculoController.getVehiculosPorCliente);
 router.get("/ObtenerVehiculos", vehiculoController.obtenerTodosLosVehiculos);
 router.get("/ObtenerVehiculo/:placaVehiculo", vehiculoController.obtenerVehiculoPorPlaca);
 

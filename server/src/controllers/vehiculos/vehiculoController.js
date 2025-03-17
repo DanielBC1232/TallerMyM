@@ -53,9 +53,7 @@ const eliminarVehiculo = async (req, res) => {
   }
 };
 
-
-
-// Obtener todos los clientes
+// Obtener todos los vehiculos
 const obtenerTodosLosVehiculos = async (req, res) => {
   try {
     // Usar el método getAll del repositorio
@@ -65,6 +63,21 @@ const obtenerTodosLosVehiculos = async (req, res) => {
   } catch (error) {
     console.error("Error al obtener todos los clientes:", error);
     res.status(500).json({ error: "Error al obtener todos los clientes" });
+  }
+};
+
+// Obtener todos vehiculos
+const getVehiculosPorCliente = async (req, res) => {
+  try {
+    // Usar el método getVehiculosPorCliente del repositorio
+    const idCliente = parseInt(req.params.idCliente);
+
+    const vehiculos = await VehiculoRepo.getVehiculosPorCliente(idCliente);
+
+    res.status(200).json(vehiculos);
+  } catch (error) {
+    console.error("Error al obtener los vehiculos del cliente:", error);
+    res.status(500).json({ error: "Error al obtener los vehiculos del cliente" });
   }
 };
  
@@ -97,7 +110,8 @@ module.exports = {
   actualizarVehiculo,
   eliminarVehiculo,
   obtenerTodosLosVehiculos,
-  obtenerVehiculoPorPlaca
+  obtenerVehiculoPorPlaca,
+  getVehiculosPorCliente
 };
 
 
