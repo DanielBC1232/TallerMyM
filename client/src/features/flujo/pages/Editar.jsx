@@ -1,3 +1,4 @@
+/*
 import React, { useState, useEffect } from "react";
 import { Grid, Row, Col } from "rsuite";
 import "../styles/flu.css";
@@ -215,4 +216,4 @@ function comprobarCambioFecha(){
   );
 };
 
-export default Editar;
+export default Editar;*/
