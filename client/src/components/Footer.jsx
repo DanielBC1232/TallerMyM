@@ -70,7 +70,7 @@ return (
 
 <div className="text-center p-4">
   <h6>
-    © 2024 Derechos Reservados - Analisis y Modelado de Requerimientos
+  Copyright &copy; 2025 - Taller Mécanico MyM
   </h6>
 </div>
 </footer>

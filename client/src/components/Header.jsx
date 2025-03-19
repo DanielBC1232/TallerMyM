@@ -3,6 +3,9 @@ import MoveDownIcon from "@rsuite/icons/MoveDown";
 import CogIcon from "@rsuite/icons/legacy/Cog";
 import logo from "../assets/Logo.png";
 import {Link} from "react-router-dom";
+import "./styles.css";
+import "bootstrap/dist/css/bootstrap.mi.css"
+import Reat from "react"; 
 
 const Header = ({ onSelect, activeKey, ...props }) => {
   return (
