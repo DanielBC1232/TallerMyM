@@ -46,7 +46,14 @@ import EliminarCliente from "./features/clientes/pages/Eliminar.jsx";
 
 //imports vehiculos
 import IndexVehi from "./features/vehiculos/pages/IndexVehi.jsx";
-import AgregarVehiculo from "./features/vehiculos/pages/AgregarCli.jsx";
+import ListarVehiculosPage from "./features/vehiculos/pages/ListarVehiculosPage.jsx";
+import ListarEditVehiculosPage from "./features/vehiculos/pages/ListarEditVehiculosPage.jsx";
+import ListarElimVehiculosPage from "./features/vehiculos/pages/ListarElimVehiculosPage.jsx";
+
+import AgregarVehiculo from "./features/vehiculos/pages/AgregarVehiculo.jsx";
+import EditarVehiculo from "./features/vehiculos/pages/EditarVehiculo.jsx";
+import EliminarVehiculo from "./features/vehiculos/pages/EliminarVehiculo.jsx"
+
 
 
 const App = () => {
@@ -102,9 +109,23 @@ const App = () => {
           <Route path="/clientes/registrar" element={<AgregarCliente />} />
           <Route path="/clientes/editar/:cedula" element={<EditarCliente />} />
           <Route path="/clientes/eliminar/:cedula" element={<EliminarCliente />} />
+
+
+
           {/* Rutas para Vehiculos */}
-          <Route path="/vehiculo/Index" element={<IndexVehi />} />
-          <Route path="/vehiculo/registrar" element={<AgregarVehiculo />} />
+          <Route path="/vehiculos/Index" element={<IndexVehi />} />
+
+          <Route path="/vehiculos/listarVehiculos" element={<ListarVehiculosPage />} />
+          <Route path="/vehiculos/ListEditVehi" element={<ListarEditVehiculosPage />} />
+          <Route path="/vehiculos/ListElimVehi" element={<ListarElimVehiculosPage />} />
+
+
+          <Route path="/vehiculos/registrar" element={<AgregarVehiculo />} />
+          <Route path="/vehiculos/editar/:idVehiculo" element={<EditarVehiculo />} />
+          <Route path="/vehiculos/eliminar/:idVehiculo" element={<EliminarVehiculo />} />
+
+
+
 
         </Routes>
       </main>

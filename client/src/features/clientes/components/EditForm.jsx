@@ -40,7 +40,7 @@ const EditarCliente = () => {
     try {
       await axios.put(`http://localhost:3000/clientes/editar/${cedula}`, cliente);//!!
       alert("Cliente actualizado exitosamente");
-      navigate("/clientes/listar-edit"); // Redirigir a la lista de clientes (edición)
+      navigate("/clientes/list-edit"); // Redirigir a la lista de clientes (edición)
     } catch (error) {
       console.error("Error al actualizar el cliente:", error);
       alert("Error al actualizar el cliente");

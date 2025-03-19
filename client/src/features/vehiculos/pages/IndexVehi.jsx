@@ -21,7 +21,7 @@ const IndexVehi = () => {
     <div className="row gap-5 justify-content-center">
 
     <div className="col-sm-3 align-self-center">
-        <Link to="#" className="btn-link text-decoration-none">
+        <Link to="/vehiculos/listarVehiculos" className="btn-link text-decoration-none">
           <Card width={300} direction="row" className="p-2">
             <Card.Header><MdPersonSearch  size={55} color="#005ba5" className="d-flex align-self-baseline"/></Card.Header>
             <Card.Body as="h4" className="d-flex align-self-baseline">Buscar Vehiculo</Card.Body>
@@ -39,7 +39,7 @@ const IndexVehi = () => {
       </div>
 
       <div className="col-sm-3 align-self-center">
-        <Link to="#" className="btn-link text-decoration-none">
+        <Link to="/vehiculos/ListEditVehi" className="btn-link text-decoration-none">
           <Card width={300} direction="row" className="p-2">
             <Card.Header><FaUserEdit size={55} color="#005ba5" className="d-flex align-self-baseline"/></Card.Header>
             <Card.Body as="h4" className="d-flex align-self-baseline">Editar<br/>Vehiculo</Card.Body>
@@ -48,7 +48,7 @@ const IndexVehi = () => {
       </div>
 
       <div className="col-sm-3 align-self-center">
-        <Link to="#" className="btn-link text-decoration-none">
+        <Link to="/vehiculos/ListElimVehi" className="btn-link text-decoration-none">
           <Card width={300} direction="row" className="p-2">
             <Card.Header><AiOutlineUserDelete size={55} color="#005ba5" className="d-flex align-self-baseline"/></Card.Header>
             <Card.Body as="h4" className="d-flex align-self-baseline">Eliminar Vehiculo</Card.Body>

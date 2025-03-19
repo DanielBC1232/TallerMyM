@@ -5,6 +5,7 @@ const sql = require('mssql');
 class Vehiculo {
   constructor(placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente) {
 
+    this.idVehiculo = 0;
     this.placaVehiculo = placaVehiculo;
     this.modeloVehiculo = modeloVehiculo;
     this.marcaVehiculo = marcaVehiculo;
@@ -44,12 +45,10 @@ class VehiculoRepository {
   async updateVehiculo(idVehiculo, datosActualizados) {
     try {
       const pool = await connectDB();
-      const { placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente } = datosActualizados;
+      
+      const { idVehiculo,placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente } = datosActualizados;
 
       const result = await pool
-
-
-
         .request()
         .input("idVehiculo", sql.Int, idVehiculo)
         .input("placaVehiculo", sql.VarChar, placaVehiculo)
@@ -113,11 +112,8 @@ class VehiculoRepository {
     try {
       const pool = await connectDB();
       const result = await pool.request()
-        .input("idCliente", sql.Int, idCliente)
-        .query(`SELECT idVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo
-          FROM CLIENTE_VEHICULO
-          WHERE idCliente = @idCliente        
-        `);
+        .input("idCliente", sql.Int, idCliente).query(`SELECT idVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo FROM CLIENTE_VEHICULO
+          WHERE idCliente = @idCliente`);
       return result.recordset;
     } catch (error) {
       console.error("Error al obtener los vehiculos:", error);
@@ -125,14 +121,26 @@ class VehiculoRepository {
     }
   }
 
+    // Buscar por ID cliente // Select-Flujo
+    async getVehiculosPorIdVehiculo(idVehiculo) {
+      try {
+        const pool = await connectDB();
+        const result = await pool.request()
+          .input("idVehiculo", sql.Int, idVehiculo).query(`SELECT idVehiculo,placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo,tipoVehiculo,"idCliente"
+             FROM CLIENTE_VEHICULO WHERE idVehiculo = @idVehiculo`);
+        return result.recordset;
+      } catch (error) {
+        console.error("Error al obtener los vehiculos:", error);
+        throw new Error("Error al obtener vehiculos");
+      }
+    }
+
   // Obtener cliente por cédula
-  async getByPlaca(placa) {
+  async getByPlaca(placaVehiculo) {
     try {
       const pool = await connectDB();
-      const result = await pool
-        .request()
-        .input("placaVehiculo", sql.VarChar(10), placa)
-        .query("SELECT * FROM CLIENTE WHERE placaVehiculo = @placaVehiculo");
+      const result = await pool.request().input("placaVehiculo", sql.VarChar(10), placaVehiculo)
+        .query("SELECT * FROM CLIENTE_VEHICULO WHERE placaVehiculo = @placaVehiculo");
 
       return result.recordset;
 

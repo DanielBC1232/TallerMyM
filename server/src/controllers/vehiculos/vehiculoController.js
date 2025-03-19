@@ -16,17 +16,17 @@ const insertarVehiculo = async (req, res) => {
   }
 };
 //-----------------------------------------------
-// Actualizar cliente
+// Actualizar vehiculo
 
 const actualizarVehiculo = async (req, res) => {
   try {
     
-    const idVehiculo = parseInt(req.params.idVehiculo);
+    const idVehiculo = req.params.idVehiculo;
     const datosActualizados = req.body;
     const actualizacionExitosa = await VehiculoRepo.updateVehiculo(idVehiculo, datosActualizados);
 
     if (!actualizacionExitosa) {
-      res.status(404).json({ error: "Cliente no encontrado o no se pudo actualizar" });
+      res.status(404).json({ error: "Vehiculo no encontrado o no se pudo actualizar" });
     } else {
       res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
     }
@@ -81,16 +81,38 @@ const getVehiculosPorCliente = async (req, res) => {
   }
 };
  
-// Obtener un cliente por cédula
-const obtenerVehiculoPorPlaca = async (req, res) => {
+// Obtener un cliente por idVehiculo
+const obtenerVehiculoPoridVehiculo = async (req, res) => {
   try {
-    const { placa } = req.params; // Obtener la cédula del query string
+    const { idVehiculo } = req.params; // Obtener la cédula del query string
 
-    if (!placa) {
+    if (!idVehiculo) {
       return res.status(400).json({ error: "La placa es requerida" });
     }
 
-    const vehiculo = await VehiculoRepo.getByPlaca(placa);
+    const vehiculo = await VehiculoRepo.getVehiculosPorIdVehiculo(idVehiculo);
+
+    if (!vehiculo || vehiculo.length === 0) {
+      res.status(404).json({ error: "vehiculo no encontrado" });
+    } else {
+      res.status(200).json(vehiculo[0]); // Devuelve el primer vehiculo encontrado
+    }
+  } catch (error) {
+    console.error("Error al obtener vehiculo por placa:", error);
+    res.status(500).json({ error: "Error al obtener vehiculo por cédula" });
+  }
+};
+
+// Obtener un cliente por cédula
+const obtenerVehiculoPorPlaca = async (req, res) => {
+  try {
+    const { placaVehiculo } = req.params; // Obtener la cédula del query string
+
+    if (!placaVehiculo) {
+      return res.status(400).json({ error: "La placa es requerida" });
+    }
+
+    const vehiculo = await VehiculoRepo.getByPlaca(placaVehiculo);
 
     if (!vehiculo || vehiculo.length === 0) {
       res.status(404).json({ error: "vehiculo no encontrado" });
@@ -111,6 +133,7 @@ module.exports = {
   eliminarVehiculo,
   obtenerTodosLosVehiculos,
   obtenerVehiculoPorPlaca,
+  obtenerVehiculoPoridVehiculo,
   getVehiculosPorCliente
 };
 
