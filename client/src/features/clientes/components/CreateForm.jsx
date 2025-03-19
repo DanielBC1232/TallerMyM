@@ -8,9 +8,7 @@ const model = Schema.Model({
   nombre: StringType().isRequired("El nombre es obligatorio"),
   apellido: StringType().isRequired("El apellido es obligatorio"),
   cedula: StringType().isRequired("La cédula es obligatoria"),
-  correo: StringType()
-    .isEmail("Correo inválido")
-    .isRequired("El correo es obligatorio"),
+  correo: StringType().isEmail("Correo inválido").isRequired("El correo es obligatorio"),
   telefono: StringType().isRequired("El teléfono es obligatorio"),
 });
 

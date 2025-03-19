@@ -75,7 +75,7 @@ const Index = () => {
         </div>
 
         <div className="col-sm-3 align-self-center">
-          <Link to="/vehiculo/Index" className="btn-link text-decoration-none">
+          <Link to="/vehiculos/Index" className="btn-link text-decoration-none">
             <Card width={300} direction="row" className="p-2">
               <Card.Header><FaMoneyCheckDollar size={55} color="#005ba5" className="d-flex align-self-baseline" /></Card.Header>
               <Card.Body as="h4" className="d-flex align-self-baseline">Vehiculos-Cliente</Card.Body>

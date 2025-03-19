@@ -18,6 +18,7 @@ const CreateForm = () => {
   const [formValue, setFormValue] = useState({
     placaVehiculo: "",
     modeloVehiculo: "",
+    marcaVehiculo: "",
     annoVehiculo: "",
     tipoVehiculo: "",
     idCliente: "",
@@ -26,7 +27,7 @@ const CreateForm = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost:3000/vehiculo/registrar", {
+      const response = await fetch("http://localhost:3000/vehiculos/registrar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formValue),
@@ -38,6 +39,7 @@ const CreateForm = () => {
       setFormValue({
         placaVehiculo: "",
         modeloVehiculo: "",
+        marcaVehiculo: "",
         annoVehiculo: "",
         tipoVehiculo: "",
         idCliente: "",
@@ -58,6 +60,10 @@ const CreateForm = () => {
         <Form.Group>
           <Form.ControlLabel>Modelo del Vehiculo</Form.ControlLabel>
           <Form.Control name="modeloVehiculo" />
+        </Form.Group>
+        <Form.Group>
+          <Form.ControlLabel>Marca del Vehiculo</Form.ControlLabel>
+          <Form.Control name="marcaVehiculo" />
         </Form.Group>
         <Form.Group>
           <Form.ControlLabel>Año del vehiculo</Form.ControlLabel>
