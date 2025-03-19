@@ -5,8 +5,8 @@ const router = express.Router();
 // Ruta para agregar orden
 router.post("/agregar-orden/", ordenController.insertOrden);
 
-// Ruta para obtener todos los ordenes
-router.get("/obtener-ordenes", ordenController.getOrdenes);
+// Ruta para obtener lista de ordenes segun su estado
+router.get("/obtener-ordenes/:id", ordenController.getOrdenesByStatus);
 
 // Ruta para obtener orden por ID
 router.get("/obtener-orden/:id", ordenController.getOrdenById);

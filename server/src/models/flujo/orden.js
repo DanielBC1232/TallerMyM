@@ -2,7 +2,7 @@ import sql from 'mssql';
 import { connectDB } from '../../config/database.js';
 
 export class Orden {
-    constructor(idOrden, codigoOrden, estadoOrden, fechaIngreso, tiempoEstimado,estadoAtrasado,idVehiculo,idTrabajador,idCliente) {
+    constructor(idOrden, codigoOrden, estadoOrden, fechaIngreso, tiempoEstimado, estadoAtrasado, idVehiculo,descripcion, idTrabajador, idCliente) {
         this.idOrden = idOrden
         this.codigoOrden = codigoOrden;
         this.estadoOrden = estadoOrden;
@@ -10,15 +10,16 @@ export class Orden {
         this.tiempoEstimado = tiempoEstimado;
         this.estadoAtrasado = estadoAtrasado;
         this.idVehiculo = idVehiculo;
-        this.idTrabajador =idTrabajador;
-        this.idCliente =idCliente;
+        this.descripcion = descripcion
+        this.idTrabajador = idTrabajador;
+        this.idCliente = idCliente;
     }
 }
 
 export class OrdenRepository {
 
     // Método para insertar Orden
-    async insertOrden(tiempoEstimado, idVehiculo,idTrabajador,idCliente) {
+    async insertOrden(tiempoEstimado, idVehiculo, idTrabajador, idCliente,descripcion) {
         try {
             const pool = await connectDB();
             const result = await pool
@@ -27,6 +28,7 @@ export class OrdenRepository {
                 .input('idVehiculo', sql.Int, idVehiculo)
                 .input('idTrabajador', sql.Int, idTrabajador)
                 .input('idCliente', sql.Int, idCliente)
+                .input('descripcion', sql.NVarChar, descripcion)
                 .execute(`SP_INSERTAR_ORDEN`);
             return result.rowsAffected[0]; // Devuelve el número de filas afectadas
         } catch (error) {
@@ -34,22 +36,19 @@ export class OrdenRepository {
             throw new Error('Error en generar una nueva orde');
         }
     }
-    
+
     // Obtener listado de Orden - By estado (columna 1-Pendiente, 2-En proceso, 3-Listo)
-    async getOrdenByStatus(codigoOrden, estadoOrden, fechaIngresoMin, fechaIngresoMax) {
+    async getOrdenesByStatus(estadoOrden) {
         try {
             const pool = await connectDB();
             const result = await pool
                 .request()
-                .input('codigoOrden',sql.VarChar, codigoOrden)
-                .input('estadoOrden',sql.VarChar, estadoOrden)
-                .input('fechaIngresoMin',sql.Decimal(10, 2), fechaIngresoMin)
-                .input('fechaIngresoMax',sql.Decimal(10, 2), fechaIngresoMax)
-                .query(`SELECT * FROM TRABAJADOR`);
-            return result.recordset; // Devuelve el listado (10 más recientes)
+                .input('estadoOrden', sql.Int, estadoOrden)
+                .execute(`SP_GET_ORDENES`);
+            return result.recordset;
         } catch (error) {
-            console.error('Error en obtener trabajadores:', error);
-            throw new Error('Error en obtener trabajadores');
+            console.error('Error en obtener ordenes:', error);
+            throw new Error('Error en obtener ordenes');
         }
     }
 
@@ -60,14 +59,11 @@ export class OrdenRepository {
             const result = await pool
                 .request()
                 .input('idOrden', sql.Int, idOrden)
-                .query(`
-                    SELECT * FROM TRABAJADOR
-                    WHERE idOrden = @idOrden
-                `);
-            return result.recordset; // Devuelve el registro
+                .execute(`GET_ORDEN`);
+            return result.recordset[0]; // Devuelve el registro
         } catch (error) {
-            console.error('Error en obtener trabajador:', error);
-            throw new Error('Error en obtener trabajador');
+            console.error('Error en obtener orden:', error);
+            throw new Error('Error en obtener orden');
         }
     }
 

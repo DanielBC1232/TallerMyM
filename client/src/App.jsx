@@ -23,6 +23,8 @@ import EditarCotizacion from "./features/ventas/pages/EditarCotizarcion.jsx";
 //flujo
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
 import AgregarOrden from './features/flujo/pages/Agregar.jsx';
+import DetallesOrden from "./features/flujo/pages/Detalles.jsx";
+import EditarOrden from "./features/flujo/pages/Editar.jsx";
 
 //Trabajadores
 import TrabajadoresIndex from "./features/trabajadores/pages/Index.jsx";
@@ -74,6 +76,8 @@ const App = () => {
           {/* FLUJO */}
           <Route path="/flujo" element={<IndexFlujo />} />
           <Route path="/flujo-agregar" element={<AgregarOrden />} />
+          <Route path="/flujo-detalles/:idOrden" element={<DetallesOrden />} />
+          <Route path="/flujo-editar/:idOrden" element={<EditarOrden />} />
 
           {/* Ventas */}
           <Route path="/ventas" element={<IndexVentas />} />

@@ -1,25 +1,27 @@
-import React, { useState } from "react";
-import { Grid, Row, Col, Text } from "rsuite";
+import React, { useState, useEffect } from "react";
+import { Grid, Row, Col } from "rsuite";
 import "../styles/flu.css";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import moment from 'moment';
+import { useNavigate, useParams } from "react-router-dom";
 
-import SelectClientes from "../components/SelectClientes";
 import SelectTrabajadores from "../components/SelectTrabajadores";
-import SelectVehiculos from "../components/SelectVehiculos";
 
 //URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
-const Agregar = () => {
+const Editar = () => {
+  const { idOrden } = useParams();
   const navigate = useNavigate(); // Hook para navegar
+  const [verificaCambioFecha, setVerificaCambioFecha] = useState({
+    tiempoEstimadoInicial: ""
+  });
   const [formData, setFormData] = useState({
     tiempoEstimado: "",
     idTrabajador: null,
-    idCliente: null,
-    idVehiculo: null,
-    descripcion: ""
+    descripcion: "",
+    estadoAtrasado: 0
   });
 
   const errorNotification = (message) => {
@@ -48,49 +50,14 @@ const Agregar = () => {
     }
     return pass;
   };
-  const verificarCliente = () => {
-    var pass = false;
-    //Campo Precio
-    if (!formData.idCliente) {
-      pass = false;
-      errorNotification("Debe asignar un cliente");
-    } else if (formData.idCliente) {
-      pass = true;
-    }
-    return pass;
-  };
-  const verificarVehiculo = () => {
-    var pass = false;
-    //Campo Fecha Ingreso
-    if (!formData.idVehiculo) {
-      pass = false;
-      errorNotification("Debe asignar un vehiculo");
-    } else if (formData.idVehiculo) {
-      pass = true;
-    }
-    return pass;
-  };
-  const verificarDescripcion = () => {
-    var pass = false;
-    //Campo Fecha Ingreso
-    if (!formData.descripcion) {
-      pass = false;
-      errorNotification("Debe Redactar una descripcion");
-    } else if (formData.descripcion) {
-      pass = true;
-    }
-    return pass;
-  };
+
   // VERIFICACION GENERAL
   const verificacion = () => {
     var pass = false;
     //Verificar que todos los campos sean validos
     if (
       VerificarTiempoEstimado() &&
-      verificarTrabajador() &&
-      verificarCliente() &&
-      verificarVehiculo() &&
-      verificarDescripcion()
+      verificarTrabajador()
     ) {
       pass = true;
     } else {
@@ -99,13 +66,56 @@ const Agregar = () => {
     return pass;
   };
 
+  useEffect(() => {
+    const obtenerOrden = async () => {
+      try {
+        const { data } = await axios.get(`${BASE_URL}/flujo/obtener-orden/${idOrden}`
+        ); //consumir api en backend por id
+        setFormData((prev) => ({
+          ...prev,//Mantener valores predefinidos
+          tiempoEstimado: moment(data.timepoEstimadoOriginal).format('YYYY-MM-DD'),
+          idTrabajador: data.idTrabajador,
+          descripcion: data.decripcion,
+          estadoAtrasado: data.estadoAtrasado
+        }));
+        setVerificaCambioFecha((prev) => ({
+          ...prev,//Mantener valores predefinidos
+          tiempoEstimadoInicial: moment(data.timepoEstimadoOriginal).format('YYYY-MM-DD'),
+        }));
+        console.log(data); // imprimir JSON en consola
+      } catch (error) {
+        console.error("Error al obtener el orden:", error);
+      }
+    };
+    console.log(FormData);
+
+    obtenerOrden(); // llamar funcion
+  }, [idOrden]);//cargar al tener id
+
+function comprobarCambioFecha(){
+  //si se actualiza la fecha.
+  if (formData.tiempoEstimado != verificaCambioFecha.tiempoEstimadoInicial) {
+
+    //El estado atrasado se reinicia a false
+    setFormData((prev) => ({
+      ...prev,//Mantener valores predefinidos
+      estadoAtrasado: 0
+    }));
+
+  }
+}
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (verificacion()) {
+
+      comprobarCambioFecha();
+      
       try {
-        const res = await axios.post(`${BASE_URL}/flujo/agregar-orden/`, formData);
-        //console.log(res.data);
+        const { res } = await axios.post(`${BASE_URL}/flujo/obtener-orden/`, formData);
+        setFormData(res);
+        console.log(res.data);
 
         if (res.status === 201) {
           await Swal.fire({
@@ -114,7 +124,7 @@ const Agregar = () => {
             showConfirmButton: false,
             timer: 1300,
           });
-          navigate("/flujo");
+          navigate(`/flujo-editar/${idOrden}`);
         } else {
           Swal.fire({
             icon: "warning",
@@ -124,7 +134,6 @@ const Agregar = () => {
           });
         }
       } catch (error) {
-        console.error("Error al agregar la orden:", error);
         if (error.response) {
           const { status } = error.response;
           let message = "Error al agregar la orden";
@@ -153,7 +162,6 @@ const Agregar = () => {
     }
   };
 
-
   return (
     <form onSubmit={handleSubmit}>
       <div className="container main p-5">
@@ -164,17 +172,10 @@ const Agregar = () => {
           >
             <Col
               xs={16}
-              className="d-grid gap-3 bg-white shadow-sm p-5 rounded-3"
+              className="d-grid gap-5 bg-white shadow-sm p-5 rounded-3"
             >
               <Row className="show-grid" gutter={16}>
                 <Col xs={12} className="column">
-                  <span>
-                    Seleccionar un cliente
-                    <SelectClientes
-                      value={formData.idCliente}
-                      onChange={(e) => setFormData(prev => ({ ...prev, idCliente: e.target.value }))}
-                    />
-                  </span>
                   <span>
                     Seleccionar un mecánico
                     <SelectTrabajadores
@@ -182,23 +183,14 @@ const Agregar = () => {
                       onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))}
                     />
                   </span>
-
                 </Col>
                 <Col xs={12} className="column">
-                  <span>
-                    Seleccionar un vehiculo
-                    <SelectVehiculos
-                      idCliente={formData.idCliente}
-                      value={formData.idVehiculo}
-                      onChange={(e) => setFormData(prev => ({ ...prev, idVehiculo: e.target.value }))}
-                    />
-                  </span>
                   <span>
                     Estimado de finalización:
                     <input
                       type="date"
                       className="form-control"
-                      style={{ maxWidth: "355px" }}
+                      style={{ maxWidth: "225px" }}
                       name="tiempoEstimado"
                       value={formData.tiempoEstimado}
                       onChange={(e) => setFormData(prev => ({ ...prev, tiempoEstimado: e.target.value }))}
@@ -206,18 +198,7 @@ const Agregar = () => {
                   </span>
                 </Col>
               </Row>
-              <Row><span>
-                Descripción:
-                <textarea
-                  type="date"
-                  className="form-control"
-                  rows={4}
-                  name="descripcion"
-                  value={formData.descripcion}
-                  onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))}
-                />
-              </span></Row>
-              <div className="d-grid justify-content-end me-5 mt-2">
+              <div className="d-grid justify-content-end me-5">
                 <button
                   type="submit"
                   className="btn btn-primary"
@@ -234,4 +215,4 @@ const Agregar = () => {
   );
 };
 
-export default Agregar;
+export default Editar;

@@ -6,10 +6,10 @@ const OrdenRepo = new OrdenRepository();
 const insertOrden = async (req, res) => {
     try {
         // Requerir parámetros desde el cuerpo de la solicitud
-        const { tiempoEstimado, idVehiculo, idTrabajador, idCliente } = req.body;
+        const { tiempoEstimado, idVehiculo, idTrabajador, idCliente,descripcion } = req.body;
 
         // Usar el método de inserción del repositorio
-        const orden = await OrdenRepo.insertOrden(tiempoEstimado, idVehiculo, idTrabajador, idCliente);
+        const orden = await OrdenRepo.insertOrden(tiempoEstimado, idVehiculo, idTrabajador, idCliente,descripcion);
 
         // Enviar la respuesta
         res.status(201).json({ message: "Orden insertado correctamente", rowsAffected: orden });
@@ -19,11 +19,13 @@ const insertOrden = async (req, res) => {
     }
 };
 
-const getOrdenes = async (req, res) => {
+const getOrdenesByStatus = async (req, res) => {
     try {
-        const { nombreCompleto, cedula, salarioMin, salarioMax } = req.body;
+
+        const id = parseInt(req.params.id);
+
         // Usar el método de listado del repositorio
-        const orden = await OrdenRepo.getOrdenes(nombreCompleto, cedula, salarioMin, salarioMax);
+        const orden = await OrdenRepo.getOrdenesByStatus(id);
 
         // Enviar la respuesta
         res.status(200).json(orden);
@@ -37,14 +39,14 @@ const getOrdenById = async (req, res) => {
     try {
         const id = parseInt(req.params.id);
 
-        // Usar el método de obtener trabajador por ID del repositorio
-        const trabajador = await ordenRepo.getOrdenById(id);
+        // Usar el método de obtener orden por ID
+        const orden = await OrdenRepo.getOrdenById(id);
 
         // Enviar la respuesta
-        res.status(200).json(trabajador);
+        res.status(200).json(orden);
     } catch (error) {
-        console.error("Error al obtener trabajador:", error);
-        res.status(500).json({ error: "Error al obtener trabajador" });
+        console.error("Error al obtener orden", error);
+        res.status(500).json({ error: "Error al obtener orden" });
     }
 };
 
@@ -84,4 +86,4 @@ const deleteOrden = async (req, res) => {
     }
 };
 
-export { insertOrden, getOrdenes, getOrdenById, updateOrden, deleteOrden };
+export { insertOrden, getOrdenesByStatus, getOrdenById, updateOrden, deleteOrden };

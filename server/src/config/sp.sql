@@ -65,7 +65,8 @@ CREATE OR ALTER PROCEDURE SP_INSERTAR_ORDEN
     @tiempoEstimado DATETIME,
 	@idVehiculo INT,
     @idTrabajador INT,
-    @idCliente INT
+    @idCliente INT,
+	@descripcion NVARCHAR(2048)
 AS
 BEGIN
     DECLARE @codigoOrden VARCHAR(9)
@@ -74,10 +75,68 @@ BEGIN
     EXEC GenerarCodigoOrden @CodigoOrden = @codigoOrden OUTPUT
 
     -- Inserta la orden con el código generado
-    INSERT INTO ORDEN (codigoOrden,tiempoEstimado, idVehiculo, idTrabajador, idCliente)
-    VALUES (@codigoOrden,@tiempoEstimado, @idVehiculo, @idTrabajador, @idCliente)
+    INSERT INTO ORDEN (codigoOrden,tiempoEstimado,descripcion, idVehiculo, idTrabajador, idCliente)
+    VALUES (@codigoOrden,@tiempoEstimado,@descripcion, @idVehiculo, @idTrabajador, @idCliente)
     
 END;
 GO
 
-select * from ORDEN;
+-- SP para optener lista de ordenes dentro de las columnas de fkujo
+CREATE OR ALTER PROCEDURE SP_GET_ORDENES
+    @estadoOrden INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        O.idOrden,
+        O.codigoOrden,
+		O.estadoAtrasado,
+        FORMAT(DATEDIFF(DAY, GETDATE(), O.tiempoEstimado), '00') + ' días, ' +
+        FORMAT(DATEDIFF(HOUR, GETDATE(), O.tiempoEstimado) % 24, '00') + ' horas, ' +
+        FORMAT(DATEDIFF(MINUTE, GETDATE(), O.tiempoEstimado) % 60, '00') + ' minutos' AS TiempoRestante,
+        O.descripcion,
+		V.marcaVehiculo,
+        V.modeloVehiculo,
+        V.annoVehiculo,
+        FORMAT(O.fechaIngreso, 'dd/MM/yyyy') AS fechaIngreso,
+        T.nombreCompleto as nombreMecanico,
+        C.nombre + ' ' + C.apellido AS nombreCliente
+    FROM ORDEN O
+    INNER JOIN CLIENTE_VEHICULO V ON V.idVehiculo = O.idVehiculo
+    INNER JOIN CLIENTE C ON C.idCliente = O.idCliente
+    INNER JOIN TRABAJADOR T ON T.idTrabajador = O.idTrabajador
+    WHERE O.estadoOrden = @estadoOrden 
+      AND O.estadoOrden BETWEEN 1 AND 3
+    ORDER BY O.tiempoEstimado ASC;
+END;
+GO
+
+--SP para cagar datos por idOrden
+CREATE OR ALTER PROCEDURE GET_ORDEN
+@idOrden INT
+AS BEGIN
+	SELECT
+		O.idOrden,
+		O.codigoOrden,
+		O.estadoOrden,
+		FORMAT(O.fechaIngreso, 'dd/MM/yyyy') AS fechaIngreso,
+		FORMAT(DATEDIFF(DAY, GETDATE(), O.tiempoEstimado), '00') + ' días, ' +
+		FORMAT(DATEDIFF(HOUR, GETDATE(), O.tiempoEstimado) % 24, '00') + ' horas, ' +
+		FORMAT(DATEDIFF(MINUTE, GETDATE(), O.tiempoEstimado) % 60, '00') + ' minutos' AS TiempoRestante,
+		FORMAT(O.tiempoEstimado, 'dd/MM/yyyy') AS tiempoEstimado,
+		O.tiempoEstimado as timepoEstimadoOriginal,
+		O.descripcion,
+		O.estadoAtrasado,
+		T.idTrabajador,
+		T.nombreCompleto as nombreMecanico,
+		C.nombre + ' ' + C.apellido AS nombreCliente,
+		V.marcaVehiculo + ' ' + V.modeloVehiculo + ' ' + CAST(V.annoVehiculo AS VARCHAR(4)) AS vehiculo
+	FROM ORDEN O
+		INNER JOIN CLIENTE_VEHICULO V ON V.idVehiculo = O.idVehiculo
+		INNER JOIN CLIENTE C ON C.idCliente = O.idCliente
+		INNER JOIN TRABAJADOR T ON T.idTrabajador = O.idTrabajador
+		WHERE O.idOrden = @idOrden
+	END;
+GO
+

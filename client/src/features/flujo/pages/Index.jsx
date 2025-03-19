@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
-  Routes,
-  Route,
   Link,
   useNavigate,
-  data,
 } from "react-router-dom";
 import axios from "axios";
 import { Grid, Row, Col, Card, VStack, Text } from "rsuite";
 import "../styles/flu.css";
 
-import OrdenEnProceso from "../components/OrdenEnProceso";
-
+import ColPendiente from "../components/ColPendiente";
+import ColProgreso from "../components/ColProgreso";
+import ColListo from "../components/ColListo";
 const IndexFlujo = () => {
   const navigate = useNavigate(); // Hook para navegar
 
@@ -23,7 +21,8 @@ const IndexFlujo = () => {
         className="sidebar p-4 rounded-3 shadow-sm p-2"
         style={{ maxWidth: "550px" }}
       >
-        <a className="btn btn-secondary btn-sm text-white">Agregar orden</a>
+        <Link to="/flujo-agregar" 
+        className="btn btn-secondary btn-sm text-white">Agregar orden</Link>
       </nav>
 
       {/* FLUJO */}
@@ -34,19 +33,29 @@ const IndexFlujo = () => {
               {/* COLUMNA EN PROCESO */}
               <Col xs={8} className="flujo-col ">
                 <div className="bg-primary rounded-top-4 py-2 mb-4">
-                  <h6 className="text-white pt-2">Pendiente</h6>
+                  <Text size="xxl" className="text-white pt-2">Pendiente</Text>
                 </div>
-                <div className="px-4">
-                  <OrdenEnProceso />
+                <div className="px-4 scrollable-container">
+                  <ColPendiente />
                 </div>
               </Col>
               {/* COLUMNA EN PROCESO */}
 
-              <Col xs={8} className="bg-dark">
-                En Progreso
+              <Col xs={8} className="flujo-col ">
+              <div className="bg-primary rounded-top-4 py-2 mb-4">
+                  <Text size="xxl" className="text-white pt-2">En progreso</Text>
+                </div>
+                <div className="px-4 scrollable-container">
+                  <ColProgreso />
+                </div>
               </Col>
-              <Col xs={8} className="bg-dark">
-                Listo
+              <Col xs={8} className="flujo-col ">
+              <div className="bg-primary rounded-top-4 py-2 mb-4">
+                  <Text size="xxl" className="text-white pt-2">Listo</Text>
+                </div>
+                <div className="px-4 scrollable-container">
+                  <ColListo />
+                </div>
               </Col>
             </Row>
           </Grid>
