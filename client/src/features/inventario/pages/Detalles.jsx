@@ -3,13 +3,14 @@ import { data, useParams } from "react-router-dom";
 import axios from "axios";
 import { Grid, Row, Col } from "rsuite";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Image } from "rsuite";
 
 import "../styles/inv.css";
 
-const styles = {
-  width: 225,
-};
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Detalles = () => {
   const navigate = useNavigate(); // Hook para navegar
@@ -20,7 +21,7 @@ const Detalles = () => {
     const obtenerProducto = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/productos/${idProducto}`
+         `${BASE_URL}/productos/${idProducto}`
         ); //consumir api en backend por id
         setProducto(data);
         //console.log(data); // imprimir JSON en consola
@@ -67,7 +68,10 @@ const Detalles = () => {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:3000/productos/eliminar-producto/${idProducto}`)
+        axios
+          .delete(
+            `${BASE_URL}/productos/eliminar-producto/${idProducto}`
+          )
           .then(() => {
             // Redirigir a la pagina de inventario despues de eliminar
             navigate("/inventario");
@@ -76,7 +80,7 @@ const Detalles = () => {
             // error
             Swal.fire({
               title: "Error",
-              text: "Error al eliminar producto o servicio: " + error.message, // Usar error.message para mostrar un mensaje claro
+              text: "Error al eliminar producto o servicio",
               icon: "error",
               showCancelButton: false,
             });
@@ -86,11 +90,23 @@ const Detalles = () => {
     });
   };
 
+  //url get imagen
+  const getImg = (img) => img ? `${BASE_URL}/img/${img}` : "/noResult.png";
+
+
   return (
     <div className="container main mx-auto p-5">
       <Grid fluid>
         <Row className="show-grid" gutter={16}>
-          <Col xs={6}>{/* AUN FALTA CARGAR SUBIR IMAGEN */}</Col>
+          <Col xs={6}>
+          <Image
+            src={getImg(producto.img)}
+            fallbackSrc="https://placehold.co/300x200"
+            alt="nonexistent-image"
+            width={300}
+          />
+          </Col>
+          
           <Col
             xs={16}
             className="d-grid gap-5 bg-white shadow-sm p-5 rounded-3"
@@ -244,12 +260,13 @@ const Detalles = () => {
               >
                 Eliminar
               </button>
-              <button
+              <Link
+                to={`/inventario-editar/${idProducto}`}
                 className="btn btn-warning text-white"
                 style={{ maxWidth: "120px" }}
               >
                 Editar
-              </button>
+              </Link>
             </div>
           </Col>
         </Row>

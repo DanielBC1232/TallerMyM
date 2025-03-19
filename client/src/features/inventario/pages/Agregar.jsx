@@ -10,6 +10,9 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const Agregar = () => {
   const navigate = useNavigate(); // Hook para navegar
   const [formData, setFormData] = useState({
@@ -48,7 +51,7 @@ const Agregar = () => {
     });
   };
 
-  //Verificaciones de campos
+  // --- Verificaciones de campos ---
   const verificarNombre = () => {
     var pass = false;
     //Campo Nombre
@@ -254,7 +257,7 @@ const Agregar = () => {
 
     if (verificacion()) {
       axios
-        .post("http://localhost:3000/productos/agregar-producto/", formData)
+        .post(`${BASE_URL}/productos/agregar-producto/`, formData)
         .then((res) => {
           Swal.fire({
             icon: "success",
@@ -283,8 +286,12 @@ const Agregar = () => {
         <Grid fluid>
           <Row className="show-grid" gutter={16}>
             <Col xs={6}>
-              {/* AUN FALTA COMPONENTE SUBIR IMAGEN */}
-              <SubirImagen value={formData.img} onChange={handleChange} />
+              <SubirImagen
+                value={formData.img}
+                onChange={(newPath) =>
+                  setFormData((prev) => ({ ...prev, img: newPath }))
+                }
+              />
             </Col>
             <Col
               xs={16}
@@ -372,7 +379,7 @@ const Agregar = () => {
                         name="precio"
                         type="number"
                         min={0}
-                        step={100}
+                        step={0.01}
                         className="form-control"
                         value={Number(formData.precio)}
                         onChange={handleChange}
@@ -431,17 +438,17 @@ const Agregar = () => {
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="d-grid justify-content-center">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      style={{ maxWidth: "120px" }}
-                    >
-                      Agregar
-                    </button>
-                  </div>
                 </Col>
               </Row>
+              <div className="d-grid justify-content-end me-5">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ maxWidth: "120px" }}
+                >
+                  Agregar
+                </button>
+              </div>
             </Col>
           </Row>
         </Grid>

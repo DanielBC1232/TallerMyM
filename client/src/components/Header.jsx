@@ -6,16 +6,16 @@ import {Link} from "react-router-dom";
 
 const Header = ({ onSelect, activeKey, ...props }) => {
   return (
-    <Navbar {...props} appearance="inverse" className="shadow">
-      <Navbar.Brand href="#" style={{ display: "flex", alignItems: "center" }}>
+    <Navbar {...props} appearance="inverse" className="shadow-sm">
+      <Navbar.Brand as={Link} to="/" style={{ display: "flex", alignItems: "center" }}>
         <Image
-          rounded
+          circle
           src={logo}
           alt="Logo"
           style={{
             position: "relative",
-            width: "80px",
-            height: "80px",
+            width: "65px",
+            height: "65px",
             objectFit: "contain",
           }}
         />
@@ -23,11 +23,13 @@ const Header = ({ onSelect, activeKey, ...props }) => {
       <Nav onSelect={onSelect} activeKey={activeKey}>
         <Nav.Menu title="Inventario">
         <Nav.Item as={Link} to="/inventario" eventKey="1">Productos y Servicios</Nav.Item>
-          <Nav.Item className="li" eventKey="2">Historial</Nav.Item>
+        <Nav.Item as={Link} to="/solicitudes" eventKey="1">Solicitudes</Nav.Item>
         </Nav.Menu>
         <Nav.Item eventKey="3">Trabajadores</Nav.Item>
         <Nav.Item eventKey="4">Clientes</Nav.Item>
-        <Nav.Item as={Link} to="/perfil" eventKey="5">Administrativo</Nav.Item>
+        <Nav.Menu title="Administrativo">
+        <Nav.Item as={Link} to="/perfil-crear" eventKey="5">CrearPerfil</Nav.Item>
+        </Nav.Menu>
       </Nav>
       <Nav pullRight>
         <Nav.Menu icon={<CogIcon />} title="Ajustes">

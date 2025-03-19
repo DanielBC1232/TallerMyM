@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "axios";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const SelectVehiculos = ({ value, onChange }) => {
   const [opciones, setOpciones] = useState([]);
@@ -9,7 +11,7 @@ const SelectVehiculos = ({ value, onChange }) => {
   useEffect(() => {
     const obtenerVehiculos = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/vehiculos-compatibles");
+        const { data } = await axios.get(`${BASE_URL}/vehiculos-compatibles`);
         const opcionesFormateadas = data.map((vehiculo) => ({
           value: vehiculo.modelo,
           label: vehiculo.modelo,

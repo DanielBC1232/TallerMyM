@@ -1,33 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ContenedorProductos from "../components/contenedorArticulo";
-
 import SelectCategoria from "../components/SelectCategoria";
-import SelectVehiculos from "../components/SelectVehiculos";
 import SelectMarca from "../components/SelectMarca";
 import RangoPrecio from "../components/RangoPrecio";
+import ModalSolicitarProducto from "../components/ModalSolicitarProducto";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Link,
   useNavigate,
+  data,
 } from "react-router-dom";
 import axios from "axios";
-
 import { Button, Grid, Row, Col, FlexboxGrid, Divider } from "rsuite";
 
 import "../styles/inv.css";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const IndexInventario = () => {
-  const navigate = useNavigate(); // Hook para navegar
+  const [precios, setPrecios] = useState([]);
+  //console.log(precios)
   const [formData, setFormData] = useState({
     nombre: "",
     marca: "",
     categoria: "",
     stock: 0,
-    vehiculosCompatibles: [],
-    rangoPrecio:[]
+    rangoPrecio: [precios.precioMin, precios.precioMax],
   });
+  //console.log(formData)
+  const navigate = useNavigate(); // Hook para navegar
+
+  useEffect(() => {
+    async function obtenerPrecios() {
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/productos/precios`
+        );
+        setPrecios(response.data);
+        if (response.data) {
+          // Actualiza formData solo después de obtener los precios
+          setFormData((prevState) => ({
+            ...prevState,
+            rangoPrecio: [response.data.precioMin, response.data.precioMax],
+          }));
+        }
+      } catch (error) {
+        console.error("Error obteniendo precios:", error);
+      }
+    }
+
+    obtenerPrecios();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,19 +80,6 @@ const IndexInventario = () => {
         style={{ maxWidth: "550px" }}
       >
         <form onSubmit={handleSubmit}>
-          <div className="row my-4">
-            <RangoPrecio value={[formData.precioMin, formData.precioMax]}
-              onChange={handleChange}/>
-          </div>
-          <div className="mt-3">
-            <input
-              name="nombre"
-              className="form-control"
-              placeholder="Buscar por nombre"
-              value={formData.nombre}
-              onChange={handleChange}
-            />
-          </div>
           <br />
           <div className="row my-2 d-flex justify-content-center">
             <Grid fluid>
@@ -108,44 +121,58 @@ const IndexInventario = () => {
                     </select>
                   </Col>
                   <Col xs={12}>
-                    <span>Compatible con:</span>
-                    <SelectVehiculos
-                      value={formData.vehiculosCompatibles}
-                      onChange={handleChange}
-                    />
+                    <div>
+                      <span>Producto:</span>
+                      <input
+                        name="nombre"
+                        className="form-control"
+                        placeholder="Buscar por nombre"
+                        value={formData.nombre}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </Col>
                 </Row>
               </FlexboxGrid>
             </Grid>
           </div>
           <br />
-
+          <div className="row mb-4">
+            <RangoPrecio
+              value={[formData.precioMin, formData.precioMax]}
+              onChange={handleChange}
+            />
+          </div>
           <div className="row mx-1">
             <Divider />
-            <div className="d-flex flex-column gap-4 my-3">
-              <Button
-                type="submit"
-                className="btn btn-sm btn-primary px-5 text-white"
-                style={{ minWidth: "50px", maxWidth: "350px" }}
-              >
-                Buscar
-              </Button>
+            <div>
+              <Row gutter={10}>
+                <Col xs={11}>
+                  <Button
+                    type="button"
+                    className="btn btn-sm btn-secondary text-white"
+                    style={{ minWidth: "50px", width: "130px" }}
+                  >
+                    <Link to="/inventario-agregar" className="btn-link">
+                      Agregar producto
+                    </Link>
+                  </Button>
+                </Col>
+                <Col xs={2}>
+                  <Divider vertical />
+                </Col>
+                <Col xs={11}>
+                  <ModalSolicitarProducto />
+                </Col>
+              </Row>
             </div>
-            <Button
-              className="btn btn-sm btn-secondary px-5 text-white"
-              style={{ minWidth: "50px", maxWidth: "350px" }}
-            >
-              <Link to="/inventario-agregar" className="btn-link">
-                Agregar Repuesto/Servicio
-              </Link>
-            </Button>
           </div>
         </form>
       </nav>
 
-      <div className="main rounded-3 p-3">
+      <div className="main rounded-3">
         <div className="article-container article-scroll">
-          <ContenedorProductos formData={formData}/>
+          <ContenedorProductos formData={formData} />
         </div>
       </div>
     </div>

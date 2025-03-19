@@ -6,7 +6,7 @@ body {
 footer {
   background-color: #d9e2e9;
   text-align: center;
-  height: 550px;
+  min-height: 550px;
   position:relative;
   background: linear-gradient(to right, #004680, #005ba5);
   backdrop-filter: blur(10px); /* Efecto blur (vidrio esmerilado) */

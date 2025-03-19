@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Image } from "rsuite";
 
-console.log()
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
 
 //constante de Productos
-const ContenedorProductos = (formData) => {
-
-  console.log("Datos filtro:", JSON.stringify(formData));//parametros de filtro
+const ContenedorProductos = ({formData}) => {
 
   const [listado, setLista] = useState([]);
 
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:3000/productos`);
+        const { data } = await axios.post(`${BASE_URL}/productos`,formData);
         setLista(data);
       } catch (error) {
         console.error("Error obteniendo las categorías:", error);
       }
     };
 
-    obtenerProductos();
-  }, []);
+    if (formData) {
+      obtenerProductos();
+    }
+  }, [formData]);
+
+   //url get imagen para las previsualizaciones
+   const getImg = (img) => img ? `${BASE_URL}/img/${img}` : "/noResult.png";
+
 
   return (
     <div className="article-container article-scroll">
@@ -36,11 +42,13 @@ const ContenedorProductos = (formData) => {
               to={`/inventario-detalles/${productos.idProducto}`}
               className="btn-link"
             >
-              <img
+              <Image
                 className="card-img-top"
-                src="https://www.autofixpr.com/wp-content/uploads/2017/12/3p-disco-freno.jpg"
-                alt="Card image"
-                style={{ width: "90%", minHeight: "120px" }}
+                //src={getImg+productos.img}
+                src={getImg(productos.img)}
+                fallbackSrc="/noResult.png"
+                alt=""
+                style={{ width: "100%", minHeight: "120px" }}
               />
             </Link>
           </div>
@@ -55,6 +63,9 @@ const ContenedorProductos = (formData) => {
             <br />
             <span className="card-text">
               <strong>Stock:</strong> {productos.stock}
+            </span><br />
+            <span className="card-text">
+              <strong>Precio:</strong> ₡{productos.precio}
             </span>
           </div>
         </div>

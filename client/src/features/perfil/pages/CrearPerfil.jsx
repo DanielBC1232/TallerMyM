@@ -1,28 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import FormularioPerfil from "../components/FormularioPerfil";
 
 const CrearPerfil = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleFormSubmit = async (data) => {
     if (!data.email) {
       alert("Por favor, ingrese un correo electrónico válido.");
       return;
     }
+    setIsSubmitting(true);
     try {
-      const response = await fetch("http://127.0.0.1:3000/api/email/send-email", {
+     
+      const verifyResponse = await fetch("http:/localhost:3000/api/usuario/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email : data.email}),
+        body: JSON.stringify({ email: data.email, nombre: data.nombre }),
       });
-    
+
+      const verifyData = await verifyResponse.json();
+
+      if (!verifyResponse.ok) {
+        alert(verifyData.message);
+        setIsSubmitting(false);
+        return;
+      }
+
+
+      const response = await fetch("localhost:3000/api/email/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email : data.email, nombre: data.nombre}),
+      });
+
+      const responseData = await response.json();
+
       if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(errorMessage || "Error al verificar el correo.");
+        const errorMessage = responseData.message || "Error al enviar el correo.";
+        throw new Error(errorMessage);
       }
     
       alert("Correo verificado correctamente.");
     } catch (error) {
-      console.error("Error en la solicitud:", error);
       alert(`Hubo un error al intentar enviar el correo: ${error.message}`);
+    }finally{
+      setIsSubmitting(false);
     }
   };
 
@@ -34,7 +56,7 @@ const CrearPerfil = () => {
           <p className="lead">Complete el formulario para crear un perfil de usuario</p>
         </div>
 
-        <FormularioPerfil onSubmit={handleFormSubmit} />
+        <FormularioPerfil onSubmit={handleFormSubmit} isSubmitting={isSubmitting} />
       </main>
     </div>
   );

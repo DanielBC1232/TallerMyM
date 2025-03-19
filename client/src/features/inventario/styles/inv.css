@@ -9,7 +9,7 @@
 .article {
   background-color: #fff;
   text-align: start;
-  box-shadow: 2px 0px 6px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 6px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
   width: 250px;
   height: 285px;
