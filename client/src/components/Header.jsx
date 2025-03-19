@@ -1,48 +1,39 @@
-import { Navbar, Nav, Image } from "rsuite";
-import MoveDownIcon from "@rsuite/icons/MoveDown";
-import CogIcon from "@rsuite/icons/legacy/Cog";
-import logo from "../assets/Logo.png";
-import {Link} from "react-router-dom";
-import "./styles.css";
-import "bootstrap/dist/css/bootstrap.mi.css"
-import Reat from "react"; 
+import "../styles/custom.css";
+import React from "react";
+import Logo from "../assets/Logo.png";
 
-const Header = ({ onSelect, activeKey, ...props }) => {
+const Header = () => {
   return (
-    <Navbar {...props} appearance="inverse" className="shadow-sm">
-      <Navbar.Brand as={Link} to="/" style={{ display: "flex", alignItems: "center" }}>
-        <Image
-          circle
-          src={logo}
-          alt="Logo"
-          style={{
-            position: "relative",
-            width: "65px",
-            height: "65px",
-            objectFit: "contain",
-          }}
-        />
-      </Navbar.Brand>
-      <Nav onSelect={onSelect} activeKey={activeKey}>
-        <Nav.Menu title="Inventario">
-        <Nav.Item as={Link} to="/inventario" eventKey="1">Productos y Servicios</Nav.Item>
-        <Nav.Item as={Link} to="/solicitudes" eventKey="1">Solicitudes</Nav.Item>
-        </Nav.Menu>
-        <Nav.Item eventKey="3">Trabajadores</Nav.Item>
-        <Nav.Item eventKey="4">Clientes</Nav.Item>
-        <Nav.Menu title="Administrativo">
-        <Nav.Item as={Link} to="/perfil-crear" eventKey="5">CrearPerfil</Nav.Item>
-        </Nav.Menu>
-      </Nav>
-      <Nav pullRight>
-        <Nav.Menu icon={<CogIcon />} title="Ajustes">
-          <Nav.Item eventKey="2">
-            Cerrar Sesion 
-            <MoveDownIcon />
-          </Nav.Item>
-        </Nav.Menu>
-      </Nav>
-    </Navbar>
+    <>
+      <nav className="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+        <div className="container px-4 px-lg-5">
+          <a className="navbar-brand d-flex align-items-center" href="#page-top">
+            <img src={Logo} alt="Logo Taller MyM" width="40" height="40" className="me-2" />
+            Taller MyM
+          </a>
+          <button
+            className="navbar-toggler navbar-toggler-right"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarResponsive"
+            aria-controls="navbarResponsive"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarResponsive">
+            <ul className="navbar-nav ms-auto my-2 my-lg-0">
+              <li className="nav-item"><a className="nav-link" href="#inventario">Inventario</a></li>
+              <li className="nav-item"><a className="nav-link" href="#ventas">Ventas</a></li>
+              <li className="nav-item"><a className="nav-link" href="#administrador">Administrador</a></li>
+              <li className="nav-item"><a className="nav-link" href="#clientes">Clientes</a></li>
+              <li className="nav-item"><a className="nav-link" href="#trabajadores">Trabajadores</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </>
   );
 };
 
