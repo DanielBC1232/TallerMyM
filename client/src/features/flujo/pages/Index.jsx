@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Link,
   useNavigate,
 } from "react-router-dom";
-import axios from "axios";
-import { Grid, Row, Col, Card, VStack, Text } from "rsuite";
+import { Grid, Row, Col, Text } from "rsuite";
 import "../styles/flu.css";
 
 import ColPendiente from "../components/ColPendiente";

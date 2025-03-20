@@ -251,9 +251,7 @@ CREATE TABLE PRODUCTO_SERVICIO(
     img NVARCHAR(255) NULL,
 
     -- Opcional - Descuentos
-    porcentajeDescuento DECIMAL(10,2) NULL,
-    fechaInicio DATETIME NULL,
-    fechaFin DATETIME NULL,
+    porcentajeDescuento DECIMAL(10,2) NULL
 )
 GO
 
@@ -329,6 +327,7 @@ CREATE TABLE ORDEN(
     tiempoEstimado DATETIME NOT NULL,
     estadoAtrasado BIT NOT NULL DEFAULT 0,
 	idVehiculo INT NOT NULL,
+	descripcion NVARCHAR(2048) NULL,
     --FK
     --Se puede reasignar otro trabajador (update)
     idTrabajador INT,

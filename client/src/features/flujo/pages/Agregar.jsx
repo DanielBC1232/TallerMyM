@@ -209,7 +209,6 @@ const Agregar = () => {
               <Row><span>
                 Descripción:
                 <textarea
-                  type="date"
                   className="form-control"
                   rows={4}
                   name="descripcion"

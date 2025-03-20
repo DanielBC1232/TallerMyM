@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Grid, Row, Col, Steps, Text, Divider } from "rsuite";
 import "../styles/flu.css";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 //URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -16,6 +17,11 @@ const Detalles = () => {
     const { idOrden } = useParams();
     const navigate = useNavigate(); // Hook para navegar
     const [orden, setOrden] = useState([]);
+    const [fase, setFase] = useState({
+        idOrden: idOrden,
+        estadoOrden: 0
+    });
+    const [reload, setReload] = useState(0);
 
     useEffect(() => {
         const obtenerOrden = async () => {
@@ -23,6 +29,8 @@ const Detalles = () => {
                 const { data } = await axios.get(`${BASE_URL}/flujo/obtener-orden/${idOrden}`
                 ); //consumir api en backend por id
                 setOrden(data);
+                setFase((prev) => ({ ...prev, estadoOrden: data.estadoOrden }));
+
                 //console.log(data); // imprimir JSON en consola
             } catch (error) {
                 console.error("Error al obtener el orden:", error);
@@ -30,9 +38,56 @@ const Detalles = () => {
         };
 
         obtenerOrden(); // llamar funcion
-    }, [idOrden]);//cargar al tener id
+    }, [idOrden, reload]);//cargar al tener id // al cambiar fase
 
-    if (!orden) return <p>Cargando...</p>;
+    //numero de estado ==> texto de proximo estado
+    const estadoTexto = useMemo(() => {
+        const estados = {
+            0: "Pendiente",
+            1: "En progreso",
+            2: "Finalizado",
+            3: "Venta",
+        };
+        return estados[fase.estadoOrden]; // No hay "default"
+    }, [fase.estadoOrden]);
+
+    const siguienteFase = async () => {
+        try {
+            const result = await Swal.fire({
+                text: `Avanzar orden a la fase "${estadoTexto}"?`,
+                icon: "warning",
+                confirmButtonText: 'Confirmar',
+                showConfirmButton: true,
+                showCancelButton: true,
+                customClass: {
+                    actions: 'my-actions',
+                    confirmButton: 'btn btn-success btn-sm text-white order-2',
+                    cancelButton: 'btn btn-sm btn-outline-dark order-1',
+                },
+            });
+
+            if (result.isConfirmed) {
+                const resFase = await axios.put(`${BASE_URL}/flujo/actualizar-fase-orden/`, fase); // Consumir API
+
+                if (resFase.status === 200) {
+                    Swal.fire({
+                        title: 'Orden actualizada!',
+                        icon: 'success',
+                        showConfirmButton: false
+                    });
+                    setReload(reload + 1); // Recargar página para ver cambios
+                }
+            }
+        } catch (error) {
+            Swal.fire({
+                title: 'Error al actualizar orden!',
+                icon: 'error',
+                showConfirmButton: false
+            });
+            console.error("Error al actualizar fase:", error);
+        }
+    };
+
 
     return (
         <div className="container main p-5">
@@ -60,6 +115,7 @@ const Detalles = () => {
                                 </Steps>
                                 <div className="d-grid justify-content-start me-5 gap-2 mt-5">
                                     <button
+                                        onClick={siguienteFase}
                                         type="button"
                                         className="btn btn-success btn-sm text-white"
                                         style={{ maxWidth: "120px" }}
@@ -68,18 +124,19 @@ const Detalles = () => {
                                     </button>
                                     <Link
                                         to={`/flujo-editar/${idOrden}`}
-                                        className="btn btn-secondary btn-sm text-white"
+                                        className="btn btn-warning btn-sm text-white"
                                         style={{ maxWidth: "120px" }}
                                     >
                                         Editar Orden
                                     </Link>
-                                    <button
+                                    <Link
+                                        to={`/flujo`}
                                         type="button"
                                         className="btn btn-muted btn-sm"
                                         style={{ maxWidth: "120px" }}
                                     >
-                                        Volver Atras
-                                    </button>
+                                        Volver Atrás
+                                    </Link>
 
                                 </div>
                             </Col>
@@ -113,7 +170,7 @@ const Detalles = () => {
                                 </span>
                                 <span>
                                     <Text size="xl">Descripcion:</Text>
-                                    <Text size="lg" style={orden.estadoAtrasado === true ? { color: "#F50025" } : { color: "#717273" }}>
+                                    <Text size="lg" muted>
                                         {orden.descripcion}
                                     </Text>
                                 </span>

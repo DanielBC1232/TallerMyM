@@ -11,11 +11,12 @@ router.get("/obtener-ordenes/:id", ordenController.getOrdenesByStatus);
 // Ruta para obtener orden por ID
 router.get("/obtener-orden/:id", ordenController.getOrdenById);
 
+// Ruta para actualizar orden - cancelar orden (parametro = 0)
+router.put("/actualizar-fase-orden/", ordenController.siguienteFase);
+
 // Ruta para actualizar orden
 router.put("/actualizar-orden/", ordenController.updateOrden);
 
-// Ruta para eliminar orden por ID
-router.put("/eliminar-orden/:id", ordenController.deleteOrden);
 
 // Exporta el router usando CommonJS
 module.exports = router;

@@ -171,7 +171,7 @@ const IndexInventario = () => {
       </nav>
 
       <div className="main rounded-3">
-        <div className="article-container article-scroll">
+        <div className="article-container scrollable-container">
           <ContenedorProductos formData={formData} />
         </div>
       </div>

@@ -125,7 +125,7 @@ AS BEGIN
 		FORMAT(DATEDIFF(HOUR, GETDATE(), O.tiempoEstimado) % 24, '00') + ' horas, ' +
 		FORMAT(DATEDIFF(MINUTE, GETDATE(), O.tiempoEstimado) % 60, '00') + ' minutos' AS TiempoRestante,
 		FORMAT(O.tiempoEstimado, 'dd/MM/yyyy') AS tiempoEstimado,
-		O.tiempoEstimado as timepoEstimadoOriginal,
+		O.tiempoEstimado as tiempoEstimadoOriginal,
 		O.descripcion,
 		O.estadoAtrasado,
 		T.idTrabajador,
@@ -140,3 +140,15 @@ AS BEGIN
 	END;
 GO
 
+--Para ordenes atrasadas, cambia el estado atrasado en 1
+CREATE OR ALTER PROCEDURE ACTUALIZAR_ORDENES_ATRASADAS
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE ORDEN
+    SET estadoAtrasado = 1
+    WHERE tiempoEstimado < GETDATE() -- Si la fecha ya pasó
+      AND estadoAtrasado = 0; -- Solo actualizar si aún no ha sido marcado
+END;
+GO

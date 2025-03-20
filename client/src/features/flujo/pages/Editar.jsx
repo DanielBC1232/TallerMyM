@@ -3,8 +3,7 @@ import { Grid, Row, Col } from "rsuite";
 import "../styles/flu.css";
 import Swal from "sweetalert2";
 import axios from "axios";
-import moment from 'moment';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 
 import SelectTrabajadores from "../components/SelectTrabajadores";
 
@@ -14,14 +13,17 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const Editar = () => {
   const { idOrden } = useParams();
   const navigate = useNavigate(); // Hook para navegar
-  const [verificaCambioFecha, setVerificaCambioFecha] = useState({
-    tiempoEstimadoInicial: ""
-  });
   const [formData, setFormData] = useState({
+    idOrden: 0,
     tiempoEstimado: "",
     idTrabajador: null,
     descripcion: "",
-    estadoAtrasado: 0
+    estadoAtrasado: 0,
+
+  });
+  const [fase, setFase] = useState({
+    idOrden: 0,
+    estadoOrden: 0
   });
 
   const errorNotification = (message) => {
@@ -50,6 +52,17 @@ const Editar = () => {
     }
     return pass;
   };
+  const verificarDescripcion = () => {
+    var pass = false;
+    //Campo Marca
+    if (formData.descripcion.trim().length < 5) {
+      pass = false;
+      errorNotification("Debe redactar una descripcion");
+    } else if (formData.descripcion.trim().length > 5) {
+      pass = true;
+    }
+    return pass;
+  };
 
   // VERIFICACION GENERAL
   const verificacion = () => {
@@ -57,7 +70,8 @@ const Editar = () => {
     //Verificar que todos los campos sean validos
     if (
       VerificarTiempoEstimado() &&
-      verificarTrabajador()
+      verificarTrabajador() &&
+      verificarDescripcion()
     ) {
       pass = true;
     } else {
@@ -66,153 +80,211 @@ const Editar = () => {
     return pass;
   };
 
-  useEffect(() => {
-    const obtenerOrden = async () => {
-      try {
-        const { data } = await axios.get(`${BASE_URL}/flujo/obtener-orden/${idOrden}`
-        ); //consumir api en backend por id
-        setFormData((prev) => ({
-          ...prev,//Mantener valores predefinidos
-          tiempoEstimado: moment(data.timepoEstimadoOriginal).format('YYYY-MM-DD'),
-          idTrabajador: data.idTrabajador,
-          descripcion: data.decripcion,
-          estadoAtrasado: data.estadoAtrasado
-        }));
-        setVerificaCambioFecha((prev) => ({
-          ...prev,//Mantener valores predefinidos
-          tiempoEstimadoInicial: moment(data.timepoEstimadoOriginal).format('YYYY-MM-DD'),
-        }));
-        console.log(data); // imprimir JSON en consola
-      } catch (error) {
-        console.error("Error al obtener el orden:", error);
-      }
-    };
-    console.log(FormData);
+// Función para convertir el formato de fecha de "dd-MM-yyyy" a "yyyy-MM-dd"
+const convertDateFormat = (dateString) => {
+  if (!dateString) return '';
+  // Separar por '/' o '-' usando una expresión regular
+  const parts = dateString.split(/[-/]/);
+  // Validar que tenga 3 partes (día, mes, año)
+  if (parts.length !== 3) return '';
+  const [day, month, year] = parts;
+  // Validar que día, mes y año sean números
+  if (isNaN(day) || isNaN(month) || isNaN(year)) return '';
+  // Formatear como yyyy-MM-dd
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+};
 
-    obtenerOrden(); // llamar funcion
-  }, [idOrden]);//cargar al tener id
+useEffect(() => {
+  const obtenerOrden = async () => {
+    try {
+      const { data } = await axios.get(`${BASE_URL}/flujo/obtener-orden/${idOrden}`); //consumir api en backend por id
 
-function comprobarCambioFecha(){
-  //si se actualiza la fecha.
-  if (formData.tiempoEstimado != verificaCambioFecha.tiempoEstimadoInicial) {
+      setFormData((prev) => ({
+        ...prev,//Mantener valores predefinidos
+        idOrden: data.idOrden,
+        tiempoEstimado: convertDateFormat(data.tiempoEstimado),
+        idTrabajador: data.idTrabajador,
+        descripcion: data.descripcion,
+        estadoAtrasado: data.estadoAtrasado
+      }));
 
-    //El estado atrasado se reinicia a false
-    setFormData((prev) => ({
-      ...prev,//Mantener valores predefinidos
-      estadoAtrasado: 0
-    }));
+      setFase((prev) => ({
+        ...prev,//Mantener valores predefinidos
+        idOrden: data.idOrden,
+        estadoOrden: -1// -1 porque el controller suma +1 (porque originalmente esta hecho por cambiar fase siguiente)
+      }));
+    } catch (error) {
+      //console.error("Error al obtener el orden:", error);
+    }
+  };
+  obtenerOrden(); // llamar funcion
+}, [idOrden]);//cargar al tener id
 
-  }
-}
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+console.log("FormData: ");
+console.log(formData);
 
+const actualizarOrden = async () => {
+  try {
     if (verificacion()) {
 
-      comprobarCambioFecha();
-      
-      try {
-        const { res } = await axios.post(`${BASE_URL}/flujo/obtener-orden/`, formData);
-        setFormData(res);
-        console.log(res.data);
+      const result = await Swal.fire({
+        text: `¿ Actualizar cambios realizados?`,
+        icon: "warning",
+        confirmButtonText: 'Confirmar',
+        showConfirmButton: true,
+        showCancelButton: true,
+        customClass: {
+          actions: 'my-actions',
+          confirmButton: 'btn btn-warning btn-sm text-white order-2',
+          cancelButton: 'btn btn-sm btn-outline-dark order-1',
+        },
+      });
 
-        if (res.status === 201) {
-          await Swal.fire({
-            icon: "success",
-            title: "Orden agregada correctamente",
-            showConfirmButton: false,
-            timer: 1300,
-          });
-          navigate(`/flujo-editar/${idOrden}`);
-        } else {
+      if (result.isConfirmed) {
+        const resFase = await axios.put(`${BASE_URL}/flujo/actualizar-orden/`, formData); // Consumir API
+        console.log(resFase)
+
+        if (resFase.status === 200) {
           Swal.fire({
-            icon: "warning",
-            title: "Ocurrió un problema al procesar la solicitud",
-            showConfirmButton: false,
-            timer: 1500,
+            title: 'Orden actualizada!',
+            icon: 'success',
+            showConfirmButton: false
           });
-        }
-      } catch (error) {
-        if (error.response) {
-          const { status } = error.response;
-          let message = "Error al agregar la orden";
-          if (status === 400) {
-            message = "Solicitud incorrecta, por favor verifique los datos ingresados";
-          } else if (status === 404) {
-            message = "No se encontró el recurso solicitado";
-          } else if (status === 500) {
-            message = "Error interno del servidor, por favor intente más tarde";
-          }
-          Swal.fire({
-            icon: "error",
-            title: message,
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error desconocido, por favor intente más tarde",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          navigate(`/flujo-detalles/${idOrden}`);
         }
       }
     }
-  };
+  } catch (error) {
+    Swal.fire({
+      title: 'Error al actualizar orden!',
+      icon: 'error',
+      showConfirmButton: false
+    });
+    console.error("Error al actualizar fase:", error);
+  }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <div className="container main p-5">
-        <Grid fluid>
-          <Row
-            className="show-grid d-flex justify-content-center align-items-center"
-            gutter={16}
-          >
-            <Col
-              xs={16}
-              className="d-grid gap-5 bg-white shadow-sm p-5 rounded-3"
-            >
-              <Row className="show-grid" gutter={16}>
-                <Col xs={12} className="column">
-                  <span>
-                    Seleccionar un mecánico
-                    <SelectTrabajadores
-                      value={formData.idTrabajador}
-                      onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))}
-                    />
-                  </span>
-                </Col>
-                <Col xs={12} className="column">
-                  <span>
-                    Estimado de finalización:
-                    <input
-                      type="date"
-                      className="form-control"
-                      style={{ maxWidth: "225px" }}
-                      name="tiempoEstimado"
-                      value={formData.tiempoEstimado}
-                      onChange={(e) => setFormData(prev => ({ ...prev, tiempoEstimado: e.target.value }))}
-                    />
-                  </span>
-                </Col>
-              </Row>
-              <div className="d-grid justify-content-end me-5">
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  style={{ maxWidth: "120px" }}
-                >
-                  Agregar
-                </button>
-              </div>
+};
+
+const cancelarOrden = async () => {
+  try {
+    const result = await Swal.fire({
+      text: `¿¡ Seguro que desea cancelar la orden !?`,
+      icon: "error",
+      confirmButtonText: 'Confirmar',
+      showConfirmButton: true,
+      showCancelButton: true,
+      customClass: {
+        actions: 'my-actions',
+        confirmButton: 'btn btn-warning btn-sm text-white order-2',
+        cancelButton: 'btn btn-sm btn-outline-dark order-1',
+      },
+    });
+
+    if (result.isConfirmed) {
+      const resFase = await axios.put(`${BASE_URL}/flujo/actualizar-fase-orden/`, fase); // Consumir API
+      console.log(resFase)
+
+      if (resFase.status === 200) {
+        Swal.fire({
+          title: 'Orden cancelada!',
+          icon: 'success',
+          showConfirmButton: false
+        });
+        navigate("/flujo");
+      }
+    }
+  } catch (error) {
+    Swal.fire({
+      title: 'Error al actualizar orden!',
+      icon: 'error',
+      showConfirmButton: false
+    });
+    console.error("Error al actualizar fase:", error);
+  }
+};
+
+return (
+  <div className="container main p-5">
+    <Grid fluid>
+      <Row
+        className="show-grid d-flex justify-content-center align-items-center"
+        gutter={16}
+      >
+        <Col
+          xs={16}
+          className="d-grid gap-3 bg-white shadow-sm p-5 rounded-3"
+        >
+          <Row gutter={16}>
+            <Col xs={12} className="column">
+              <span>
+                Seleccionar un mecánico
+                <SelectTrabajadores
+                  value={formData.idTrabajador}
+                  onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))}
+                />
+              </span>
             </Col>
+            <Col xs={12} className="column">
+              <span>
+                Estimado de finalización:
+                <input
+                  type="date"
+                  className="form-control"
+                  style={{ maxWidth: "370px" }}
+                  name="tiempoEstimado"
+                  value={formData.tiempoEstimado}
+                  onChange={(e) => setFormData(prev => ({ ...prev, tiempoEstimado: e.target.value }))}
+                />
+              </span>
+            </Col>
+
           </Row>
-        </Grid>
-      </div>
-    </form>
-  );
+          <Row><span>
+            Descripción:
+            <textarea
+              className="form-control"
+              rows={6}
+              name="descripcion"
+              value={formData.descripcion}
+              onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))}
+            />
+          </span></Row>
+          <div className="row mt-4">
+            <div className="d-flex col justify-content-start">
+              <Link
+                to={`/flujo-detalles/${idOrden}`}
+                type="button"
+                className="btn btn-outline-dark btn-sm"
+                style={{ maxWidth: "120px" }}
+              >
+                Volver Atrás
+              </Link>
+            </div>
+            <div className="d-flex col justify-content-end">
+              <button
+                onClick={cancelarOrden}
+                type="button"
+                className="btn btn-danger btn-sm text-white me-3"
+                style={{ maxWidth: "120px" }}
+              >
+                Cancelar Orden
+              </button>
+              <button
+                onClick={actualizarOrden}
+                type="button"
+                className="btn btn-sm btn-secondary text-white"
+                style={{ maxWidth: "120px" }}
+              >
+                Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </Col>
+      </Row>
+    </Grid>
+  </div>
+);
 };
 
 export default Editar;
