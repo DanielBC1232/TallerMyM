@@ -86,10 +86,10 @@ const Header = () => {
             </li>
           </ul>
 
-          {/* Botón de perfil alineado a la derecha */}
+          {/* Botón de perfil alineado a la derecha con efecto */}
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link btn btn-outline-light" href="/perfil-crear">Perfil</a>
+              <a className="nav-link btn btn-outline-light perfil-hover" href="/perfil-crear">Perfil</a>
             </li>
           </ul>
         </div>
