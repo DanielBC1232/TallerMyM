@@ -14,69 +14,32 @@ go
 --************  TABLAS  ***********--
 
 -- MODULO ADMINISTRATIVO --
+-- Crear la tabla de Roles
+CREATE TABLE ROLES (
+    idRol INT PRIMARY KEY IDENTITY(1, 1), -- ID autoincremental
+    nombreRol NVARCHAR(50) NOT NULL UNIQUE -- Nombre del rol (ej: "admin", "user")
+);
 
-CREATE TABLE USUARIO(
+CREATE TABLE USUARIO (
+    idUsuario INT PRIMARY KEY IDENTITY(1, 1), -- ID autoincremental
 
-    idUsuario INT IDENTITY(1,1) PRIMARY KEY,
-    nombreUsuario VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    cedula VARCHAR(10) NOT NULL UNIQUE,
-    contrasenaHash VARBINARY(256) NOT NULL,
-    estadoCuenta BIT DEFAULT 1 NOT NULL, --activo, bloquedo
-	intentosFallidos INT DEFAULT 5 NOT NULL,
+    username NVARCHAR(50) NOT NULL UNIQUE, -- Nombre de usuario
+    email NVARCHAR(100) NOT NULL UNIQUE, -- Correo electrónico
+    password NVARCHAR(255) NOT NULL, -- Contraseña (hash)
+    idRol INT NOT NULL, -- FK al rol del usuario
 
-    fechaRegistro DATE DEFAULT GETDATE(),--al crear cuenta
-    fechaUltimaSesion DATE NOT NULL, --cada vez que hace login
-
-)
+    failedLoginAttempts INT DEFAULT 0, -- Intentos fallidos de inicio de sesión
+    isLocked BIT DEFAULT 0, -- Indica si la cuenta está bloqueada (0 = no, 1 = sí)
+    resetToken NVARCHAR(255), -- Token para recuperación de contraseña
+    resetTokenExpiry DATETIME, -- Fecha de expiración del token
+    lastLogin DATETIME, -- Fecha del último inicio de sesión
+    lastPasswordChange DATETIME, -- Fecha del último cambio de contraseña
+    FOREIGN KEY (idRol) REFERENCES Roles(idRol) -- Relación con la tabla Roles
+);
 GO
 
-CREATE TABLE HISTORIAL_CONTRASENA(
-
-    idHistorialContrasena INT IDENTITY(1,1) PRIMARY KEY,
-    fechaUltimoCambio DATE NOT NULL,
-
-    idUsuario INT NOT NULL,
-    FOREIGN KEY (idUsuario) REFERENCES USUARIO(idUsuario) ON DELETE CASCADE
-
-)
-GO
-
-CREATE TABLE USUARIO_BLOQUEADO(
-
-    idBloqueo INT IDENTITY(1,1) PRIMARY KEY,
-    fechaBloqueo DATETIME NOT NULL,
-    motivo VARCHAR(500) NOT NULL,
-
-    --dependiendo del motivo, cambia el tiempo de bloqueo
-    fechaDesbloqueo AS 
-        CASE 
-            WHEN motivo = 'Contrasena' THEN DATEADD(MINUTE, 30, fechaBloqueo) --30min
-            WHEN motivo = 'Inactividad' THEN NULL --tiempo indefinido
-            ELSE NULL
-        END PERSISTED,
-
-    idUsuario INT NOT NULL,
-    FOREIGN KEY (idUsuario) REFERENCES USUARIO(idUsuario) ON DELETE CASCADE
-)
-GO
-
-CREATE TABLE ROL(
-
-    idRol INT IDENTITY(1,1) PRIMARY KEY,
-    rol VARCHAR(30) NOT NULL,
-    permisoAcceder BIT NOT NULL DEFAULT 0,
-    permisoVisualizar BIT NOT NULL DEFAULT 0,
-    permisoAgregar BIT NOT NULL DEFAULT 0,
-    permisoConsultar BIT NOT NULL DEFAULT 0,
-    permisoModificar BIT NOT NULL DEFAULT 0,
-    permisoGenerar BIT NOT NULL DEFAULT 0,
-
-    idUsuario INT NOT NULL,
-    FOREIGN KEY (idUsuario) REFERENCES USUARIO(idUsuario)
-
-)
-GO
+INSERT INTO USUARIO(username, email, password, idRol)
+VALUES ('johndoe', 'johndoe@example.com', 'hashedpassword123', 1);
 -- MODULO TRABAJADORES --
 
 CREATE TABLE TRABAJADOR(

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+/*import React, { useState, useEffect } from "react";
 import { Grid, Row, Col } from "rsuite";
 import "../styles/flu.css";
 import Swal from "sweetalert2";
@@ -215,4 +215,4 @@ function comprobarCambioFecha(){
   );
 };
 
-export default Editar;
+export default Editar;*/
