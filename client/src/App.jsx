@@ -30,6 +30,9 @@ import DetallesOrden from "./features/flujo/pages/Detalles.jsx";
 import TrabajadoresIndex from "./features/trabajadores/pages/Index.jsx";
 import AgregarTrabajador from "./features/trabajadores/pages/Agregar.jsx";
 import EditarTrabajador from "./features/trabajadores/pages/Editar.jsx";
+//---Seccion de solicitud de vacaciones
+import AgregarSolicitudVacaciones from "./features/trabajadores/pages/AgregarSolicitud.jsx"
+
 
 //administracion
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
@@ -108,6 +111,9 @@ const App = () => {
           <Route path="/trabajadores" element={<TrabajadoresIndex />} />
           <Route path="/trabajadores-agregar" element={<AgregarTrabajador />} />
           <Route path="/trabajadores-editar/:idTrabajador" element={<EditarTrabajador />} />
+
+          <Route path="/AgregarSolicitud-Vacaciones" element={<AgregarSolicitudVacaciones />} />
+          
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />

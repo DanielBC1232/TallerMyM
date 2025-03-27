@@ -35,15 +35,33 @@ const IndexTrabajadores = () => {
                 <Link to="/trabajadores-agregar" className="btn-link">Agregar Trabajador</Link>
               </Button>
             </Col>
+            
             <Col xs={2}>
               <Divider vertical />
             </Col>
+            
+            <Col xs={11}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px" }}>
+                <Link to="/AgregarSolicitud-Vacaciones" className="btn-link">Solicitar Vacaciones</Link>
+              </Button>
+            </Col>
+
             <Col xs={11}>
               <Link
                 to="/trabajadores-vacaciones"
                 type="submit"
                 className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "130px" }}>
               Filtrar</Link>
+            </Col>
+
+            <Col xs={2}>
+              <Divider vertical />
+            </Col>
+          
+            <Col xs={11}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px" }}>
+                <Link to="#" className="btn-link">Aprobar Vacaciones</Link>
+              </Button>
             </Col>
           </Row>
         </div>
