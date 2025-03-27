@@ -18,7 +18,7 @@ const database_1 = require("../../config/database");
 
 
 class ProductoServicio {
-    constructor(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin) {
+    constructor(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.marca = marca;
@@ -33,10 +33,8 @@ class ProductoServicio {
         this.tipo = tipo;
         this.img = img;
         this.porcentajeDescuento = porcentajeDescuento;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
     }
-} 
+}
 
 exports.ProductoServicio = ProductoServicio;
 
@@ -45,28 +43,29 @@ class ProductoRepository {
     getAll(nombre, marca, categoria, stock, rangoPrecio) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const precioMin = (rangoPrecio && rangoPrecio[0]) || null;
+                const precioMax = (rangoPrecio && rangoPrecio[1]) || null;
                 const pool = yield (0, database_1.connectDB)();
                 // llamada al procedimiento almacenado
                 const result = yield pool
                     .request()
-                    .input('nombre', mssql_1.default.VarChar(50), nombre)
-                    .input('marca', mssql_1.default.VarChar(50), marca)
-                    .input('categoria', mssql_1.default.VarChar(50), categoria)
-                    .input('stock', mssql_1.default.Int, stock)
-                    .input('precioMin', mssql_1.default.Decimal(18, 2), rangoPrecio[0])
-                    .input('precioMax', mssql_1.default.Decimal(18, 2), rangoPrecio[1])
+                    .input('nombre', mssql_1.default.VarChar(50), nombre || null)
+                    .input('marca', mssql_1.default.VarChar(50), marca || null)
+                    .input('categoria', mssql_1.default.VarChar(50), categoria || null)
+                    .input('stock', mssql_1.default.Int, stock || null)
+                    .input('precioMin', mssql_1.default.Decimal(18, 2), precioMin)
+                    .input('precioMax', mssql_1.default.Decimal(18, 2), precioMax)
                     .execute('SP_FILTRO_PRODUCTOS');  // Ejecutar el procedimiento
-
                 // Retorno de los resultados
                 return result.recordset;
             }
             catch (error) {
-                console.error("Error en getAll:", error);
-                throw new Error("Error al obtener productos");
+                console.error("M-Error en getAll:", error);
+                throw new Error("M-Error al obtener productos");
             }
         });
     }
-    
+
     findById(idProducto) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -74,7 +73,22 @@ class ProductoRepository {
                 const result = yield pool
                     .request()
                     .input("idProducto", mssql_1.default.Int, idProducto) // Parametros
-                    .query("SELECT * FROM PRODUCTO_SERVICIO WHERE idProducto = @idProducto");
+                    .query(`SELECT
+                        idproducto,
+                        nombre,
+                        marca,
+                        descripcion,
+                        precio,
+                        stock,
+                        fechaIngreso,
+                        ubicacionAlmacen,
+                        proveedor,
+                        categoria,
+                        vehiculosCompatibles,
+                        tipo,
+                        img,
+                        porcentajeDescuento*100 as porcentajeDescuento
+                        FROM PRODUCTO_SERVICIO WHERE idProducto = @idProducto`);
                 return result.recordset.length > 0 ? result.recordset[0] : null;
             }
             catch (error) {
@@ -84,7 +98,7 @@ class ProductoRepository {
         });
     }
     // Insertar producto
-    insertProducto(nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin) {
+    insertProducto(nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
@@ -103,16 +117,13 @@ class ProductoRepository {
                     .input("vehiculosCompatibles", mssql_1.default.NVarChar, vehiculosCompatibles)
                     .input("tipo", mssql_1.default.VarChar, tipo)
                     .input("img", mssql_1.default.VarChar, img || null)
-                    .input("porcentajeDescuento", mssql_1.default.Decimal(10, 2), porcentajeDescuento || null)
-                    .input("fechaInicio", mssql_1.default.DateTime, fechaInicio || null)
-                    .input("fechaFin", mssql_1.default.DateTime, fechaFin || null).query(`
-          INSERT INTO PRODUCTO_SERVICIO 
-          (nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, 
-          proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin) 
-          VALUES 
-          (@nombre, @marca, @descripcion, @precio, @stock, @fechaIngreso, @ubicacionAlmacen, 
-          @proveedor, @categoria, @vehiculosCompatibles, @tipo, @img, @porcentajeDescuento, @fechaInicio, @fechaFin)
-        `);
+                    .query(`
+                    INSERT INTO PRODUCTO_SERVICIO 
+                    (nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, 
+                    proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento) 
+                    VALUES 
+                    (@nombre, @marca, @descripcion, @precio, @stock, @fechaIngreso, @ubicacionAlmacen, 
+                    @proveedor, @categoria, @vehiculosCompatibles, @tipo, @img, 0)`);
                 return result.rowsAffected[0];
             }
             catch (error) {
@@ -122,15 +133,11 @@ class ProductoRepository {
         });
     }
     // Actualizar producto
-    updateProducto(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin) {
+    updateProducto(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
                 const result = yield pool.request()
-                //Query update
-                pool
-                    //PARAMETROS
-                    .request()
                     .input("idProducto", mssql_1.default.Int, idProducto)
                     .input("nombre", mssql_1.default.VarChar, nombre)
                     .input("marca", mssql_1.default.VarChar, marca)
@@ -144,27 +151,25 @@ class ProductoRepository {
                     .input("vehiculosCompatibles", mssql_1.default.NVarChar, vehiculosCompatibles)
                     .input("tipo", mssql_1.default.VarChar, tipo)
                     .input("img", mssql_1.default.NVarChar, img || null)
-                    .input("porcentajeDescuento", mssql_1.default.Decimal(10, 2), porcentajeDescuento || null)
-                    .input("fechaInicio", mssql_1.default.DateTime, fechaInicio || null)
-                    .input("fechaFin", mssql_1.default.DateTime, fechaFin || null).query(`
-          UPDATE PRODUCTO_SERVICIO SET
-            nombre = @nombre,
-            marca = @marca,
-            descripcion = @descripcion,
-            precio = @precio,
-            stock = @stock,
-            fechaIngreso = @fechaIngreso,
-            ubicacionAlmacen = @ubicacionAlmacen,
-            proveedor = @proveedor,
-            categoria = @categoria,
-            vehiculosCompatibles = @vehiculosCompatibles,
-            tipo = @tipo,
-            img = @img,
-            porcentajeDescuento = @porcentajeDescuento,
-            fechaInicio = @fechaInicio,
-            fechaFin = @fechaFin
-          WHERE idProducto = @idProducto
-        `);
+                    .input("porcentajeDescuento", mssql_1.default.Decimal(10, 2), porcentajeDescuento || 0)
+                    .query(`
+                    UPDATE PRODUCTO_SERVICIO SET
+                        nombre = @nombre,
+                        marca = @marca,
+                        descripcion = @descripcion,
+                        precio = @precio,
+                        stock = @stock,
+                        fechaIngreso = @fechaIngreso,
+                        ubicacionAlmacen = @ubicacionAlmacen,
+                        proveedor = @proveedor,
+                        categoria = @categoria,
+                        vehiculosCompatibles = @vehiculosCompatibles,
+                        tipo = @tipo,
+                        img = @img,
+                        porcentajeDescuento = @porcentajeDescuento
+                    WHERE idProducto = @idProducto
+                    `);
+                    console.log("Filas afectadas:", result.rowsAffected[0]);
                 return result.rowsAffected[0];
             }
             catch (error) {

@@ -19,6 +19,7 @@ import IndexVentas from './features/ventas/pages/index.jsx'
 import IndexCotizacion from "./features/ventas/pages/IndexCotizacion.jsx";
 import Cotizar from "./features/ventas/pages/Cotizar.jsx";
 import EditarCotizacion from "./features/ventas/pages/EditarCotizarcion.jsx";
+import Venta from "./features/ventas/pages/Venta.jsx";
 
 //flujo
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
@@ -91,6 +92,7 @@ const App = () => {
           <Route path="/cotizacion" element={<IndexCotizacion />} />
           <Route path="/cotizacion-cotizar" element={<Cotizar />} />
           <Route path="/cotizacion-editar/:idCotizacion" element={<EditarCotizacion />} />
+          <Route path="/detalles/:idVenta" element={<Venta />}/>
 
           {/* Ruta para trabajadores*/}
           <Route path="/trabajadores" element={<TrabajadoresIndex />} />

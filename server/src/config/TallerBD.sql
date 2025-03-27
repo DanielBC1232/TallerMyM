@@ -254,7 +254,7 @@ CREATE TABLE PRODUCTO_SERVICIO(
     porcentajeDescuento DECIMAL(10,2) NULL
 )
 GO
-
+select * from PRODUCTO_SERVICIO
 CREATE TABLE AUDITORIA_TABLAS(
 
     idAuditoria INT IDENTITY(1,1) PRIMARY KEY,
@@ -341,7 +341,6 @@ CREATE TABLE ORDEN(
 GO
 
 -- MODULO VENTAS --
-
 CREATE TABLE COTIZACION(
 
     idCotizacion INT IDENTITY(1,1) PRIMARY KEY,
@@ -359,18 +358,31 @@ GO
 
 CREATE TABLE VENTA(
 
-    idVenta INT IDENTITY(1,1) PRIMARY KEY,
+    idVenta BIGINT IDENTITY(1,1) PRIMARY KEY,
 
-    costoReparacion DECIMAL(10,2) NOT NULL,
-    fechaIngreso DATETIME NOT NULL,
-    fechaSalida DATETIME NOT NULL,
-    tipoPago VARCHAR(30),--credito o contado
-    montoTotal DECIMAL(10,2) NOT NULL,
+    fechaVenta DATE DEFAULT GETDATE(),
+    tipoPago VARCHAR(30) NOT NULL,--credito o contado
+    montoTotal DECIMAL(10,2) DEFAULT 0 NULL,
+	detalles NVARCHAR(1024) NULL,
+	ventaConsumada BIT DEFAULT 0 NOT NULL,
 
     idOrden INT NOT NULL,
     FOREIGN KEY (idOrden) REFERENCES ORDEN(idOrden),
- 
 )
+GO
+
+CREATE TABLE PRODUCTO_POR_VENTA(
+	idProductoVenta BIGINT IDENTITY(1,1) PRIMARY KEY,
+
+	idVenta BIGINT NOT NULL,
+	idProducto INT NOT NULL,
+	cantidad INT NOT NULL,
+	monto DECIMAL(10,2) NOT NULL,
+
+	FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta),
+	FOREIGN KEY (idProducto)REFERENCES PRODUCTO_SERVICIO(idProducto)
+
+);
 GO
 
 CREATE TABLE CUOTA (

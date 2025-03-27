@@ -81,7 +81,7 @@ BEGIN
 END;
 GO
 
--- SP para optener lista de ordenes dentro de las columnas de fkujo
+-- SP para optener lista de ordenes dentro de las columnas de flujo
 CREATE OR ALTER PROCEDURE SP_GET_ORDENES
     @estadoOrden INT
 AS
@@ -96,6 +96,7 @@ BEGIN
         FORMAT(DATEDIFF(HOUR, GETDATE(), O.tiempoEstimado) % 24, '00') + ' horas, ' +
         FORMAT(DATEDIFF(MINUTE, GETDATE(), O.tiempoEstimado) % 60, '00') + ' minutos' AS TiempoRestante,
         O.descripcion,
+		O.estadoOrden,
 		V.marcaVehiculo,
         V.modeloVehiculo,
         V.annoVehiculo,
@@ -107,7 +108,6 @@ BEGIN
     INNER JOIN CLIENTE C ON C.idCliente = O.idCliente
     INNER JOIN TRABAJADOR T ON T.idTrabajador = O.idTrabajador
     WHERE O.estadoOrden = @estadoOrden 
-      AND O.estadoOrden BETWEEN 1 AND 3
     ORDER BY O.tiempoEstimado ASC;
 END;
 GO
@@ -128,6 +128,8 @@ AS BEGIN
 		O.tiempoEstimado as tiempoEstimadoOriginal,
 		O.descripcion,
 		O.estadoAtrasado,
+		O.idVehiculo,
+		O.idCliente,
 		T.idTrabajador,
 		T.nombreCompleto as nombreMecanico,
 		C.nombre + ' ' + C.apellido AS nombreCliente,
@@ -149,6 +151,208 @@ BEGIN
     UPDATE ORDEN
     SET estadoAtrasado = 1
     WHERE tiempoEstimado < GETDATE() -- Si la fecha ya pasó
-      AND estadoAtrasado = 0; -- Solo actualizar si aún no ha sido marcado
+    AND estadoAtrasado = 0
+	AND estadoOrden < 4; -- Solo actualizar si aún no ha sido marcado
+
+	  UPDATE ORDEN
+    SET estadoAtrasado = 0
+    WHERE tiempoEstimado > GETDATE() -- Si la fecha ya pasó
+     AND estadoAtrasado = 1; -- Solo actualizar si aún no ha sido marcado
+
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_INSERT_VENTA
+@idOrden INT,
+@detalles NVARCHAR(1024),
+@tipoPago VARCHAR(30)
+AS BEGIN
+
+	--Insertar la venta
+	INSERT INTO VENTA(tipoPago,detalles,idOrden)
+	VALUES(@tipoPago, @detalles, @idOrden);
+
+	--Update orden, estado orden = 5 (desaparecer del listado de ordenes al generar ventas)
+	UPDATE ORDEN SET
+	estadoOrden = 5
+	WHERE idOrden = @idOrden;
+
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_GET_VENTAS
+AS BEGIN
+
+	SELECT TOP 30
+		V.idVenta,
+		V.fechaVenta,
+		V.tipoPago,
+		V.montoTotal,
+		V.idOrden,
+		O.codigoOrden,
+		C.nombre + ' ' + C.apellido AS nombreCliente
+	FROM VENTA V
+	INNER JOIN ORDEN O ON O.idOrden = V.idOrden
+	INNER JOIN CLIENTE C ON C.idCliente = O.idCliente
+	ORDER BY V.fechaVenta ASC
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_GET_VENTA
+@idVenta INT
+AS BEGIN
+
+	SELECT
+	--Venta
+		V.idVenta,
+		V.fechaVenta,
+		V.tipoPago,
+		V.montoTotal,
+		V.detalles as VentaDetalles,
+	--Orden
+		O.codigoOrden,
+		O.descripcion as descripcionOrden,
+		O.fechaIngreso,
+	--vehiculo
+		CV.idVehiculo,
+		CV.marcaVehiculo + ' ' + CV.modeloVehiculo + ' ' + CAST(CV.annoVehiculo AS VARCHAR(4)) AS vehiculo,
+	--Cliente
+		C.nombre + ' ' + C.apellido AS nombreCliente
+	FROM VENTA V
+	INNER JOIN ORDEN O ON O.idOrden = V.idOrden
+	INNER JOIN CLIENTE C ON C.idCliente = O.idCliente
+	INNER JOIN CLIENTE_VEHICULO CV ON CV.idVehiculo = O.idVehiculo
+	WHERE V.idVenta = @idVenta
+
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_INSERTAR_PRODUCTO_VENTA
+@idVenta INT,
+@idProducto INT,
+@cantidad INT --cantidad de unidades reservadas
+AS BEGIN
+	BEGIN TRY
+		--Declarar variables
+		DECLARE @precio DECIMAL(10,2), @porcentajeDescuento DECIMAL(10,2), @monto DECIMAL(10,2), @stock INT;
+
+		BEGIN TRANSACTION; -- Iniciar transaccion
+
+		--consultar datos de producto
+		SELECT @stock = stock, @precio = precio, @porcentajeDescuento = porcentajeDescuento
+		FROM PRODUCTO_SERVICIO WITH (UPDLOCK, ROWLOCK, HOLDLOCK) --bloqueo para evitar sobreventa
+		WHERE idProducto = @idProducto;
+
+		--condicional para aplicar o no descuento
+		IF @porcentajeDescuento IS NOT NULL AND @porcentajeDescuento > 0.00
+			SET @monto = @precio - (@precio * @porcentajeDescuento); --aplicar descuento
+		ELSE
+			SET @monto = @precio;
+
+		--Insertar producto a la venta
+			INSERT INTO PRODUCTO_POR_VENTA(idVenta,idProducto,cantidad,monto)
+			VALUES (@idVenta, @idProducto,@cantidad, @monto)
+	
+		--Rebajar stock a producto
+		-- Verificar si hay suficiente stock
+		IF @stock < @cantidad
+		BEGIN
+			ROLLBACK TRANSACTION;
+				THROW 50409, 'Stock insuficiente', 1;
+			RETURN;
+		END
+
+		--update de stock
+		UPDATE PRODUCTO_SERVICIO
+		SET stock = stock - @cantidad
+		WHERE idProducto = @idProducto;
+
+		--Confirmar transaccion
+		COMMIT TRANSACTION;
+
+	END TRY
+	BEGIN CATCH
+		--manejo de errores y rollback
+		IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+		THROW 50500, 'Error inesperado en el servidor', 1;
+	END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_GET_PRODUCTOS_VENTA
+@idVenta INT
+AS BEGIN
+
+	SELECT
+		CAST(PPV.idProductoVenta AS INT) AS idProductoVenta,
+		PPV.cantidad,
+		PPV.monto,
+		PPV.monto * PPV.cantidad AS montoFinalUnitario, --monto con descuento aplicado * unidades
+	--PRODUCTO
+		PPV.idProducto,
+		P.nombre + ' ' + P.marca AS nombreProducto,
+	--VENTA
+		CAST(PPV.idVenta AS INT) AS idVenta,
+		(SELECT SUM(PPV2.monto * PPV2.cantidad) 
+             FROM PRODUCTO_POR_VENTA PPV2 
+             WHERE PPV2.idVenta = @idVenta) AS montoTotalVenta
+	FROM PRODUCTO_POR_VENTA PPV
+	INNER JOIN VENTA V ON V.idVenta = PPV.idVenta
+	INNER JOIN PRODUCTO_SERVICIO P ON P.idProducto = PPV.idProducto
+	WHERE V.idVenta = @idVenta;
+
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_DELETE_PRODUCTO_VENTA
+@idProductoVenta INT,
+@idProducto INT,
+@cantidad INT
+AS BEGIN
+    BEGIN TRY
+        DECLARE @tipo VARCHAR(25), @stock INT, @filasAfectadas INT;
+
+        BEGIN TRANSACTION;
+
+        -- Consultar datos de producto
+        SELECT @tipo = tipo, @stock = stock
+        FROM PRODUCTO_SERVICIO WITH (UPDLOCK, ROWLOCK, HOLDLOCK)
+        WHERE idProducto = @idProducto;
+
+        -- Devolver el stock, si es tipo producto
+        IF @tipo = 'PRODUCTO'
+        BEGIN
+            UPDATE PRODUCTO_SERVICIO
+            SET stock = stock + @cantidad
+            WHERE idProducto = @idProducto;
+        END
+        ELSE 
+        BEGIN
+            UPDATE PRODUCTO_SERVICIO
+            SET stock = 1
+            WHERE idProducto = @idProducto;
+        END
+
+        -- Eliminar producto de la venta y obtener filas afectadas
+        DELETE FROM PRODUCTO_POR_VENTA
+        WHERE idProductoVenta = @idProductoVenta;
+
+        SET @filasAfectadas = @@ROWCOUNT;
+
+        -- Confirmar transacción
+        COMMIT TRANSACTION;
+
+        -- Retornar filas afectadas en un formato adecuado para Express.js
+        SELECT CAST(@filasAfectadas AS INT) AS filasAfectadas;
+    END TRY
+    BEGIN CATCH
+        -- Manejo de errores y rollback
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        -- Retornar -1 en caso de error
+        SELECT CAST(-1 AS INT) AS filasAfectadas;
+    END CATCH
 END;
 GO

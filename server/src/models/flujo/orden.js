@@ -86,7 +86,7 @@ export class OrdenRepository {
     }
 
     // Actualizar Orden
-    async updateOrden(idOrden, tiempoEstimado, idTrabajador, descripcion, estadoAtrasado) {
+    async updateOrden(idOrden, tiempoEstimado, idTrabajador,idVehiculo, descripcion, estadoAtrasado) {
         try {
             const pool = await connectDB();
             const result = await pool
@@ -94,13 +94,15 @@ export class OrdenRepository {
                 .input('idOrden', sql.Int, idOrden)
                 .input('tiempoEstimado', sql.DateTime, tiempoEstimado)
                 .input('idTrabajador', sql.Int, idTrabajador)
+                .input('idVehiculo', sql.Int, idVehiculo)
                 .input('descripcion', sql.NVarChar(2048), descripcion)
                 .input('estadoAtrasado', sql.Bit, estadoAtrasado)
                 .query(`
                     UPDATE ORDEN
                     SET tiempoEstimado = @tiempoEstimado,
                         idTrabajador = @idTrabajador,
-                        descripcion = @descripcion,
+                        idVehiculo = @idVehiculo,
+                        [descripcion] = @descripcion,
                         estadoAtrasado = @estadoAtrasado
                     WHERE idOrden = @idOrden`);
             return result.rowsAffected[0]; // Devuelve el número de filas afectadas

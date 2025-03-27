@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate, useParams, Link } from "react-router-dom";
 
 import SelectTrabajadores from "../components/SelectTrabajadores";
+import SelectVehiculos from "../components/SelectVehiculos";
 
 //URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -17,6 +18,8 @@ const Editar = () => {
     idOrden: 0,
     tiempoEstimado: "",
     idTrabajador: null,
+    idVehiculo:null,
+    idCliente:null,
     descripcion: "",
     estadoAtrasado: 0,
 
@@ -104,6 +107,8 @@ useEffect(() => {
         idOrden: data.idOrden,
         tiempoEstimado: convertDateFormat(data.tiempoEstimado),
         idTrabajador: data.idTrabajador,
+        idVehiculo: data.idVehiculo,
+        idCliente: data.idCliente,
         descripcion: data.descripcion,
         estadoAtrasado: data.estadoAtrasado
       }));
@@ -119,10 +124,6 @@ useEffect(() => {
   };
   obtenerOrden(); // llamar funcion
 }, [idOrden]);//cargar al tener id
-
-
-console.log("FormData: ");
-console.log(formData);
 
 const actualizarOrden = async () => {
   try {
@@ -224,6 +225,14 @@ return (
                   onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))}
                 />
               </span>
+              <span>
+                Estimado de finalización:
+                <SelectVehiculos 
+                idCliente={formData.idCliente}
+                value={formData.idVehiculo}
+                onChange={(e) => setFormData(prev => ({ ...prev, idVehiculo: e.target.value }))}
+                />
+              </span>
             </Col>
             <Col xs={12} className="column">
               <span>
@@ -237,6 +246,7 @@ return (
                   onChange={(e) => setFormData(prev => ({ ...prev, tiempoEstimado: e.target.value }))}
                 />
               </span>
+              
             </Col>
 
           </Row>

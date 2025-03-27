@@ -10,6 +10,6 @@ router.post("/", productoController_1.getAllProductos);
 router.get("/precios", productoController_1.getMinMax);
 router.get("/:id", productoController_1.getProductoById);
 router.post("/agregar-producto/", productoController_1.addProducto);
-router.patch("/actualizar-producto/", productoController_1.updateProducto);
+router.put("/actualizar-producto/", productoController_1.updateProducto);
 router.delete("/eliminar-producto/:id", productoController_1.deleteProducto);
 exports.default = router;

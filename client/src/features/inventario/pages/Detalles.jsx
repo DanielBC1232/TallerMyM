@@ -93,7 +93,6 @@ const Detalles = () => {
   //url get imagen
   const getImg = (img) => img ? `${BASE_URL}/img/${img}` : "/noResult.png";
 
-
   return (
     <div className="container main mx-auto p-5">
       <Grid fluid>
@@ -234,6 +233,18 @@ const Detalles = () => {
                     type="number"
                     className="form-control"
                     value={producto.stock}
+                    readOnly
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="descripcion" className="form-label">
+                    Descuento
+                  </label>
+                  <input
+                    type="text"
+                    name="porcentajeDescuento"
+                    className="form-control"
+                    value={(producto.porcentajeDescuento)+"%"}
                     readOnly
                   />
                 </div>

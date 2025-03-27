@@ -73,10 +73,10 @@ const siguienteFase = async (req, res) => {
 const updateOrden = async (req, res) => {
     try {
         // Requerir parámetros desde el cuerpo de la solicitud
-        const { idOrden, tiempoEstimado, idTrabajador, descripcion, estadoAtrasado } = req.body;
+        const { idOrden, tiempoEstimado, idTrabajador, idVehiculo, descripcion, estadoAtrasado } = req.body;
 
         // Usar el método de actualizar del repositorio
-        const orden = await OrdenRepo.updateOrden(idOrden, tiempoEstimado, idTrabajador, descripcion, estadoAtrasado);
+        const orden = await OrdenRepo.updateOrden(idOrden, tiempoEstimado, idTrabajador, idVehiculo, descripcion, estadoAtrasado);
 
         // Enviar la respuesta
         res.status(200).json({ message: "Orden actualizado correctamente", rowsAffected: orden });

@@ -125,10 +125,8 @@ export class TrabajadorRepository {
             const result = await pool
                 .request()
                 .input('idTrabajador', sql.Int, idTrabajador)
-                .query(`
-                    DELETE FROM TRABAJADOR
-                    WHERE idTrabajador = @idTrabajador
-                `);
+                .query(`DELETE FROM TRABAJADOR
+                    WHERE idTrabajador = @idTrabajador`);
             return result.rowsAffected; // Devuelve el número de filas afectadas
         } catch (error) {
             console.error('Error en eliminar trabajador:', error);
