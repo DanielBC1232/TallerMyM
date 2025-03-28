@@ -60,7 +60,7 @@ const IndexTrabajadores = () => {
           
             <Col xs={11}>
               <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px" }}>
-                <Link to="#" className="btn-link">Aprobar Vacaciones</Link>
+                <Link to="/GestionarSolicitud-Vacaciones" className="btn-link">Aprobar Vacaciones</Link>
               </Button>
             </Col>
           </Row>

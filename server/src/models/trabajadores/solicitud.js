@@ -34,6 +34,17 @@ class SolicitudRepository {
     }
   }
 
+  async getVacacionesGest() {
+    try {
+      const pool = await connectDB();
+      const result = await pool.request().query("SELECT idVacaciones,solicitud,fechaInicio,fechaFin,motivoRechazo,idTrabajador FROM VACACIONES");
+      return result.recordset;
+    } catch (error) {
+      console.error("Error al obtener todos los clientes:", error);
+      throw new Error("Error al obtener clientes");
+    }
+  }
+
 }
 
 module.exports = { Solicitud, SolicitudRepository };
