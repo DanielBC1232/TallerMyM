@@ -19,11 +19,14 @@ const insertVenta = async (req, res) => {
     }
 };
 
-const getVentas = async (_req, res) => {
+const getVentas = async (req, res) => {
     try {
 
+        const { nombreCliente, codigoOrden } = req.body;
+        console.log(nombreCliente,codigoOrden);
+        
         // Usar el método de listado del repositorio
-        const venta = await VentaRepo.getVentas();
+        const venta = await VentaRepo.getVentas(nombreCliente, codigoOrden);
 
         // Enviar la respuesta
         res.status(200).json(venta);

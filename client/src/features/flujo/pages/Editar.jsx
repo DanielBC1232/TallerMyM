@@ -226,7 +226,7 @@ return (
                 />
               </span>
               <span>
-                Estimado de finalización:
+                Vehiculo:
                 <SelectVehiculos 
                 idCliente={formData.idCliente}
                 value={formData.idVehiculo}

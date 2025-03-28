@@ -181,20 +181,44 @@ END;
 GO
 
 CREATE OR ALTER PROCEDURE SP_GET_VENTAS
-AS BEGIN
+    @codigoOrden VARCHAR(50) = NULL,
+    @nombreCliente VARCHAR(50) = NULL
+AS
+BEGIN
+    DECLARE @sql NVARCHAR(MAX) = N'';
+    DECLARE @where NVARCHAR(MAX) = N'WHERE 1 = 1 ';
+    DECLARE @paramDefinition NVARCHAR(MAX) = N'@codigoOrden VARCHAR(50), @nombreCliente VARCHAR(50)';
+    DECLARE @top NVARCHAR(10);
 
-	SELECT TOP 30
-		V.idVenta,
-		V.fechaVenta,
-		V.tipoPago,
-		V.montoTotal,
-		V.idOrden,
-		O.codigoOrden,
-		C.nombre + ' ' + C.apellido AS nombreCliente
-	FROM VENTA V
-	INNER JOIN ORDEN O ON O.idOrden = V.idOrden
-	INNER JOIN CLIENTE C ON C.idCliente = O.idCliente
-	ORDER BY V.fechaVenta ASC
+    IF @codigoOrden IS NULL AND @nombreCliente IS NULL
+        SET @top = N'TOP 15';
+    ELSE
+        SET @top = N'TOP 30';
+
+    -- Filtros dinamicos
+    IF @codigoOrden IS NOT NULL
+        SET @where += N' AND O.codigoOrden LIKE ''%'' +  @codigoOrden + ''%'' ';
+
+    IF @nombreCliente IS NOT NULL
+        SET @where += N' AND (C.nombre + '' '' + C.apellido) LIKE ''%'' + @nombreCliente + ''%'' ';
+
+    -- consulta final
+    SET @sql = N'SELECT ' + @top + '
+        V.idVenta,
+        V.fechaVenta,
+        V.tipoPago,
+        V.montoTotal,
+        V.idOrden,
+        O.codigoOrden,
+        C.nombre + '' '' + C.apellido AS nombreCliente
+    FROM VENTA V
+    INNER JOIN ORDEN O ON O.idOrden = V.idOrden
+    INNER JOIN CLIENTE C ON C.idCliente = O.idCliente
+    ' + @where + N'
+    ORDER BY V.fechaVenta ASC;';
+
+    -- Ejecutar SQL
+    EXEC sp_executesql @sql, @paramDefinition, @codigoOrden = @codigoOrden, @nombreCliente = @nombreCliente;
 END;
 GO
 

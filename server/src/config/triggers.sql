@@ -509,13 +509,6 @@ BEGIN
 
     UNION ALL
 
-    SELECT 'U', 'ORDEN', i.idOrden, 'tiempoEstimado', CONVERT(VARCHAR, d.tiempoEstimado, 120), CONVERT(VARCHAR, i.tiempoEstimado, 120), GETDATE(), SUSER_NAME(), HOST_NAME()
-    FROM inserted i
-    INNER JOIN deleted d ON i.idOrden = d.idOrden
-    WHERE i.tiempoEstimado <> d.tiempoEstimado
-
-    UNION ALL
-
     SELECT 'U', 'ORDEN', i.idOrden, 'idVehiculo', CAST(d.idVehiculo AS VARCHAR), CAST(i.idVehiculo AS VARCHAR), GETDATE(), SUSER_NAME(), HOST_NAME()
     FROM inserted i
     INNER JOIN deleted d ON i.idOrden = d.idOrden

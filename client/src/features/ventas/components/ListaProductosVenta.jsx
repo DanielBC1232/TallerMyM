@@ -3,7 +3,6 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
-
 //URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -11,6 +10,7 @@ const ListaProductosVenta = () => {
     const { idVenta } = useParams();
     const [reload, setReload] = useState(0);//listado
     const [productos, setProductos] = useState([]);//listado
+
     useEffect(() => {
         const obtenerDatos = async () => {
             try {
@@ -25,27 +25,47 @@ const ListaProductosVenta = () => {
             obtenerDatos();
         }
     }, [idVenta, reload]);
+    
 
     // Remover producto de la venta
     async function RemoverProductoVenta(id, idProductoParam, cantidadParam) {
-        try {
-            const deleteData = {
-                idProductoVenta: parseInt(id),
-                idProducto: parseInt(idProductoParam),
-                cantidad: parseInt(cantidadParam)
+        Swal.fire({
+            title: "¿Seguro que desea remover este producto?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Remover",
+            cancelButtonText: "Cancelar"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const deleteData = {
+                        idProductoVenta: parseInt(id),
+                        idProducto: parseInt(idProductoParam),
+                        cantidad: parseInt(cantidadParam)
+                    };
+    
+                    await axios.post(`${BASE_URL}/ventas/eliminar-producto-venta/`, deleteData);
+                    setReload(prev => prev + 1);
+    
+                    Swal.fire({
+                        text: "Producto removido correctamente",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+    
+                } catch (error) {
+                    Swal.fire({
+                        text: "Error al remover producto",
+                        icon: "error",
+                        showConfirmButton: false
+                    });
+                    console.error("Error al eliminar el producto:", error);
+                }
             }
-            console.log(deleteData)
-            const res = await axios.post(`${BASE_URL}/ventas/eliminar-producto-venta/`, deleteData);
-            setReload(prev => prev + 1);
-
-        } catch (error) {
-            Swal.fire({
-                text: "Error al remover producto",
-                icon: "error",
-                showConfirmButton: false,
-            });
-            console.error("Error al eliminar el producto:", error)
-        }
+        });
     }
 
     return (

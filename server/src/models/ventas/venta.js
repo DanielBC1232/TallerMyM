@@ -32,11 +32,13 @@ export class VentaRepository {
     }
 
     //obtener listado
-    async getVentas() {
+    async getVentas(nombreCliente, codigoOrden) {
         try {
             const pool = await connectDB();
             const result = await pool
                 .request()
+                .input('codigoOrden', sql.VarChar, codigoOrden || null)
+                .input('nombreCliente', sql.VarChar, nombreCliente || null)
                 .execute(`SP_GET_VENTAS`);
             return result.recordset; // Devuelve el listado 
         } catch (error) {

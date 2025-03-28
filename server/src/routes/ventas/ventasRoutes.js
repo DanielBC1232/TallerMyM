@@ -3,7 +3,7 @@ const ventasController = require('../../controllers/ventas/ventasController');
 const router = express.Router();
 
 router.post("/registrar-venta/", ventasController.insertVenta);
-router.get("/obtener-ventas", ventasController.getVentas);
+router.post("/obtener-ventas", ventasController.getVentas);
 router.get("/obtener-venta/:id", ventasController.getVentaById);
 router.post("/agregar-producto/", ventasController.agregarProducto);
 router.get("/obtener-productos-venta/:id", ventasController.getProductosVenta);

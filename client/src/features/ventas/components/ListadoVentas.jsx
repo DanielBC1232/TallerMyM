@@ -10,13 +10,25 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const ListadoVentas = () => {
     const navigate = useNavigate();
+    const [filtroData, setFiltroData] = useState({
+        nombreCliente: "",
+        codigoOrden: ""
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFiltroData({
+            ...filtroData,
+            [name]: value || ""
+        });
+    };
 
     //GET Ventas
     const [datos, setDatos] = useState([]);
     useEffect(() => {
         const getOrdenes = async () => {
             try {
-                const { data } = await axios.get(`${BASE_URL}/ventas/obtener-ventas`,);
+                const { data } = await axios.post(`${BASE_URL}/ventas/obtener-ventas`,filtroData);
                 setDatos(data);
                 //console.log(data);
 
@@ -25,10 +37,30 @@ const ListadoVentas = () => {
             }
         };
         getOrdenes();
-    }, []);
+    }, [filtroData]);
 
     return (
         <div>
+            <div className="d-flex gap-4 ms-4">
+                <span>
+                    Cliente:
+                    <input className="form-control form-control-sm"
+                    name="nombreCliente"
+                    type="text" 
+                    value={filtroData.nombreCliente}
+                    onChange={handleChange}
+                    />
+                </span>
+                <span>
+                    Orden:
+                    <input className="form-control form-control-sm"
+                    name="codigoOrden"
+                    type="text" 
+                    value={filtroData.codigoOrden}
+                    onChange={handleChange}
+                    />
+                </span>
+            </div>
             <Table
                 width={1300}
                 height={800}
@@ -47,11 +79,10 @@ const ListadoVentas = () => {
                 <Column width={200}>
                     <HeaderCell className="text-center">Fecha de venta</HeaderCell>
                     <Cell className="text-center">
-                    {rowData => {
-                    const fecha = new Date(rowData.fechaVenta);
-                    return `${fecha.getFullYear()}-${(fecha.getMonth() + 1).toString().padStart(2, "0")}-${fecha.getDate().toString().padStart(2, "0")}`;
-                    }}
-
+                        {rowData => {
+                            const fecha = new Date(rowData.fechaVenta);
+                            return `${fecha.getFullYear()}-${(fecha.getMonth() + 1).toString().padStart(2, "0")}-${fecha.getDate().toString().padStart(2, "0")}`;
+                        }}
                     </Cell>
                 </Column>
 
