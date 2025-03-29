@@ -30,7 +30,8 @@ const Editar = () => {
     vehiculosCompatibles: [],
     img: "",
     tipo: "",
-    porcentajeDescuento: 0
+    porcentajeDescuento: 0,
+    stockMinimo: parseInt(0) || ''
   });
 
   useEffect(() => {
@@ -462,6 +463,18 @@ const Editar = () => {
                       name="descripcion"
                       className="form-control"
                       value={(formData.descripcion)}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="stockMinimo" className="form-label">
+                      Stock Minimo:
+                    </label>
+                    <input
+                      type="number"
+                      name="stockMinimo"
+                      className="form-control"
+                      value={(formData.stockMinimo)}
                       onChange={handleChange}
                     />
                   </div>

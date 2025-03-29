@@ -41,22 +41,23 @@ const ListadoVentas = () => {
 
     return (
         <div>
+
             <div className="d-flex gap-4 ms-4">
-                <span>
-                    Cliente:
-                    <input className="form-control form-control-sm"
-                    name="nombreCliente"
-                    type="text" 
-                    value={filtroData.nombreCliente}
-                    onChange={handleChange}
-                    />
-                </span>
                 <span>
                     Orden:
                     <input className="form-control form-control-sm"
                     name="codigoOrden"
                     type="text" 
                     value={filtroData.codigoOrden}
+                    onChange={handleChange}
+                    />
+                </span>
+                <span>
+                    Cliente:
+                    <input className="form-control form-control-sm"
+                    name="nombreCliente"
+                    type="text" 
+                    value={filtroData.nombreCliente}
                     onChange={handleChange}
                     />
                 </span>

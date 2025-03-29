@@ -18,7 +18,7 @@ const database_1 = require("../../config/database");
 
 
 class ProductoServicio {
-    constructor(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento) {
+    constructor(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, stockMinimo) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.marca = marca;
@@ -33,6 +33,7 @@ class ProductoServicio {
         this.tipo = tipo;
         this.img = img;
         this.porcentajeDescuento = porcentajeDescuento;
+        this.stockMinimo = stockMinimo;
     }
 }
 
@@ -87,7 +88,8 @@ class ProductoRepository {
                         vehiculosCompatibles,
                         tipo,
                         img,
-                        porcentajeDescuento*100 as porcentajeDescuento
+                        porcentajeDescuento*100 as porcentajeDescuento,
+                        stockMinimo
                         FROM PRODUCTO_SERVICIO WHERE idProducto = @idProducto`);
                 return result.recordset.length > 0 ? result.recordset[0] : null;
             }
@@ -98,7 +100,7 @@ class ProductoRepository {
         });
     }
     // Insertar producto
-    insertProducto(nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img) {
+    insertProducto(nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, stockMinimo) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
@@ -117,13 +119,14 @@ class ProductoRepository {
                     .input("vehiculosCompatibles", mssql_1.default.NVarChar, vehiculosCompatibles)
                     .input("tipo", mssql_1.default.VarChar, tipo)
                     .input("img", mssql_1.default.VarChar, img || null)
+                    .input("stockMinimo", mssql_1.default.Int, stockMinimo || 1)
                     .query(`
                     INSERT INTO PRODUCTO_SERVICIO 
                     (nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, 
-                    proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento) 
+                    proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento,stockMinimo) 
                     VALUES 
                     (@nombre, @marca, @descripcion, @precio, @stock, @fechaIngreso, @ubicacionAlmacen, 
-                    @proveedor, @categoria, @vehiculosCompatibles, @tipo, @img, 0)`);
+                    @proveedor, @categoria, @vehiculosCompatibles, @tipo, @img, 0,@stockMinimo)`);
                 return result.rowsAffected[0];
             }
             catch (error) {
@@ -133,7 +136,7 @@ class ProductoRepository {
         });
     }
     // Actualizar producto
-    updateProducto(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento) {
+    updateProducto(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, stockMinimo) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, database_1.connectDB)();
@@ -152,6 +155,7 @@ class ProductoRepository {
                     .input("tipo", mssql_1.default.VarChar, tipo)
                     .input("img", mssql_1.default.NVarChar, img || null)
                     .input("porcentajeDescuento", mssql_1.default.Decimal(10, 2), porcentajeDescuento || 0)
+                    .input("stockMinimo", mssql_1.default.Int, stockMinimo || 1)
                     .query(`
                     UPDATE PRODUCTO_SERVICIO SET
                         nombre = @nombre,
@@ -166,10 +170,11 @@ class ProductoRepository {
                         vehiculosCompatibles = @vehiculosCompatibles,
                         tipo = @tipo,
                         img = @img,
-                        porcentajeDescuento = @porcentajeDescuento
+                        porcentajeDescuento = @porcentajeDescuento,
+                        stockMinimo = @stockMinimo
                     WHERE idProducto = @idProducto
                     `);
-                    console.log("Filas afectadas:", result.rowsAffected[0]);
+                console.log("Filas afectadas:", result.rowsAffected[0]);
                 return result.rowsAffected[0];
             }
             catch (error) {

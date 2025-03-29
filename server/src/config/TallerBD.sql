@@ -251,10 +251,11 @@ CREATE TABLE PRODUCTO_SERVICIO(
     img NVARCHAR(255) NULL,
 
     -- Opcional - Descuentos
-    porcentajeDescuento DECIMAL(10,2) NULL
+    porcentajeDescuento DECIMAL(10,2) NULL,
+	stockMinimo INT NULL
 )
 GO
-select * from PRODUCTO_SERVICIO
+
 CREATE TABLE AUDITORIA_TABLAS(
 
     idAuditoria INT IDENTITY(1,1) PRIMARY KEY,
@@ -417,17 +418,20 @@ CREATE TABLE PAGO_CUOTA (
 );
 GO
 
-CREATE TABLE NOTIFICACION(
+CREATE TABLE NOTIFICACIONES(
 
-    idNotificacion INT IDENTITY(1,1) PRIMARY KEY,
-    titulo VARCHAR(150) NOT NULL,
-    cuerpo NVARCHAR(2048) NOT NULL,
-    fecha DATETIME DEFAULT GETDATE() NOT NULL,
+    idNotificacion BIGINT IDENTITY(1,1) PRIMARY KEY,
+    titulo VARCHAR(50) NOT NULL,
+    cuerpo NVARCHAR(256) NOT NULL,
+    fecha DATE DEFAULT GETDATE() NOT NULL,
     modulo VARCHAR(50) NOT NULL,
-
-    idUsuario INT NOT NULL,
-    FOREIGN KEY (idUsuario) REFERENCES USUARIO(idUsuario)
+	tipo VARCHAR(10) NOT NULL,--error,info,warning
+	estado BIT DEFAULT 1 NOT NULL ,
 
 );
 GO
+select * from NOTIFICACIONES
 
+
+
+drop table NOTIFICACIONES

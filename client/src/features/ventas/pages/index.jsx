@@ -7,12 +7,14 @@ import {
 } from "react-router-dom";
 import ListadoVentas from "../components/ListadoVentas";
 import ListadoOrdenes from "../components/ListadoOrdenes";
+import Notificaciones from "../../../components/Notificaciones";
 
 const Index = () => {
-  const [vista, setVista] = useState("ListadoVentas");//estado para manerjar listado
+  const [vista, setVista] = useState("ListadoVentas");//estado para manejar listado
 
   return (
     <Grid className="container mt-3 rounded-0">
+      <Notificaciones modulo={'VENTAS'}/>
       <Row>
         <Col xs={2}>
           <Link className="nav-btn btn text-white rounded-0" to="/cotizacion" style={{height: "44px", textAlign: "center", paddingTop:"10px"}}>Cotizar</Link>

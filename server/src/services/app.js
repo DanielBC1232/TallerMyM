@@ -18,7 +18,7 @@ const ordenRoutes = require("../routes/flujo/ordenRoutes");
 const cotizacionRoutes = require("../routes/ventas/cotizacionRoutes");
 const trabajadoresRoutes = require("../routes/trabajadores/trabajadoresRoutes");
 const ventasRoutes = require("../routes/ventas/ventasRoutes");
-
+const notificacionesRoutes = require("../routes/notificaciones/notificacionesRoutes")
 const ClienteRoutes_1 = __importDefault(require("../routes/clientes/clienteRoutes"));
 const VehiculoRoute_1 = __importDefault(require("../routes/vehiculos/vehiculosRoutes"));
 
@@ -53,6 +53,9 @@ app.use("/vehiculos-compatibles", vehiculosCompatiblesRoutes_1.default);
 app.use("/productos", productoRoutes_1.default);
 app.use("/img", imgRoutes_1.default);
 app.use("/inventario", solicitudRoutes_1.default);
+
+//Rutas notificaciones
+app.use("/notificaciones", notificacionesRoutes);
 
 //Rutas Ventas
 app.use("/cotizacion",cotizacionRoutes);

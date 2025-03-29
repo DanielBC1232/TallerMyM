@@ -17,7 +17,7 @@ const ProductoRepo = new producto_1.ProductoRepository();
 const getAllProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //console.log(req.body);
-        const { nombre , marca, categoria, stock, rangoPrecio } = req.body;
+        const { nombre, marca, categoria, stock, rangoPrecio } = req.body;
 
         const producto = yield ProductoRepo.getAll(nombre, marca, categoria, stock, rangoPrecio); // Get
         //validaciones
@@ -56,9 +56,9 @@ exports.getProductoById = getProductoById;
 const addProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Obtener los datos del cuerpo de la solicitud
-        const { nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img } = req.body;
+        const { nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, stockMinimo } = req.body;
         // Llamar al método insertProducto para insertar el nuevo producto en la base de datos
-        const nuevoProducto = yield ProductoRepo.insertProducto(nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img);
+        const nuevoProducto = yield ProductoRepo.insertProducto(nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, stockMinimo);
         // Respuesta exitosa con el producto insertado
         res.status(201).json({
             message: "Producto insertado exitosamente",
@@ -90,12 +90,13 @@ const updateProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const vehiculosCompatibles = req.body.vehiculosCompatibles;
         const tipo = req.body.tipo;
         const img = req.body.img;
-        
+        const stockMinimo = req.body.stockMinimo;
+
         //parse a porcentaje INT a decimales FLOAT
         const porcentajeDescuento = parseFloat(req.body.porcentajeDescuento) / 100 || 0;
 
         // Llamar al metodo update Producto
-        const actualizarProducto = yield ProductoRepo.updateProducto(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento);
+        const actualizarProducto = yield ProductoRepo.updateProducto(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, stockMinimo);
         // Respuesta exitosa con el producto insertado
         res.status(201).json({
             message: "Producto actualizado exitosamente",

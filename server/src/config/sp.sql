@@ -148,19 +148,43 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+    -- Capturar ordenes que se van a marcar como atrasadas
+    DECLARE @OrdenesAtrasadas TABLE (idOrden INT);
+
+    -- Marcar ordenes como atrasadas si la fecha estimada ya vencio
     UPDATE ORDEN
     SET estadoAtrasado = 1
-    WHERE tiempoEstimado < GETDATE() -- Si la fecha ya pasó
-    AND estadoAtrasado = 0
-	AND estadoOrden < 4; -- Solo actualizar si aún no ha sido marcado
+    OUTPUT inserted.idOrden INTO @OrdenesAtrasadas
+    WHERE tiempoEstimado < GETDATE() 
+    AND estadoAtrasado = 0 
+    AND estadoOrden < 4;
 
-	  UPDATE ORDEN
+    -- Insertar notificacion
+    INSERT INTO NOTIFICACIONES (titulo, cuerpo, modulo, tipo)
+    SELECT 
+        'Orden Atrasada', 
+        'La orden con código ' + O.codigoOrden + ' se encuentra atrasada.', 
+        'FLUJO', 
+        'error'
+    FROM @OrdenesAtrasadas OA
+    INNER JOIN ORDEN O ON OA.idOrden = O.idOrden
+    WHERE NOT EXISTS (
+        SELECT 1 
+        FROM NOTIFICACIONES N 
+        WHERE N.titulo = 'Orden Atrasada' 
+        AND N.modulo = 'FLUJO' 
+        AND N.cuerpo LIKE '%código ' + O.codigoOrden + '%'
+    );
+
+    -- Marcar órdenes como NO atrasadas (en condicional contraria)
+    UPDATE ORDEN
     SET estadoAtrasado = 0
-    WHERE tiempoEstimado > GETDATE() -- Si la fecha ya pasó
-     AND estadoAtrasado = 1; -- Solo actualizar si aún no ha sido marcado
+    WHERE tiempoEstimado > GETDATE() 
+    AND estadoAtrasado = 1;
 
 END;
 GO
+
 
 CREATE OR ALTER PROCEDURE SP_INSERT_VENTA
 @idOrden INT,
@@ -289,7 +313,10 @@ AS BEGIN
 		--update de stock
 		UPDATE PRODUCTO_SERVICIO
 		SET stock = stock - @cantidad
-		WHERE idProducto = @idProducto;
+		WHERE idProducto = @idProducto 
+		AND tipo = 'PRODUCTO';
+
+		EXEC SP_NOTIFICACION_STOCK;
 
 		--Confirmar transaccion
 		COMMIT TRANSACTION;
@@ -380,3 +407,88 @@ AS BEGIN
     END CATCH
 END;
 GO
+
+
+--NOTIFICACIONES
+CREATE OR ALTER PROCEDURE SP_INSERT_NOTIFICACIONES
+@titulo VARCHAR(50),
+@cuerpo NVARCHAR(256),
+@modulo VARCHAR(50),
+@tipo VARCHAR(10)
+AS BEGIN
+
+	INSERT INTO NOTIFICACIONES(titulo, cuerpo, modulo, tipo)
+	VALUES(@titulo,@cuerpo,@modulo,@tipo)
+
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_DESCARTAR_NOTIFICACIONES
+@idNotificacion BIGINT
+AS BEGIN
+
+	UPDATE NOTIFICACIONES
+	SET estado = 0
+	WHERE idNotificacion = @idNotificacion
+
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_NOTIFICACION_STOCK
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE 
+        @nombreProducto VARCHAR(100),
+        @marca VARCHAR(100),
+        @tipo VARCHAR(50),
+        @cuerpo NVARCHAR(256);
+
+    -- Cursor para recorrer productos con stock bajo
+    DECLARE stock_cursor CURSOR FAST_FORWARD FOR
+        SELECT nombre, marca, tipo
+        FROM PRODUCTO_SERVICIO
+        WHERE stockMinimo IS NOT NULL
+          AND stock <= stockMinimo;
+
+    OPEN stock_cursor;
+    FETCH NEXT FROM stock_cursor INTO @nombreProducto, @marca, @tipo;
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        -- Si el producto es de tipo 'SERVICIO', no generar notificación.
+        IF UPPER(@tipo) <> 'SERVICIO'
+        BEGIN
+            -- Construir el cuerpo de la notificación
+            IF UPPER(@marca) = 'NINGUNO'
+                SET @cuerpo = 'El stock de ' + @nombreProducto + ' esta por acabar';
+            ELSE
+                SET @cuerpo = 'El stock de ' + @nombreProducto + ' ' + @marca + ' esta por acabar';
+
+            -- Verificar si ya existe una notificación similar para evitar duplicados
+            IF NOT EXISTS (
+                SELECT 1 
+                FROM NOTIFICACIONES 
+                WHERE titulo = 'Stock' 
+                  AND modulo = 'INVENTARIO' 
+                  AND cuerpo LIKE '%' + @nombreProducto + '%'
+            )
+            BEGIN
+                EXEC SP_INSERT_NOTIFICACIONES
+                    'Stock',
+                    @cuerpo,
+                    'INVENTARIO',
+                    'warning';
+            END;
+        END;
+
+        FETCH NEXT FROM stock_cursor INTO @nombreProducto, @marca, @tipo;
+    END;
+
+    CLOSE stock_cursor;
+    DEALLOCATE stock_cursor;
+END;
+GO
+
+
+

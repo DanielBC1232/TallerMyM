@@ -1,7 +1,7 @@
 USE msdb;
 
+--JOB para cambiar estado atrasado
 DECLARE @jobId UNIQUEIDENTIFIER;
-
 -- Crear el Job
 EXEC sp_add_job 
     @job_name = N'ActualizarOrdenesAtrasadas', 
@@ -34,12 +34,12 @@ EXEC sp_add_jobstep
 -- Agregar un Schedule (Ejecutar cada 10 minutos)
 EXEC sp_add_jobschedule 
     @job_id = @jobId, 
-    @name = N'Cada 10 minutos', 
+    @name = N'Cada 5 minutos', 
     @enabled = 1, 
     @freq_type = 4, -- Diario
     @freq_interval = 1, 
     @freq_subday_type = 4, -- Minutos
-    @freq_subday_interval = 10, -- Cada 10 minutos
+    @freq_subday_interval = 5, -- Cada 10 minutos
     @active_start_date = 20250318, -- Fecha de inicio
     @active_start_time = 000000; -- Hora de inicio
 
