@@ -10,13 +10,9 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const ListadoOrdenes = () => {
     const navigate = useNavigate();
-    const [inputCantidad, setInputCantidad] = useState({
-        cantidad: ""
-    })
     const [formData, setFormData] = useState({
         idOrden: 0,
-        detalles: "",
-        tipoPago: "",
+        detalles: ""
     });
 
     const [open, setOpen] = React.useState(false);
@@ -121,8 +117,8 @@ const ListadoOrdenes = () => {
 
                     <Cell className="text-center" style={{ padding: '6px' }}>
                         {rowData => (
-                            <Button className="btn btn-sm text-white btn-secondary rounded-1" 
-                            onClick={() => GenerarVenta(rowData.idOrden)}>
+                            <Button className="btn btn-sm text-white btn-secondary rounded-1"
+                                onClick={() => GenerarVenta(rowData.idOrden)}>
                                 Generar Venta
                             </Button>
                         )}
@@ -131,49 +127,36 @@ const ListadoOrdenes = () => {
             </Table>
 
             <Modal open={open} onClose={handleClose}>
-        <form onSubmit={handleSubmit}>
-          <Modal.Header className="px-3 pt-3">
-            <Modal.Title className="text-center">
-              <Text size="xxl" className="text-secondary">
-                Generar venta
-              </Text>
-            </Modal.Title>
-            <hr className="text-secondary" />
-          </Modal.Header>
-          <Modal.Body className="px-3">
-            <div>
-              <span>Detalles:</span>
-              <textarea
-                name="detalles"
-                className="form-control form-control-sm"
-                rows={4}
-                placeholder="Espacio opcional"
-                onChange={handleChange}
-                value={formData.detalles}
-              ></textarea>
-            </div>
-            <div className="my-4">
-              <span>Método de pago:</span>
-              <select
-                name="tipoPago"
-                className="form-select form-select-sm"
-                onChange={handleChange}
-                value={formData.tipoPago}
-              >
-                <option value="">Seleccionar...</option>
-                <option value="contado">De contado</option>
-                <option value="credito">A credito</option>
-              </select>
-            </div>
-          </Modal.Body>
-          <Modal.Footer className="p-3 mb-3">
-            <Button appearance="primary" type="submit">
-              Generar
-            </Button>
-          </Modal.Footer>
-        </form>
-      </Modal>
-    </div>
+                <form onSubmit={handleSubmit}>
+                    <Modal.Header className="px-3 pt-3">
+                        <Modal.Title className="text-center">
+                            <Text size="xxl" className="text-secondary">
+                                Generar venta
+                            </Text>
+                        </Modal.Title>
+                        <hr className="text-secondary" />
+                    </Modal.Header>
+                    <Modal.Body className="px-3">
+                        <div>
+                            <span>Detalles:</span>
+                            <textarea
+                                name="detalles"
+                                className="form-control form-control-sm"
+                                rows={4}
+                                placeholder="Espacio opcional"
+                                onChange={handleChange}
+                                value={formData.detalles}
+                            ></textarea>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer className="p-3 mb-3">
+                        <Button appearance="primary" type="submit">
+                            Generar
+                        </Button>
+                    </Modal.Footer>
+                </form>
+            </Modal>
+        </div>
     );
 }
 export default ListadoOrdenes;

@@ -17,7 +17,7 @@
 
 .nav-container{
     background: #fff;
-    height: 85vh;
+    min-height: 85vh;
     margin-bottom: 10px;
 }
 
@@ -27,8 +27,9 @@
 }
 
 .ven-col{
-    height: 90vh;
+    min-height: 90vh;
     background: #fff;
+    margin-bottom: 20px;
 }
 
 input[type="number"]::-webkit-outer-spin-button,

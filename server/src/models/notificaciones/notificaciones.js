@@ -41,8 +41,8 @@ export class NotificacionesRepository {
                     WHERE idNotificacion = @idNotificacion`);
             return result.recordset; // Devuelve el número de filas afectadas
         } catch (error) {
-            console.error('M-Error al obtener notificaciones:', error);
-            throw new Error('M-Error al obtener notificaciones:');
+            console.error('M-Error al eliminar notificacion:', error);
+            throw new Error('M-Error al eliminar notificacion:');
         }
     }
 

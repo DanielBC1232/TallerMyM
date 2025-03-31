@@ -271,51 +271,7 @@ CREATE TABLE AUDITORIA_TABLAS(
 );
 GO
 
--- MODULO FINANZAS --
 
-CREATE TABLE PAGO_CLIENTE(
-
-    idPago INT IDENTITY(1,1) PRIMARY KEY,
-    monto DECIMAL(10,2) NOT NULL,
-    metodoPago VARCHAR(100),
-    fecha DATETIME NOT NULL,
-    estado VARCHAR(50),--cancelado, pendiente, atrasado
-    descripcion NVARCHAR(MAX) NOT NULL,
-
-    FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta)
-    idCliente INT NOT NULL,
-    FOREIGN KEY (idCliente) REFERENCES CLIENTE(idCliente),
-
-)
-GO
-
-CREATE TABLE GASTO_OPERATIVO(
-
-    idGastoOperativo INT IDENTITY(1,1) PRIMARY KEY,
-    monto DECIMAL(10,2) NOT NULL,
-    fecha DATETIME NOT NULL,
-    idProveedor INT NOT NULL,
-    FOREIGN KEY (idProveedor) REFERENCES PROVEEDOR(idProveedor)
-)
-GO
-
-CREATE TABLE DEVOLUCION(
-
-    idDevolucion INT IDENTITY(1,1) PRIMARY KEY,
-    monto DECIMAL(10,2) NOT NULL,
-    fecha DATETIME NOT NULL,
-    razon NVARCHAR(MAX) NOT NULL,
-    codigoOrden VARCHAR(9) NOT NULL
-)
-GO
-
-CREATE TABLE INGRESO(
-
-    idIngreso INT IDENTITY(1,1) PRIMARY KEY,
-    monto DECIMAL(10,2) NOT NULL,
-    fecha DATE NOT NULL
-)
-GO
 
 -- MODULO CONTROL DE FLUJO --
 
@@ -362,10 +318,9 @@ CREATE TABLE VENTA(
     idVenta BIGINT IDENTITY(1,1) PRIMARY KEY,
 
     fechaVenta DATE DEFAULT GETDATE(),
-    tipoPago VARCHAR(30) NOT NULL,--credito o contado
     montoTotal DECIMAL(10,2) DEFAULT 0 NULL,
 	detalles NVARCHAR(1024) NULL,
-	ventaConsumada BIT DEFAULT 0 NOT NULL,
+	ventaConsumada BIT DEFAULT 0 NOT NULL,--pagado o no pagado
 
     idOrden INT NOT NULL,
     FOREIGN KEY (idOrden) REFERENCES ORDEN(idOrden),
@@ -386,38 +341,6 @@ CREATE TABLE PRODUCTO_POR_VENTA(
 );
 GO
 
-CREATE TABLE CUOTA (
-    
-    idCuota INT IDENTITY(1,1) PRIMARY KEY,
-    montoTotal DECIMAL(10,2) NOT NULL,
-    montoCuota DECIMAL(10,2) NOT NULL,
-    fechaInicio DATE NOT NULL,
-    fechaLimite DATE NOT NULL,
-    numeroCuotas INT NOT NULL,
-    estado VARCHAR(50) DEFAULT 'Pendiente',
-
-    --FK
-    idCliente INT NOT NULL,
-    idVenta INT NOT NULL,
-    FOREIGN KEY (idCliente) REFERENCES CLIENTE(idCliente) ON DELETE CASCADE,
-    FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta) ON DELETE CASCADE
-)
-GO
-
-CREATE TABLE PAGO_CUOTA (
-    idPagoCuota INT IDENTITY(1,1) PRIMARY KEY,
-    numeroCuota INT NOT NULL,
-    fechaVencimiento DATE NOT NULL,
-    fechaPago DATE NOT NULL,
-    montoPagado DECIMAL(10,2) NOT NULL,
-    penalidad DECIMAL(10,2) DEFAULT 0.00,--penalidad si la fecha de pago es mayor a la de vencimiento
-
-    idCuota INT NOT NULL,
-    FOREIGN KEY (idCuota) REFERENCES CUOTA(idCuota) ON DELETE CASCADE
-
-);
-GO
-
 CREATE TABLE NOTIFICACIONES(
 
     idNotificacion BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -430,8 +353,53 @@ CREATE TABLE NOTIFICACIONES(
 
 );
 GO
-select * from NOTIFICACIONES
+
+-- MODULO FINANZAS --
+
+--JOB notificacion de atrasado y correo al cliente: VENTA.fechaVenta > 3 semanas and VENTA.ventaConsumada = 0 (no pagado)
+--Listado de pagos atrasados: VENTA.fechaVenta > 3 semanas and VENTA.ventaConsumada = 0
+CREATE TABLE PAGO_CLIENTE(
+
+    idPago BIGINT IDENTITY(1,1) PRIMARY KEY,
+    monto DECIMAL(10,2) NOT NULL,
+	dineroVuelto DECIMAL(10,2) NOT NULL,
+    metodoPago VARCHAR(15) NOT NULL,--efectivo, transferencia
+    fecha DATE DEFAULT GETDATE() NOT NULL,
+	--FK
+    idVenta BIGINT NOT NULL,
+    FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta)
+);
+GO
+
+CREATE TABLE DEVOLUCION(
+
+    idDevolucion BIGINT IDENTITY(1,1) PRIMARY KEY,
+    monto DECIMAL(10,2) NOT NULL,
+    motivo VARCHAR(512) NOT NULL,
+    fecha DATE DEFAULT GETDATE() NOT NULL,
+	--FK
+	idVenta BIGINT NOT NULL,
+    FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta)
+);
+GO
+
+CREATE TABLE GASTO_OPERATIVO(
+
+    idGastoOperativo BIGINT IDENTITY(1,1) PRIMARY KEY,
+    monto DECIMAL(10,2) NOT NULL,
+    fecha DATE DEFAULT GETDATE() NOT NULL,
+	detalle VARCHAR(512) NOT NULL,
+    idProveedor INT NOT NULL,
+    FOREIGN KEY (idProveedor) REFERENCES PROVEEDOR(idProveedor)
+)
+GO
 
 
+CREATE TABLE INGRESO(
 
-drop table NOTIFICACIONES
+    idIngreso INT IDENTITY(1,1) PRIMARY KEY,
+    monto DECIMAL(10,2) NOT NULL,
+    fecha DATE NOT NULL
+)
+GO
+

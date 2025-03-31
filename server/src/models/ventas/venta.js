@@ -2,10 +2,9 @@ import sql from 'mssql';
 import { connectDB } from '../../config/database.js';
 
 export class Venta {
-    constructor(idVenta, fechaVenta, tipoPago, montoTotal, detalles, idOrden) {
+    constructor(idVenta, fechaVenta, montoTotal, detalles, idOrden) {
         this.idVenta = idVenta;
         this.fechaVenta = fechaVenta;
-        this.tipoPago = tipoPago;
         this.montoTotal = montoTotal;
         this.detalles = detalles;
         this.idOrden = idOrden;
@@ -15,14 +14,13 @@ export class Venta {
 export class VentaRepository {
 
     // Método para insertar venta
-    async insertVenta(idOrden, detalles, tipoPago) {
+    async insertVenta(idOrden, detalles) {
         try {
             const pool = await connectDB();
             const result = await pool
                 .request()
                 .input('idOrden', sql.Int, idOrden)
                 .input('detalles', sql.NVarChar, detalles)
-                .input('tipoPago', sql.VarChar, tipoPago)
                 .execute(`SP_INSERT_VENTA`);
             return result.rowsAffected[0]; // Devuelve el número de filas afectadas
         } catch (error) {

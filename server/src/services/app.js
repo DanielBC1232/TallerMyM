@@ -21,10 +21,12 @@ const ventasRoutes = require("../routes/ventas/ventasRoutes");
 const notificacionesRoutes = require("../routes/notificaciones/notificacionesRoutes")
 const ClienteRoutes_1 = __importDefault(require("../routes/clientes/clienteRoutes"));
 const VehiculoRoute_1 = __importDefault(require("../routes/vehiculos/vehiculosRoutes"));
-
+const pagoClienteRoutes = require("../routes/finanzas/pagoClienteRoutes");
+const devolucionRoutes = require("../routes/finanzas/devolucionRoutes");
 const Usuario_1 = __importDefault(require("../models/usuario/usuario"));
 const database_1 = require("../config/database");
 const emailServices_1 = require("../services/emailServices"); 
+
 const app = (0, express_1.default)();
 app.use(express_1.default.json()); // Middleware
 const PORT = 3000; // Iniciar servidor
@@ -60,6 +62,11 @@ app.use("/notificaciones", notificacionesRoutes);
 //Rutas Ventas
 app.use("/cotizacion",cotizacionRoutes);
 app.use("/ventas",ventasRoutes);
+
+//Finanzas
+app.use("/finanzas",pagoClienteRoutes);
+app.use("/finanzas",devolucionRoutes);
+
 //trabajadores
 app.use("/trabajadores",trabajadoresRoutes);
 

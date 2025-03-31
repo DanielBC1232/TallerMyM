@@ -6,10 +6,10 @@ const VentaRepo = new VentaRepository();
 const insertVenta = async (req, res) => {
     try {
         // Requerir parámetros desde el cuerpo de la solicitud
-        const { idOrden, detalles, tipoPago } = req.body;
+        const { idOrden, detalles } = req.body;
 
         // Usar el método de inserción del repositorio
-        const venta = await VentaRepo.insertVenta(idOrden, detalles, tipoPago);
+        const venta = await VentaRepo.insertVenta(idOrden, detalles);
 
         // Enviar la respuesta
         res.status(201).json({ message: "Venta insertada correctamente", rowsAffected: venta });

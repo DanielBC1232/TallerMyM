@@ -164,7 +164,7 @@ BEGIN
     SELECT 
         'Orden Atrasada', 
         'La orden con código ' + O.codigoOrden + ' se encuentra atrasada.', 
-        'FLUJO', 
+        'flujo', 
         'error'
     FROM @OrdenesAtrasadas OA
     INNER JOIN ORDEN O ON OA.idOrden = O.idOrden
@@ -172,7 +172,7 @@ BEGIN
         SELECT 1 
         FROM NOTIFICACIONES N 
         WHERE N.titulo = 'Orden Atrasada' 
-        AND N.modulo = 'FLUJO' 
+        AND N.modulo = 'flujo' 
         AND N.cuerpo LIKE '%código ' + O.codigoOrden + '%'
     );
 
@@ -185,16 +185,14 @@ BEGIN
 END;
 GO
 
-
 CREATE OR ALTER PROCEDURE SP_INSERT_VENTA
 @idOrden INT,
-@detalles NVARCHAR(1024),
-@tipoPago VARCHAR(30)
+@detalles NVARCHAR(1024)
 AS BEGIN
 
 	--Insertar la venta
-	INSERT INTO VENTA(tipoPago,detalles,idOrden)
-	VALUES(@tipoPago, @detalles, @idOrden);
+	INSERT INTO VENTA(detalles,idOrden)
+	VALUES(@detalles, @idOrden);
 
 	--Update orden, estado orden = 5 (desaparecer del listado de ordenes al generar ventas)
 	UPDATE ORDEN SET
@@ -230,7 +228,6 @@ BEGIN
     SET @sql = N'SELECT ' + @top + '
         V.idVenta,
         V.fechaVenta,
-        V.tipoPago,
         V.montoTotal,
         V.idOrden,
         O.codigoOrden,
@@ -254,7 +251,6 @@ AS BEGIN
 	--Venta
 		V.idVenta,
 		V.fechaVenta,
-		V.tipoPago,
 		V.montoTotal,
 		V.detalles as VentaDetalles,
 	--Orden
@@ -470,14 +466,14 @@ BEGIN
                 SELECT 1 
                 FROM NOTIFICACIONES 
                 WHERE titulo = 'Stock' 
-                  AND modulo = 'INVENTARIO' 
+                  AND modulo = 'inventario' 
                   AND cuerpo LIKE '%' + @nombreProducto + '%'
             )
             BEGIN
                 EXEC SP_INSERT_NOTIFICACIONES
                     'Stock',
                     @cuerpo,
-                    'INVENTARIO',
+                    'inventario',
                     'warning';
             END;
         END;
