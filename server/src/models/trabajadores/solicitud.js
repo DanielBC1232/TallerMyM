@@ -81,8 +81,7 @@ class SolicitudRepository {
         .request()
         .input("idVacaciones", sql.Int, idVacaciones)
         
-        .query(`DELETE VACACIONES SET solicitud = 'Aprobado' 
-          WHERE idVacaciones = @idVacaciones`);
+        .query(`DELETE VACACIONES  WHERE idVacaciones = @idVacaciones`);
   
       return result.rowsAffected[0] > 0;
     } catch (error) {
