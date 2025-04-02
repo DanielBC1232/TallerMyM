@@ -23,12 +23,11 @@ router.delete("/eliminar-trabajador/:id", trabajadorController.deleteTrabajador)
 // Rutas Crud
 router.post("/Solicitud-Vacaciones", SolicitudController.InsertSolicitudVacaciones);
 router.put("/Edit-Vacaciones/:idVacaciones", SolicitudController.UpdateSolicitudVacaciones);
-//router.delete("/Elim-Vacaciones/", SolicitudController.DeleteSolicitudVacaciones);
+router.delete("/Elim-Vacaciones/:idVacaciones", SolicitudController.DeleteSolicitudVacaciones);
 
 //aprobar y rechazar
-
-//router.put("/Aprovar-Vacaciones/:idVacaciones", SolicitudController.**);
-//router.put("/Rechazar-Vacaciones/:idVacaciones", SolicitudController.**);
+router.put("/Aprob-Vacaciones/:idVacaciones", SolicitudController.AprobarSolicitudVacaciones);
+router.put("/Rechazar-Vacaciones/:idVacaciones", SolicitudController.RechazarSolicitudVacaciones);
 
 //Rutas Get
 router.get("/obteneTrabajadoresMenu", trabajadorController.obtenerTrabajadoresMenuDesplegable);

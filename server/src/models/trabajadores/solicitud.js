@@ -36,7 +36,7 @@ class SolicitudRepository {
   }
 
    // Actualizar Solicitud
-   async UpdateSolicitud(idVacaciones, datosActualizados) {
+  async UpdateSolicitud(idVacaciones, datosActualizados) {
     try {
       const pool = await connectDB();
       
@@ -71,6 +71,71 @@ class SolicitudRepository {
     }
   }
 
+  async DeleteSolicitud(idVacaciones) {
+    try {
+      const pool = await connectDB();
+      
+      
+  
+      const result = await pool
+        .request()
+        .input("idVacaciones", sql.Int, idVacaciones)
+        
+        .query(`DELETE VACACIONES SET solicitud = 'Aprobado' 
+          WHERE idVacaciones = @idVacaciones`);
+  
+      return result.rowsAffected[0] > 0;
+    } catch (error) {
+      console.error("Error al actualizar la solicitud:", error);
+      throw new Error("Error al actualizar la solicitud");
+    }
+  }
+  //--------
+
+//Aprobar y Rechazar Vacaciones
+  // AprobarSolicitud
+
+  async AprobarSolicitud(idVacaciones) {
+    try {
+      const pool = await connectDB();
+      
+      
+  
+      const result = await pool
+        .request()
+        .input("idVacaciones", sql.Int, idVacaciones)
+        
+        .query(`UPDATE VACACIONES SET solicitud = 'Aprobado' 
+          WHERE idVacaciones = @idVacaciones`);
+  
+      return result.rowsAffected[0] > 0;
+    } catch (error) {
+      console.error("Error al actualizar la solicitud:", error);
+      throw new Error("Error al actualizar la solicitud");
+    }
+  }
+
+  //Rechazar
+  async RechazarSolicitud(idVacaciones,datosActualizados) {
+    try {
+      const pool = await connectDB();
+      
+      const { motivoRechazo } = datosActualizados;
+
+  
+      const result = await pool
+        .request()
+        .input("idVacaciones", sql.Int, idVacaciones)
+        .input("motivoRechazo", sql.VarChar, motivoRechazo) 
+        .query(`UPDATE VACACIONES SET solicitud = 'Rechazado',motivoRechazo = @motivoRechazo
+          WHERE idVacaciones = @idVacaciones`);
+  
+      return result.rowsAffected[0] > 0;
+    } catch (error) {
+      console.error("Error al actualizar la solicitud:", error);
+      throw new Error("Error al actualizar la solicitud");
+    }
+  }
 
 //Metodos Get
   async getVacacionesGest() {

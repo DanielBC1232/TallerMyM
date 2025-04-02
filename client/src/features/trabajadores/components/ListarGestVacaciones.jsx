@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Para redirigir a la página de edición
+import { useNavigate } from "react-router-dom";
 
 const ListarGestVacaciones = () => {
   const [vacaciones, setVacaciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filtroTrabajador, setfiltroTrabajador] = useState("");
-  const navigate = useNavigate(); // Hook para redirigir
+  const navigate = useNavigate();
 
-  // Función para obtener todas las vacaciones
   const obtenervacaciones = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/trabajadores/obtenerSolicitudVacaciones"); // obtener solicitud, fechaInicio, FechaFin, motivoRechazo, trabajador
+      const response = await axios.get("http://localhost:3000/trabajadores/obtenerSolicitudVacaciones");
       setVacaciones(response.data);
       setError("");
     } catch (error) {
@@ -23,31 +22,21 @@ const ListarGestVacaciones = () => {
     }
   };
 
-  // Obtener vacaciones al cargar el componente
   useEffect(() => {
     obtenervacaciones();
   }, []);
 
-  // Filtrar vacaciones por idTrabajador
-  const vacacionesFiltrados = vacaciones.filter((vacaciones) =>
-    vacaciones.idTrabajador &&
-    String(vacaciones.idTrabajador).includes(filtroTrabajador)
+  const vacacionesFiltrados = vacaciones.filter((vacacion) =>
+    vacacion.idTrabajador &&
+    String(vacacion.idTrabajador).includes(filtroTrabajador)
   );
 
-  // Función para redirigir a la página de edición
-  const handleAprobar = (idTrabajador) => {
-    navigate(`/AprobarVacaciones/${idTrabajador}`); // Redirige a la página de edición
+  const handleAprobar = (idVacaciones) => {
+    navigate(`/AprobarVacaciones/${idVacaciones}`);
   };
-  // Función para redirigir a la página de edición
- 
 
-  if (loading) {
-    return <p>Cargando vacaciones...</p>;
-  }
-
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
+  if (loading) return <p>Cargando vacaciones...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div className="p-6">
@@ -61,7 +50,6 @@ const ListarGestVacaciones = () => {
           className="border p-2 rounded"
         />
       </div>
-      {/* Tabla de vacaciones */}
       <table className="min-w-full bg-white border">
         <thead>
           <tr>
@@ -70,28 +58,28 @@ const ListarGestVacaciones = () => {
             <th className="py-2 px-4 border">Fecha Fin</th>
             <th className="py-2 px-4 border">Motivo de Rechazo</th>
             <th className="py-2 px-4 border">Id Trabajador</th>
-            <th className="py-2 px-4 border">Acciones</th> {/* Nueva columna */}
+            <th className="py-2 px-4 border">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {vacacionesFiltrados.map((vacacion) => (
-            <tr key={vacacion.idTrabajador}>
+            <tr key={`${vacacion.idVacaciones}-${vacacion.idTrabajador}`}>
               <td className="py-2 px-4 border">{vacacion.solicitud}</td>
-              <td className="py-2 px-4 border">{vacacion.fechaInicio}</td>
-              <td className="py-2 px-4 border">{vacacion.fechaFin}</td>
+              <td className="py-2 px-4 border">
+                {new Date(vacacion.fechaInicio).toLocaleDateString()}
+              </td>
+              <td className="py-2 px-4 border">
+                {new Date(vacacion.fechaFin).toLocaleDateString()}
+              </td>
               <td className="py-2 px-4 border">{vacacion.motivoRechazo}</td>
               <td className="py-2 px-4 border">{vacacion.idTrabajador}</td>
               <td className="py-2 px-4 border">
-                {/* Botón de editar */}
                 <button
-                  onClick={() => handleAprobar(vacacion.idTrabajador)}
+                  onClick={() => handleAprobar(vacacion.idVacaciones)}
                   className="bg-blue-500 text-white p-2 rounded"
                 >
                   Ver
                 </button>
-
-                
-
               </td>
             </tr>
           ))}

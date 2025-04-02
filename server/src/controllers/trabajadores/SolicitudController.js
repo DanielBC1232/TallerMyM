@@ -35,6 +35,61 @@ const UpdateSolicitudVacaciones = async (req, res) => {
   }
 };
 
+const DeleteSolicitudVacaciones = async (req, res) => {
+  try {
+    
+    const idVacaciones = req.params.idVacaciones;
+  //  const datosActualizados = req.body;datosActualizados
+    const actualizacionExitosa = await solicitudRepo.DeleteSolicitud(idVacaciones);
+
+    if (!actualizacionExitosa) {
+      res.status(404).json({ error: "Vehiculo no encontrado o no se pudo actualizar" });
+    } else {
+      res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
+    }
+  } catch (error) {
+    console.error("Error al actualizar cliente:", error);
+    res.status(500).json({ error: "Error al actualizar los datos del cliente" });
+  }
+};
+//---------
+//Aprobar y Rechar---
+const AprobarSolicitudVacaciones = async (req, res) => {
+  try {
+    
+    const idVacaciones = req.params.idVacaciones;
+  //  const datosActualizados = req.body;datosActualizados
+    const actualizacionExitosa = await solicitudRepo.AprobarSolicitud(idVacaciones);
+
+    if (!actualizacionExitosa) {
+      res.status(404).json({ error: "Vehiculo no encontrado o no se pudo actualizar" });
+    } else {
+      res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
+    }
+  } catch (error) {
+    console.error("Error al actualizar cliente:", error);
+    res.status(500).json({ error: "Error al actualizar los datos del cliente" });
+  }
+};
+
+const RechazarSolicitudVacaciones = async (req, res) => {
+  try {
+    
+    const idVacaciones = req.params.idVacaciones;
+   const datosActualizados = req.body;
+    const actualizacionExitosa = await solicitudRepo.RechazarSolicitud(idVacaciones,datosActualizados);
+
+    if (!actualizacionExitosa) {
+      res.status(404).json({ error: "Vehiculo no encontrado o no se pudo actualizar" });
+    } else {
+      res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
+    }
+  } catch (error) {
+    console.error("Error al actualizar cliente:", error);
+    res.status(500).json({ error: "Error al actualizar los datos del cliente" });
+  }
+};
+
 //Metodos Get
 
 //Obtener Vacaciones listado Vacaciones solicitadas (aprobar vacaciones index)
@@ -73,7 +128,9 @@ const ObtenerVacacionxID = async (req, res) => {
 };
 
 module.exports = { 
- InsertSolicitudVacaciones,UpdateSolicitudVacaciones,ObtenerVacacionesGest,ObtenerVacacionxID
+ InsertSolicitudVacaciones,UpdateSolicitudVacaciones,DeleteSolicitudVacaciones,
+ AprobarSolicitudVacaciones,RechazarSolicitudVacaciones,
+ ObtenerVacacionesGest,ObtenerVacacionxID
 };
 
 

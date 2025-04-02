@@ -38,7 +38,9 @@ const EditarVacaciones = () => {
     cargarDatos();
   }, [idVacaciones]);
 
-  // Funcionalidades de los botones
+  // Funcionalidades botes
+
+  //Handle de Guardar
   const handleSubmit = async () => {
     console.log("Datos a enviar",formValue)
     try {
@@ -50,50 +52,38 @@ const EditarVacaciones = () => {
       //se envian los datos
       console.log("Datos a enviar",datosActualizados)
 
-      await axios.put(`http://localhost:3000/trabajadores/Edit-Vacaciones/${idVacaciones}`,datosActualizados
-      );
+      await axios.put(`http://localhost:3000/trabajadores/Edit-Vacaciones/${idVacaciones}`,datosActualizados);
       alert("Solicitud actualizada correctamente");
-      navigate("/Vacacioness/list-edit");
+      navigate("/GestionarSolicitud-Vacaciones");
     } catch (error) {
       console.error("Error al guardar:", error);
       alert("Error al actualizar la solicitud front");
     }
   };
 
+  //---Aprobar
   const handleAprobar = async () => {
-    try {
-      await axios.put(
-        `http://localhost:3000/Vacacioness/editar/${idVacaciones}`,
-        {
-          ...formValue,
-          estadoSolicitud: "Aprobado", // Fuerza el estado
-          fechaInicio: formValue.fechaInicio?.toISOString(),
-          fechaFin: formValue.fechaFin?.toISOString(),
-        }
-      );
-      alert("¡Solicitud aprobada!");
-      navigate("/Vacacioness/list-edit");
+    console.log("Datos a enviar",idVacaciones)
+    try {      
+      //se envian los datos
+      await axios.put(`http://localhost:3000/trabajadores/Aprob-Vacaciones/${idVacaciones}` );
+      alert("Solicitud aprobada correctamente");
+      navigate("/GestionarSolicitud-Vacaciones");
     } catch (error) {
       console.error("Error al aprobar:", error);
-      alert("Error al aprobar");
+      alert("Error al aprobar la solicitud front");
     }
   };
 
+  //---Rechazar
   const handleRechazar = async () => {
     if (!formValue.motivoRechazo) {
       alert("Debe ingresar un motivo de rechazo");
       return;
     }
     try {
-      await axios.put(
-        `http://localhost:3000/Vacacioness/editar/${idVacaciones}`,
-        {
-          ...formValue,
-          estadoSolicitud: "Rechazado", // Fuerza el estado
-          fechaInicio: formValue.fechaInicio?.toISOString(),
-          fechaFin: formValue.fechaFin?.toISOString(),
-        }
-      );
+      const datosActualizados = {...formValue};
+      await axios.put(`http://localhost:3000/trabajadores/Rechazar-Vacaciones/${idVacaciones}`,datosActualizados);
       alert("Solicitud rechazada");
       navigate("/GestionarSolicitud-Vacaciones");
     } catch (error) {
@@ -102,12 +92,11 @@ const EditarVacaciones = () => {
     }
   };
 
+    //Eliminar
   const handleEliminar = async () => {
     if (!confirm("¿Está seguro de eliminar esta solicitud?")) return;
     try {
-      await axios.delete(
-        `http://localhost:3000/Vacacioness/eliminar/${idVacaciones}`
-      );
+      await axios.delete(`http://localhost:3000/trabajadores/Elim-Vacaciones/${idVacaciones}`);
       alert("Solicitud eliminada");
       navigate("/GestionarSolicitud-Vacaciones");
     } catch (error) {
@@ -115,6 +104,7 @@ const EditarVacaciones = () => {
       alert("Error al eliminar");
     }
   };
+  //
 
   return (
     <div className="p-6">
@@ -259,7 +249,7 @@ const EditarVacaciones = () => {
               fontSize: "18px",
               margin: 10
             }}
-            onClick={() => navigate("/Vacacioness/list-edit")}
+            onClick={() => navigate("/GestionarSolicitud-Vacaciones")}
           >
             Cancelar
           </Button>
