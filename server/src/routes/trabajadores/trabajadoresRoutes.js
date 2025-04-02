@@ -18,14 +18,25 @@ router.put("/actualizar-trabajador/", trabajadorController.updateTrabajador);
 // Ruta para eliminar trabajador por ID
 router.delete("/eliminar-trabajador/:id", trabajadorController.deleteTrabajador);
 
-// Ruta para agregar trabajador
-router.post("/Solicitud-Vacaciones/", SolicitudController.insertSolicitudVacaciones);
-
-
 //Rutas relacionadas con Solicitud de vacaciones
-router.get("/obteneTrabajadoresMenu/", trabajadorController.obtenerTrabajadoresMenuDesplegable);
 
-router.get("/obteneSolicitudVacaciones", SolicitudController.ObtenerVacacionesGest);
+// Rutas Crud
+router.post("/Solicitud-Vacaciones", SolicitudController.InsertSolicitudVacaciones);
+router.put("/Edit-Vacaciones/:idVacaciones", SolicitudController.UpdateSolicitudVacaciones);
+//router.delete("/Elim-Vacaciones/", SolicitudController.DeleteSolicitudVacaciones);
+
+//aprobar y rechazar
+
+//router.put("/Aprovar-Vacaciones/:idVacaciones", SolicitudController.**);
+//router.put("/Rechazar-Vacaciones/:idVacaciones", SolicitudController.**);
+
+//Rutas Get
+router.get("/obteneTrabajadoresMenu", trabajadorController.obtenerTrabajadoresMenuDesplegable);
+router.get("/obtenerSolicitudVacaciones", SolicitudController.ObtenerVacacionesGest);
+router.get("/obtenerSolicitudVacacion/:idVacaciones", SolicitudController.ObtenerVacacionxID);
+
+
+
 
 
 // Exporta el router usando CommonJS

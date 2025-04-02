@@ -2,13 +2,14 @@ const { Solicitud, SolicitudRepository } = require("../../models/trabajadores/so
 
 const solicitudRepo = new SolicitudRepository();
 
+//Operaciones CRUD
 // Insertar un cliente
-const insertSolicitudVacaciones = async (req, res) => {
+const InsertSolicitudVacaciones = async (req, res) => {
   try {
     const { fechaInicio,fechaFin,idTrabajador } = req.body;
     const newSolicitud= new Solicitud(fechaInicio,fechaFin,idTrabajador);
 
-    await solicitudRepo.insert(newSolicitud);
+    await solicitudRepo.InsertSolicitud(newSolicitud);
     res.status(201).json(newSolicitud);
   } catch (error) {
     console.error("Error al insertar solicitud controller:", error);
@@ -16,6 +17,27 @@ const insertSolicitudVacaciones = async (req, res) => {
   }
 };
 
+const UpdateSolicitudVacaciones = async (req, res) => {
+  try {
+    
+    const idVacaciones = req.params.idVacaciones;
+    const datosActualizados = req.body;
+    const actualizacionExitosa = await solicitudRepo.UpdateSolicitud(idVacaciones, datosActualizados);
+
+    if (!actualizacionExitosa) {
+      res.status(404).json({ error: "Vehiculo no encontrado o no se pudo actualizar" });
+    } else {
+      res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
+    }
+  } catch (error) {
+    console.error("Error al actualizar cliente:", error);
+    res.status(500).json({ error: "Error al actualizar los datos del cliente" });
+  }
+};
+
+//Metodos Get
+
+//Obtener Vacaciones listado Vacaciones solicitadas (aprobar vacaciones index)
 const ObtenerVacacionesGest = async (req, res) => {
   try {
     // Usar el método getAll del repositorio
@@ -28,8 +50,30 @@ const ObtenerVacacionesGest = async (req, res) => {
   }
 };
 
+
+const ObtenerVacacionxID = async (req, res) => {
+  try {
+    const { idVacaciones } = req.params; // Obtener la cédula del query string
+
+    if (!idVacaciones) {
+      return res.status(400).json({ error: "El Id es requerido" });
+    }
+
+    const vacacion = await solicitudRepo.getVacionPorIdVacacion(idVacaciones);
+
+    if (!vacacion || vacacion.length === 0) {
+      res.status(404).json({ error: "vehiculo no encontrado" });
+    } else {
+      res.status(200).json(vacacion[0]); // Devuelve el primer vehiculo encontrado
+    }
+  } catch (error) {
+    console.error("Error al obtener vacacion por idVacacion:", error);
+    res.status(500).json({ error: "Error al obtener vacacion por idVacacion" });
+  }
+};
+
 module.exports = { 
- insertSolicitudVacaciones,ObtenerVacacionesGest,
+ InsertSolicitudVacaciones,UpdateSolicitudVacaciones,ObtenerVacacionesGest,ObtenerVacacionxID
 };
 
 

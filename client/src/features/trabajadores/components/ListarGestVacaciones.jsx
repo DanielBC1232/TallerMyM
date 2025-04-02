@@ -12,7 +12,7 @@ const ListarGestVacaciones = () => {
   // Función para obtener todas las vacaciones
   const obtenervacaciones = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/trabajadores/obteneSolicitudVacaciones"); // obtener solicitud, fechaInicio, FechaFin, motivoRechazo, trabajador
+      const response = await axios.get("http://localhost:3000/trabajadores/obtenerSolicitudVacaciones"); // obtener solicitud, fechaInicio, FechaFin, motivoRechazo, trabajador
       setVacaciones(response.data);
       setError("");
     } catch (error) {
@@ -35,9 +35,11 @@ const ListarGestVacaciones = () => {
   );
 
   // Función para redirigir a la página de edición
-  const handleEditar = (idTrabajador) => {
-    navigate(`/vacaciones/editar/${idTrabajador}`); // Redirige a la página de edición
+  const handleAprobar = (idTrabajador) => {
+    navigate(`/AprobarVacaciones/${idTrabajador}`); // Redirige a la página de edición
   };
+  // Función para redirigir a la página de edición
+ 
 
   if (loading) {
     return <p>Cargando vacaciones...</p>;
@@ -82,11 +84,14 @@ const ListarGestVacaciones = () => {
               <td className="py-2 px-4 border">
                 {/* Botón de editar */}
                 <button
-                  onClick={() => handleEditar(vacacion.idTrabajador)}
+                  onClick={() => handleAprobar(vacacion.idTrabajador)}
                   className="bg-blue-500 text-white p-2 rounded"
                 >
-                  Editar
+                  Ver
                 </button>
+
+                
+
               </td>
             </tr>
           ))}

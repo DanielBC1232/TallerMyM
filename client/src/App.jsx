@@ -34,6 +34,8 @@ import EditarTrabajador from "./features/trabajadores/pages/Editar.jsx";
 import AgregarSolicitudVacaciones from "./features/trabajadores/pages/AgregarSolicitud.jsx"
 import GestionarSolicitudVacaciones from "./features/trabajadores/pages/GestionarSolicitud.jsx";
 
+import AprobarVacaciones from "./features/trabajadores/pages/AprobarVacaciones.jsx";
+
 
 //administracion
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
@@ -116,8 +118,8 @@ const App = () => {
           <Route path="/AgregarSolicitud-Vacaciones" element={<AgregarSolicitudVacaciones />} />
           <Route path="/GestionarSolicitud-Vacaciones" element={<GestionarSolicitudVacaciones />} />
 
-          
-          
+          <Route path="/AprobarVacaciones/:idVacaciones" element={<AprobarVacaciones />} />
+              
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
