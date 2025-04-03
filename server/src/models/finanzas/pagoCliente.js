@@ -1,12 +1,15 @@
 import sql from 'mssql';
 import { connectDB } from '../../config/database.js';
 
-export class Venta {
-    constructor(idPago, monto, dineroVuelto, metodoPago, fecha, idVenta) {
+export class PagoCliente {
+    constructor(idPago, monto, dineroVuelto, metodoPago, subtotal, iva, total, fecha, idVenta) {
         this.idPago = idPago;
         this.monto = monto;
         this.dineroVuelto = dineroVuelto
         this.metodoPago = metodoPago;
+        this.subtotal = subtotal;
+        this.iva = iva;
+        this.total = total;
         this.fecha = fecha;
         this.idVenta = idVenta;
     }
@@ -14,7 +17,7 @@ export class Venta {
 
 export class PagoClienteRepository {
 
-    insertPagoCliente = async (monto, dineroVuelto, metodoPago, idVenta) => {
+    insertPagoCliente = async (monto, dineroVuelto, metodoPago, subtotal, iva, total, idVenta) => {
         try {
             const pool = await connectDB();
             const existePago = await pool
@@ -22,9 +25,9 @@ export class PagoClienteRepository {
                 .input('idVenta', sql.BigInt, idVenta)
                 .query('SELECT COUNT(*) AS total FROM PAGO_CLIENTE WHERE idVenta = @idVenta');
 
-            const total = existePago.recordset[0].total;
+            const Total = existePago.recordset[0].total;
 
-            if (total > 0) {
+            if (Total > 0) {
                 return 409; // Indica que ya existe un pago para esta venta
             }
 
@@ -33,9 +36,12 @@ export class PagoClienteRepository {
                 .input('monto', sql.Int, monto)
                 .input('dineroVuelto', sql.Decimal(10, 2), dineroVuelto)
                 .input('metodoPago', sql.NVarChar, metodoPago)
+                .input('subtotal', sql.Decimal(10, 2), subtotal)
+                .input('iva', sql.Decimal(10, 2), iva)
+                .input('total', sql.Decimal(10, 2), total)
                 .input('idVenta', sql.BigInt, idVenta)
-                .query(`INSERT INTO PAGO_CLIENTE (monto, dineroVuelto, metodoPago, idVenta)
-                        VALUES (@monto, @dineroVuelto, @metodoPago, @idVenta)`);
+                .query(`INSERT INTO PAGO_CLIENTE (monto, dineroVuelto, metodoPago, subtotal, iva, total, idVenta)
+                        VALUES (@monto, @dineroVuelto, @metodoPago, @subtotal, @iva, @total, @idVenta)`);
             return result.rowsAffected[0];
         } catch (error) {
             console.error("Error en insertar pago:", error);

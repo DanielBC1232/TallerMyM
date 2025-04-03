@@ -13,6 +13,7 @@
     "dev-ts": "ts-node-dev src/services/app.ts"
   },
   "dependencies": {
+    "apexcharts": "^4.5.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "moment": "^2.30.1",

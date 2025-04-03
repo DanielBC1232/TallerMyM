@@ -25,12 +25,14 @@ const pagoClienteRoutes = require("../routes/finanzas/pagoClienteRoutes");
 const devolucionRoutes = require("../routes/finanzas/devolucionRoutes");
 const Usuario_1 = __importDefault(require("../models/usuario/usuario"));
 const database_1 = require("../config/database");
-const emailServices_1 = require("../services/emailServices"); 
+const gastoOperativoRoutes = require("../routes/finanzas/gastoOperativoRoutes");
+const reportesRoutes = require("../routes/reportes/reportesRoutes")
+const dashboardRoutes = require("../routes/finanzas/dashboardRoutes");
 
 const app = (0, express_1.default)();
 app.use(express_1.default.json()); // Middleware
 const PORT = 3000; // Iniciar servidor
-app.listen(PORT, () => { ////
+app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
 });
 app.use((0, cors_1.default)({ 
@@ -66,7 +68,8 @@ app.use("/ventas",ventasRoutes);
 //Finanzas
 app.use("/finanzas",pagoClienteRoutes);
 app.use("/finanzas",devolucionRoutes);
-
+app.use("/finanzas",gastoOperativoRoutes);
+app.use("/finanzas",dashboardRoutes);
 //trabajadores
 app.use("/trabajadores",trabajadoresRoutes);
 
@@ -82,3 +85,6 @@ app.use("/vehiculos", VehiculoRoute_1.default);
 
 //Ruta flujo-ordenes
 app.use("/flujo",ordenRoutes);
+
+//reportes
+app.use("/reportes",reportesRoutes);

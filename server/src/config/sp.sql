@@ -404,7 +404,6 @@ AS BEGIN
 END;
 GO
 
-
 --NOTIFICACIONES
 CREATE OR ALTER PROCEDURE SP_INSERT_NOTIFICACIONES
 @titulo VARCHAR(50),
@@ -418,7 +417,7 @@ AS BEGIN
 
 END;
 GO
-
+--eliminar notificacion
 CREATE OR ALTER PROCEDURE SP_DESCARTAR_NOTIFICACIONES
 @idNotificacion BIGINT
 AS BEGIN
@@ -486,5 +485,148 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE SP_NOTIFICACION_PAGO_ATRASADO
+AS
+BEGIN
+    SET NOCOUNT ON;
 
+    DECLARE 
+        @codigoOrden VARCHAR(50),
+        @cuerpo NVARCHAR(256),
+        @idVenta BIGINT;
 
+    -- Cursor para recorrer ventas que llevan más de 3 semanas y no estan pagadas
+    DECLARE atraso_cursor CURSOR FAST_FORWARD FOR
+        SELECT V.idVenta, O.codigoOrden
+        FROM VENTA V
+        INNER JOIN ORDEN O ON V.idOrden = O.idOrden
+        WHERE V.fechaVenta < DATEADD(WEEK, -3, GETDATE())
+          AND V.ventaConsumada = 0;
+
+    OPEN atraso_cursor;
+    FETCH NEXT FROM atraso_cursor INTO @idVenta, @codigoOrden;
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        -- Construir el cuerpo de la notificacion usando el código de la orden
+        SET @cuerpo = 'La orden ' + @codigoOrden + ' lleva más de 3 semanas de atraso';
+
+        -- Verificar si ya existe una notificacion similar para esta orden
+        IF NOT EXISTS (
+            SELECT 1
+            FROM NOTIFICACIONES
+            WHERE titulo = 'Pago atrasado'
+              AND modulo = 'ventas'
+              AND cuerpo LIKE '%' + @codigoOrden + '%'
+        )
+        BEGIN
+            EXEC SP_INSERT_NOTIFICACIONES
+                'Pago atrasado',
+                @cuerpo,
+                'ventas',
+                'warning';
+        END;
+
+        FETCH NEXT FROM atraso_cursor INTO @idVenta, @codigoOrden;
+    END;
+
+    CLOSE atraso_cursor;
+    DEALLOCATE atraso_cursor;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_GET_VENTAS_ATRASADAS
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        V.idVenta,
+        V.fechaVenta,
+        V.montoTotal,
+        V.detalles,
+        V.idOrden,
+        O.codigoOrden,
+        DATEDIFF(DAY, V.fechaVenta, GETDATE()) AS diasAtraso
+    FROM VENTA V
+    INNER JOIN ORDEN O ON O.idOrden = V.idOrden
+    LEFT JOIN PAGO_CLIENTE P ON P.idVenta = V.idVenta
+    WHERE V.ventaConsumada = 0  -- Venta no pagada
+      AND P.idPago IS NULL  -- No existe pago asociado
+      AND DATEDIFF(DAY, V.fechaVenta, GETDATE()) > 21; -- Mas de 3 semanas de atraso
+
+END;
+GO
+
+select * from PAGO_CLIENTE
+go
+
+CREATE OR ALTER PROCEDURE SP_GET_GANANCIAS_MESES
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @totalMesActual DECIMAL(10,2);
+    DECLARE @totalMesAnterior DECIMAL(10,2);
+    DECLARE @diferenciaPorcentaje DECIMAL(10,2);
+
+    -- Total de pagos del mes actual
+    SELECT @totalMesActual = COALESCE(SUM(total), 0)
+    FROM PAGO_CLIENTE
+    WHERE YEAR(fecha) = YEAR(GETDATE()) 
+      AND MONTH(fecha) = MONTH(GETDATE());
+
+    -- Total de pagos del mes anterior
+    SELECT @totalMesAnterior = COALESCE(SUM(total), 0)
+    FROM PAGO_CLIENTE
+    WHERE YEAR(fecha) = YEAR(DATEADD(MONTH, -1, GETDATE())) 
+      AND MONTH(fecha) = MONTH(DATEADD(MONTH, -1, GETDATE()));
+
+    -- Calcular la diferencia porcentual correctamente
+    IF @totalMesAnterior = 0
+        SET @diferenciaPorcentaje = CASE 
+            WHEN @totalMesActual = 0 THEN 0  -- Si ambos son 0, no hay cambio
+            ELSE 100  -- Si el mes anterior fue 0 y el actual tiene valor, es un 100% de aumento
+        END;
+    ELSE
+        SET @diferenciaPorcentaje = ((@totalMesActual - @totalMesAnterior) * 100.0) / @totalMesAnterior;
+
+    -- Retornar los resultados
+    SELECT 
+        @totalMesActual AS totalMesActual, 
+        @totalMesAnterior AS totalMesAnterior, 
+        @diferenciaPorcentaje AS diferenciaPorcentaje;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_GET_GASTOS_MESES
+AS
+BEGIN
+    DECLARE @totalMesActual DECIMAL(10,2)
+    DECLARE @totalMesAnterior DECIMAL(10,2)
+    DECLARE @diferenciaPorcentual DECIMAL(10,2)
+
+    -- Suma de los gastos operativos y devoluciones del mes actual
+    SELECT @totalMesActual = 
+        (SELECT ISNULL(SUM(monto), 0) FROM DEVOLUCION WHERE MONTH(fecha) = MONTH(GETDATE()) AND YEAR(fecha) = YEAR(GETDATE()))
+        +
+        (SELECT ISNULL(SUM(monto), 0) FROM GASTO_OPERATIVO WHERE MONTH(fecha) = MONTH(GETDATE()) AND YEAR(fecha) = YEAR(GETDATE()))
+
+    -- Suma de los gastos operativos y devoluciones del mes anterior
+    SELECT @totalMesAnterior = 
+        (SELECT ISNULL(SUM(monto), 0) FROM DEVOLUCION WHERE MONTH(fecha) = MONTH(DATEADD(MONTH, -1, GETDATE())) AND YEAR(fecha) = YEAR(DATEADD(MONTH, -1, GETDATE())))
+        +
+        (SELECT ISNULL(SUM(monto), 0) FROM GASTO_OPERATIVO WHERE MONTH(fecha) = MONTH(DATEADD(MONTH, -1, GETDATE())) AND YEAR(fecha) = YEAR(DATEADD(MONTH, -1, GETDATE())))
+
+    -- Calcular la diferencia porcentual
+    IF @totalMesAnterior = 0 
+        SET @diferenciaPorcentual = CASE WHEN @totalMesActual = 0 THEN 0 ELSE 100 END
+    ELSE 
+        SET @diferenciaPorcentual = ((@totalMesActual - @totalMesAnterior) / @totalMesAnterior) * 100
+
+    -- resultado
+    SELECT 
+        @totalMesActual AS totalMesActual,
+        @totalMesAnterior AS totalMesAnterior,
+        @diferenciaPorcentual AS diferenciaPorcentual
+END;
+GO

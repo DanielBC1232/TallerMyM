@@ -5,10 +5,10 @@ const PagoClienteRepo = new PagoClienteRepository();
 
 const insertPagoCliente = async (req, res) => {
     try {
-        const { monto, dineroVuelto, metodoPago, idVenta } = req.body;
+        const { monto, dineroVuelto, metodoPago, subtotal, iva, total, idVenta } = req.body;
 
         // Llamar al método del modelo para insertar el pago
-        const pagoInsertado = await PagoClienteRepo.insertPagoCliente(monto, dineroVuelto, metodoPago, idVenta);
+        const pagoInsertado = await PagoClienteRepo.insertPagoCliente(monto, dineroVuelto, metodoPago, subtotal, iva, total, idVenta);
 
         // Si el modelo devuelve 409, significa que ya hay un pago registrado
         if (pagoInsertado === 409) {

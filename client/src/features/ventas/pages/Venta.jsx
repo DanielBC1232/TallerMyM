@@ -34,20 +34,25 @@ const Venta = () => {
     idVenta: parseInt(idVenta),
     monto: 0,
     dineroVuelto: 0,
-    montoTotal: 0,
-    metodoPago: ""
+    metodoPago: "",
+    subtotal: 0,
+    iva: 0,
+    total: 0,
   });
   const [openPago, setOpenPago] = useState(false);
 
   const handleChangePago = (e) => {
     const { name, value } = e.target;
-    setFormDataPago((prev) => ({
-      ...prev,
-      [name]:
-        isNaN(value) || value.trim() === ""
-          ? value
-          : parseInt(value, 10),
-    }));
+    
+    setFormDataPago((prev) => {
+      const newPago = {
+        ...prev,
+        [name]: isNaN(value) || value.trim() === "" ? value : parseInt(value, 10),
+      };
+      handleUpdateMontoTotal(newPago.subtotal);
+      
+      return newPago;
+    });
   };
 
   const GenerarPago = (id) => {
@@ -87,8 +92,11 @@ const Venta = () => {
 
   const handleSubmitPago = async (e) => {
     e.preventDefault();
+
     if (verificarMetodoPago() && verificarPagoCompleto()) {
       try {
+        console.log(formDataPago);
+
         const res = await axios.post(`${BASE_URL}/finanzas/registrar-pago/`, formDataPago);
         if (res.status === 200 || res.status === 201) {
           await Swal.fire({
@@ -207,11 +215,81 @@ const Venta = () => {
   };
 
   /* ============= CALLBACK PARA ACTUALIZAR MONTO TOTAL ============= */
-  const handleUpdateMontoTotal = (nuevoMonto) => {
-    setFormDataPago((prev) => ({
-      ...prev,
-      montoTotal: nuevoMonto
-    }));
+  const handleUpdateMontoTotal = (nuevosubtotal) => {
+    setFormDataPago(prev => {
+      const nuevoIva = nuevosubtotal * 0.13;
+      const nuevoTotal = nuevosubtotal + nuevoIva;
+      const dineroVuelto = parseFloat(prev.monto) 
+        ? parseFloat(prev.monto) - nuevoTotal 
+        : 0;
+      
+      return {
+        ...prev,
+        subtotal: nuevosubtotal,
+        iva: nuevoIva,
+        total: nuevoTotal,
+        dineroVuelto: parseFloat(dineroVuelto.toFixed(2)),
+      };
+    });
+  };
+
+  //* =========== GENERAR FACTURA =========== *//
+  const GenerarFactura = async () => {
+    try {
+      // Combina los datos de venta y pago en un solo objeto
+      const payload = { ...formData, ...formDataPago };
+
+      const response = await axios.post(
+        `${BASE_URL}/reportes/generar-factura/`,
+        payload,
+        { responseType: 'blob' }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        await Swal.fire({
+          icon: "success",
+          title: "Factura generada exitosamente",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+
+        const blob = new Blob([response.data], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+
+        // Intentar obtener el nombre del archivo desde el header
+        const contentDisposition = response.headers['content-disposition'];
+        let fileName = '';
+        if (contentDisposition) {
+          const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+          if (fileNameMatch && fileNameMatch.length === 2) {
+            fileName = fileNameMatch[1];
+          }
+        }
+        // Si no se recibió el nombre, se genera uno con la fecha actual
+        if (!fileName) {
+          const fechaActual = new Date().toISOString().split('T')[0];
+          fileName = `Factura-${fechaActual}.xlsx`;
+        }
+
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(downloadUrl);
+      }
+    } catch (error) {
+      console.error("Error al generar la factura:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al generar la factura",
+        text: "No se pudo generar el archivo XLSX.",
+      });
+    }
   };
 
   /* ============= RENDER ============= */
@@ -274,18 +352,23 @@ const Venta = () => {
                     >
                       Realizar reembolso
                     </button>
+                    <button className="btn btn-sm btn-secondary text-white"
+                      onClick={() => GenerarFactura()}
+                    >
+                      Generar Factura
+                    </button>
                   </div>
                   {/* COMPONENTES QUE MUESTRAN DATOS DE PAGO Y DEVOLUCIÓN */}
                   <Pago />
-                  <hr/>
+                  <hr />
                   <Devolucion />
                 </Col>
                 {/* COLUMNA PRODUCTOS VINCULADOS + PRECIOS */}
                 <Col xs={13} className="d-grid gap-4">
                   {/* Lista de productos asociados a la venta */}
-                  <ListaProductosVenta 
-                    formDataPago={formDataPago} 
-                    onUpdateMontoTotal={handleUpdateMontoTotal} 
+                  <ListaProductosVenta
+
+                    onUpdateMontoTotal={handleUpdateMontoTotal}
                   />
                 </Col>
               </Row>
@@ -317,6 +400,33 @@ const Venta = () => {
             <hr className="text-secondary" />
           </Modal.Header>
           <Modal.Body className="px-4 d-flex flex-column gap-4">
+            <div>
+              <span>subtotal:</span>
+              <input
+                type="number"
+                value={formDataPago.subtotal.toFixed(2)}
+                readOnly
+                className="form-control form-control-sm"
+              />
+            </div>
+            <div>
+              <span>IVA (13%):</span>
+              <input
+                type="number"
+                value={formDataPago.iva.toFixed(2)}
+                readOnly
+                className="form-control form-control-sm"
+              />
+            </div>
+            <div>
+              <span>Total:</span>
+              <input
+                type="number"
+                value={formDataPago.total.toFixed(2)}
+                readOnly
+                className="form-control form-control-sm"
+              />
+            </div>
             <div>
               <span>Monto:</span>
               <input
