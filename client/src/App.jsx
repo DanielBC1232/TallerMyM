@@ -33,6 +33,9 @@ import EditarTrabajador from "./features/trabajadores/pages/Editar.jsx";
 //---Seccion de solicitud de vacaciones
 import AgregarSolicitudVacaciones from "./features/trabajadores/pages/AgregarSolicitud.jsx"
 import GestionarSolicitudVacaciones from "./features/trabajadores/pages/GestionarSolicitud.jsx";
+//--seccion gestion de salarios
+import GestionarSalarios from "./features/trabajadores/pages/ListaGestSalariosPage.jsx";
+import EditarTrabajadorSalario from "./features/trabajadores/pages/EditarSalario.jsx";
 
 import AprobarVacaciones from "./features/trabajadores/pages/AprobarVacaciones.jsx";
 
@@ -118,6 +121,10 @@ const App = () => {
           <Route path="/AgregarSolicitud-Vacaciones" element={<AgregarSolicitudVacaciones />} />
           <Route path="/GestionarSolicitud-Vacaciones" element={<GestionarSolicitudVacaciones />} />
 
+          <Route path="/Gestionar-Salarios" element={<GestionarSalarios />} />
+          <Route path="/trabajadores-editar-salario/:idTrabajador" element={<EditarTrabajadorSalario />} />
+
+            {/*Esta ruta hay que revisarla creo que la agregue y no la use al final*/}
           <Route path="/AprobarVacaciones/:idVacaciones" element={<AprobarVacaciones />} />
               
 
