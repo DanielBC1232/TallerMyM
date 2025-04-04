@@ -2,107 +2,108 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
-const EditarCliente = () => {
-  const { cedula } = useParams(); // Obtener el idCliente de la URL
+const EditForm = () => {
+  const { idUsuario } = useParams();
+  // Obtener el idCliente de la URL
   const navigate = useNavigate();
-  const [cliente, setCliente] = useState({
-    nombre: "",
-    apellido: "",
-    cedula: "",
-    correo: "",
-    telefono: "",
+  const [usuario, setUsuario] = useState({
+    username: "",
+    email: "",
+    password: "",
+    idRol: "",
   });
 
-  // Obtener los datos del cliente al cargar el componente
+  // Obtener los datos del cliente al cargar el componente------------------**********
   useEffect(() => {
-    const obtenerCliente = async () => {
+    const obtenerUsuarionn = async () => {
       try {
         //implementar obtener un cliente por id /ocupo primero cargar los datos
-        const response = await axios.get(`http://localhost:3000/clientes/${cedula}`);
+        const response = await axios.get(`http://localhost:3000/admin/obtenerUsuarioEdit/${idUsuario}`);
         console.log("Datos obtenidos:", response.data);
 
-        setCliente(response.data);
+        setUsuario(response.data);
       } catch (error) {
         console.error("Error al obtener el cliente:", error);
         alert("Error al obtener los datos del cliente");
       }
     };
-    obtenerCliente();
-  }, [cedula]);
+    obtenerUsuarionn();
+  }, [idUsuario]);
 
-  // Manejar cambios en los campos del formulario
+/*
+  useEffect(() => {
+    console.log("Estado usuario actualizado:", usuario);
+  }, [usuario]);
+*/
+
+  // Manejar cambios en los campos del formulario   POSIBLE CULPABLE -------------^^^^
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCliente({ ...cliente, [name]: value });
+    setUsuario({ ...usuario, [name]: value });
   };
 
   // Manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/clientes/editar/${cedula}`, cliente);//!!
-      alert("Cliente actualizado exitosamente");
-      navigate("/clientes/list-edit"); // Redirigir a la lista de clientes (edición)
+      console.log("Datos a enviar", usuario);
+      await axios.put(
+        `http://localhost:3000/admin/editar/${idUsuario}`,
+        usuario
+      ); //!!
+      alert("Vehiculo actualizado exitosamente");
+      navigate("/admin/listarEditUsuarios"); // Redirigir a la lista de vehiculos (edición)
     } catch (error) {
-      console.error("Error al actualizar el cliente:", error);
-      alert("Error al actualizar el cliente");
+      console.error("Error al actualizar el vehiculo:", error);
+      alert("Error al actualizar el vehiculo");
     }
   };
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Editar Cliente</h1>
+      <h1 className="text-2xl font-bold mb-4">Editar Usuario</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block">Nombre:</label>
+          <label className="block">Nombre del usuario</label>
           <input
             type="text"
-            name="nombre"
-            value={cliente.nombre}
+            name="username"
+            value={usuario.username}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block">Email:</label>
+          <input
+            type="text"
+            name="email"
+            value={usuario.email}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block">Contraseña Actual:</label>
+          <input
+            type="text"
+            name="password"
+            value={usuario.password}
             onChange={handleChange}
             className="border p-2 rounded w-full"
             required
           />
         </div>
         <div>
-          <label className="block">Apellido:</label>
+          <label className="block">Rol Asignado:</label>
           <input
-            type="text"
-            name="apellido"
-            value={cliente.apellido}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-            required
-          />
-        </div>
-        <div>
-          <label className="block">Cédula:</label>
-          <input
-            type="text"
-            name="cedula"
-            value={cliente.cedula}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-            required
-          />
-        </div>
-        <div>
-          <label className="block">Correo:</label>
-          <input
-            type="email"
-            name="correo"
-            value={cliente.correo}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-            required
-          />
-        </div>
-        <div>
-          <label className="block">Teléfono:</label>
-          <input
-            type="text"
-            name="telefono"
-            value={cliente.telefono}
+            type="number"
+            name="idRol"
+            value={usuario.idRol}
             onChange={handleChange}
             className="border p-2 rounded w-full"
             required
@@ -112,13 +113,16 @@ const EditarCliente = () => {
         <button
           type="button" // Importante: type="button" para que no active el submit
           onClick={() => {
-            console.log("Datos actuales del formulario:", cliente);
-            alert(JSON.stringify(cliente, null, 2));
+            console.log("Datos actuales del formulario:", usuario);
+            alert(JSON.stringify(usuario, null, 2));
           }}
           className="bg-gray-500 text-white p-2 rounded mr-2"
         >
           Ver Datos
         </button>
+
+        
+
         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
           Guardar Cambios
         </button>
@@ -127,4 +131,4 @@ const EditarCliente = () => {
   );
 };
 
-export default EditarCliente;
+export default EditForm;

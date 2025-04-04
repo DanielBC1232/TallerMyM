@@ -23,6 +23,7 @@ const ClienteRoutes_1 = __importDefault(require("../routes/clientes/clienteRoute
 const VehiculoRoute_1 = __importDefault(require("../routes/vehiculos/vehiculosRoutes"));
 const pagoClienteRoutes = require("../routes/finanzas/pagoClienteRoutes");
 const devolucionRoutes = require("../routes/finanzas/devolucionRoutes");
+const AdministrativoRoute1 = __importDefault(require("../routes/administrativo/AdminRoutes"));
 const Usuario_1 = __importDefault(require("../models/usuario/usuario"));
 const database_1 = require("../config/database");
 const gastoOperativoRoutes = require("../routes/finanzas/gastoOperativoRoutes");
@@ -82,7 +83,8 @@ app.use("/usuario", Usuario_1.default);
 app.use("/clientes", ClienteRoutes_1.default);
 //Ruta modulo Vehiculos
 app.use("/vehiculos", VehiculoRoute_1.default);
-
+//Ruta modulo Administrativo
+app.use("/admin", AdministrativoRoute1.default);
 //Ruta flujo-ordenes
 app.use("/flujo",ordenRoutes);
 

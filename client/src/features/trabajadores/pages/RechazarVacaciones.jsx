@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
-//Agregar Trabajador
+
 const AgregarTrabajador = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({

@@ -55,6 +55,16 @@ export class TrabajadorRepository {
         }
     }
     
+    async getMenu() {
+        try {
+          const pool = await connectDB();
+          const result = await pool.request().query("SELECT idTrabajador,nombreCompleto FROM TRABAJADOR");
+          return result.recordset;
+        } catch (error) {
+          console.error("Error al obtener todos los clientes:", error);
+          throw new Error("Error al obtener clientes");
+        }
+      }
 
     // Obtener listado de trabajadores
     async getTrabajadores(nombreCompleto, cedula, salarioMin, salarioMax) {
