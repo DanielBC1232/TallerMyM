@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProducto = exports.updateProducto = exports.addProducto = exports.getProductoById = exports.getAllProductos = void 0;
 const producto_1 = require("../../models/inventario/producto");
 const ProductoRepo = new producto_1.ProductoRepository();
+
 // Obtener todas las producto - filtros y paginacion
 const getAllProductos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -23,10 +24,11 @@ const getAllProductos = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.json(producto);
     }
     catch (error) {
-        res.status(500).json({ error: "Error al obtener los producto" });
+        res.status(500).json({ error: "C-Error al obtener los producto" });
     }
 });
 exports.getAllProductos = getAllProductos;
+
 // Obtener una producto por ID
 const getProductoById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -49,13 +51,14 @@ const getProductoById = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getProductoById = getProductoById;
+
 // Registrar nuevo producto
 const addProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Obtener los datos del cuerpo de la solicitud
-        const { nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img } = req.body;
+        const { nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, stockMinimo } = req.body;
         // Llamar al método insertProducto para insertar el nuevo producto en la base de datos
-        const nuevoProducto = yield ProductoRepo.insertProducto(nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img);
+        const nuevoProducto = yield ProductoRepo.insertProducto(nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, stockMinimo);
         // Respuesta exitosa con el producto insertado
         res.status(201).json({
             message: "Producto insertado exitosamente",
@@ -70,14 +73,30 @@ const addProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.addProducto = addProducto;
 
-
 // Actualizar un producto
 const updateProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Obtener los datos del cuerpo de la solicitud
-        const { idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin } = req.body;
+        const idProducto = req.body.idproducto;
+        const nombre = req.body.nombre;
+        const marca = req.body.marca;
+        const descripcion = req.body.descripcion;
+        const precio = req.body.precio;
+        const stock = req.body.stock;
+        const fechaIngreso = req.body.fechaIngreso;
+        const ubicacionAlmacen = req.body.ubicacionAlmacen;
+        const proveedor = req.body.proveedor;
+        const categoria = req.body.categoria;
+        const vehiculosCompatibles = req.body.vehiculosCompatibles;
+        const tipo = req.body.tipo;
+        const img = req.body.img;
+        const stockMinimo = req.body.stockMinimo;
+
+        //parse a porcentaje INT a decimales FLOAT
+        const porcentajeDescuento = parseFloat(req.body.porcentajeDescuento) / 100 || 0;
+
         // Llamar al metodo update Producto
-        const actualizarProducto = yield ProductoRepo.updateProducto(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, fechaInicio, fechaFin);
+        const actualizarProducto = yield ProductoRepo.updateProducto(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, stockMinimo);
         // Respuesta exitosa con el producto insertado
         res.status(201).json({
             message: "Producto actualizado exitosamente",
@@ -91,6 +110,7 @@ const updateProducto = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.updateProducto = updateProducto;
+
 // Eliminar producto
 const deleteProducto = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

@@ -17,18 +17,23 @@ const usuarioRoutes_1 = __importDefault(require("../routes/perfil/usuarioRoutes"
 const ordenRoutes = require("../routes/flujo/ordenRoutes");
 const cotizacionRoutes = require("../routes/ventas/cotizacionRoutes");
 const trabajadoresRoutes = require("../routes/trabajadores/trabajadoresRoutes");
-
+const ventasRoutes = require("../routes/ventas/ventasRoutes");
+const notificacionesRoutes = require("../routes/notificaciones/notificacionesRoutes")
 const ClienteRoutes_1 = __importDefault(require("../routes/clientes/clienteRoutes"));
 const VehiculoRoute_1 = __importDefault(require("../routes/vehiculos/vehiculosRoutes"));
+const pagoClienteRoutes = require("../routes/finanzas/pagoClienteRoutes");
+const devolucionRoutes = require("../routes/finanzas/devolucionRoutes");
 const AdministrativoRoute1 = __importDefault(require("../routes/administrativo/AdminRoutes"));
-
 const Usuario_1 = __importDefault(require("../models/usuario/usuario"));
 const database_1 = require("../config/database");
-const emailServices_1 = require("../services/emailServices"); 
+const gastoOperativoRoutes = require("../routes/finanzas/gastoOperativoRoutes");
+const reportesRoutes = require("../routes/reportes/reportesRoutes")
+const dashboardRoutes = require("../routes/finanzas/dashboardRoutes");
+
 const app = (0, express_1.default)();
 app.use(express_1.default.json()); // Middleware
 const PORT = 3000; // Iniciar servidor
-app.listen(PORT, () => { ////
+app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
 });
 app.use((0, cors_1.default)({ 
@@ -54,9 +59,18 @@ app.use("/productos", productoRoutes_1.default);
 app.use("/img", imgRoutes_1.default);
 app.use("/inventario", solicitudRoutes_1.default);
 
+//Rutas notificaciones
+app.use("/notificaciones", notificacionesRoutes);
+
 //Rutas Ventas
 app.use("/cotizacion",cotizacionRoutes);
+app.use("/ventas",ventasRoutes);
 
+//Finanzas
+app.use("/finanzas",pagoClienteRoutes);
+app.use("/finanzas",devolucionRoutes);
+app.use("/finanzas",gastoOperativoRoutes);
+app.use("/finanzas",dashboardRoutes);
 //trabajadores
 app.use("/trabajadores",trabajadoresRoutes);
 
@@ -73,3 +87,6 @@ app.use("/vehiculos", VehiculoRoute_1.default);
 app.use("/admin", AdministrativoRoute1.default);
 //Ruta flujo-ordenes
 app.use("/flujo",ordenRoutes);
+
+//reportes
+app.use("/reportes",reportesRoutes);

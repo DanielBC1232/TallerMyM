@@ -454,3 +454,127 @@ BEGIN
     FROM DELETED d;
 END
 GO
+
+--//Auditoria de tabla orden
+CREATE TRIGGER TR_AUDIT_ORDEN_INSERT
+ON ORDEN
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO AUDITORIA_TABLAS (tipo, tabla, registro, campo, valorAntes, valorDespues, fecha, usuario, PC)
+    SELECT 
+        'I' AS tipo,
+        'ORDEN' AS tabla,
+        i.idOrden AS registro,
+        'NUEVO REGISTRO' AS campo,
+        NULL AS valorAntes,
+        CONCAT('Orden creada: ', i.codigoOrden) AS valorDespues,
+        GETDATE() AS fecha,
+        SUSER_NAME() AS usuario,
+        HOST_NAME() AS PC
+    FROM inserted i;
+END;
+GO
+
+CREATE TRIGGER TR_AUDIT_ORDEN_UPDATE
+ON ORDEN
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO AUDITORIA_TABLAS (tipo, tabla, registro, campo, valorAntes, valorDespues, fecha, usuario, PC)
+    SELECT 
+        'U' AS tipo,
+        'ORDEN' AS tabla,
+        i.idOrden AS registro,
+        'codigoOrden' AS campo,
+        d.codigoOrden AS valorAntes,
+        i.codigoOrden AS valorDespues,
+        GETDATE() AS fecha,
+        SUSER_NAME() AS usuario,
+        HOST_NAME() AS PC
+    FROM inserted i
+    INNER JOIN deleted d ON i.idOrden = d.idOrden
+    WHERE i.codigoOrden <> d.codigoOrden
+
+    UNION ALL
+
+    SELECT 'U', 'ORDEN', i.idOrden, 'estadoOrden', d.estadoOrden, i.estadoOrden, GETDATE(), SUSER_NAME(), HOST_NAME()
+    FROM inserted i
+    INNER JOIN deleted d ON i.idOrden = d.idOrden
+    WHERE i.estadoOrden <> d.estadoOrden 
+
+    UNION ALL
+
+    SELECT 'U', 'ORDEN', i.idOrden, 'idVehiculo', CAST(d.idVehiculo AS VARCHAR), CAST(i.idVehiculo AS VARCHAR), GETDATE(), SUSER_NAME(), HOST_NAME()
+    FROM inserted i
+    INNER JOIN deleted d ON i.idOrden = d.idOrden
+    WHERE i.idVehiculo <> d.idVehiculo
+
+    UNION ALL
+
+    SELECT 'U', 'ORDEN', i.idOrden, 'idTrabajador', CAST(d.idTrabajador AS VARCHAR), CAST(i.idTrabajador AS VARCHAR), GETDATE(), SUSER_NAME(), HOST_NAME()
+    FROM inserted i
+    INNER JOIN deleted d ON i.idOrden = d.idOrden
+    WHERE i.idTrabajador <> d.idTrabajador
+
+    UNION ALL
+
+    SELECT 'U', 'ORDEN', i.idOrden, 'descripcion', d.descripcion, i.descripcion, GETDATE(), SUSER_NAME(), HOST_NAME()
+    FROM inserted i
+    INNER JOIN deleted d ON i.idOrden = d.idOrden
+    WHERE i.descripcion <> d.descripcion;
+END;
+GO
+
+CREATE TRIGGER TR_AUDIT_ORDEN_DELETE
+ON ORDEN
+AFTER DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO AUDITORIA_TABLAS (tipo, tabla, registro, campo, valorAntes, valorDespues, fecha, usuario, PC)
+    SELECT 
+        'D' AS tipo,
+        'ORDEN' AS tabla,
+        d.idOrden AS registro,
+        'codigoOrden' AS campo,
+        d.codigoOrden AS valorAntes,
+        NULL AS valorDespues,
+        GETDATE() AS fecha,
+        SUSER_NAME() AS usuario,
+        HOST_NAME() AS PC
+    FROM deleted d
+
+    UNION ALL
+
+    SELECT 'D', 'ORDEN', d.idOrden, 'estadoOrden', CAST(d.estadoOrden AS VARCHAR), NULL, GETDATE(), SUSER_NAME(), HOST_NAME()
+    FROM deleted d
+
+    UNION ALL
+
+    SELECT 'D', 'ORDEN', d.idOrden, 'tiempoEstimado', CONVERT(VARCHAR, d.tiempoEstimado, 120), NULL, GETDATE(), SUSER_NAME(), HOST_NAME()
+    FROM deleted d
+
+    UNION ALL
+
+    SELECT 'D', 'ORDEN', d.idOrden, 'idVehiculo', CAST(d.idVehiculo AS VARCHAR), NULL, GETDATE(), SUSER_NAME(), HOST_NAME()
+    FROM deleted d
+
+    UNION ALL
+
+    SELECT 'D', 'ORDEN', d.idOrden, 'idTrabajador', CAST(d.idTrabajador AS VARCHAR), NULL, GETDATE(), SUSER_NAME(), HOST_NAME()
+    FROM deleted d
+
+    UNION ALL
+
+    SELECT 'D', 'ORDEN', d.idOrden, 'descripcion', d.descripcion, NULL, GETDATE(), SUSER_NAME(), HOST_NAME()
+    FROM deleted d;
+END;
+GO
+
+

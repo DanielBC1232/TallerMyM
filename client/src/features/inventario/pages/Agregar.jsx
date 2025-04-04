@@ -19,8 +19,8 @@ const Agregar = () => {
     nombre: "",
     marca: "",
     descripcion: "",
-    precio: 0,
-    stock: 0,
+    precio: parseFloat(0) || '',
+    stock: parseInt(0) || '',
     fechaIngreso: "",
     ubicacionAlmacen: "",
     proveedor: "",
@@ -28,6 +28,7 @@ const Agregar = () => {
     vehiculosCompatibles: [],
     img: "",
     tipo: "",
+    stockMinimo: parseInt(0) || ''
   });
 
   const errorNotification = (message) => {
@@ -435,6 +436,18 @@ const Agregar = () => {
                       name="descripcion"
                       className="form-control"
                       value={formData.descripcion}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="stockMinimo" className="form-label">
+                      Stock Minimo:
+                    </label>
+                    <input
+                      type="number"
+                      name="stockMinimo"
+                      className="form-control"
+                      value={(formData.stockMinimo)}
                       onChange={handleChange}
                     />
                   </div>

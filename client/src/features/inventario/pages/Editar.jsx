@@ -17,7 +17,7 @@ const Editar = () => {
   const navigate = useNavigate(); // Hook para navegar
   const { idProducto } = useParams();
   const [formData, setFormData] = useState({
-    idProducto: idProducto,
+    idProducto: parseInt(idProducto),
     nombre: "",
     marca: "",
     descripcion: "",
@@ -30,6 +30,8 @@ const Editar = () => {
     vehiculosCompatibles: [],
     img: "",
     tipo: "",
+    porcentajeDescuento: 0,
+    stockMinimo: parseInt(0) || ''
   });
 
   useEffect(() => {
@@ -47,7 +49,7 @@ const Editar = () => {
 
     cargarDatos();
   }, [idProducto]);
-  
+
   const errorNotification = (message) => {
     Swal.fire({
       text: message,
@@ -64,8 +66,8 @@ const Editar = () => {
         name === "precio" || name === "stock"
           ? Number(value)
           : name === "vehiculosCompatibles"
-          ? JSON.stringify(value)
-          : value,
+            ? JSON.stringify(value)
+            : value,
     });
   };
 
@@ -274,11 +276,10 @@ const Editar = () => {
     //console.log(formData);
 
     if (verificacion()) {
-      console.log(formData)
       axios
-        .patch(`${BASE_URL}/productos/actualizar-producto/`, formData)
+        .put(`${BASE_URL}/productos/actualizar-producto/`, formData)
         .then((res) => {
-          
+
           Swal.fire({
             icon: "success",
             title: "Producto editado correctamente",
@@ -298,7 +299,7 @@ const Editar = () => {
         <Grid fluid>
           <Row className="show-grid" gutter={16}>
             <Col xs={6}>
-            <SubirImagen
+              <SubirImagen
                 value={formData.img}
                 onChange={(newPath) =>
                   setFormData((prev) => ({ ...prev, img: newPath }))
@@ -440,28 +441,55 @@ const Editar = () => {
                   </div>
                   <div className="mb-3">
                     <label htmlFor="descripcion" className="form-label">
+                      Descuento:
+                    </label>
+                    <input
+                      type="number"
+                      name="porcentajeDescuento"
+                      className="form-control"
+                      value={formData.porcentajeDescuento}
+                      onChange={handleChange}
+                      placeholder="%"
+                      max="90"
+                      min="0"
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="descripcion" className="form-label">
                       Descripción:
                     </label>
                     <textarea
                       id="descripcion"
                       name="descripcion"
                       className="form-control"
-                      value={formData.descripcion}
+                      value={(formData.descripcion)}
                       onChange={handleChange}
                     />
                   </div>
-                  
+                  <div className="mb-3">
+                    <label htmlFor="stockMinimo" className="form-label">
+                      Stock Minimo:
+                    </label>
+                    <input
+                      type="number"
+                      name="stockMinimo"
+                      className="form-control"
+                      value={(formData.stockMinimo)}
+                      onChange={handleChange}
+                    />
+                  </div>
+
                 </Col>
               </Row>
               <div className="d-grid justify-content-end me-5">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      style={{ maxWidth: "120px" }}
-                    >
-                      Guardar
-                    </button>
-                  </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ maxWidth: "120px" }}
+                >
+                  Guardar
+                </button>
+              </div>
             </Col>
           </Row>
         </Grid>

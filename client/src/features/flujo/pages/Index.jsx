@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Link,
   useNavigate,
 } from "react-router-dom";
-import axios from "axios";
-import { Grid, Row, Col, Card, VStack, Text } from "rsuite";
+import { Grid, Row, Col, Text } from "rsuite";
 import "../styles/flu.css";
-
 import ColPendiente from "../components/ColPendiente";
 import ColProgreso from "../components/ColProgreso";
 import ColListo from "../components/ColListo";
+import Notificaciones from "../../../components/Notificaciones";
+
 const IndexFlujo = () => {
   const navigate = useNavigate(); // Hook para navegar
 
   return (
     <div className="grid-container">
       {/* OPCIONES */}
+      <Notificaciones modulo={'FLUJO'}/>
       <nav
         className="sidebar p-4 rounded-3 shadow-sm p-2"
         style={{ maxWidth: "550px" }}

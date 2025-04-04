@@ -2,7 +2,7 @@ import sql from 'mssql';
 import { connectDB } from '../../config/database.js';
 
 export class Orden {
-    constructor(idOrden, codigoOrden, estadoOrden, fechaIngreso, tiempoEstimado, estadoAtrasado, idVehiculo,descripcion, idTrabajador, idCliente) {
+    constructor(idOrden, codigoOrden, estadoOrden, fechaIngreso, tiempoEstimado, estadoAtrasado, idVehiculo, descripcion, idTrabajador, idCliente) {
         this.idOrden = idOrden
         this.codigoOrden = codigoOrden;
         this.estadoOrden = estadoOrden;
@@ -19,7 +19,7 @@ export class Orden {
 export class OrdenRepository {
 
     // Método para insertar Orden
-    async insertOrden(tiempoEstimado, idVehiculo, idTrabajador, idCliente,descripcion) {
+    async insertOrden(tiempoEstimado, idVehiculo, idTrabajador, idCliente, descripcion) {
         try {
             const pool = await connectDB();
             const result = await pool
@@ -67,48 +67,50 @@ export class OrdenRepository {
         }
     }
 
-    // Actualizar Orden
-    async updateTrabajador(idOrden, codigoOrden, estadoOrden, fechaIngreso, tiempoEstimado) {
+    //Siguiente fase - Tambien se usa para cancelar orden si el estado es 0
+    async siguienteFase(idOrden, estadoOrden) {
         try {
             const pool = await connectDB();
             const result = await pool
                 .request()
                 .input('idOrden', sql.Int, idOrden)
-                .input('codigoOrden', sql.VarChar, codigoOrden)
-                .input('estadoOrden', sql.VarChar, estadoOrden)
-                .input('fechaIngreso', sql.Decimal(10, 2), fechaIngreso)
-                .input('tiempoEstimado', sql.VarChar, tiempoEstimado)
-                .query(`
-                    UPDATE TRABAJADOR
-                    SET codigoOrden = @codigoOrden,
-                        estadoOrden = @estadoOrden,
-                        fechaIngreso = @fechaIngreso,
-                        tiempoEstimado = @tiempoEstimado
-                    WHERE idOrden = @idOrden
-                `);
+                .input('estadoOrden', sql.Int, estadoOrden)
+                .query(`UPDATE ORDEN
+                    SET estadoOrden = @estadoOrden
+                    WHERE idOrden = @idOrden`);
             return result.rowsAffected[0]; // Devuelve el número de filas afectadas
         } catch (error) {
-            console.error('Error en actualizar trabajador:', error);
-            throw new Error('Error en actualizar trabajador');
+            console.error('Error en actualizar orden:', error);
+            throw new Error('Error en actualizar orden');
         }
     }
 
-    // Cancelar orden => update estado a 0
-    async cancelarOrden(idOrden) {
+    // Actualizar Orden
+    async updateOrden(idOrden, tiempoEstimado, idTrabajador,idVehiculo, descripcion, estadoAtrasado) {
         try {
             const pool = await connectDB();
             const result = await pool
                 .request()
                 .input('idOrden', sql.Int, idOrden)
+                .input('tiempoEstimado', sql.DateTime, tiempoEstimado)
+                .input('idTrabajador', sql.Int, idTrabajador)
+                .input('idVehiculo', sql.Int, idVehiculo)
+                .input('descripcion', sql.NVarChar(2048), descripcion)
+                .input('estadoAtrasado', sql.Bit, estadoAtrasado)
                 .query(`
-                    DELETE FROM TRABAJADOR
-                    WHERE idOrden = @idOrden
-                `);
-            return result.rowsAffected; // Devuelve el número de filas afectadas
+                    UPDATE ORDEN
+                    SET tiempoEstimado = @tiempoEstimado,
+                        idTrabajador = @idTrabajador,
+                        idVehiculo = @idVehiculo,
+                        [descripcion] = @descripcion,
+                        estadoAtrasado = @estadoAtrasado
+                    WHERE idOrden = @idOrden`);
+            return result.rowsAffected[0]; // Devuelve el número de filas afectadas
         } catch (error) {
-            console.error('Error en eliminar trabajador:', error);
-            throw new Error('Error en eliminar trabajador');
+            console.error('Error en actualizar orden:', error);
+            throw new Error('Error en actualizar orden');
         }
     }
+
 
 }

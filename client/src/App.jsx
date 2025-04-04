@@ -19,6 +19,11 @@ import IndexVentas from './features/ventas/pages/index.jsx'
 import IndexCotizacion from "./features/ventas/pages/IndexCotizacion.jsx";
 import Cotizar from "./features/ventas/pages/Cotizar.jsx";
 import EditarCotizacion from "./features/ventas/pages/EditarCotizarcion.jsx";
+import Venta from "./features/ventas/pages/Venta.jsx";
+
+//Finanzas
+import GastosOperativos from "./features/finanzas/pages/GastosOperativos.jsx";
+import Dashboard from "./features/finanzas/pages/Dashboard.jsx";
 
 //flujo
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
@@ -48,7 +53,6 @@ import IndexCli from "./features/clientes/pages/IndexCli.jsx";
 import ListarClientesPage from "./features/clientes/pages/ListarClientesPage.jsx";
 import ListarEditClientesPage from "./features/clientes/pages/ListarEditClientePage.jsx";
 import ListarElimClientesPage from "./features/clientes/pages/ListarElimClientePage.jsx";
-
 import AgregarCliente from "./features/clientes/pages/AgregarCli.jsx";
 import EditarCliente from "./features/clientes/pages/EditarCli.jsx";
 import EliminarCliente from "./features/clientes/pages/Eliminar.jsx";
@@ -73,8 +77,6 @@ import IndexAdmin from "./features/adminn/pages/IndexAdm.jsx";
 import AgregarUsuario from "./features/adminn/pages/AgregarUser.jsx";
 import EditarUsuario from "./features/adminn/pages/EditarUser.jsx"
 import EliminarUsuario from "./features/adminn/pages/EliminarUser.jsx"
-
-
 
 
 const App = () => {
@@ -112,6 +114,11 @@ const App = () => {
           <Route path="/cotizacion" element={<IndexCotizacion />} />
           <Route path="/cotizacion-cotizar" element={<Cotizar />} />
           <Route path="/cotizacion-editar/:idCotizacion" element={<EditarCotizacion />} />
+          <Route path="/detalles/:idVenta" element={<Venta />} />
+
+          {/* Finanzas */}
+          <Route path="/gastos-operativos" element={<GastosOperativos />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
 
           {/* Ruta para trabajadores*/}
           <Route path="/trabajadores" element={<TrabajadoresIndex />} />
@@ -140,8 +147,6 @@ const App = () => {
           <Route path="/clientes/registrar" element={<AgregarCliente />} />
           <Route path="/clientes/editar/:cedula" element={<EditarCliente />} />
           <Route path="/clientes/eliminar/:cedula" element={<EliminarCliente />} />
-
-
 
           {/* Rutas para Vehiculos */}
           <Route path="/vehiculos/Index" element={<IndexVehi />} />

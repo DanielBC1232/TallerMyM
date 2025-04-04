@@ -14,7 +14,9 @@ const ContenedorProductos = ({formData}) => {
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
+        await new Promise((resolve) => setTimeout(resolve, 500));//delay para evitar consumo innecesario
         const { data } = await axios.post(`${BASE_URL}/productos`,formData);
+
         setLista(data);
       } catch (error) {
         console.error("Error obteniendo las categorías:", error);

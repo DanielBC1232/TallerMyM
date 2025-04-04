@@ -27,11 +27,13 @@
 }
 
 .scrollable-container {
-  max-height: 75vh;
+  height: 100vh;
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
   margin-bottom: 20px;
+  padding-bottom: 20px;
+
 
 }
 

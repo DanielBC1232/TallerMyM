@@ -142,3 +142,16 @@
 .imgDetalle:hover .delete-btn {
   opacity: 1;
 }
+
+.scrollable-container {
+  max-height: 75vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-bottom: 20px;
+
+}
+
+.scrollable-container::-webkit-scrollbar {
+  display: none;
+}

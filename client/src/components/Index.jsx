@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import React from "react";
-import { Card, Text, Button, TagGroup, Tag } from "rsuite";
+import { Card } from "rsuite";
 import { Link } from "react-router-dom";
 
 import "../styles/style.css";
@@ -66,7 +66,8 @@ const Index = () => {
         </div>
 
         <div className="col-sm-3 align-self-center">
-          <Link className="btn-link text-decoration-none">
+          <Link to="/gastos-operativos"
+          className="btn-link text-decoration-none">
             <Card width={300} direction="row" className="p-2">
               <Card.Header><FaMoneyCheckDollar size={55} color="#005ba5" className="d-flex align-self-baseline" /></Card.Header>
               <Card.Body as="h4" className="d-flex align-self-baseline">Módulo Finanzas</Card.Body>

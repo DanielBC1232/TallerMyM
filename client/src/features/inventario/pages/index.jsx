@@ -6,15 +6,12 @@ import RangoPrecio from "../components/RangoPrecio";
 import ModalSolicitarProducto from "../components/ModalSolicitarProducto";
 import {
   BrowserRouter as Router,
-  Routes,
-  Route,
   Link,
-  useNavigate,
-  data,
+  useNavigate
 } from "react-router-dom";
 import axios from "axios";
 import { Button, Grid, Row, Col, FlexboxGrid, Divider } from "rsuite";
-
+import Notificaciones from "../../../components/Notificaciones";
 import "../styles/inv.css";
 
 //URL Base
@@ -75,6 +72,7 @@ const IndexInventario = () => {
 
   return (
     <div className="grid-container">
+      <Notificaciones modulo={'INVENTARIO'}/>
       <nav
         className="sidebar p-4 rounded-3 shadow-sm"
         style={{ maxWidth: "550px" }}
@@ -171,7 +169,7 @@ const IndexInventario = () => {
       </nav>
 
       <div className="main rounded-3">
-        <div className="article-container article-scroll">
+        <div className="article-container scrollable-container">
           <ContenedorProductos formData={formData} />
         </div>
       </div>

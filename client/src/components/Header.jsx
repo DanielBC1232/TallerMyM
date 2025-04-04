@@ -7,7 +7,8 @@ import {Link} from "react-router-dom";
 const Header = ({ onSelect, activeKey, ...props }) => {
   return (
     <Navbar {...props} appearance="inverse" className="shadow-sm">
-      <Navbar.Brand as={Link} to="/" style={{ display: "flex", alignItems: "center" }}>
+      <Navbar.Brand as={Link} to="/"
+      style={{ display: "flex", alignItems: "center" }}>
         <Image
           circle
           src={logo}

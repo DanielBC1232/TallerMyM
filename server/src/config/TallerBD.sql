@@ -215,8 +215,7 @@ CREATE TABLE PRODUCTO_SERVICIO(
 
     -- Opcional - Descuentos
     porcentajeDescuento DECIMAL(10,2) NULL,
-    fechaInicio DATETIME NULL,
-    fechaFin DATETIME NULL,
+	stockMinimo INT NULL
 )
 GO
 
@@ -235,52 +234,6 @@ CREATE TABLE AUDITORIA_TABLAS(
 );
 GO
 
--- MODULO FINANZAS --
-
-CREATE TABLE PAGO_CLIENTE(
-
-    idPago INT IDENTITY(1,1) PRIMARY KEY,
-    monto DECIMAL(10,2) NOT NULL,
-    metodoPago VARCHAR(100),
-    fecha DATETIME NOT NULL,
-    estado VARCHAR(50),--cancelado, pendiente, atrasado
-    descripcion NVARCHAR(MAX) NOT NULL,
-
-    FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta)
-    idCliente INT NOT NULL,
-    FOREIGN KEY (idCliente) REFERENCES CLIENTE(idCliente),
-
-)
-GO
-
-CREATE TABLE GASTO_OPERATIVO(
-
-    idGastoOperativo INT IDENTITY(1,1) PRIMARY KEY,
-    monto DECIMAL(10,2) NOT NULL,
-    fecha DATETIME NOT NULL,
-    idProveedor INT NOT NULL,
-    FOREIGN KEY (idProveedor) REFERENCES PROVEEDOR(idProveedor)
-)
-GO
-
-CREATE TABLE DEVOLUCION(
-
-    idDevolucion INT IDENTITY(1,1) PRIMARY KEY,
-    monto DECIMAL(10,2) NOT NULL,
-    fecha DATETIME NOT NULL,
-    razon NVARCHAR(MAX) NOT NULL,
-    codigoOrden VARCHAR(9) NOT NULL
-)
-GO
-
-CREATE TABLE INGRESO(
-
-    idIngreso INT IDENTITY(1,1) PRIMARY KEY,
-    monto DECIMAL(10,2) NOT NULL,
-    fecha DATE NOT NULL
-)
-GO
-
 -- MODULO CONTROL DE FLUJO --
 
 CREATE TABLE ORDEN(
@@ -292,6 +245,7 @@ CREATE TABLE ORDEN(
     tiempoEstimado DATETIME NOT NULL,
     estadoAtrasado BIT NOT NULL DEFAULT 0,
 	idVehiculo INT NOT NULL,
+	descripcion NVARCHAR(2048) NULL,
     --FK
     --Se puede reasignar otro trabajador (update)
     idTrabajador INT,
@@ -305,7 +259,6 @@ CREATE TABLE ORDEN(
 GO
 
 -- MODULO VENTAS --
-
 CREATE TABLE COTIZACION(
 
     idCotizacion INT IDENTITY(1,1) PRIMARY KEY,
@@ -323,63 +276,87 @@ GO
 
 CREATE TABLE VENTA(
 
-    idVenta INT IDENTITY(1,1) PRIMARY KEY,
+    idVenta BIGINT IDENTITY(1,1) PRIMARY KEY,
 
-    costoReparacion DECIMAL(10,2) NOT NULL,
-    fechaIngreso DATETIME NOT NULL,
-    fechaSalida DATETIME NOT NULL,
-    tipoPago VARCHAR(30),--credito o contado
-    montoTotal DECIMAL(10,2) NOT NULL,
+    fechaVenta DATE DEFAULT GETDATE(),
+    montoTotal DECIMAL(10,2) DEFAULT 0 NULL,
+	detalles NVARCHAR(1024) NULL,
+	ventaConsumada BIT DEFAULT 0 NOT NULL,--pagado o no pagado
 
     idOrden INT NOT NULL,
     FOREIGN KEY (idOrden) REFERENCES ORDEN(idOrden),
- 
 )
 GO
 
-CREATE TABLE CUOTA (
-    
-    idCuota INT IDENTITY(1,1) PRIMARY KEY,
-    montoTotal DECIMAL(10,2) NOT NULL,
-    montoCuota DECIMAL(10,2) NOT NULL,
-    fechaInicio DATE NOT NULL,
-    fechaLimite DATE NOT NULL,
-    numeroCuotas INT NOT NULL,
-    estado VARCHAR(50) DEFAULT 'Pendiente',
+CREATE TABLE PRODUCTO_POR_VENTA(
+	idProductoVenta BIGINT IDENTITY(1,1) PRIMARY KEY,
 
-    --FK
-    idCliente INT NOT NULL,
-    idVenta INT NOT NULL,
-    FOREIGN KEY (idCliente) REFERENCES CLIENTE(idCliente) ON DELETE CASCADE,
-    FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta) ON DELETE CASCADE
-)
-GO
+	idVenta BIGINT NOT NULL,
+	idProducto INT NOT NULL,
+	cantidad INT NOT NULL,
+	monto DECIMAL(10,2) NOT NULL,
 
-CREATE TABLE PAGO_CUOTA (
-    idPagoCuota INT IDENTITY(1,1) PRIMARY KEY,
-    numeroCuota INT NOT NULL,
-    fechaVencimiento DATE NOT NULL,
-    fechaPago DATE NOT NULL,
-    montoPagado DECIMAL(10,2) NOT NULL,
-    penalidad DECIMAL(10,2) DEFAULT 0.00,--penalidad si la fecha de pago es mayor a la de vencimiento
-
-    idCuota INT NOT NULL,
-    FOREIGN KEY (idCuota) REFERENCES CUOTA(idCuota) ON DELETE CASCADE
+	FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta),
+	FOREIGN KEY (idProducto)REFERENCES PRODUCTO_SERVICIO(idProducto)
 
 );
 GO
 
-CREATE TABLE NOTIFICACION(
+CREATE TABLE NOTIFICACIONES(
 
-    idNotificacion INT IDENTITY(1,1) PRIMARY KEY,
-    titulo VARCHAR(150) NOT NULL,
-    cuerpo NVARCHAR(2048) NOT NULL,
-    fecha DATETIME DEFAULT GETDATE() NOT NULL,
+    idNotificacion BIGINT IDENTITY(1,1) PRIMARY KEY,
+    titulo VARCHAR(50) NOT NULL,
+    cuerpo NVARCHAR(256) NOT NULL,
+    fecha DATE DEFAULT GETDATE() NOT NULL,
     modulo VARCHAR(50) NOT NULL,
-
-    idUsuario INT NOT NULL,
-    FOREIGN KEY (idUsuario) REFERENCES USUARIO(idUsuario)
+	tipo VARCHAR(10) NOT NULL,--error,info,warning
+	estado BIT DEFAULT 1 NOT NULL ,
 
 );
 GO
+
+-- MODULO FINANZAS --
+
+--JOB notificacion de atrasado y correo al cliente: VENTA.fechaVenta > 3 semanas and VENTA.ventaConsumada = 0 (no pagado)
+--Listado de pagos atrasados: VENTA.fechaVenta > 3 semanas and VENTA.ventaConsumada = 0
+CREATE TABLE PAGO_CLIENTE(
+
+    idPago BIGINT IDENTITY(1,1) PRIMARY KEY,
+    monto DECIMAL(10,2) NOT NULL,
+	dineroVuelto DECIMAL(10,2) NOT NULL,
+    metodoPago VARCHAR(15) NOT NULL,--efectivo, transferencia
+	subtotal DECIMAL(10,2) NOT NULL,
+	iva DECIMAL(10,2) NOT NULL,
+	total DECIMAL(10,2) NOT NULL,
+    fecha DATE DEFAULT GETDATE() NOT NULL,
+	--FK
+    idVenta BIGINT NOT NULL,
+    FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta)
+);
+GO
+
+CREATE TABLE DEVOLUCION(
+
+    idDevolucion BIGINT IDENTITY(1,1) PRIMARY KEY,
+    monto DECIMAL(10,2) NOT NULL,
+    motivo VARCHAR(512) NOT NULL,
+    fecha DATE DEFAULT GETDATE() NOT NULL,
+	--FK
+	idVenta BIGINT NOT NULL,
+    FOREIGN KEY (idVenta) REFERENCES VENTA(idVenta)
+);
+GO
+
+CREATE TABLE GASTO_OPERATIVO(
+
+    idGastoOperativo BIGINT IDENTITY(1,1) PRIMARY KEY,
+	tipoGasto VARCHAR(50) NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
+	detalle VARCHAR(512) NOT NULL,
+    proveedor VARCHAR(50) NULL,
+
+    fecha DATE DEFAULT GETDATE() NOT NULL
+)
+GO
+
 
