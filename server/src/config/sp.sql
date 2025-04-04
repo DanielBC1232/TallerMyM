@@ -274,58 +274,74 @@ GO
 CREATE OR ALTER PROCEDURE SP_INSERTAR_PRODUCTO_VENTA
 @idVenta INT,
 @idProducto INT,
-@cantidad INT --cantidad de unidades reservadas
+@cantidad INT
 AS BEGIN
 	BEGIN TRY
-		--Declarar variables
-		DECLARE @precio DECIMAL(10,2), @porcentajeDescuento DECIMAL(10,2), @monto DECIMAL(10,2), @stock INT;
+		DECLARE @precio DECIMAL(10,2), @porcentajeDescuento DECIMAL(10,2), @montoUnitario DECIMAL(10,2),
+				@stock INT, @tipo VARCHAR(50), @cantidadFinal INT;
 
-		BEGIN TRANSACTION; -- Iniciar transaccion
+		BEGIN TRANSACTION;
 
-		--consultar datos de producto
-		SELECT @stock = stock, @precio = precio, @porcentajeDescuento = porcentajeDescuento
-		FROM PRODUCTO_SERVICIO WITH (UPDLOCK, ROWLOCK, HOLDLOCK) --bloqueo para evitar sobreventa
+		SELECT 
+			@stock = stock, 
+			@precio = precio, 
+			@porcentajeDescuento = porcentajeDescuento,
+			@tipo = tipo
+		FROM PRODUCTO_SERVICIO WITH (UPDLOCK, ROWLOCK, HOLDLOCK)
 		WHERE idProducto = @idProducto;
 
-		--condicional para aplicar o no descuento
-		IF @porcentajeDescuento IS NOT NULL AND @porcentajeDescuento > 0.00
-			SET @monto = @precio - (@precio * @porcentajeDescuento); --aplicar descuento
-		ELSE
-			SET @monto = @precio;
-
-		--Insertar producto a la venta
-			INSERT INTO PRODUCTO_POR_VENTA(idVenta,idProducto,cantidad,monto)
-			VALUES (@idVenta, @idProducto,@cantidad, @monto)
-	
-		--Rebajar stock a producto
-		-- Verificar si hay suficiente stock
-		IF @stock < @cantidad
+		IF @precio IS NULL
 		BEGIN
 			ROLLBACK TRANSACTION;
-				THROW 50409, 'Stock insuficiente', 1;
+			THROW 50410, 'Producto o servicio no encontrado', 1;
 			RETURN;
 		END
 
-		--update de stock
-		UPDATE PRODUCTO_SERVICIO
-		SET stock = stock - @cantidad
-		WHERE idProducto = @idProducto 
-		AND tipo = 'PRODUCTO';
+		-- Si es servicio, la cantidad siempre debe ser 1
+		IF @tipo = 'SERVICIO'
+			SET @cantidadFinal = 1;
+		ELSE
+			SET @cantidadFinal = @cantidad;
 
-		EXEC SP_NOTIFICACION_STOCK;
+		-- Calcular monto unitario con o sin descuento
+		IF @porcentajeDescuento IS NOT NULL AND @porcentajeDescuento > 0.00
+			SET @montoUnitario = @precio - (@precio * @porcentajeDescuento);
+		ELSE
+			SET @montoUnitario = @precio;
 
-		--Confirmar transaccion
+		-- Insertar producto o servicio a la venta
+		INSERT INTO PRODUCTO_POR_VENTA(idVenta, idProducto, cantidad, monto)
+		VALUES (@idVenta, @idProducto, @cantidadFinal, @montoUnitario * @cantidadFinal);
+
+		-- Si es producto, verificar y actualizar stock
+		IF @tipo = 'PRODUCTO'
+		BEGIN
+			IF @stock IS NULL OR @stock < @cantidadFinal
+			BEGIN
+				ROLLBACK TRANSACTION;
+				THROW 50409, 'Stock insuficiente', 1;
+				RETURN;
+			END
+
+			UPDATE PRODUCTO_SERVICIO
+			SET stock = stock - @cantidadFinal
+			WHERE idProducto = @idProducto;
+
+			EXEC SP_NOTIFICACION_STOCK;
+		END
+
 		COMMIT TRANSACTION;
-
 	END TRY
 	BEGIN CATCH
-		--manejo de errores y rollback
 		IF @@TRANCOUNT > 0
-            ROLLBACK TRANSACTION;
+			ROLLBACK TRANSACTION;
 		THROW 50500, 'Error inesperado en el servidor', 1;
 	END CATCH
 END;
 GO
+
+select * from PRODUCTO_SERVICIO
+go
 
 CREATE OR ALTER PROCEDURE SP_GET_PRODUCTOS_VENTA
 @idVenta INT
@@ -445,7 +461,9 @@ BEGIN
         SELECT nombre, marca, tipo
         FROM PRODUCTO_SERVICIO
         WHERE stockMinimo IS NOT NULL
-          AND stock <= stockMinimo;
+          AND stock <= stockMinimo
+		  AND tipo != 'SERVICIO'
+		  AND tipo != 'servicio'
 
     OPEN stock_cursor;
     FETCH NEXT FROM stock_cursor INTO @nombreProducto, @marca, @tipo;
@@ -628,5 +646,23 @@ BEGIN
         @totalMesActual AS totalMesActual,
         @totalMesAnterior AS totalMesAnterior,
         @diferenciaPorcentual AS diferenciaPorcentual
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_TOP_VENTAS
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT TOP 10
+        ps.nombre + ' ' + ps.marca AS nombreProducto,
+        SUM(ppv.cantidad) AS totalVentas
+    FROM PRODUCTO_POR_VENTA ppv
+    INNER JOIN VENTA v ON ppv.idVenta = v.idVenta
+    INNER JOIN PRODUCTO_SERVICIO ps ON ppv.idProducto = ps.idProducto
+    WHERE v.fechaVenta >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0)
+      AND v.fechaVenta < DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
+    GROUP BY ps.nombre, ps.marca
+    ORDER BY totalVentas DESC;
 END;
 GO

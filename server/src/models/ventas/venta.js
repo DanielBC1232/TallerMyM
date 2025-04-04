@@ -104,12 +104,28 @@ export class VentaRepository {
                 .input('idProducto', sql.Int, idProducto)
                 .input('cantidad', sql.Int, cantidad)
                 .execute(`SP_DELETE_PRODUCTO_VENTA`);
-                const filasAfectadas = result.recordset[0]?.filasAfectadas || 0;
+            const filasAfectadas = result.recordset[0]?.filasAfectadas || 0;
 
-                return filasAfectadas;
+            return filasAfectadas;
         } catch (error) {
             console.error('Error en eliminar producto:', error);
             throw new Error('Error en eliminar producto');
+        }
+    }
+
+    //existe pago
+    async existePago(idVenta) {
+        try {
+            const pool = await connectDB();
+            const result = await pool
+                .request()
+                .input('idVenta', sql.Int, idVenta)
+                .query(`SELECT * FROM PAGO_CLIENTE WHERE idVenta = @idVenta`);
+                return result.recordset.length > 0;
+
+        } catch (error) {
+            console.error('Error obtener dato:', error);
+            throw new Error('Error obtener dato:');
         }
     }
 

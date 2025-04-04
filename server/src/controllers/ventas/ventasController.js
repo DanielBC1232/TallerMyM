@@ -23,8 +23,8 @@ const getVentas = async (req, res) => {
     try {
 
         const { nombreCliente, codigoOrden } = req.body;
-        console.log(nombreCliente,codigoOrden);
-        
+        console.log(nombreCliente, codigoOrden);
+
         // Usar el método de listado del repositorio
         const venta = await VentaRepo.getVentas(nombreCliente, codigoOrden);
 
@@ -87,7 +87,7 @@ const deleteProductoVenta = async (req, res) => {
 
         const rowsAffected = await VentaRepo.deleteProductoVenta(idProductoVenta, idProducto, cantidad);
         console.log(rowsAffected);
-        
+
         if (rowsAffected > 0) {
             res.status(200).json({ message: "Producto eliminado de venta correctamente" });
         } else {
@@ -99,4 +99,18 @@ const deleteProductoVenta = async (req, res) => {
     }
 };
 
-export { insertVenta, getVentas, getVentaById, agregarProducto, getProductosVenta, deleteProductoVenta };
+const existePago = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+
+        const respuesta = await VentaRepo.existePago(id);
+
+        res.status(200).send(respuesta);
+
+    } catch (error) {
+        console.error("Error en obtener dato:", error);
+        res.status(500).json({ error: "Error en obtener dato" });
+    }
+};
+
+export { insertVenta, getVentas, getVentaById, agregarProducto, getProductosVenta, deleteProductoVenta, existePago };

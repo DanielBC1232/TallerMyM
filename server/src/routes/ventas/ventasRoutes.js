@@ -8,6 +8,7 @@ router.get("/obtener-venta/:id", ventasController.getVentaById);
 router.post("/agregar-producto/", ventasController.agregarProducto);
 router.get("/obtener-productos-venta/:id", ventasController.getProductosVenta);
 router.post("/eliminar-producto-venta/", ventasController.deleteProductoVenta);
+router.get("/existe-pago/:id", ventasController.existePago);
 
 
 // Exporta el router usando CommonJS

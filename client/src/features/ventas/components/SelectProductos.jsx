@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, Modal, Button } from "rsuite";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -11,9 +11,10 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const SelectProductos = ({ idVenta }) => {
     const [productos, setProductos] = useState({});//listado
     const [loading, setLoading] = useState(true); // Estado para manejar la carga
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
     const [formData, setFormData] = useState({//Parametros para filtro
         nombre: "",
         marca: "",
@@ -98,7 +99,6 @@ const SelectProductos = ({ idVenta }) => {
                 Swal.fire({
                     icon: "error",
                     title: "Error al agregar producto",
-                    text: error,
                     showConfirmButton: false,
                     timer: 1000,
                 })

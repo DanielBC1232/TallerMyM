@@ -11,6 +11,23 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
   const [reload, setReload] = useState(0);//listado
   const [productos, setProductos] = useState([]);//listado
 
+  //Verificacion si existe un pago asociado a la venta
+  const [existePago, setExistePago] = useState(false);
+  useEffect(() => {
+    const verificarPago = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/ventas/existe-pago/${idVenta}`);
+        setExistePago(response.data === true);
+      } catch (error) {
+        console.error('Error al verificar pago:', error);
+        setExistePago(false); // En caso de error asumimos que no hay pago
+      }
+    };
+    verificarPago();
+
+  }, [idVenta]);
+  console.log(existePago);
+
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
@@ -99,18 +116,20 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
                   <td className="text-center">x {producto.cantidad}</td>
                   <td className="text-center">₡ {producto.montoFinalUnitario}</td>
                   <td className="text-center">
-                    <button
-                      className="btn btn-sm text-white btn-danger"
-                      onClick={() =>
-                        RemoverProductoVenta(
-                          producto.idProductoVenta,
-                          producto.idProducto,
-                          producto.cantidad
-                        )
-                      }
-                    >
-                      Eliminar
-                    </button>
+                    {!existePago && (
+                      <button
+                        className="btn btn-sm text-white btn-danger"
+                        onClick={() =>
+                          RemoverProductoVenta(
+                            producto.idProductoVenta,
+                            producto.idProducto,
+                            producto.cantidad
+                          )
+                        }
+                      >
+                        Eliminar
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
