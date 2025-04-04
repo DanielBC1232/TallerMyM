@@ -112,7 +112,8 @@ class VehiculoRepository {
     try {
       const pool = await connectDB();
       const result = await pool.request()
-        .input("idCliente", sql.Int, idCliente).query(`SELECT idVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo FROM CLIENTE_VEHICULO
+        .input("idCliente", sql.Int, idCliente)
+        .query(`SELECT idVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo FROM CLIENTE_VEHICULO
           WHERE idCliente = @idCliente`);
       return result.recordset;
     } catch (error) {

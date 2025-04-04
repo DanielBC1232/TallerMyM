@@ -20,6 +20,7 @@ const trabajadoresRoutes = require("../routes/trabajadores/trabajadoresRoutes");
 
 const ClienteRoutes_1 = __importDefault(require("../routes/clientes/clienteRoutes"));
 const VehiculoRoute_1 = __importDefault(require("../routes/vehiculos/vehiculosRoutes"));
+const AdministrativoRoute1 = __importDefault(require("../routes/administrativo/AdminRoutes"));
 
 const Usuario_1 = __importDefault(require("../models/usuario/usuario"));
 const database_1 = require("../config/database");
@@ -68,6 +69,7 @@ app.use("/usuario", Usuario_1.default);
 app.use("/clientes", ClienteRoutes_1.default);
 //Ruta modulo Vehiculos
 app.use("/vehiculos", VehiculoRoute_1.default);
-
+//Ruta modulo Administrativo
+app.use("/admin", AdministrativoRoute1.default);
 //Ruta flujo-ordenes
 app.use("/flujo",ordenRoutes);

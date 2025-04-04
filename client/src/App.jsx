@@ -24,12 +24,21 @@ import EditarCotizacion from "./features/ventas/pages/EditarCotizarcion.jsx";
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
 import AgregarOrden from './features/flujo/pages/Agregar.jsx';
 import DetallesOrden from "./features/flujo/pages/Detalles.jsx";
-import EditarOrden from "./features/flujo/pages/Editar.jsx";
+//import EditarOrden from "./features/flujo/pages/Editar.jsx";
 
 //Trabajadores
 import TrabajadoresIndex from "./features/trabajadores/pages/Index.jsx";
 import AgregarTrabajador from "./features/trabajadores/pages/Agregar.jsx";
 import EditarTrabajador from "./features/trabajadores/pages/Editar.jsx";
+//---Seccion de solicitud de vacaciones
+import AgregarSolicitudVacaciones from "./features/trabajadores/pages/AgregarSolicitud.jsx"
+import GestionarSolicitudVacaciones from "./features/trabajadores/pages/GestionarSolicitud.jsx";
+//--seccion gestion de salarios
+import GestionarSalarios from "./features/trabajadores/pages/ListaGestSalariosPage.jsx";
+import EditarTrabajadorSalario from "./features/trabajadores/pages/EditarSalario.jsx";
+
+import AprobarVacaciones from "./features/trabajadores/pages/AprobarVacaciones.jsx";
+
 
 //administracion
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
@@ -52,7 +61,19 @@ import ListarElimVehiculosPage from "./features/vehiculos/pages/ListarElimVehicu
 
 import AgregarVehiculo from "./features/vehiculos/pages/AgregarVehiculo.jsx";
 import EditarVehiculo from "./features/vehiculos/pages/EditarVehiculo.jsx";
-import EliminarVehiculo from "./features/vehiculos/pages/EliminarVehiculo.jsx"
+import EliminarVehiculo from "./features/vehiculos/pages/EliminarVehiculo.jsx";
+
+//Imports Modulo administrativo
+import ListarUsuariosPage from "./features/adminn/pages/ListarUsuariosPage.jsx";
+import ListarEditUsuariosPage from "./features/adminn/pages/ListarEditUsuariosPage.jsx";
+import ListarElimUsuariosPage from "./features/adminn/pages/ListarElimUsuariosPage.jsx"
+
+
+import IndexAdmin from "./features/adminn/pages/IndexAdm.jsx";
+import AgregarUsuario from "./features/adminn/pages/AgregarUser.jsx";
+import EditarUsuario from "./features/adminn/pages/EditarUser.jsx"
+import EliminarUsuario from "./features/adminn/pages/EliminarUser.jsx"
+
 
 
 
@@ -84,7 +105,7 @@ const App = () => {
           <Route path="/flujo" element={<IndexFlujo />} />
           <Route path="/flujo-agregar" element={<AgregarOrden />} />
           <Route path="/flujo-detalles/:idOrden" element={<DetallesOrden />} />
-          <Route path="/flujo-editar/:idOrden" element={<EditarOrden />} />
+          {/*<Route path="/flujo-editar/:idOrden" element={<EditarOrden />} />
 
           {/* Ventas */}
           <Route path="/ventas" element={<IndexVentas />} />
@@ -96,6 +117,16 @@ const App = () => {
           <Route path="/trabajadores" element={<TrabajadoresIndex />} />
           <Route path="/trabajadores-agregar" element={<AgregarTrabajador />} />
           <Route path="/trabajadores-editar/:idTrabajador" element={<EditarTrabajador />} />
+
+          <Route path="/AgregarSolicitud-Vacaciones" element={<AgregarSolicitudVacaciones />} />
+          <Route path="/GestionarSolicitud-Vacaciones" element={<GestionarSolicitudVacaciones />} />
+
+          <Route path="/Gestionar-Salarios" element={<GestionarSalarios />} />
+          <Route path="/trabajadores-editar-salario/:idTrabajador" element={<EditarTrabajadorSalario />} />
+
+            {/*Esta ruta hay que revisarla creo que la agregue y no la use al final*/}
+          <Route path="/AprobarVacaciones/:idVacaciones" element={<AprobarVacaciones />} />
+              
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
@@ -123,6 +154,25 @@ const App = () => {
           <Route path="/vehiculos/registrar" element={<AgregarVehiculo />} />
           <Route path="/vehiculos/editar/:idVehiculo" element={<EditarVehiculo />} />
           <Route path="/vehiculos/eliminar/:idVehiculo" element={<EliminarVehiculo />} />
+
+          {/* Rutas para Admin */}
+          
+          <Route path="/admin/listarUsuarios" element={<ListarUsuariosPage/>} />
+          <Route path="/admin/listarEditUsuarios" element={<ListarEditUsuariosPage/>} />
+          <Route path="/admin/listarElimUsuarios" element={<ListarElimUsuariosPage/>} />
+
+
+
+
+          <Route path="/admin/Index" element={<IndexAdmin />} />
+          <Route path="/admin/registrar" element={<AgregarUsuario />} />
+          <Route path="/admin/editar/:idUsuario" element={<EditarUsuario />} />
+          <Route path="/admin/eliminar/:idUsuario" element={<EliminarUsuario />} />
+
+
+
+
+
 
 
 

@@ -31,23 +31,49 @@ const IndexTrabajadores = () => {
         <div className="row mx-1">
           <Row gutter={10}>
             <Col xs={11}>
-              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px" }}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px" ,margin:"10px"}}>
                 <Link to="/trabajadores-agregar" className="btn-link">Agregar Trabajador</Link>
               </Button>
             </Col>
+            
             <Col xs={2}>
               <Divider vertical />
             </Col>
+            
+            <Col xs={11}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px",margin:"10px" }}>
+                <Link to="/AgregarSolicitud-Vacaciones" className="btn-link">Solicitar Vacaciones</Link>
+              </Button>
+            </Col>
+
             <Col xs={11}>
               <Link
                 to="/trabajadores-vacaciones"
                 type="submit"
-                className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "130px" }}>
+                className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "130px" ,margin:"10px"}}>
               Filtrar</Link>
             </Col>
+
+            <Col xs={2}>
+              <Divider vertical />
+            </Col>
+          
+            <Col xs={11}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px",margin:"10px" }}>
+                <Link to="/GestionarSolicitud-Vacaciones" className="btn-link">Aprobar Vacaciones</Link>
+              </Button>
+            </Col>
+
+            <Col xs={11}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px",margin:"10px" }}>
+                <Link to="/Gestionar-Salarios" className="btn-link">Gestionar Salarios</Link>
+              </Button>
+            </Col>
+
           </Row>
         </div>
       </nav>
+
       <div className="main rounded-3">
         <div className="article-scroll">
           <ListaTrabajadores />
