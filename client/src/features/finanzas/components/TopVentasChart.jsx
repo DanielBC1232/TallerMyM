@@ -20,7 +20,7 @@ const TopVentasChart = () => {
     }, []);
 
     const categories = ventas.map(item => item.nombreProducto);
-    const seriesData = ventas.map(item => item.totalVentas);
+    const seriesData = ventas.map(item => item.cantidad);
 
     const options = {
         chart: {

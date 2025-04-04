@@ -26,7 +26,7 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
     verificarPago();
 
   }, [idVenta]);
-  console.log(existePago);
+  //console.log(existePago);
 
   useEffect(() => {
     const obtenerDatos = async () => {

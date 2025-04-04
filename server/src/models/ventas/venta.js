@@ -114,19 +114,31 @@ export class VentaRepository {
     }
 
     //existe pago
-    async existePago(idVenta) {
-        try {
-            const pool = await connectDB();
-            const result = await pool
+// existePago
+async existePago(idVenta) {
+    try {
+        const pool = await connectDB();
+
+        const resultPago = await pool
+            .request()
+            .input('idVenta', sql.Int, idVenta)
+            .query(`SELECT 1 FROM PAGO_CLIENTE WHERE idVenta = @idVenta`);
+
+        const existe = resultPago.recordset.length > 0;
+
+        if (existe) {//si hay pago efectuado cambiar el estado de venta a consumado
+            await pool
                 .request()
                 .input('idVenta', sql.Int, idVenta)
-                .query(`SELECT * FROM PAGO_CLIENTE WHERE idVenta = @idVenta`);
-                return result.recordset.length > 0;
-
-        } catch (error) {
-            console.error('Error obtener dato:', error);
-            throw new Error('Error obtener dato:');
+                .query(`UPDATE VENTA SET ventaConsumada = 1 WHERE idVenta = @idVenta`);
         }
+        return existe;//retornar el existe boleano
+
+    } catch (error) {
+        console.error('Error al verificar pago:', error);
+        throw new Error('Error al verificar pago');
     }
+}
+
 
 }

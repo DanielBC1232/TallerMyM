@@ -340,9 +340,6 @@ AS BEGIN
 END;
 GO
 
-select * from PRODUCTO_SERVICIO
-go
-
 CREATE OR ALTER PROCEDURE SP_GET_PRODUCTOS_VENTA
 @idVenta INT
 AS BEGIN
@@ -575,9 +572,6 @@ BEGIN
 END;
 GO
 
-select * from PAGO_CLIENTE
-go
-
 CREATE OR ALTER PROCEDURE SP_GET_GANANCIAS_MESES
 AS
 BEGIN
@@ -652,17 +646,19 @@ GO
 CREATE OR ALTER PROCEDURE SP_TOP_VENTAS
 AS
 BEGIN
-    SET NOCOUNT ON;
-
-    SELECT TOP 10
+    SELECT TOP 10 
         ps.nombre + ' ' + ps.marca AS nombreProducto,
-        SUM(ppv.cantidad) AS totalVentas
-    FROM PRODUCTO_POR_VENTA ppv
-    INNER JOIN VENTA v ON ppv.idVenta = v.idVenta
-    INNER JOIN PRODUCTO_SERVICIO ps ON ppv.idProducto = ps.idProducto
-    WHERE v.fechaVenta >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) - 1, 0)
-      AND v.fechaVenta < DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
-    GROUP BY ps.nombre, ps.marca
-    ORDER BY totalVentas DESC;
+        SUM(pv.cantidad) AS cantidad
+    FROM 
+        PRODUCTO_POR_VENTA pv
+    INNER JOIN 
+        PRODUCTO_SERVICIO ps ON pv.idProducto = ps.idProducto
+    GROUP BY 
+        ps.nombre, ps.marca                 
+    ORDER BY 
+        cantidad  DESC;
 END;
 GO
+
+select * from PRODUCTO_POR_VENTA
+select * from venta
