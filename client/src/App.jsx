@@ -29,7 +29,7 @@ import Dashboard from "./features/finanzas/pages/Dashboard.jsx";
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
 import AgregarOrden from './features/flujo/pages/Agregar.jsx';
 import DetallesOrden from "./features/flujo/pages/Detalles.jsx";
-//import EditarOrden from "./features/flujo/pages/Editar.jsx";
+import EditarOrden from "./features/flujo/pages/Editar.jsx";
 
 //Trabajadores
 import TrabajadoresIndex from "./features/trabajadores/pages/Index.jsx";
@@ -107,7 +107,7 @@ const App = () => {
           <Route path="/flujo" element={<IndexFlujo />} />
           <Route path="/flujo-agregar" element={<AgregarOrden />} />
           <Route path="/flujo-detalles/:idOrden" element={<DetallesOrden />} />
-          {/*<Route path="/flujo-editar/:idOrden" element={<EditarOrden />} />
+          <Route path="/flujo-editar/:idOrden" element={<EditarOrden />} />
 
           {/* Ventas */}
           <Route path="/ventas" element={<IndexVentas />} />

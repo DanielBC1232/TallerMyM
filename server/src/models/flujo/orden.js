@@ -1,5 +1,6 @@
 import sql from 'mssql';
 import { connectDB } from '../../config/database.js';
+import { cambioEstadoOrden } from '../mailer/mailerBD.js';
 
 export class Orden {
     constructor(idOrden, codigoOrden, estadoOrden, fechaIngreso, tiempoEstimado, estadoAtrasado, idVehiculo, descripcion, idTrabajador, idCliente) {
@@ -78,7 +79,12 @@ export class OrdenRepository {
                 .query(`UPDATE ORDEN
                     SET estadoOrden = @estadoOrden
                     WHERE idOrden = @idOrden`);
-            return result.rowsAffected[0]; // Devuelve el número de filas afectadas
+            const resultadoSQL = result.rowsAffected[0];
+
+            if (resultadoSQL > 0) {
+                cambioEstadoOrden();
+            }
+            return resultadoSQL  // Devuelve el número de filas afectadas
         } catch (error) {
             console.error('Error en actualizar orden:', error);
             throw new Error('Error en actualizar orden');
@@ -86,7 +92,7 @@ export class OrdenRepository {
     }
 
     // Actualizar Orden
-    async updateOrden(idOrden, tiempoEstimado, idTrabajador,idVehiculo, descripcion, estadoAtrasado) {
+    async updateOrden(idOrden, tiempoEstimado, idTrabajador, idVehiculo, descripcion, estadoAtrasado) {
         try {
             const pool = await connectDB();
             const result = await pool

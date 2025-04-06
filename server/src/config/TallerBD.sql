@@ -19,6 +19,9 @@ CREATE TABLE ROLES (
     idRol INT PRIMARY KEY IDENTITY(1, 1), -- ID autoincremental
     nombreRol NVARCHAR(50) NOT NULL UNIQUE -- Nombre del rol (ej: "admin", "user")
 );
+INSERT INTO ROLES(nombreRol)VALUES('admin');
+INSERT INTO ROLES(nombreRol)VALUES('user');
+GO
 
 CREATE TABLE USUARIO (
     idUsuario INT PRIMARY KEY IDENTITY(1, 1), -- ID autoincremental
@@ -246,6 +249,7 @@ CREATE TABLE ORDEN(
     estadoAtrasado BIT NOT NULL DEFAULT 0,
 	idVehiculo INT NOT NULL,
 	descripcion NVARCHAR(2048) NULL,
+	estadoCorreoNotificacion INT NULL DEFAULT 1,--si este valor es diferente a estadoOrden envia correo
     --FK
     --Se puede reasignar otro trabajador (update)
     idTrabajador INT,

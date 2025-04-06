@@ -36,20 +36,20 @@ const PORT = 3000; // Iniciar servidor
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
 });
-app.use((0, cors_1.default)({ 
+app.use((0, cors_1.default)({
     origin: "http://localhost:5173",
     methods: 'GET, POST, PUT, PATCH, DELETE',
 }));
 (0, database_1.connectDB)() // conexion BD
     .then(() => console.log("Conectado a la base de datos"))
     .catch((err) => {
-    if (err instanceof Error) {
-        console.error("Error en la conexión:", err.message);
-    }
-    else {
-        console.error("Error en la conexión:", err);
-    }
-});
+        if (err instanceof Error) {
+            console.error("Error en la conexión:", err.message);
+        }
+        else {
+            console.error("Error en la conexión:", err);
+        }
+    });
 //* Rutas Inventario
 app.use("/categorias", categoriaRoutes_1.default);
 app.use("/marcas", marcaRoutes_1.default);
@@ -63,16 +63,16 @@ app.use("/inventario", solicitudRoutes_1.default);
 app.use("/notificaciones", notificacionesRoutes);
 
 //Rutas Ventas
-app.use("/cotizacion",cotizacionRoutes);
-app.use("/ventas",ventasRoutes);
+app.use("/cotizacion", cotizacionRoutes);
+app.use("/ventas", ventasRoutes);
 
 //Finanzas
-app.use("/finanzas",pagoClienteRoutes);
-app.use("/finanzas",devolucionRoutes);
-app.use("/finanzas",gastoOperativoRoutes);
-app.use("/finanzas",dashboardRoutes);
+app.use("/finanzas", pagoClienteRoutes);
+app.use("/finanzas", devolucionRoutes);
+app.use("/finanzas", gastoOperativoRoutes);
+app.use("/finanzas", dashboardRoutes);
 //trabajadores
-app.use("/trabajadores",trabajadoresRoutes);
+app.use("/trabajadores", trabajadoresRoutes);
 
 //* Rutas Perfil
 
@@ -86,7 +86,20 @@ app.use("/vehiculos", VehiculoRoute_1.default);
 //Ruta modulo Administrativo
 app.use("/admin", AdministrativoRoute1.default);
 //Ruta flujo-ordenes
-app.use("/flujo",ordenRoutes);
+app.use("/flujo", ordenRoutes);
 
 //reportes
-app.use("/reportes",reportesRoutes);
+app.use("/reportes", reportesRoutes);
+
+
+
+//pruebas de enviar correo al arracar app
+/*
+const { cambioEstadoOrden } = require('../models/mailer/mailerBD');
+
+try {
+    cambioEstadoOrden();
+  } catch (err) {
+    console.error('Error al ejecutar cambioEstadoOrden:', err);
+  }
+    */

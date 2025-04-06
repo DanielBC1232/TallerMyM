@@ -71,10 +71,10 @@ AS
 BEGIN
     DECLARE @codigoOrden VARCHAR(9)
     
-    -- Genera el código único
+    -- Genera el cï¿½digo ï¿½nico
     EXEC GenerarCodigoOrden @CodigoOrden = @codigoOrden OUTPUT
 
-    -- Inserta la orden con el código generado
+    -- Inserta la orden con el cï¿½digo generado
     INSERT INTO ORDEN (codigoOrden,tiempoEstimado,descripcion, idVehiculo, idTrabajador, idCliente)
     VALUES (@codigoOrden,@tiempoEstimado,@descripcion, @idVehiculo, @idTrabajador, @idCliente)
     
@@ -92,7 +92,7 @@ BEGIN
         O.idOrden,
         O.codigoOrden,
 		O.estadoAtrasado,
-        FORMAT(DATEDIFF(DAY, GETDATE(), O.tiempoEstimado), '00') + ' días, ' +
+        FORMAT(DATEDIFF(DAY, GETDATE(), O.tiempoEstimado), '00') + ' dï¿½as, ' +
         FORMAT(DATEDIFF(HOUR, GETDATE(), O.tiempoEstimado) % 24, '00') + ' horas, ' +
         FORMAT(DATEDIFF(MINUTE, GETDATE(), O.tiempoEstimado) % 60, '00') + ' minutos' AS TiempoRestante,
         O.descripcion,
@@ -121,7 +121,7 @@ AS BEGIN
 		O.codigoOrden,
 		O.estadoOrden,
 		FORMAT(O.fechaIngreso, 'dd/MM/yyyy') AS fechaIngreso,
-		FORMAT(DATEDIFF(DAY, GETDATE(), O.tiempoEstimado), '00') + ' días, ' +
+		FORMAT(DATEDIFF(DAY, GETDATE(), O.tiempoEstimado), '00') + ' dï¿½as, ' +
 		FORMAT(DATEDIFF(HOUR, GETDATE(), O.tiempoEstimado) % 24, '00') + ' horas, ' +
 		FORMAT(DATEDIFF(MINUTE, GETDATE(), O.tiempoEstimado) % 60, '00') + ' minutos' AS TiempoRestante,
 		FORMAT(O.tiempoEstimado, 'dd/MM/yyyy') AS tiempoEstimado,
@@ -163,7 +163,7 @@ BEGIN
     INSERT INTO NOTIFICACIONES (titulo, cuerpo, modulo, tipo)
     SELECT 
         'Orden Atrasada', 
-        'La orden con código ' + O.codigoOrden + ' se encuentra atrasada.', 
+        'La orden con cï¿½digo ' + O.codigoOrden + ' se encuentra atrasada.', 
         'flujo', 
         'error'
     FROM @OrdenesAtrasadas OA
@@ -173,10 +173,10 @@ BEGIN
         FROM NOTIFICACIONES N 
         WHERE N.titulo = 'Orden Atrasada' 
         AND N.modulo = 'flujo' 
-        AND N.cuerpo LIKE '%código ' + O.codigoOrden + '%'
+        AND N.cuerpo LIKE '%cï¿½digo ' + O.codigoOrden + '%'
     );
 
-    -- Marcar órdenes como NO atrasadas (en condicional contraria)
+    -- Marcar ï¿½rdenes como NO atrasadas (en condicional contraria)
     UPDATE ORDEN
     SET estadoAtrasado = 0
     WHERE tiempoEstimado > GETDATE() 
@@ -400,7 +400,7 @@ AS BEGIN
 
         SET @filasAfectadas = @@ROWCOUNT;
 
-        -- Confirmar transacción
+        -- Confirmar transacciï¿½n
         COMMIT TRANSACTION;
 
         -- Retornar filas afectadas en un formato adecuado para Express.js
@@ -466,16 +466,16 @@ BEGIN
     FETCH NEXT FROM stock_cursor INTO @nombreProducto, @marca, @tipo;
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        -- Si el producto es de tipo 'SERVICIO', no generar notificación.
+        -- Si el producto es de tipo 'SERVICIO', no generar notificaciï¿½n.
         IF UPPER(@tipo) <> 'SERVICIO'
         BEGIN
-            -- Construir el cuerpo de la notificación
+            -- Construir el cuerpo de la notificaciï¿½n
             IF UPPER(@marca) = 'NINGUNO'
                 SET @cuerpo = 'El stock de ' + @nombreProducto + ' esta por acabar';
             ELSE
                 SET @cuerpo = 'El stock de ' + @nombreProducto + ' ' + @marca + ' esta por acabar';
 
-            -- Verificar si ya existe una notificación similar para evitar duplicados
+            -- Verificar si ya existe una notificaciï¿½n similar para evitar duplicados
             IF NOT EXISTS (
                 SELECT 1 
                 FROM NOTIFICACIONES 
@@ -510,7 +510,7 @@ BEGIN
         @cuerpo NVARCHAR(256),
         @idVenta BIGINT;
 
-    -- Cursor para recorrer ventas que llevan más de 3 semanas y no estan pagadas
+    -- Cursor para recorrer ventas que llevan mï¿½s de 3 semanas y no estan pagadas
     DECLARE atraso_cursor CURSOR FAST_FORWARD FOR
         SELECT V.idVenta, O.codigoOrden
         FROM VENTA V
@@ -522,8 +522,8 @@ BEGIN
     FETCH NEXT FROM atraso_cursor INTO @idVenta, @codigoOrden;
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        -- Construir el cuerpo de la notificacion usando el código de la orden
-        SET @cuerpo = 'La orden ' + @codigoOrden + ' lleva más de 3 semanas de atraso';
+        -- Construir el cuerpo de la notificacion usando el cï¿½digo de la orden
+        SET @cuerpo = 'La orden ' + @codigoOrden + ' lleva mï¿½s de 3 semanas de atraso';
 
         -- Verificar si ya existe una notificacion similar para esta orden
         IF NOT EXISTS (
@@ -660,5 +660,18 @@ BEGIN
 END;
 GO
 
-select * from PRODUCTO_POR_VENTA
-select * from venta
+SELECT
+	O.idOrden,
+	C.nombre +' '+ C.apellido as nombreCliente,
+	C.correo,
+	O.codigoOrden,
+	CV.marcaVehiculo +' '+ CV.modeloVehiculo +' '+ CAST(CV.annoVehiculo as varchar(4)) as vehiculo,
+	O.estadoOrden,
+	O.estadoCorreoNotificacion
+FROM ORDEN O
+INNER JOIN CLIENTE C ON C.idCliente = O.idCliente
+INNER JOIN CLIENTE_VEHICULO CV ON CV.idVehiculo = O.idVehiculo
+WHERE O.estadoCorreoNotificacion IS NULL OR O.estadoCorreoNotificacion != O.estadoOrden
+
+
+Select estadoOrden, estadoCorreoNotificacion from ORDEN

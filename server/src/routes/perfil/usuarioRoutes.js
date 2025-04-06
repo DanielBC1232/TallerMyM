@@ -1,6 +1,5 @@
 const express = require('express');
 const Usuario = require('../../models/usuario/usuario'); 
-const { sendEmail } = require('../../services/emailServices'); 
 
 const router = express.Router();
 
