@@ -31,7 +31,7 @@ const IndexTrabajadores = () => {
         <div className="row mx-1">
           <Row gutter={10}>
             <Col xs={11}>
-              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px" ,margin:"10px"}}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px" ,margin:"10px"}}>
                 <Link to="/trabajadores-agregar" className="btn-link">Agregar Trabajador</Link>
               </Button>
             </Col>
@@ -41,7 +41,7 @@ const IndexTrabajadores = () => {
             </Col>
             
             <Col xs={11}>
-              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px",margin:"10px" }}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
                 <Link to="/AgregarSolicitud-Vacaciones" className="btn-link">Solicitar Vacaciones</Link>
               </Button>
             </Col>
@@ -50,7 +50,7 @@ const IndexTrabajadores = () => {
               <Link
                 to="/trabajadores-vacaciones"
                 type="submit"
-                className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "130px" ,margin:"10px"}}>
+                className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px" ,margin:"10px"}}>
               Filtrar</Link>
             </Col>
 
@@ -59,15 +59,34 @@ const IndexTrabajadores = () => {
             </Col>
           
             <Col xs={11}>
-              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px",margin:"10px" }}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
                 <Link to="/GestionarSolicitud-Vacaciones" className="btn-link">Aprobar Vacaciones</Link>
               </Button>
             </Col>
 
             <Col xs={11}>
-              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "140px",margin:"10px" }}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
                 <Link to="/Gestionar-Salarios" className="btn-link">Gestionar Salarios</Link>
               </Button>
+            </Col>
+
+            <Col xs={2}>
+              <Divider vertical />
+            </Col>
+
+            <Col xs={11}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
+                <Link to="/Gestionar-Amonest-Trab-List" className="btn-link">Generar Amonestacion</Link>
+              </Button>
+            </Col>
+
+            <Col xs={11}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
+                <Link to="/Gestionar-Ausencias-Trab-List" className="btn-link">Registrar Ausencia</Link>
+              </Button>
+            </Col>
+            <Col xs={2}>
+              <Divider vertical />
             </Col>
 
           </Row>
@@ -76,6 +95,7 @@ const IndexTrabajadores = () => {
 
       <div className="main rounded-3">
         <div className="article-scroll">
+          <h2>Lista Trabajadores Activos</h2>
           <ListaTrabajadores />
         </div>
       </div>

@@ -1,4 +1,4 @@
-const { Solicitud, SolicitudRepository } = require("../../models/trabajadores/solicitud.js");
+const { Solicitud, SolicitudRepository } = require("../../models/trabajadores/solicitud");
 
 const solicitudRepo = new SolicitudRepository();
 

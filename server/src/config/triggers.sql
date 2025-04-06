@@ -454,3 +454,14 @@ BEGIN
     FROM DELETED d;
 END
 GO
+
+--Trigger Ausencias
+CREATE TRIGGER trg_ActualizarJustificada
+ON JUSTIFICACIONES_AUSENCIA
+AFTER INSERT
+AS
+BEGIN
+    UPDATE AUSENCIAS
+    SET justificada = 1
+    WHERE idAusencia IN (SELECT idAusencia FROM inserted);
+END;

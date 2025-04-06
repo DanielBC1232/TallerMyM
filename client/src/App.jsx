@@ -36,8 +36,15 @@ import GestionarSolicitudVacaciones from "./features/trabajadores/pages/Gestiona
 //--seccion gestion de salarios
 import GestionarSalarios from "./features/trabajadores/pages/ListaGestSalariosPage.jsx";
 import EditarTrabajadorSalario from "./features/trabajadores/pages/EditarSalario.jsx";
-
 import AprobarVacaciones from "./features/trabajadores/pages/AprobarVacaciones.jsx";
+//--Seccion Generar Amonestaciones
+import ListaTrabAmonestacion from"./features/trabajadores/pages/GestionarAmonestPage.jsx";
+import ListaAmonestaciones from "./features/trabajadores/pages/ListaAmonestPage.jsx";
+import AgregarAmonestacion from "./features/trabajadores/pages/AgregarAmonestacion.jsx";
+import EditarAmonestacion from "./features/trabajadores/pages/EditarAmonestacion.jsx";
+//--Seccion Ausencias
+import ListaGestionAusencias from "./features/trabajadores/pages/GestionarAusenciasPage.jsx"
+import ListaAusencias from  "./features/trabajadores/pages/ListaAusenciasPage.jsx"
 
 
 //administracion
@@ -117,16 +124,23 @@ const App = () => {
           <Route path="/trabajadores" element={<TrabajadoresIndex />} />
           <Route path="/trabajadores-agregar" element={<AgregarTrabajador />} />
           <Route path="/trabajadores-editar/:idTrabajador" element={<EditarTrabajador />} />
-
+          {/*Vacaciones*/}
+          <Route path="/AprobarVacaciones/:idVacaciones" element={<AprobarVacaciones />} />
           <Route path="/AgregarSolicitud-Vacaciones" element={<AgregarSolicitudVacaciones />} />
           <Route path="/GestionarSolicitud-Vacaciones" element={<GestionarSolicitudVacaciones />} />
-
+          {/*Salarios*/}
           <Route path="/Gestionar-Salarios" element={<GestionarSalarios />} />
           <Route path="/trabajadores-editar-salario/:idTrabajador" element={<EditarTrabajadorSalario />} />
+          {/*Amonestaciones*/}
+          <Route path="/Gestionar-Amonest-Trab-List" element={<ListaTrabAmonestacion />} />
+          <Route path="/Lista-Amonest-Trab-List" element={<ListaAmonestaciones />} />
+          <Route path="/amonestaciones-agregar/:idTrabajador" element={<AgregarAmonestacion />} />
+          <Route path="/amonestaciones-editar/:idAmonestacion" element={<EditarAmonestacion />} />
+          {/*Ausencias*/}
+          <Route path="/Gestionar-Ausencias-Trab-List" element={<ListaGestionAusencias />} />
+          <Route path="/Lista-Ausencia-Trab-List" element={<ListaAusencias />} />
+     
 
-            {/*Esta ruta hay que revisarla creo que la agregue y no la use al final*/}
-          <Route path="/AprobarVacaciones/:idVacaciones" element={<AprobarVacaciones />} />
-              
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
@@ -141,8 +155,6 @@ const App = () => {
           <Route path="/clientes/editar/:cedula" element={<EditarCliente />} />
           <Route path="/clientes/eliminar/:cedula" element={<EliminarCliente />} />
 
-
-
           {/* Rutas para Vehiculos */}
           <Route path="/vehiculos/Index" element={<IndexVehi />} />
 
@@ -150,39 +162,24 @@ const App = () => {
           <Route path="/vehiculos/ListEditVehi" element={<ListarEditVehiculosPage />} />
           <Route path="/vehiculos/ListElimVehi" element={<ListarElimVehiculosPage />} />
 
-
           <Route path="/vehiculos/registrar" element={<AgregarVehiculo />} />
           <Route path="/vehiculos/editar/:idVehiculo" element={<EditarVehiculo />} />
           <Route path="/vehiculos/eliminar/:idVehiculo" element={<EliminarVehiculo />} />
 
           {/* Rutas para Admin */}
-          
           <Route path="/admin/listarUsuarios" element={<ListarUsuariosPage/>} />
           <Route path="/admin/listarEditUsuarios" element={<ListarEditUsuariosPage/>} />
           <Route path="/admin/listarElimUsuarios" element={<ListarElimUsuariosPage/>} />
-
-
-
 
           <Route path="/admin/Index" element={<IndexAdmin />} />
           <Route path="/admin/registrar" element={<AgregarUsuario />} />
           <Route path="/admin/editar/:idUsuario" element={<EditarUsuario />} />
           <Route path="/admin/eliminar/:idUsuario" element={<EliminarUsuario />} />
 
-
-
-
-
-
-
-
-
         </Routes>
       </main>
-
       <Footer />
     </div>
   );
 };
-
 export default App;
