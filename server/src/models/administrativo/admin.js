@@ -1,7 +1,7 @@
-const { connectDB } = require("../../config/database");
-const sql = require('mssql');
+import sql from 'mssql';
+import { connectDB } from '../../config/database.js';
 
-class Usuario {
+export class Usuario {
   constructor(username, email, password, idRol) {
     this.idUsuario = 0; // Se generará automáticamente en la BD
     this.username = username;
@@ -17,10 +17,10 @@ class Usuario {
   }
 }
 //------------
-class UsuarioRepository {
-  // Insertar nuevos clientes
+export class UsuarioRepository {
+  // Insertar nuevos usuarios
   async insertUser(usuario) {
-    console.log(usuario)
+    console.log(usuario);
     try {
       const pool = await connectDB();
       await pool
@@ -30,106 +30,99 @@ class UsuarioRepository {
         .input("password", sql.NVarChar(255), usuario.password) // ocupa hashear la contrasenia
         .input("idRol", sql.Int, usuario.idRol)
         .query(`INSERT INTO USUARIO (username, email, password, idRol)
-        VALUES (@username, @email, @password, @idRol)`);
+                VALUES (@username, @email, @password, @idRol)`);
 
-      console.log("Cliente insertado exitosamente");
+      console.log("Usuario insertado exitosamente");
     } catch (error) {
       console.error("Error en insert:", error);
-      throw new Error("Error al insertar usuario1");
+      throw new Error("Error al insertar usuario");
     }
   }
 
 
-  async updateUsuario(idUsuario,datosActualizados) {
+  async updateUsuario(idUsuario, datosActualizados) {
     try {
       const pool = await connectDB();
 
-    
-      const {idUsuario, username, email, password, idRol } = datosActualizados;
+      const { username, email, password, idRol } = datosActualizados;
 
       const result = await pool
         .request()
         .input("idUsuario", sql.Int, idUsuario)
         .input("username", sql.NVarChar(50), username)
         .input("email", sql.NVarChar(100), email)
-        .input("password", sql.NVarChar(255),password) // ocupa hashear la contrasenia
-        .input("idRol", sql.Int,idRol)
+        .input("password", sql.NVarChar(255), password) // ocupa hashear la contrasenia
+        .input("idRol", sql.Int, idRol)
         .query(`
-          UPDATE USUARIO
-          SET  username = @username, email = @email, password = @password, idRol = @idRol
-          WHERE idUsuario = @idUsuario
-        `);
+                    UPDATE USUARIO
+                    SET username = @username, email = @email, password = @password, idRol = @idRol
+                    WHERE idUsuario = @idUsuario
+                `);
 
       return result.rowsAffected[0] > 0;
     } catch (error) {
-      console.error("Error al actualizar el usuario:2222222222", error);
-      throw new Error("Error al actualizar usuario22222222");
+      console.error("Error al actualizar el usuario:", error);
+      throw new Error("Error al actualizar usuario");
     }
   }
 
-  // Eliminar cliente
+  // Eliminar usuario
   async deleteUsuario(idUsuario) {
     try {
-      
       const pool = await connectDB();
       const result = await pool
         .request()
         .input("idUsuario", sql.Int, idUsuario)
         .query(`
-          DELETE FROM USUARIO WHERE idUsuario = @idUsuario
-        `);
-
-     
+                    DELETE FROM USUARIO WHERE idUsuario = @idUsuario
+                `);
 
       return result.rowsAffected[0] > 0;
     } catch (error) {
-      console.error("Error444 al eliminar cliente:", error);
-      throw new Error("Error444 al eliminar cliente");
+      console.error("Error al eliminar usuario:", error);
+      throw new Error("Error al eliminar usuario");
     }
   }
 
-    //select todos
-    async getAll() {
-      try {
-        const pool = await connectDB();
-        const result = await pool.request().query("SELECT * FROM USUARIO");
-        return result.recordset;
-      } catch (error) {
-        console.error("Error al obtener todos los clientes:", error);
-        throw new Error("Error al obtener clientes");
-      }
+  //select todos
+  async getAll() {
+    try {
+      const pool = await connectDB();
+      const result = await pool.request().query("SELECT * FROM USUARIO");
+      return result.recordset;
+    } catch (error) {
+      console.error("Error al obtener todos los usuarios:", error);
+      throw new Error("Error al obtener usuarios");
     }
+  }
 
-     //select todos
-     async getOneByID(idUsuario) {
-      try {
-        const pool = await connectDB();
-        const result = await pool.
-        request()
+  //select uno por ID
+  async getOneByID(idUsuario) {
+    try {
+      const pool = await connectDB();
+      const result = await pool
+        .request()
         .input("idUsuario", sql.Int, idUsuario)
         .query("SELECT * FROM USUARIO WHERE idUsuario = @idUsuario");
-        return result.recordset;
-      } catch (error) {
-        console.error("Error al obtener todos los clientes:", error);
-        throw new Error("Error al obtener clientes");
-      }
+      return result.recordset;
+    } catch (error) {
+      console.error("Error al obtener el usuario por ID:", error);
+      throw new Error("Error al obtener usuario");
     }
+  }
 
-    //select todos editar
-    async getOneByIDedit(idUsuario) {
-      try {
-        const pool = await connectDB();
-        const result = await pool.
-        request()
+  //select uno por ID para editar (campos específicos)
+  async getOneByIDedit(idUsuario) {
+    try {
+      const pool = await connectDB();
+      const result = await pool
+        .request()
         .input("idUsuario", sql.Int, idUsuario)
         .query("SELECT idUsuario,username,email,password,idRol FROM USUARIO WHERE idUsuario = @idUsuario");
-        return result.recordset;
-      } catch (error) {
-        console.error("Error al obtener todos los clientes:", error);
-        throw new Error("Error al obtener clientes");
-      }
+      return result.recordset;
+    } catch (error) {
+      console.error("Error al obtener el usuario por ID para editar:", error);
+      throw new Error("Error al obtener usuario para editar");
     }
+  }
 }
-
-module.exports = { Usuario, UsuarioRepository };
-

@@ -1,46 +1,40 @@
-"use strict";
-require('dotenv').config();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const imgRoutes_1 = __importDefault(require("../routes/inventario/imgRoutes"));
-const categoriaRoutes_1 = __importDefault(require("../routes/inventario/categoriaRoutes"));
-const marcaRoutes_1 = __importDefault(require("../routes/inventario/marcaRoutes"));
-const proveedorRoute_1 = __importDefault(require("../routes/inventario/proveedorRoute"));
-const vehiculosCompatiblesRoutes_1 = __importDefault(require("../routes/inventario/vehiculosCompatiblesRoutes"));
-const productoRoutes_1 = __importDefault(require("../routes/inventario/productoRoutes"));
-const solicitudRoutes_1 = __importDefault(require("../routes/inventario/solicitudRoutes"));
-const usuarioRoutes_1 = __importDefault(require("../routes/perfil/usuarioRoutes"));
-const ordenRoutes = require("../routes/flujo/ordenRoutes");
-const cotizacionRoutes = require("../routes/ventas/cotizacionRoutes");
-const trabajadoresRoutes = require("../routes/trabajadores/trabajadoresRoutes");
-const ventasRoutes = require("../routes/ventas/ventasRoutes");
-const notificacionesRoutes = require("../routes/notificaciones/notificacionesRoutes")
-const ClienteRoutes_1 = __importDefault(require("../routes/clientes/clienteRoutes"));
-const VehiculoRoute_1 = __importDefault(require("../routes/vehiculos/vehiculosRoutes"));
-const pagoClienteRoutes = require("../routes/finanzas/pagoClienteRoutes");
-const devolucionRoutes = require("../routes/finanzas/devolucionRoutes");
-const AdministrativoRoute1 = __importDefault(require("../routes/administrativo/AdminRoutes"));
-const Usuario_1 = __importDefault(require("../models/usuario/usuario"));
-const database_1 = require("../config/database");
-const gastoOperativoRoutes = require("../routes/finanzas/gastoOperativoRoutes");
-const reportesRoutes = require("../routes/reportes/reportesRoutes")
-const dashboardRoutes = require("../routes/finanzas/dashboardRoutes");
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import imgRoutes from '../routes/inventario/imgRoutes.js';
+import categoriaRoutes from '../routes/inventario/categoriaRoutes.js';
+import marcaRoutes from '../routes/inventario/marcaRoutes.js';
+import proveedorRoute from '../routes/inventario/proveedorRoute.js';
+import vehiculosCompatiblesRoutes from '../routes/inventario/vehiculosCompatiblesRoutes.js';
+import productoRoutes from '../routes/inventario/productoRoutes.js';
+import solicitudRoutes from '../routes/inventario/solicitudRoutes.js';
+import usuarioRoutes from '../routes/perfil/usuarioRoutes.js';
+import ordenRoutes from '../routes/flujo/ordenRoutes.js';
+import cotizacionRoutes from '../routes/ventas/cotizacionRoutes.js';
+import trabajadoresRoutes from '../routes/trabajadores/trabajadoresRoutes.js';
+import ventasRoutes from '../routes/ventas/ventasRoutes.js';
+import notificacionesRoutes from '../routes/notificaciones/notificacionesRoutes.js';
+import ClienteRoutes from '../routes/clientes/clienteRoutes.js';
+import VehiculoRoute from '../routes/vehiculos/vehiculosRoutes.js';
+import pagoClienteRoutes from '../routes/finanzas/pagoClienteRoutes.js';
+import devolucionRoutes from '../routes/finanzas/devolucionRoutes.js';
+import AdministrativoRoute from '../routes/administrativo/AdminRoutes.js';
+import { connectDB } from '../config/database.js';
+import gastoOperativoRoutes from '../routes/finanzas/gastoOperativoRoutes.js';
+import reportesRoutes from '../routes/reportes/reportesRoutes.js';
+import dashboardRoutes from '../routes/finanzas/dashboardRoutes.js';
 
-const app = (0, express_1.default)();
-app.use(express_1.default.json()); // Middleware
+const app = express();
+app.use(express.json()); // Middleware
 const PORT = 3000; // Iniciar servidor
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
 });
-app.use((0, cors_1.default)({
+app.use(cors({
     origin: "http://localhost:5173",
     methods: 'GET, POST, PUT, PATCH, DELETE',
 }));
-(0, database_1.connectDB)() // conexion BD
+connectDB() // conexion BD
     .then(() => console.log("Conectado a la base de datos"))
     .catch((err) => {
         if (err instanceof Error) {
@@ -51,13 +45,13 @@ app.use((0, cors_1.default)({
         }
     });
 //* Rutas Inventario
-app.use("/categorias", categoriaRoutes_1.default);
-app.use("/marcas", marcaRoutes_1.default);
-app.use("/proveedor", proveedorRoute_1.default);
-app.use("/vehiculos-compatibles", vehiculosCompatiblesRoutes_1.default);
-app.use("/productos", productoRoutes_1.default);
-app.use("/img", imgRoutes_1.default);
-app.use("/inventario", solicitudRoutes_1.default);
+app.use("/categorias", categoriaRoutes);
+app.use("/marcas", marcaRoutes);
+app.use("/proveedor", proveedorRoute);
+app.use("/vehiculos-compatibles", vehiculosCompatiblesRoutes);
+app.use("/productos", productoRoutes);
+app.use("/img", imgRoutes);
+app.use("/inventario", solicitudRoutes);
 
 //Rutas notificaciones
 app.use("/notificaciones", notificacionesRoutes);
@@ -77,14 +71,14 @@ app.use("/trabajadores", trabajadoresRoutes);
 //* Rutas Perfil
 
 // Ruta de Usuario Api
-app.use("/api/usuario", usuarioRoutes_1.default);
-app.use("/usuario", Usuario_1.default);
+app.use("/api/usuario", usuarioRoutes);
+
 //Ruta modulo de clientes
-app.use("/clientes", ClienteRoutes_1.default);
+app.use("/clientes", ClienteRoutes);
 //Ruta modulo Vehiculos
-app.use("/vehiculos", VehiculoRoute_1.default);
+app.use("/vehiculos", VehiculoRoute);
 //Ruta modulo Administrativo
-app.use("/admin", AdministrativoRoute1.default);
+app.use("/admin", AdministrativoRoute);
 //Ruta flujo-ordenes
 app.use("/flujo", ordenRoutes);
 
@@ -93,9 +87,9 @@ app.use("/reportes", reportesRoutes);
 
 
 
-//pruebas de enviar correo al arracar app
+//pruebas de enviar correo al arrancar app
 /*
-const { cambioEstadoOrden } = require('../models/mailer/mailerBD');
+import { cambioEstadoOrden } from '../models/mailer/mailerBD.js';
 
 try {
     cambioEstadoOrden();

@@ -1,13 +1,14 @@
-const express = require('express');
-const sql = require('mssql');
-const { connectDB } = require('../../config/database');
+import express from 'express';
+import sql from 'mssql';
+import { connectDB } from '../../config/database.js';
 
 const router = express.Router();
 
 // Obtener usuario por correo
 const getUsuarioByEmail = async (email) => {
-    const pool = await connectDB();
+    let pool;
     try {
+        pool = await connectDB();
         const result = await pool.request()
             .input('email', sql.NVarChar, email)
             .query('SELECT * FROM USUARIO WHERE email = @email');
@@ -17,7 +18,9 @@ const getUsuarioByEmail = async (email) => {
         console.error('Error en la consulta de usuario por correo:', error);
         throw new Error('Error al acceder a la base de datos');
     } finally {
-        pool.close();
+        if (pool) {
+            pool.close();
+        }
     }
 };
 
@@ -48,6 +51,9 @@ router.post('/send-email', async (req, res) => {
 
         console.log(`Enviando correo a ${email} con asunto "${nombreUsuario}"`);
 
+        // Aquí iría la lógica real para enviar el correo
+        // utilizando una librería como Nodemailer o SendGrid
+
         res.json({ message: 'Correo enviado exitosamente' });
     } catch (error) {
         console.error('Error al enviar el correo:', error);
@@ -55,4 +61,4 @@ router.post('/send-email', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

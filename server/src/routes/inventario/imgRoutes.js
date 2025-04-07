@@ -1,16 +1,15 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const router = express_1.default.Router();
-const multer = require("multer");
-const path = require('path');
+import express from 'express';
+const router = express.Router();
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "src/uploads"); // Carpeta donde se guardan las imágenes
+        cb(null, path.join(__dirname, '../../uploads')); // Carpeta donde se guardan las imágenes
     },
     filename: (req, file, cb) => {
         const ext = file.originalname.split('.').pop(); //extraer extension de imagen
@@ -24,14 +23,14 @@ const upload = multer({ storage });
 
 router.post("/upload", upload.single("img"), (req, res) => {
     if (!req.file) {
-      return res.status(400).json({ error: "No se subió ningún archivo" });
+        return res.status(400).json({ error: "No se subió ningún archivo" });
     }
     res.json({ message: "Archivo subido correctamente", fileName: req.file.filename });
-  });
-  
+});
+
 router.get("/:img", (req, res) => {
     const filePath = path.join(__dirname, '../../uploads', req.params.img);
-    
+
     res.sendFile(filePath, (err) => {
         if (err) {
             res.status(404).send("Imagen no encontrada");
@@ -39,4 +38,4 @@ router.get("/:img", (req, res) => {
     });
 });
 
-exports.default = router;
+export default router;

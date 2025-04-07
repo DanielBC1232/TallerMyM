@@ -1,7 +1,9 @@
-const sql = require('mssql');
-const dbConfig = require('../../config/database');
-const nodemailer = require('nodemailer');
-require('dotenv').config();
+import sql from 'mssql';
+import { connectDB } from '../../config/database.js';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Configuración reusable del transporter
 const transporter = nodemailer.createTransport({
@@ -14,12 +16,17 @@ const transporter = nodemailer.createTransport({
 
 class EmailModel {
   static async obtenerClientePorId(idCliente) {
-    const pool = await sql.connect(dbConfig);
-    const result = await pool.request()
-      .input('idCliente', sql.Int, idCliente)
-      .query('SELECT nombre, apellido, correo FROM CLIENTE WHERE idCliente = @idCliente');
-    
-    return result.recordset[0];
+    try {
+      const pool = await connectDB();
+      const result = await pool.request()
+        .input('idCliente', sql.Int, idCliente)
+        .query('SELECT nombre, apellido, correo FROM CLIENTE WHERE idCliente = @idCliente');
+
+      return result.recordset[0];
+    } catch (error) {
+      console.error('Error al obtener cliente por ID:', error);
+      throw error;
+    }
   }
 
   static async enviarCorreo(destinatario, asunto, contenido) {
@@ -30,8 +37,14 @@ class EmailModel {
       html: contenido
     };
 
-    await transporter.sendMail(mailOptions);
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log(`Correo enviado a: ${destinatario}`);
+    } catch (error) {
+      console.error('Error al enviar correo:', error);
+      throw error;
+    }
   }
 }
 
-module.exports = EmailModel;
+export default EmailModel;

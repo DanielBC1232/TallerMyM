@@ -1,6 +1,5 @@
-//const { default: id } = require("date-fns/esm/locale/id/index.js");
-const { connectDB } = require("../../config/database");
-const sql = require('mssql');
+import sql from 'mssql';
+import { connectDB } from '../../config/database.js';
 
 class Vehiculo {
   constructor(placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente) {
@@ -23,16 +22,16 @@ class VehiculoRepository {
       const pool = await connectDB();
       await pool
         .request()
-        .input("placaVehiculo", Vehiculo.placaVehiculo)
-        .input("modeloVehiculo", Vehiculo.modeloVehiculo)
-        .input("marcaVehiculo", Vehiculo.marcaVehiculo)
-        .input("annoVehiculo", Vehiculo.annoVehiculo)
-        .input("tipoVehiculo", Vehiculo.tipoVehiculo)
-        .input("idCliente", Vehiculo.idCliente)
+        .input("placaVehiculo", sql.VarChar, Vehiculo.placaVehiculo)
+        .input("modeloVehiculo", sql.VarChar, Vehiculo.modeloVehiculo)
+        .input("marcaVehiculo", sql.VarChar, Vehiculo.marcaVehiculo)
+        .input("annoVehiculo", sql.Int, Vehiculo.annoVehiculo)
+        .input("tipoVehiculo", sql.VarChar, Vehiculo.tipoVehiculo)
+        .input("idCliente", sql.Int, Vehiculo.idCliente)
         .query(`
-          INSERT INTO CLIENTE_VEHICULO (placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente)
-          VALUES (@placaVehiculo, @modeloVehiculo, @marcaVehiculo, @annoVehiculo, @tipoVehiculo, @idCliente)
-        `);
+                    INSERT INTO CLIENTE_VEHICULO (placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente)
+                    VALUES (@placaVehiculo, @modeloVehiculo, @marcaVehiculo, @annoVehiculo, @tipoVehiculo, @idCliente)
+                `);
       console.log("Vehiculo insertado exitosamente");
     } catch (error) {
       console.error("Error en insert:", error);
@@ -45,8 +44,8 @@ class VehiculoRepository {
   async updateVehiculo(idVehiculo, datosActualizados) {
     try {
       const pool = await connectDB();
-      
-      const { idVehiculo,placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente } = datosActualizados;
+
+      const { placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente } = datosActualizados;
 
       const result = await pool
         .request()
@@ -58,10 +57,10 @@ class VehiculoRepository {
         .input("tipoVehiculo", sql.VarChar, tipoVehiculo)
         .input("idCliente", sql.Int, idCliente)
         .query(`
-          UPDATE CLIENTE_VEHICULO
-          SET placaVehiculo = @placaVehiculo, modeloVehiculo = @modeloVehiculo, marcaVehiculo = @marcaVehiculo,
-           annoVehiculo = @annoVehiculo, tipoVehiculo = @tipoVehiculo, idCliente = @idCliente WHERE idVehiculo = @idVehiculo
-        `);
+                    UPDATE CLIENTE_VEHICULO
+                    SET placaVehiculo = @placaVehiculo, modeloVehiculo = @modeloVehiculo, marcaVehiculo = @marcaVehiculo,
+                       annoVehiculo = @annoVehiculo, tipoVehiculo = @tipoVehiculo, idCliente = @idCliente WHERE idVehiculo = @idVehiculo
+                `);
 
       return result.rowsAffected[0] > 0;
     } catch (error) {
@@ -82,8 +81,8 @@ class VehiculoRepository {
         .request()
         .input("idVehiculo", sql.Int, idVehiculo)
         .query(`
-          DELETE FROM CLIENTE_VEHICULO WHERE idVehiculo = @idVehiculo
-        `);
+                    DELETE FROM CLIENTE_VEHICULO WHERE idVehiculo = @idVehiculo
+                `);
 
       console.log("Resultado de la eliminación:", result);
       console.log("Filas afectadas:", result.rowsAffected[0]);
@@ -114,7 +113,7 @@ class VehiculoRepository {
       const result = await pool.request()
         .input("idCliente", sql.Int, idCliente)
         .query(`SELECT idVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo FROM CLIENTE_VEHICULO
-          WHERE idCliente = @idCliente`);
+                    WHERE idCliente = @idCliente`);
       return result.recordset;
     } catch (error) {
       console.error("Error al obtener los vehiculos:", error);
@@ -122,19 +121,19 @@ class VehiculoRepository {
     }
   }
 
-    // Buscar por ID cliente // Select-Flujo
-    async getVehiculosPorIdVehiculo(idVehiculo) {
-      try {
-        const pool = await connectDB();
-        const result = await pool.request()
-          .input("idVehiculo", sql.Int, idVehiculo).query(`SELECT idVehiculo,placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo,tipoVehiculo,"idCliente"
-             FROM CLIENTE_VEHICULO WHERE idVehiculo = @idVehiculo`);
-        return result.recordset;
-      } catch (error) {
-        console.error("Error al obtener los vehiculos:", error);
-        throw new Error("Error al obtener vehiculos");
-      }
+  // Buscar por ID cliente // Select-Flujo
+  async getVehiculosPorIdVehiculo(idVehiculo) {
+    try {
+      const pool = await connectDB();
+      const result = await pool.request()
+        .input("idVehiculo", sql.Int, idVehiculo).query(`SELECT idVehiculo,placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo,tipoVehiculo,"idCliente"
+                        FROM CLIENTE_VEHICULO WHERE idVehiculo = @idVehiculo`);
+      return result.recordset;
+    } catch (error) {
+      console.error("Error al obtener los vehiculos:", error);
+      throw new Error("Error al obtener vehiculos");
     }
+  }
 
   // Obtener cliente por cédula
   async getByPlaca(placaVehiculo) {
@@ -150,7 +149,6 @@ class VehiculoRepository {
       throw new Error("Error al consultar el vehiculo");
     }
   }
-
 }
 
-module.exports = { Vehiculo, VehiculoRepository };
+export { Vehiculo, VehiculoRepository };

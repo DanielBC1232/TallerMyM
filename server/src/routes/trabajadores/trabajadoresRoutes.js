@@ -1,6 +1,7 @@
-const express = require("express");
-const trabajadorController = require('../../controllers/trabajadores/trabajadoresController');
-const SolicitudController = require('../../controllers/trabajadores/SolicitudController');
+import express from 'express';
+import * as trabajadorController from '../../controllers/trabajadores/trabajadoresController.js';
+import * as SolicitudController from '../../controllers/trabajadores/SolicitudController.js';
+
 const router = express.Router();
 
 // Ruta para agregar trabajador
@@ -34,9 +35,5 @@ router.get("/obteneTrabajadoresMenu", trabajadorController.obtenerTrabajadoresMe
 router.get("/obtenerSolicitudVacaciones", SolicitudController.ObtenerVacacionesGest);
 router.get("/obtenerSolicitudVacacion/:idVacaciones", SolicitudController.ObtenerVacacionxID);
 
-
-
-
-
-// Exporta el router usando CommonJS
-module.exports = router;
+// Exporta el router usando Module ES
+export default router;

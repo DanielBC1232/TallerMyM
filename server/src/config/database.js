@@ -1,4 +1,5 @@
-const sql = require('mssql');
+import sql from 'mssql';
+
 const dbConfig = {
     server: "localhost",
     database: "MYM_DB",
@@ -9,6 +10,7 @@ const dbConfig = {
         trustServerCertificate: true,
     }
 };
+
 // Función de conexión
 async function connectDB() {
     try {
@@ -20,4 +22,5 @@ async function connectDB() {
         throw error;
     }
 }
-exports.connectDB = connectDB;
+
+export { connectDB };

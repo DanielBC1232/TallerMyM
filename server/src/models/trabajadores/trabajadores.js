@@ -9,7 +9,6 @@ export class Trabajador {
         this.salario = salario;
         this.seguroSocial = seguroSocial;
     }
-
 }
 
 export class TrabajadorRepository {
@@ -25,9 +24,9 @@ export class TrabajadorRepository {
                 .input('salario', sql.Decimal(10, 2), salario)
                 .input('seguroSocial', sql.VarChar, seguroSocial)
                 .query(`
-                    INSERT INTO TRABAJADOR 
+                    INSERT INTO TRABAJADOR
                     (nombreCompleto, cedula, salario, seguroSocial)
-                    VALUES 
+                    VALUES
                     (@nombreCompleto, @cedula, @salario, @seguroSocial)
                 `);
             return result.rowsAffected[0]; // Devuelve el número de filas afectadas
@@ -46,7 +45,7 @@ export class TrabajadorRepository {
                 .query(`
                     SELECT * FROM TRABAJADOR
                     WHERE cedula = @cedula`);
-            
+
             // Si no hay registros, result.recordset estara vacío
             return result.recordset.length > 0 ? result.recordset[0] : null;
         } catch (error) {
@@ -54,17 +53,17 @@ export class TrabajadorRepository {
             throw new Error('Error al buscar trabajador');
         }
     }
-    
+
     async getMenu() {
         try {
-          const pool = await connectDB();
-          const result = await pool.request().query("SELECT idTrabajador,nombreCompleto FROM TRABAJADOR");
-          return result.recordset;
+            const pool = await connectDB();
+            const result = await pool.request().query("SELECT idTrabajador,nombreCompleto FROM TRABAJADOR");
+            return result.recordset;
         } catch (error) {
-          console.error("Error al obtener todos los clientes:", error);
-          throw new Error("Error al obtener clientes");
+            console.error("Error al obtener todos los clientes:", error);
+            throw new Error("Error al obtener clientes");
         }
-      }
+    }
 
     // Obtener listado de trabajadores
     async getTrabajadores(nombreCompleto, cedula, salarioMin, salarioMax) {
@@ -72,12 +71,12 @@ export class TrabajadorRepository {
             const pool = await connectDB();
             const result = await pool
                 .request()
-                .input('nombreCompleto',sql.VarChar, nombreCompleto)
-                .input('cedula',sql.VarChar, cedula)
-                .input('salarioMin',sql.Decimal(10, 2), salarioMin)
-                .input('salarioMax',sql.Decimal(10, 2), salarioMax)
+                .input('nombreCompleto', sql.VarChar, nombreCompleto || null)
+                .input('cedula', sql.VarChar, cedula || null)
+                .input('salarioMin', sql.Decimal(10, 2), salarioMin || null)
+                .input('salarioMax', sql.Decimal(10, 2), salarioMax || null)
                 .query(`SELECT * FROM TRABAJADOR`);
-            return result.recordset; // Devuelve el listado (10 más recientes)
+            return result.recordset; // Devuelve el listado (todos los resultados)
         } catch (error) {
             console.error('Error en obtener trabajadores:', error);
             throw new Error('Error en obtener trabajadores');
@@ -95,7 +94,7 @@ export class TrabajadorRepository {
                     SELECT * FROM TRABAJADOR
                     WHERE idTrabajador = @idTrabajador
                 `);
-            return result.recordset; // Devuelve el registro
+            return result.recordset[0]; // Devuelve el registro (el primero si existe)
         } catch (error) {
             console.error('Error en obtener trabajador:', error);
             throw new Error('Error en obtener trabajador');
@@ -143,5 +142,4 @@ export class TrabajadorRepository {
             throw new Error('Error en eliminar trabajador');
         }
     }
-
 }

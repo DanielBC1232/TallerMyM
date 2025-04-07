@@ -1,4 +1,4 @@
-const { Vehiculo, VehiculoRepository } = require("../../models/vehiculos/vehiculo");
+import { Vehiculo, VehiculoRepository } from "../../models/vehiculos/vehiculo.js";
 
 const VehiculoRepo = new VehiculoRepository();
 
@@ -11,8 +11,8 @@ const insertarVehiculo = async (req, res) => {
     await VehiculoRepo.insert(newVehiculo);
     res.status(201).json(newVehiculo);
   } catch (error) {
-    console.error("Error al insertar cliente:", error);
-    res.status(500).json({ error: "Error al insertar el cliente" });
+    console.error("Error al insertar vehiculo:", error);
+    res.status(500).json({ error: "Error al insertar el vehiculo" });
   }
 };
 //-----------------------------------------------
@@ -20,7 +20,6 @@ const insertarVehiculo = async (req, res) => {
 
 const actualizarVehiculo = async (req, res) => {
   try {
-    
     const idVehiculo = req.params.idVehiculo;
     const datosActualizados = req.body;
     const actualizacionExitosa = await VehiculoRepo.updateVehiculo(idVehiculo, datosActualizados);
@@ -28,22 +27,22 @@ const actualizarVehiculo = async (req, res) => {
     if (!actualizacionExitosa) {
       res.status(404).json({ error: "Vehiculo no encontrado o no se pudo actualizar" });
     } else {
-      res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
+      res.status(200).json({ message: "Datos del vehiculo actualizados exitosamente" });
     }
   } catch (error) {
-    console.error("Error al actualizar cliente:", error);
-    res.status(500).json({ error: "Error al actualizar los datos del cliente" });
+    console.error("Error al actualizar vehiculo:", error);
+    res.status(500).json({ error: "Error al actualizar los datos del vehiculo" });
   }
 };
 
-// Eliminar cliente
+// Eliminar vehiculo
 const eliminarVehiculo = async (req, res) => {
   try {
     const idVehiculo = parseInt(req.params.idVehiculo);
     const vehiculoEliminado = await VehiculoRepo.deleteVehiculo(idVehiculo);
 
     if (!vehiculoEliminado) {
-      res.status(404).json({ error: "Vehiculo no encontrado oooo no se pudo eliminar" });
+      res.status(404).json({ error: "Vehiculo no encontrado o no se pudo eliminar" });
     } else {
       res.status(200).json({ message: "Vehiculo eliminado exitosamente" });
     }
@@ -61,12 +60,12 @@ const obtenerTodosLosVehiculos = async (req, res) => {
 
     res.status(200).json(vehiculos);
   } catch (error) {
-    console.error("Error al obtener todos los clientes:", error);
-    res.status(500).json({ error: "Error al obtener todos los clientes" });
+    console.error("Error al obtener todos los vehiculos:", error);
+    res.status(500).json({ error: "Error al obtener todos los vehiculos" });
   }
 };
 
-// Obtener todos vehiculos
+// Obtener vehiculos por cliente
 const getVehiculosPorCliente = async (req, res) => {
   try {
     // Usar el método getVehiculosPorCliente del repositorio
@@ -80,33 +79,33 @@ const getVehiculosPorCliente = async (req, res) => {
     res.status(500).json({ error: "Error al obtener los vehiculos del cliente" });
   }
 };
- 
-// Obtener un cliente por idVehiculo
+
+// Obtener un vehiculo por idVehiculo
 const obtenerVehiculoPoridVehiculo = async (req, res) => {
   try {
-    const { idVehiculo } = req.params; // Obtener la cédula del query string
+    const { idVehiculo } = req.params; // Obtener el ID del vehículo del parámetro de la ruta
 
     if (!idVehiculo) {
-      return res.status(400).json({ error: "La placa es requerida" });
+      return res.status(400).json({ error: "El ID del vehículo es requerido" });
     }
 
-    const vehiculo = await VehiculoRepo.getVehiculosPorIdVehiculo(idVehiculo);
+    const vehiculo = await VehiculoRepo.getVehiculosPorIdVehiculo(parseInt(idVehiculo));
 
     if (!vehiculo || vehiculo.length === 0) {
-      res.status(404).json({ error: "vehiculo no encontrado" });
+      res.status(404).json({ error: "Vehículo no encontrado" });
     } else {
-      res.status(200).json(vehiculo[0]); // Devuelve el primer vehiculo encontrado
+      res.status(200).json(vehiculo[0]); // Devuelve el primer vehículo encontrado
     }
   } catch (error) {
-    console.error("Error al obtener vehiculo por placa:", error);
-    res.status(500).json({ error: "Error al obtener vehiculo por cédula" });
+    console.error("Error al obtener vehículo por ID:", error);
+    res.status(500).json({ error: "Error al obtener vehículo por ID" });
   }
 };
 
-// Obtener un cliente por cédula
+// Obtener un vehiculo por placa
 const obtenerVehiculoPorPlaca = async (req, res) => {
   try {
-    const { placaVehiculo } = req.params; // Obtener la cédula del query string
+    const { placaVehiculo } = req.params; // Obtener la placa del parámetro de la ruta
 
     if (!placaVehiculo) {
       return res.status(400).json({ error: "La placa es requerida" });
@@ -115,19 +114,17 @@ const obtenerVehiculoPorPlaca = async (req, res) => {
     const vehiculo = await VehiculoRepo.getByPlaca(placaVehiculo);
 
     if (!vehiculo || vehiculo.length === 0) {
-      res.status(404).json({ error: "vehiculo no encontrado" });
+      res.status(404).json({ error: "Vehículo no encontrado" });
     } else {
-      res.status(200).json(vehiculo[0]); // Devuelve el primer vehiculo encontrado
+      res.status(200).json(vehiculo[0]); // Devuelve el primer vehículo encontrado
     }
   } catch (error) {
-    console.error("Error al obtener vehiculo por placa:", error);
-    res.status(500).json({ error: "Error al obtener vehiculo por cédula" });
+    console.error("Error al obtener vehículo por placa:", error);
+    res.status(500).json({ error: "Error al obtener vehículo por placa" });
   }
 };
 
-
-
-module.exports = { 
+export {
   insertarVehiculo,
   actualizarVehiculo,
   eliminarVehiculo,
@@ -136,13 +133,3 @@ module.exports = {
   obtenerVehiculoPoridVehiculo,
   getVehiculosPorCliente
 };
-
-
-
-
-
-
-
-
-
-

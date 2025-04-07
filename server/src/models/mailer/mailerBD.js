@@ -1,5 +1,4 @@
 import sql from 'mssql';
-
 import { connectDB } from '../../config/database.js';
 import { enviarCorreo } from "../../config/mailerConfig.js";
 

@@ -22,6 +22,7 @@ const GastosOperativos = () => {
 
             </div>
             <Link to="/Dashboard" className="btn btn-primary">Dashboard</Link>
+            <Link to="/Reportes" className="btn btn-primary">Reportes</Link>
             <hr/>
 
             

@@ -1,5 +1,6 @@
-const express = require("express");
-const ordenController = require('../../controllers/flujo/ordenController');
+import express from 'express';
+import * as ordenController from '../../controllers/flujo/ordenController.js';
+
 const router = express.Router();
 
 // Ruta para agregar orden
@@ -17,6 +18,5 @@ router.put("/actualizar-fase-orden/", ordenController.siguienteFase);
 // Ruta para actualizar orden
 router.put("/actualizar-orden/", ordenController.updateOrden);
 
-
-// Exporta el router usando CommonJS
-module.exports = router;
+// Exporta el router usando Module ES
+export default router;

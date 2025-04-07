@@ -1,7 +1,7 @@
-const { connectDB } = require("../../config/database");
-const sql = require('mssql');
+import sql from 'mssql';
+import { connectDB } from '../../config/database.js';
 
-class Cliente {
+export class Cliente {
   constructor(nombre, apellido, cedula, correo, telefono, fechaRegistro) {
     this.idCliente = 0;
     this.nombre = nombre;
@@ -13,24 +13,24 @@ class Cliente {
   }
 }
 //------------
-class ClienteRepository {
+export class ClienteRepository {
   // Insertar nuevos clientes
   async insert(cliente) {
-    console.log(cliente)
+    console.log(cliente);
     try {
       const pool = await connectDB();
       await pool
         .request()
-        .input("nombre", cliente.nombre)
-        .input("apellido", cliente.apellido)
-        .input("cedula", cliente.cedula)
-        .input("correo", cliente.correo)
-        .input("telefono", cliente.telefono)
-        .input("fechaRegistro", cliente.fechaRegistro)
+        .input("nombre", sql.VarChar, cliente.nombre)
+        .input("apellido", sql.VarChar, cliente.apellido)
+        .input("cedula", sql.VarChar, cliente.cedula)
+        .input("correo", sql.VarChar, cliente.correo)
+        .input("telefono", sql.VarChar, cliente.telefono)
+        .input("fechaRegistro", sql.Date, cliente.fechaRegistro)
         .query(`
-          INSERT INTO CLIENTE (nombre, apellido, cedula, correo, telefono, fechaRegistro)
-          VALUES (@nombre, @apellido, @cedula, @correo, @telefono, @fechaRegistro)
-        `);
+                    INSERT INTO CLIENTE (nombre, apellido, cedula, correo, telefono, fechaRegistro)
+                    VALUES (@nombre, @apellido, @cedula, @correo, @telefono, @fechaRegistro)
+                `);
       console.log("Cliente insertado exitosamente");
     } catch (error) {
       console.error("Error en insert:", error);
@@ -43,7 +43,7 @@ class ClienteRepository {
   async updateCliente(cedula, datosActualizados) {
     try {
       const pool = await connectDB();
-      const { id,cedula, nombre, apellido, correo, telefono } = datosActualizados;
+      const { id, nombre, apellido, correo, telefono } = datosActualizados;
 
       const result = await pool
         .request()
@@ -54,10 +54,10 @@ class ClienteRepository {
         .input("correo", sql.VarChar, correo)
         .input("telefono", sql.VarChar, telefono)
         .query(`
-          UPDATE CLIENTE
-          SET cedula = @cedula, nombre = @nombre, apellido = @apellido, correo = @correo, telefono = @telefono
-          WHERE cedula = @cedula
-        `);
+                    UPDATE CLIENTE
+                    SET nombre = @nombre, apellido = @apellido, correo = @correo, telefono = @telefono
+                    WHERE cedula = @cedula
+                `);
 
       return result.rowsAffected[0] > 0;
     } catch (error) {
@@ -69,29 +69,27 @@ class ClienteRepository {
   // Eliminar cliente
   async deleteCliente(cedula) {
     try {
-      
       const pool = await connectDB();
       console.log("Conexión establecida con la base de datos.");
 
-    
       const result = await pool
         .request()
         .input("cedula", sql.VarChar, cedula)
         .query(`
-          DELETE FROM CLIENTE WHERE cedula = @cedula
-        `);
+                    DELETE FROM CLIENTE WHERE cedula = @cedula
+                `);
 
       console.log("Resultado de la eliminación:", result);
       console.log("Filas afectadas:", result.rowsAffected[0]);
 
       return result.rowsAffected[0] > 0;
     } catch (error) {
-      console.error("Error444 al eliminar cliente:", error);
-      throw new Error("Error444 al eliminar cliente");
+      console.error("Error al eliminar cliente:", error);
+      throw new Error("Error al eliminar cliente");
     }
   }
   //----CED
-//select todos
+  //select todos
   async getAll() {
     try {
       const pool = await connectDB();
@@ -113,50 +111,10 @@ class ClienteRepository {
         .query("SELECT * FROM CLIENTE WHERE cedula = @cedula");
 
       return result.recordset;
-      
+
     } catch (error) {
       console.error("Error al consultar cliente:", error);
       throw new Error("Error al consultar cliente");
     }
   }
 }
-
-module.exports = { Cliente, ClienteRepository };
-
-
-  /* Obtener historial por cédula
-  async getHistorialOrdenesByCedula(cedula) {
-    try {
-      const pool = await connectDB();
-      const result = await pool
-        .request()
-        .input("cedula", sql.VarChar, cedula)
-        .query(`
-          SELECT 
-            o.idOrden,
-            o.codigoOrden,
-            o.estadoOrden,
-            o.fechaIngreso,
-            o.estadoAtrasado,
-            o.tiempoEstimado,
-            v.placaVehiculo,
-            v.modeloVehiculo,
-            v.marcaVehiculo,
-            c.nombre AS nombreCliente,
-            c.telefono AS telefonoCliente
-          FROM ORDEN o
-          JOIN CLIENTE_VEHICULO v ON o.idVehiculo = v.idVehiculo
-          JOIN CLIENTE c ON o.idCliente = c.idCliente
-          WHERE c.cedula = @cedula
-          ORDER BY o.fechaIngreso DESC
-        `);
-      if (result.recordset.length === 0) {
-        return null;
-      }
-      return result.recordset;
-    } catch (error) {
-      console.error("Error al consultar historial de órdenes:", error);
-      throw new Error("Error al consultar historial de órdenes");
-    }
-  }
-*/

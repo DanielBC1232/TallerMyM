@@ -1,10 +1,10 @@
-const nodemailer = require("nodemailer");
-require("dotenv").config();
+import nodemailer from 'nodemailer';
+import 'dotenv/config';
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
-    secure: false, 
+    secure: false,
     auth: {
         user: 'mymtaller.cr@gmail.com',
         pass: 'luou jfuw cxvi hwaq' //contrasena de aplicacion
@@ -21,16 +21,22 @@ const transporter = nodemailer.createTransport({
 // Función para enviar correo
 async function enviarCorreo(nombreCliente, correo, codigoOrden, vehiculo, estadoOrden) {
     let nuevoEstado = '';
-    if (estadoOrden === 0) {
-        nuevoEstado = '"cancelado"';
-    } else if (estadoOrden === 1) {
-        nuevoEstado = '"en espera"';
-    } else if (estadoOrden === 2) {
-        nuevoEstado = '"en proceso"';
-    } else if (estadoOrden === 3) {
-        nuevoEstado = '"listo"';
-    } else if (estadoOrden >= 4) {
-        nuevoEstado = '"cobro"';
+    switch (estadoOrden) {
+        case 0:
+            nuevoEstado = '"cancelado"';
+            break;
+        case 1:
+            nuevoEstado = '"en espera"';
+            break;
+        case 2:
+            nuevoEstado = '"en proceso"';
+            break;
+        case 3:
+            nuevoEstado = '"listo"';
+            break;
+        default:
+            nuevoEstado = '"cobro"';
+            break;
     }
 
     const mailOptions = {
@@ -45,7 +51,7 @@ async function enviarCorreo(nombreCliente, correo, codigoOrden, vehiculo, estado
         console.log(`Correo enviado a ${correo} sobre la orden ${codigoOrden}`);
     } catch (error) {
         console.error("Error enviando correo:", error);
-    }   
+    }
 }
 
-module.exports = { enviarCorreo };
+export { enviarCorreo };

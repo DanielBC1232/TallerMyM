@@ -38,7 +38,7 @@ export class CotizacionRepository {
         }
     }
 
-    //obtener listado
+    // Obtener listado
     async getCotizacion() {
         try {
             const pool = await connectDB();
@@ -46,19 +46,19 @@ export class CotizacionRepository {
                 .request()
                 .query(`
                     SELECT TOP 10
-                    CO.idCotizacion, CO.montoTotal, CO.montoManoObra,CO.tiempoEstimado, CO.detalles, CO.fecha,CO.idCliente AS CO_idCliente,
+                    CO.idCotizacion, CO.montoTotal, CO.montoManoObra, CO.tiempoEstimado, CO.detalles, CO.fecha, CO.idCliente AS CO_idCliente,
                     CL.idCliente as idCliente, CL.nombre, CL.apellido
                     FROM COTIZACION CO
                     INNER JOIN CLIENTE CL on CO.idCliente = CL.idCliente
                     ORDER BY fecha DESC`);
-            return result.recordset; // Devuelve el listado (15 mas recientes)
+            return result.recordset; // Devuelve el listado (15 más recientes)
         } catch (error) {
             console.error('Error en obtener cotizacion:', error);
             throw new Error('Error en obtener cotizacion');
         }
     }
 
-    //obtener listado por ID
+    // Obtener listado por ID
     async getCotizacionById(idCotizacion) {
         try {
             const pool = await connectDB();
@@ -66,11 +66,13 @@ export class CotizacionRepository {
                 .request()
                 .input('idCotizacion', sql.Float, idCotizacion)
                 .query(`
-                        SELECT
-                        idCotizacion, montoTotal, montoManoObra,tiempoEstimado, detalles, fecha
-                        FROM COTIZACION
-                        WHERE idCotizacion = @idCotizacion`);
-            return result.recordset; // Devuelve el registro
+                    SELECT
+                    CO.idCotizacion, CO.montoTotal, CO.montoManoObra, CO.tiempoEstimado, CO.detalles, CO.fecha,
+                    CL.idCliente as idCliente, CL.nombre + ' ' + CL.apellido as nombreCliente
+                    FROM COTIZACION CO
+                    INNER JOIN CLIENTE CL on CO.idCliente = CL.idCliente
+                    WHERE idCotizacion = @idCotizacion`);
+            return result.recordset[0]; // Devuelve el registro
         } catch (error) {
             console.error('Error en obtener cotizacion:', error);
             throw new Error('Error en obtener cotizacion');
@@ -91,10 +93,9 @@ export class CotizacionRepository {
                     UPDATE COTIZACION
                     SET montoTotal = @montoTotal,
                         montoManoObra = @montoManoObra,
-                        tiempoEstimado= @tiempoEstimado,
-                        detalles= @detalles
-                    WHERE idCotizacion = @idCotizacion
-                `);
+                        tiempoEstimado = @tiempoEstimado,
+                        detalles = @detalles
+                    WHERE idCotizacion = @idCotizacion`);
             return result.rowsAffected[0]; // Devuelve el número de filas afectadas
         } catch (error) {
             console.error('Error en insertar cotizacion:', error);
@@ -102,8 +103,7 @@ export class CotizacionRepository {
         }
     }
 
-
-    //eliminar
+    // Eliminar
     async deleteCotizacion(idCotizacion) {
         try {
             const pool = await connectDB();
@@ -117,5 +117,4 @@ export class CotizacionRepository {
             throw new Error('Error en eliminar cotizacion');
         }
     }
-
 }

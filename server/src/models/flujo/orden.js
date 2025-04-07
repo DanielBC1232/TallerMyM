@@ -4,14 +4,14 @@ import { cambioEstadoOrden } from '../mailer/mailerBD.js';
 
 export class Orden {
     constructor(idOrden, codigoOrden, estadoOrden, fechaIngreso, tiempoEstimado, estadoAtrasado, idVehiculo, descripcion, idTrabajador, idCliente) {
-        this.idOrden = idOrden
+        this.idOrden = idOrden;
         this.codigoOrden = codigoOrden;
         this.estadoOrden = estadoOrden;
         this.fechaIngreso = fechaIngreso;
         this.tiempoEstimado = tiempoEstimado;
         this.estadoAtrasado = estadoAtrasado;
         this.idVehiculo = idVehiculo;
-        this.descripcion = descripcion
+        this.descripcion = descripcion;
         this.idTrabajador = idTrabajador;
         this.idCliente = idCliente;
     }
@@ -34,7 +34,7 @@ export class OrdenRepository {
             return result.rowsAffected[0]; // Devuelve el número de filas afectadas
         } catch (error) {
             console.error('Error en generar una nueva orden', error);
-            throw new Error('Error en generar una nueva orde');
+            throw new Error('Error en generar una nueva orden');
         }
     }
 
@@ -84,7 +84,7 @@ export class OrdenRepository {
             if (resultadoSQL > 0) {
                 cambioEstadoOrden();
             }
-            return resultadoSQL  // Devuelve el número de filas afectadas
+            return resultadoSQL;  // Devuelve el número de filas afectadas
         } catch (error) {
             console.error('Error en actualizar orden:', error);
             throw new Error('Error en actualizar orden');
@@ -117,6 +117,4 @@ export class OrdenRepository {
             throw new Error('Error en actualizar orden');
         }
     }
-
-
 }

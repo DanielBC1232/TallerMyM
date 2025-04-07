@@ -24,7 +24,7 @@ export class NotificacionesRepository {
                 .input('modulo', sql.VarChar, modulo)
                 .query(`SELECT * FROM NOTIFICACIONES
                     WHERE modulo = @modulo`);
-            return result.recordset; // Devuelve el número de filas afectadas
+            return result.recordset; // Devuelve el array de notificaciones
         } catch (error) {
             console.error('M-Error al obtener notificaciones:', error);
             throw new Error('M-Error al obtener notificaciones:');
@@ -39,11 +39,10 @@ export class NotificacionesRepository {
                 .input('idNotificacion', sql.BigInt, idNotificacion)
                 .query(`DELETE FROM NOTIFICACIONES
                     WHERE idNotificacion = @idNotificacion`);
-            return result.recordset; // Devuelve el número de filas afectadas
+            return result.rowsAffected; // Devuelve el número de filas afectadas
         } catch (error) {
             console.error('M-Error al eliminar notificacion:', error);
             throw new Error('M-Error al eliminar notificacion:');
         }
     }
-
 }

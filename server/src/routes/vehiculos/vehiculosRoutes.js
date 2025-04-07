@@ -1,5 +1,5 @@
 import express from "express";
-import vehiculoController from "../../controllers/vehiculos/vehiculoController.js";//
+import * as vehiculoController from "../../controllers/vehiculos/vehiculoController.js";//
 
 const router = express.Router();
 
@@ -15,7 +15,5 @@ router.get("/cliente-vehiculos/:idCliente", vehiculoController.getVehiculosPorCl
 router.get("/ObtenerVehiculos", vehiculoController.obtenerTodosLosVehiculos);
 router.get("/ObtenerVehiculo/:placaVehiculo", vehiculoController.obtenerVehiculoPorPlaca);
 router.get("/ObteneridVehiculo/:idVehiculo", vehiculoController.obtenerVehiculoPoridVehiculo);
-
-
 
 export default router;

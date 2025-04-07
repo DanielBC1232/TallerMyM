@@ -1,5 +1,5 @@
 import express from "express";
-import clienteController from "../../controllers/clientes/clienteController.js";
+import * as clienteController from "../../controllers/clientes/clienteController.js";
 
 const router = express.Router();
 
@@ -14,9 +14,5 @@ router.delete('/eliminar/:cedula', clienteController.eliminarCliente);
 router.get("/obtenerclientes", clienteController.obtenerTodosLosClientes);
 
 router.get("/:cedula", clienteController.obtenerClientePorCedula);
-
-
-
-
 
 export default router;

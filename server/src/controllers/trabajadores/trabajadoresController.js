@@ -55,15 +55,15 @@ const getTrabajadorById = async (req, res) => {
 };
 
 const obtenerTrabajadoresMenuDesplegable = async (req, res) => {
-  try {
-    // Usar el método getAll del repositorio
-    const trabajadores = await TrabajadorRepo.getMenu();
+    try {
+        // Usar el método getMenu del repositorio
+        const trabajadores = await TrabajadorRepo.getMenu();
 
-    res.status(200).json(trabajadores);
-  } catch (error) {
-    console.error("Error al obtener todos los trabajadores:", error);
-    res.status(500).json({ error: "Error al obtener todos los trabajadores" });
-  }
+        res.status(200).json(trabajadores);
+    } catch (error) {
+        console.error("Error al obtener todos los trabajadores para el menú desplegable:", error);
+        res.status(500).json({ error: "Error al obtener todos los trabajadores para el menú desplegable" });
+    }
 };
 
 const updateTrabajador = async (req, res) => {
@@ -102,4 +102,4 @@ const deleteTrabajador = async (req, res) => {
     }
 };
 
-export { insertTrabajador, getTrabajadores, getTrabajadorById, updateTrabajador, deleteTrabajador,obtenerTrabajadoresMenuDesplegable };
+export { insertTrabajador, getTrabajadores, getTrabajadorById, updateTrabajador, deleteTrabajador, obtenerTrabajadoresMenuDesplegable };

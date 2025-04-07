@@ -24,6 +24,7 @@ import Venta from "./features/ventas/pages/Venta.jsx";
 //Finanzas
 import GastosOperativos from "./features/finanzas/pages/GastosOperativos.jsx";
 import Dashboard from "./features/finanzas/pages/Dashboard.jsx";
+import Reportes from "./features/finanzas/pages/Reportes.jsx";
 
 //flujo
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
@@ -119,6 +120,8 @@ const App = () => {
           {/* Finanzas */}
           <Route path="/gastos-operativos" element={<GastosOperativos />} />
           <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/Reportes" element={<Reportes />} />
+
 
           {/* Ruta para trabajadores*/}
           <Route path="/trabajadores" element={<TrabajadoresIndex />} />

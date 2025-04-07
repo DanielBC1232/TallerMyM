@@ -21,7 +21,6 @@ const insertVenta = async (req, res) => {
 
 const getVentas = async (req, res) => {
     try {
-
         const { nombreCliente, codigoOrden } = req.body;
         console.log(nombreCliente, codigoOrden);
 
@@ -38,7 +37,6 @@ const getVentas = async (req, res) => {
 
 const getVentaById = async (req, res) => {
     try {
-
         const id = parseInt(req.params.id);
 
         // Usar el método de listado del repositorio

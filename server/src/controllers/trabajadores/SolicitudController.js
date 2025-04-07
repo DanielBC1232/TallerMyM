@@ -1,13 +1,13 @@
-const { Solicitud, SolicitudRepository } = require("../../models/trabajadores/solicitud.js");
+import { Solicitud, SolicitudRepository } from "../../models/trabajadores/solicitud.js";
 
 const solicitudRepo = new SolicitudRepository();
 
 //Operaciones CRUD
-// Insertar un cliente
+// Insertar una solicitud de vacaciones
 const InsertSolicitudVacaciones = async (req, res) => {
   try {
-    const { fechaInicio,fechaFin,idTrabajador } = req.body;
-    const newSolicitud= new Solicitud(fechaInicio,fechaFin,idTrabajador);
+    const { fechaInicio, fechaFin, idTrabajador } = req.body;
+    const newSolicitud = new Solicitud(fechaInicio, fechaFin, idTrabajador);
 
     await solicitudRepo.InsertSolicitud(newSolicitud);
     res.status(201).json(newSolicitud);
@@ -19,74 +19,68 @@ const InsertSolicitudVacaciones = async (req, res) => {
 
 const UpdateSolicitudVacaciones = async (req, res) => {
   try {
-    
     const idVacaciones = req.params.idVacaciones;
     const datosActualizados = req.body;
     const actualizacionExitosa = await solicitudRepo.UpdateSolicitud(idVacaciones, datosActualizados);
 
     if (!actualizacionExitosa) {
-      res.status(404).json({ error: "Vehiculo no encontrado o no se pudo actualizar" });
+      res.status(404).json({ error: "Solicitud de vacaciones no encontrada o no se pudo actualizar" });
     } else {
-      res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
+      res.status(200).json({ message: "Solicitud de vacaciones actualizada exitosamente" });
     }
   } catch (error) {
-    console.error("Error al actualizar cliente:", error);
-    res.status(500).json({ error: "Error al actualizar los datos del cliente" });
+    console.error("Error al actualizar solicitud de vacaciones:", error);
+    res.status(500).json({ error: "Error al actualizar la solicitud de vacaciones" });
   }
 };
 
 const DeleteSolicitudVacaciones = async (req, res) => {
   try {
-    
     const idVacaciones = req.params.idVacaciones;
-  //  const datosActualizados = req.body;datosActualizados
-    const actualizacionExitosa = await solicitudRepo.DeleteSolicitud(idVacaciones);
+    const eliminacionExitosa = await solicitudRepo.DeleteSolicitud(idVacaciones);
 
-    if (!actualizacionExitosa) {
-      res.status(404).json({ error: "Vehiculo no encontrado o no se pudo actualizar" });
+    if (!eliminacionExitosa) {
+      res.status(404).json({ error: "Solicitud de vacaciones no encontrada o no se pudo eliminar" });
     } else {
-      res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
+      res.status(200).json({ message: "Solicitud de vacaciones eliminada exitosamente" });
     }
   } catch (error) {
-    console.error("Error al actualizar cliente:", error);
-    res.status(500).json({ error: "Error al actualizar los datos del cliente" });
+    console.error("Error al eliminar solicitud de vacaciones:", error);
+    res.status(500).json({ error: "Error al eliminar la solicitud de vacaciones" });
   }
 };
 //---------
-//Aprobar y Rechar---
+//Aprobar y Rechazar---
 const AprobarSolicitudVacaciones = async (req, res) => {
   try {
-    
     const idVacaciones = req.params.idVacaciones;
-  //  const datosActualizados = req.body;datosActualizados
-    const actualizacionExitosa = await solicitudRepo.AprobarSolicitud(idVacaciones);
+    const aprobacionExitosa = await solicitudRepo.AprobarSolicitud(idVacaciones);
 
-    if (!actualizacionExitosa) {
-      res.status(404).json({ error: "Vehiculo no encontrado o no se pudo actualizar" });
+    if (!aprobacionExitosa) {
+      res.status(404).json({ error: "Solicitud de vacaciones no encontrada o no se pudo aprobar" });
     } else {
-      res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
+      res.status(200).json({ message: "Solicitud de vacaciones aprobada exitosamente" });
     }
   } catch (error) {
-    console.error("Error al actualizar cliente:", error);
-    res.status(500).json({ error: "Error al actualizar los datos del cliente" });
+    console.error("Error al aprobar solicitud de vacaciones:", error);
+    res.status(500).json({ error: "Error al aprobar la solicitud de vacaciones" });
   }
 };
 
 const RechazarSolicitudVacaciones = async (req, res) => {
   try {
-    
     const idVacaciones = req.params.idVacaciones;
-   const datosActualizados = req.body;
-    const actualizacionExitosa = await solicitudRepo.RechazarSolicitud(idVacaciones,datosActualizados);
+    const { motivoRechazo } = req.body;
+    const rechazoExitoso = await solicitudRepo.RechazarSolicitud(idVacaciones, motivoRechazo);
 
-    if (!actualizacionExitosa) {
-      res.status(404).json({ error: "Vehiculo no encontrado o no se pudo actualizar" });
+    if (!rechazoExitoso) {
+      res.status(404).json({ error: "Solicitud de vacaciones no encontrada o no se pudo rechazar" });
     } else {
-      res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
+      res.status(200).json({ message: "Solicitud de vacaciones rechazada exitosamente" });
     }
   } catch (error) {
-    console.error("Error al actualizar cliente:", error);
-    res.status(500).json({ error: "Error al actualizar los datos del cliente" });
+    console.error("Error al rechazar solicitud de vacaciones:", error);
+    res.status(500).json({ error: "Error al rechazar la solicitud de vacaciones" });
   }
 };
 
@@ -95,50 +89,44 @@ const RechazarSolicitudVacaciones = async (req, res) => {
 //Obtener Vacaciones listado Vacaciones solicitadas (aprobar vacaciones index)
 const ObtenerVacacionesGest = async (req, res) => {
   try {
-    // Usar el método getAll del repositorio
+    // Usar el método getVacacionesGest del repositorio
     const Vacaciones = await solicitudRepo.getVacacionesGest();
 
     res.status(200).json(Vacaciones);
   } catch (error) {
-    console.error("Error al obtener todos las Vacaciones:", error);
-    res.status(500).json({ error: "Error al obtener todos las Vacaciones" });
+    console.error("Error al obtener todas las Solicitudes de Vacaciones:", error);
+    res.status(500).json({ error: "Error al obtener todas las Solicitudes de Vacaciones" });
   }
 };
 
 
 const ObtenerVacacionxID = async (req, res) => {
   try {
-    const { idVacaciones } = req.params; // Obtener la cédula del query string
+    const { idVacaciones } = req.params; // Obtener el ID de la solicitud de vacaciones
 
     if (!idVacaciones) {
-      return res.status(400).json({ error: "El Id es requerido" });
+      return res.status(400).json({ error: "El ID de la solicitud es requerido" });
     }
 
     const vacacion = await solicitudRepo.getVacionPorIdVacacion(idVacaciones);
 
     if (!vacacion || vacacion.length === 0) {
-      res.status(404).json({ error: "vehiculo no encontrado" });
+      res.status(404).json({ error: "Solicitud de vacaciones no encontrada" });
     } else {
-      res.status(200).json(vacacion[0]); // Devuelve el primer vehiculo encontrado
+      res.status(200).json(vacacion[0]); // Devuelve la solicitud de vacaciones encontrada
     }
   } catch (error) {
-    console.error("Error al obtener vacacion por idVacacion:", error);
-    res.status(500).json({ error: "Error al obtener vacacion por idVacacion" });
+    console.error("Error al obtener solicitud de vacaciones por ID:", error);
+    res.status(500).json({ error: "Error al obtener solicitud de vacaciones por ID" });
   }
 };
 
-module.exports = { 
- InsertSolicitudVacaciones,UpdateSolicitudVacaciones,DeleteSolicitudVacaciones,
- AprobarSolicitudVacaciones,RechazarSolicitudVacaciones,
- ObtenerVacacionesGest,ObtenerVacacionxID
+export {
+  InsertSolicitudVacaciones,
+  UpdateSolicitudVacaciones,
+  DeleteSolicitudVacaciones,
+  AprobarSolicitudVacaciones,
+  RechazarSolicitudVacaciones,
+  ObtenerVacacionesGest,
+  ObtenerVacacionxID
 };
-
-
-
-
-
-
-
-
-
-

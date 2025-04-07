@@ -6,7 +6,7 @@ const getNotificaciones = async (req, res) => {
     try {
         // Requerir parámetros desde el cuerpo de la solicitud
         const { modulo } = req.body;
-        
+
         // Usar el método de inserción del repositorio
         const noti = await notiRepo.getNotificaciones(modulo);
         // Enviar la respuesta
@@ -21,7 +21,7 @@ const EliminarNotificacion = async (req, res) => {
     try {
         // Requerir parámetros desde el cuerpo de la solicitud
         const id = req.params.id;
-        
+
         // Usar el método de inserción del repositorio
         const noti = await notiRepo.EliminarNotificacion(parseInt(id));
         // Enviar la respuesta
@@ -33,4 +33,4 @@ const EliminarNotificacion = async (req, res) => {
 }
 
 
-export { getNotificaciones ,EliminarNotificacion}
+export { getNotificaciones, EliminarNotificacion }

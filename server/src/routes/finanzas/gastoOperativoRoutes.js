@@ -1,8 +1,9 @@
-const express = require("express");
-const gastoOperativoController = require('../../controllers/finanzas/gastoOperativoController');
+import express from 'express';
+import * as gastoOperativoController from '../../controllers/finanzas/gastoOperativoController.js';
+
 const router = express.Router();
 
 router.post("/agregar-gasto-operativo/", gastoOperativoController.insertGastoOperativo);
 router.get("/obtener-gastos-operativos/", gastoOperativoController.getGastoOperativos);
 
-module.exports = router;
+export default router;

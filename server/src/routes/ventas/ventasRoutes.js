@@ -1,5 +1,6 @@
-const express = require("express");
-const ventasController = require('../../controllers/ventas/ventasController');
+import express from 'express';
+import * as ventasController from '../../controllers/ventas/ventasController.js';
+
 const router = express.Router();
 
 router.post("/registrar-venta/", ventasController.insertVenta);
@@ -10,6 +11,5 @@ router.get("/obtener-productos-venta/:id", ventasController.getProductosVenta);
 router.post("/eliminar-producto-venta/", ventasController.deleteProductoVenta);
 router.get("/existe-pago/:id", ventasController.existePago);
 
-
-// Exporta el router usando CommonJS
-module.exports = router;
+// Exporta el router usando Module ES
+export default router;

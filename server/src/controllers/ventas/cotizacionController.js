@@ -21,21 +21,19 @@ const insertCotizacion = async (req, res) => {
 
 const getCotizacion = async (_req, res) => {
     try {
-
         // Usar el método de listado del repositorio
         const cotizacion = await CotizacionRepo.getCotizacion();
 
         // Enviar la respuesta
         res.status(200).json(cotizacion);
     } catch (error) {
-        console.error("Error al obtener cotización:", error);
-        res.status(500).json({ error: "Error al obtener cotización" });
+        console.error("Error al obtener cotizaciones:", error);
+        res.status(500).json({ error: "Error al obtener cotizaciones" });
     }
 };
 
 const getCotizacionById = async (req, res) => {
     try {
-
         const id = parseInt(req.params.id);
 
         // Usar el método de listado del repositorio
@@ -44,8 +42,8 @@ const getCotizacionById = async (req, res) => {
         // Enviar la respuesta
         res.status(200).json(cotizacion);
     } catch (error) {
-        console.error("Error al obtener cotización:", error);
-        res.status(500).json({ error: "Error al obtener cotización" });
+        console.error("Error al obtener cotización por ID:", error);
+        res.status(500).json({ error: "Error al obtener cotización por ID" });
     }
 };
 
@@ -85,4 +83,4 @@ const deleteCotizacion = async (req, res) => {
     }
 };
 
-export { insertCotizacion, getCotizacion,getCotizacionById, updateCotizacion, deleteCotizacion };
+export { insertCotizacion, getCotizacion, getCotizacionById, updateCotizacion, deleteCotizacion };

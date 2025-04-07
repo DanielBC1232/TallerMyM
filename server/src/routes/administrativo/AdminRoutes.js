@@ -1,5 +1,5 @@
 import express from "express";
-import adminController from "../../controllers/administrativo/adminController.js";
+import * as adminController from "../../controllers/administrativo/adminController.js";
 
 const router = express.Router();
 //Recordar Hashear Contraseña !!!!
