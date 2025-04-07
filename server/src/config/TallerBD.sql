@@ -29,7 +29,7 @@ CREATE TABLE USUARIO (
     username NVARCHAR(50) NOT NULL UNIQUE, -- Nombre de usuario
     email NVARCHAR(100) NOT NULL UNIQUE, -- Correo electrónico
     password NVARCHAR(255) NOT NULL, -- Contraseña (hash)
-    idRol INT NOT NULL, -- FK al rol del usuario
+    idRol INT NOT NULL DEFAULT 2, -- FK al rol del usuario, DEFAULT "user"
 
     failedLoginAttempts INT DEFAULT 0, -- Intentos fallidos de inicio de sesión
     isLocked BIT DEFAULT 0, -- Indica si la cuenta está bloqueada (0 = no, 1 = sí)
@@ -142,8 +142,8 @@ CREATE TABLE CLIENTE(
     cedula VARCHAR(10) NOT NULL UNIQUE,
     correo VARCHAR(100) NOT NULL,
     telefono VARCHAR(50) NOT NULL,
-    fechaRegistro DATE NOT NULL
-
+    fechaRegistro DATE NOT NULL,
+	estado BIT NULL DEFAULT 1
 )
 GO
 

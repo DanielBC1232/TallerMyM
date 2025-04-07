@@ -660,18 +660,40 @@ BEGIN
 END;
 GO
 
-SELECT
-	O.idOrden,
-	C.nombre +' '+ C.apellido as nombreCliente,
-	C.correo,
-	O.codigoOrden,
-	CV.marcaVehiculo +' '+ CV.modeloVehiculo +' '+ CAST(CV.annoVehiculo as varchar(4)) as vehiculo,
-	O.estadoOrden,
-	O.estadoCorreoNotificacion
-FROM ORDEN O
-INNER JOIN CLIENTE C ON C.idCliente = O.idCliente
-INNER JOIN CLIENTE_VEHICULO CV ON CV.idVehiculo = O.idVehiculo
-WHERE O.estadoCorreoNotificacion IS NULL OR O.estadoCorreoNotificacion != O.estadoOrden
+CREATE PROCEDURE SP_UPDATE_ESTADO_CLIENTE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @idCliente INT, @ultimaFecha DATE, @estadoActual BIT;
+    DECLARE curClientes CURSOR FAST_FORWARD FOR
+        SELECT c.idCliente, MAX(o.fechaIngreso) AS ultimaFecha, c.estado
+        FROM CLIENTE c
+        LEFT JOIN ORDEN o ON c.idCliente = o.idCliente
+        GROUP BY c.idCliente, c.estado;
+    OPEN curClientes;
+    FETCH NEXT FROM curClientes INTO @idCliente, @ultimaFecha, @estadoActual;
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        IF @ultimaFecha IS NOT NULL
+        BEGIN
+            IF DATEDIFF(MONTH, @ultimaFecha, GETDATE()) >= 12
+            BEGIN
+                IF @estadoActual <> 0
+                    UPDATE CLIENTE SET estado = 0 WHERE idCliente = @idCliente;
+            END
+            ELSE
+            BEGIN
+                IF @estadoActual = 0
+                    UPDATE CLIENTE SET estado = 1 WHERE idCliente = @idCliente;
+            END
+        END
+        FETCH NEXT FROM curClientes INTO @idCliente, @ultimaFecha, @estadoActual;
+    END;
+    CLOSE curClientes;
+    DEALLOCATE curClientes;
+END;
+GO
 
 
-Select estadoOrden, estadoCorreoNotificacion from ORDEN
+
+
