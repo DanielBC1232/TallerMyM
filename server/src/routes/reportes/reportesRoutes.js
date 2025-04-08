@@ -5,8 +5,11 @@ const router = express.Router();
 import { CotizacionRepository } from '../../models/ventas/cotizacion.js';
 const CotizacionRepo = new CotizacionRepository();
 
-import {ClienteRepository} from "../../models/clientes/cliente.js";
+import { ClienteRepository } from "../../models/clientes/cliente.js";
 const ClienteRepo = new ClienteRepository();
+
+import { TrabajadorRepository } from '../../models/trabajadores/trabajadores.js';
+const TrabajadorRepo = new TrabajadorRepository();
 
 router.post('/generar-factura', async (req, res) => {
     try {
@@ -146,7 +149,7 @@ router.get('/reporte-clientes-inactivos', async (_req, res) => {
 
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-        
+
         await workbook.xlsx.write(res);
         res.end();
 
@@ -156,6 +159,54 @@ router.get('/reporte-clientes-inactivos', async (_req, res) => {
     }
 });
 
+router.get('/reporte-trabajadores-eficientes', async (_req, res) => {
+    try {
+        // Obtenemos los datos de trabajadores eficientes
+        // Se espera que getTrabajadoresEficientes retorne objetos con { nombreCompleto, cedula, totalOrdenes }
+        const trabajadores = await TrabajadorRepo.getTrabajadoresEficientes();
+
+        if (!Array.isArray(trabajadores) || trabajadores.length === 0) {
+            return res.status(404).json({ error: 'No hay datos de trabajadores eficientes para exportar' });
+        }
+
+        // Genera el nombre del archivo usando la fecha actual
+        const fechaActual = new Date().toISOString().split('T')[0];
+        const fileName = `TrabajadoresEficientes-${fechaActual}.xlsx`;
+
+        const workbook = new Excel.Workbook();
+        const worksheet = workbook.addWorksheet('Trabajadores Eficientes');
+
+        // Definir columnas del Excel
+        worksheet.columns = [
+            { header: 'Nombre Completo', key: 'nombreCompleto', width: 30 },
+            { header: 'Cédula', key: 'cedula', width: 15 },
+            { header: 'Total Ordenes', key: 'totalOrdenes', width: 15 },
+        ];
+
+        // Poner la fila de encabezado en negrita
+        worksheet.getRow(1).font = { bold: true };
+
+        // Agregar cada trabajador a una nueva fila
+        trabajadores.forEach(trabajador => {
+            worksheet.addRow({
+                nombreCompleto: trabajador.nombreCompleto || 'N/A',
+                cedula: trabajador.cedula || 'N/A',
+                totalOrdenes: trabajador.totalOrdenes || 0
+            });
+        });
+
+        // Convertir el workbook a buffer y enviar la respuesta
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+        res.send(buffer);
+
+    } catch (error) {
+        console.error('Error al generar el reporte XLSX de trabajadores eficientes:', error);
+        res.status(500).json({ error: 'Error al generar el reporte' });
+    }
+});
 
 
 export default router;

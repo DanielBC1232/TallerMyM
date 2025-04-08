@@ -142,4 +142,33 @@ export class TrabajadorRepository {
             throw new Error('Error en eliminar trabajador');
         }
     }
+
+    // Obtener listado de trabajadores
+    async getTrabajadoresEficientes() {
+        try {
+            const pool = await connectDB();
+            const result = await pool
+                .request()
+                .query(`SELECT
+                        T.nombreCompleto,
+                        T.cedula,
+                        COUNT(O.idOrden) AS totalOrdenes
+                    FROM TRABAJADOR T
+                    INNER JOIN ORDEN O ON O.idTrabajador = T.idTrabajador
+                    WHERE 
+                        O.estadoOrden IN (3, 4) AND
+                        O.fechaIngreso >= DATEADD(DAY, -30, GETDATE())
+                    GROUP BY
+                        T.nombreCompleto,
+                        T.cedula
+                    ORDER BY
+                        totalOrdenes DESC`);
+            return result.recordset; // Devuelve el listado (todos los resultados)
+        } catch (error) {
+            console.error('Error en obtener trabajadores:', error);
+            throw new Error('Error en obtener trabajadores');
+        }
+    }
+
+
 }

@@ -102,4 +102,17 @@ const deleteTrabajador = async (req, res) => {
     }
 };
 
-export { insertTrabajador, getTrabajadores, getTrabajadorById, updateTrabajador, deleteTrabajador, obtenerTrabajadoresMenuDesplegable };
+const getTrabajadoresEficientes = async (_req, res) => {
+    try {
+
+        const trabajadores = await TrabajadorRepo.getTrabajadoresEficientes();
+
+        res.status(200).json(trabajadores);
+    } catch (error) {
+        console.error("Error al obtener todos los trabajadores:", error);
+        res.status(500).json({ error: "Error al obtener todos los trabajadores" });
+    }
+};
+
+
+export { getTrabajadoresEficientes, insertTrabajador, getTrabajadores, getTrabajadorById, updateTrabajador, deleteTrabajador, obtenerTrabajadoresMenuDesplegable };

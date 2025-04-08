@@ -694,10 +694,17 @@ BEGIN
 END;
 GO
 
-SELECT 
-			idCliente,
-          nombre +' '+ apellido as nombreCliente,
-          cedula,
-          correo,
-          telefono
-          FROM CLIENTE WHERE estado = 0
+SELECT
+    T.nombreCompleto,
+    T.cedula,
+    COUNT(O.idOrden) AS totalOrdenes
+FROM TRABAJADOR T
+INNER JOIN ORDEN O ON O.idTrabajador = T.idTrabajador
+WHERE 
+    O.estadoOrden IN (3, 4) AND --Ordenes completadas
+    O.fechaIngreso >= DATEADD(DAY, -30, GETDATE()) -- Ultimos 30 dias
+GROUP BY
+    T.nombreCompleto,
+    T.cedula
+ORDER BY
+    totalOrdenes DESC;

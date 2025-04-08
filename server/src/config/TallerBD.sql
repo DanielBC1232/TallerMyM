@@ -51,8 +51,7 @@ CREATE TABLE TRABAJADOR(
     nombreCompleto VARCHAR(200) NOT NULL,
     cedula VARCHAR(10) NOT NULL UNIQUE,
     salario DECIMAL(10,2) NOT NULL,
-    seguroSocial VARCHAR(50) NOT NULL,
-
+    seguroSocial VARCHAR(50) NOT NULL
 )
 GO
 

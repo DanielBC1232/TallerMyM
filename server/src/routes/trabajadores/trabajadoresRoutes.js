@@ -35,5 +35,8 @@ router.get("/obteneTrabajadoresMenu", trabajadorController.obtenerTrabajadoresMe
 router.get("/obtenerSolicitudVacaciones", SolicitudController.ObtenerVacacionesGest);
 router.get("/obtenerSolicitudVacacion/:idVacaciones", SolicitudController.ObtenerVacacionxID);
 
+//Reporte de trabajadores mas eficientes
+router.get("/trabajadores-eficientes", trabajadorController.getTrabajadoresEficientes);
+
 // Exporta el router usando Module ES
 export default router;

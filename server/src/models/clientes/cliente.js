@@ -124,7 +124,7 @@ export class ClienteRepository {
           nombre +' '+ apellido as nombreCliente,
           correo,
           telefono
-          FROM CLIENTE
+          FROM CLIENTE WHERE estado = 0
           `);
 
       return result.recordset || [];
