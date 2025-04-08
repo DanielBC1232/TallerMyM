@@ -4,6 +4,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Form, Button, DatePicker, Input, InputNumber } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const EditarVacaciones = () => {
   const { idVacaciones } = useParams();
   const navigate = useNavigate();
@@ -20,7 +23,7 @@ const EditarVacaciones = () => {
     const cargarDatos = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/trabajadores/obtenerSolicitudVacacion/${idVacaciones}`
+          `${BASE_URL}/trabajadores/obtenerSolicitudVacacion/${idVacaciones}`
         );
 
         setFormValue({
@@ -52,7 +55,7 @@ const EditarVacaciones = () => {
       //se envian los datos
       console.log("Datos a enviar",datosActualizados)
 
-      await axios.put(`http://localhost:3000/trabajadores/Edit-Vacaciones/${idVacaciones}`,datosActualizados);
+      await axios.put(`${BASE_URL}/trabajadores/Edit-Vacaciones/${idVacaciones}`,datosActualizados);
       alert("Solicitud actualizada correctamente");
       navigate("/GestionarSolicitud-Vacaciones");
     } catch (error) {
@@ -66,7 +69,7 @@ const EditarVacaciones = () => {
     console.log("Datos a enviar",idVacaciones)
     try {      
       //se envian los datos
-      await axios.put(`http://localhost:3000/trabajadores/Aprob-Vacaciones/${idVacaciones}` );
+      await axios.put(`${BASE_URL}/trabajadores/Aprob-Vacaciones/${idVacaciones}` );
       alert("Solicitud aprobada correctamente");
       navigate("/GestionarSolicitud-Vacaciones");
     } catch (error) {
@@ -83,7 +86,7 @@ const EditarVacaciones = () => {
     }
     try {
       const datosActualizados = {...formValue};
-      await axios.put(`http://localhost:3000/trabajadores/Rechazar-Vacaciones/${idVacaciones}`,datosActualizados);
+      await axios.put(`${BASE_URL}/trabajadores/Rechazar-Vacaciones/${idVacaciones}`,datosActualizados);
       alert("Solicitud rechazada");
       navigate("/GestionarSolicitud-Vacaciones");
     } catch (error) {
@@ -96,7 +99,7 @@ const EditarVacaciones = () => {
   const handleEliminar = async () => {
     if (!confirm("¿Está seguro de eliminar esta solicitud?")) return;
     try {
-      await axios.delete(`http://localhost:3000/trabajadores/Elim-Vacaciones/${idVacaciones}`);
+      await axios.delete(`${BASE_URL}/trabajadores/Elim-Vacaciones/${idVacaciones}`);
       alert("Solicitud eliminada");
       navigate("/GestionarSolicitud-Vacaciones");
     } catch (error) {

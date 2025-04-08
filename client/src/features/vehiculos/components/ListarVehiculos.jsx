@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const ListarVehiculos = () => {
   const [vehiculos, setVehiculos] = useState([]); // Todos los vehículos
   const [loading, setLoading] = useState(true); // Estado para manejar la carga
@@ -10,7 +13,7 @@ const ListarVehiculos = () => {
   // Función para obtener todos los vehículos
   const ObtenerVehiculos = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/vehiculos/ObtenerVehiculos");
+      const response = await axios.get(`${BASE_URL}/vehiculos/ObtenerVehiculos`);
       setVehiculos(response.data); // Guardar los vehículos en el estado
       setError(""); // Limpiar el mensaje de error
     } catch (error) {

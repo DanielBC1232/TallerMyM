@@ -4,6 +4,9 @@ import "../styles/form.css";
 
 const { StringType } = Schema.Types;
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const model = Schema.Model({
   placaVehiculo: StringType().isRequired("La placa del vehículo es obligatoria"),
   modeloVehiculo: StringType().isRequired("El modelo del vehículo es obligatorio"),
@@ -12,7 +15,6 @@ const model = Schema.Model({
   tipoVehiculo: StringType().isRequired("El tipo de vehículo es obligatorio"),
   idCliente: StringType().isRequired("El ID del cliente es obligatorio"),//investigar si lo tengo que pasar a int
 });
-
 
 const CreateForm = () => {
   const [formValue, setFormValue] = useState({
@@ -27,7 +29,7 @@ const CreateForm = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost:3000/vehiculos/registrar", {
+      const response = await fetch(`${BASE_URL}/vehiculos/registrar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formValue),

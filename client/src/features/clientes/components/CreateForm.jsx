@@ -4,6 +4,9 @@ import "../styles/form.css";
 
 const { StringType } = Schema.Types;
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const model = Schema.Model({
   nombre: StringType().isRequired("El nombre es obligatorio"),
   apellido: StringType().isRequired("El apellido es obligatorio"),
@@ -24,7 +27,7 @@ const CreateForm = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost:3000/clientes/registrar", {
+      const response = await fetch(`${BASE_URL}/clientes/registrar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formValue),

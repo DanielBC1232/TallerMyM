@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import FormularioPerfil from "../components/FormularioPerfil";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const CrearPerfil = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -12,7 +15,7 @@ const CrearPerfil = () => {
     setIsSubmitting(true);
     try {
      
-      const verifyResponse = await fetch("http:/localhost:3000/api/usuario/send-email", {
+      const verifyResponse = await fetch(`${BASE_URL}/api/usuario/send-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: data.email, nombre: data.nombre }),
@@ -27,7 +30,7 @@ const CrearPerfil = () => {
       }
 
 
-      const response = await fetch("localhost:3000/api/email/send-email", {
+      const response = await fetch(`${BASE_URL}/api/email/send-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email : data.email, nombre: data.nombre}),

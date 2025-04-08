@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const ListarClientes = () => {
   const [clientes, setClientes] = useState([]); // Todos los clientes
   const [loading, setLoading] = useState(true);
@@ -10,7 +13,7 @@ const ListarClientes = () => {
   // Función para obtener todos los clientes
   const obtenerClientes = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/clientes/obtenerclientes");
+      const response = await axios.get(`${BASE_URL}/clientes/obtenerclientes`);
       setClientes(response.data);
       setError("");
     } catch (error) {

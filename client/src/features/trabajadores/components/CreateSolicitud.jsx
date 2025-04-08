@@ -4,6 +4,9 @@ import "../styles/form.css";
 
 const { StringType, DateType } = Schema.Types;
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const model = Schema.Model({
   FechaInicio: DateType().isRequired("La fecha de inicio es obligatoria"),
   FechaFin: DateType().isRequired("La fecha de fin es obligatoria"),
@@ -23,7 +26,7 @@ const CreateSolicitud = () => {
   useEffect(() => {
     const fetchTrabajadores = async () => {
       try {
-        const response = await fetch("http://localhost:3000/trabajadores/obteneTrabajadoresMenu");
+        const response = await fetch(`${BASE_URL}/trabajadores/obteneTrabajadoresMenu`);
         if (!response.ok) throw new Error("Error al cargar trabajadores");
         const data = await response.json();
 
@@ -47,7 +50,7 @@ const CreateSolicitud = () => {
     try {
       console.log("Datos enviados:", formValue);
   
-      const response = await fetch("http://localhost:3000/trabajadores/Solicitud-Vacaciones", {
+      const response = await fetch(`${BASE_URL}/trabajadores/Solicitud-Vacaciones`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

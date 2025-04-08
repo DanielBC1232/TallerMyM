@@ -38,7 +38,7 @@ export class VentaRepository {
                 .input('codigoOrden', sql.VarChar, codigoOrden || null)
                 .input('nombreCliente', sql.VarChar, nombreCliente || null)
                 .execute(`SP_GET_VENTAS`);
-            return result.recordset; // Devuelve el listado
+                return result.recordset; // Devuelve el listado
         } catch (error) {
             console.error('Error en obtener venta:', error);
             throw new Error('Error en obtener venta');

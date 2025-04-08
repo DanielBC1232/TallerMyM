@@ -228,7 +228,6 @@ BEGIN
     SET @sql = N'SELECT ' + @top + '
         V.idVenta,
         V.fechaVenta,
-        V.montoTotal,
         V.idOrden,
         O.codigoOrden,
         C.nombre + '' '' + C.apellido AS nombreCliente
@@ -694,17 +693,4 @@ BEGIN
 END;
 GO
 
-SELECT
-    T.nombreCompleto,
-    T.cedula,
-    COUNT(O.idOrden) AS totalOrdenes
-FROM TRABAJADOR T
-INNER JOIN ORDEN O ON O.idTrabajador = T.idTrabajador
-WHERE 
-    O.estadoOrden IN (3, 4) AND --Ordenes completadas
-    O.fechaIngreso >= DATEADD(DAY, -30, GETDATE()) -- Ultimos 30 dias
-GROUP BY
-    T.nombreCompleto,
-    T.cedula
-ORDER BY
-    totalOrdenes DESC;
+

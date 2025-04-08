@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const ListarGestVacaciones = () => {
   const [vacaciones, setVacaciones] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +14,7 @@ const ListarGestVacaciones = () => {
 
   const obtenervacaciones = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/trabajadores/obtenerSolicitudVacaciones");
+      const response = await axios.get(`${BASE_URL}/trabajadores/obtenerSolicitudVacaciones`);
       setVacaciones(response.data);
       setError("");
     } catch (error) {

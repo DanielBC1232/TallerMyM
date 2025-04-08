@@ -28,7 +28,7 @@ const ListadoVentas = () => {
     useEffect(() => {
         const getOrdenes = async () => {
             try {
-                const { data } = await axios.post(`${BASE_URL}/ventas/obtener-ventas`,filtroData);
+                const { data } = await axios.post(`${BASE_URL}/ventas/obtener-ventas`, filtroData);
                 setDatos(data);
                 //console.log(data);
 
@@ -46,24 +46,24 @@ const ListadoVentas = () => {
                 <span>
                     Orden:
                     <input className="form-control form-control-sm"
-                    name="codigoOrden"
-                    type="text" 
-                    value={filtroData.codigoOrden}
-                    onChange={handleChange}
+                        name="codigoOrden"
+                        type="text"
+                        value={filtroData.codigoOrden}
+                        onChange={handleChange}
                     />
                 </span>
                 <span>
                     Cliente:
                     <input className="form-control form-control-sm"
-                    name="nombreCliente"
-                    type="text" 
-                    value={filtroData.nombreCliente}
-                    onChange={handleChange}
+                        name="nombreCliente"
+                        type="text"
+                        value={filtroData.nombreCliente}
+                        onChange={handleChange}
                     />
                 </span>
             </div>
             <Table
-                width={1300}
+                width={1200}
                 height={800}
                 data={datos}
             >
@@ -77,7 +77,7 @@ const ListadoVentas = () => {
                     <Cell className="text-center" dataKey="nombreCliente" />
                 </Column>
 
-                <Column width={200}>
+                <Column width={400}>
                     <HeaderCell className="text-center">Fecha de venta</HeaderCell>
                     <Cell className="text-center">
                         {rowData => {
@@ -87,17 +87,7 @@ const ListadoVentas = () => {
                     </Cell>
                 </Column>
 
-                <Column width={200}>
-                    <HeaderCell className="text-center">Pago</HeaderCell>
-                    <Cell className="text-center" dataKey="tipoPago" />
-                </Column>
-
-                <Column width={200}>
-                    <HeaderCell className="text-center">Monto total</HeaderCell>
-                    <Cell className="text-center" dataKey="montoTotal" />
-                </Column>
-
-                <Column width={200} fixed="right">
+                <Column width={350} fixed="right">
                     <HeaderCell className="text-center">Accion</HeaderCell>
 
                     <Cell className="text-center" style={{ padding: '6px' }}>

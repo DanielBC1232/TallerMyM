@@ -16,9 +16,6 @@ const Index = () => {
     <Grid className="container mt-3 rounded-0">
       <Notificaciones modulo={'VENTAS'}/>
       <Row>
-        <Col xs={2}>
-          <Link className="nav-btn btn text-white rounded-0" to="/cotizacion" style={{height: "44px", textAlign: "center", paddingTop:"10px"}}>Cotizar</Link>
-        </Col>
         <Col xs={22}>
           <nav>
             <div className="d-flex flex-row btn-container">

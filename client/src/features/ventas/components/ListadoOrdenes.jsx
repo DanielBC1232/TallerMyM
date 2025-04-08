@@ -35,8 +35,8 @@ const ListadoOrdenes = () => {
         getOrdenes();
     }, []);
 
-    const verificarMetodoPago = () => {
-        if (!formData.tipoPago.trim()) {
+    const verificarDetalle = () => {
+        if (!formData.detalles.trim()) {
             Swal.fire({
                 icon: 'error',
                 title: 'Debe seleccionar un método de pago'
@@ -67,7 +67,7 @@ const ListadoOrdenes = () => {
         e.preventDefault();
         //console.log(formData);
 
-        if (verificarMetodoPago()) {
+        if (verificarDetalle()) {
             axios.post(`${BASE_URL}/ventas/registrar-venta/`, formData).then((res) => {
                 Swal.fire({
                     icon: "success",
@@ -94,7 +94,7 @@ const ListadoOrdenes = () => {
     return (
         <div>
             <Table
-                width={1300}
+                width={1200}
                 height={800}
                 data={datos}
             >
@@ -112,7 +112,7 @@ const ListadoOrdenes = () => {
                     <HeaderCell className="text-center">Cliente</HeaderCell>
                     <Cell className="text-center" dataKey="nombreCliente" />
                 </Column>
-                <Column width={509} fixed="right">
+                <Column width={500} fixed="right">
                     <HeaderCell className="text-center">Accion</HeaderCell>
 
                     <Cell className="text-center" style={{ padding: '6px' }}>

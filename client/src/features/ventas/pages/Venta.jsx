@@ -95,7 +95,7 @@ const Venta = () => {
 
     if (verificarMetodoPago() && verificarPagoCompleto()) {
       try {
-        console.log(formDataPago);
+        //console.log(formDataPago);
 
         const res = await axios.post(`${BASE_URL}/finanzas/registrar-pago/`, formDataPago);
         if (res.status === 200 || res.status === 201) {

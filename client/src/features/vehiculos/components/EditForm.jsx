@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const EditForm = () => {
   const { idVehiculo } = useParams();
    // Obtener el idCliente de la URL
@@ -22,7 +25,7 @@ const EditForm = () => {
       try {
        
         //implementar obtener un cliente por id /ocupo primero cargar los datos
-        const response = await axios.get(`http://localhost:3000/vehiculos/ObteneridVehiculo/${idVehiculo}`);
+        const response = await axios.get(`${BASE_URL}/vehiculos/ObteneridVehiculo/${idVehiculo}`);
         setVehiculo(response.data);
       } catch (error) {
         console.error("Error al obtener el Vehiculo:", error);
@@ -43,7 +46,7 @@ const EditForm = () => {
     e.preventDefault();
     try {
       console.log("Datos a enviar",vehiculo)
-      await axios.put(`http://localhost:3000/vehiculos/editar/${idVehiculo}`, vehiculo);//!!
+      await axios.put(`${BASE_URL}/vehiculos/editar/${idVehiculo}`, vehiculo);//!!
       alert("Vehiculo actualizado exitosamente");
       navigate("/vehiculos/ListEditVehi"); // Redirigir a la lista de vehiculos (edición)
     } catch (error) {

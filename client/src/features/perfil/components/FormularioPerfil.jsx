@@ -1,5 +1,8 @@
 import React, { useState} from "react";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const FormularioPerfil = ({ onSubmit }) => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -26,7 +29,7 @@ const FormularioPerfil = ({ onSubmit }) => {
   const checkEmail = async () => {
     if(!email) return;
     try {
-      const response = await fetch("http://localhost:3000/api/usuario/check-email", {
+      const response = await fetch(`${BASE_URL}/api/usuario/check-email`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),

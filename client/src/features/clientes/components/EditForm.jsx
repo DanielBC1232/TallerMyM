@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const EditarCliente = () => {
   const { cedula } = useParams(); // Obtener el idCliente de la URL
   const navigate = useNavigate();
@@ -18,7 +21,7 @@ const EditarCliente = () => {
     const obtenerCliente = async () => {
       try {
         //implementar obtener un cliente por id /ocupo primero cargar los datos
-        const response = await axios.get(`http://localhost:3000/clientes/${cedula}`);
+        const response = await axios.get(`${BASE_URL}/clientes/${cedula}`);
         console.log("Datos obtenidos:", response.data);
 
         setCliente(response.data);
@@ -40,7 +43,7 @@ const EditarCliente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/clientes/editar/${cedula}`, cliente);//!!
+      await axios.put(`${BASE_URL}/clientes/editar/${cedula}`, cliente);//!!
       alert("Cliente actualizado exitosamente");
       navigate("/clientes/list-edit"); // Redirigir a la lista de clientes (edición)
     } catch (error) {

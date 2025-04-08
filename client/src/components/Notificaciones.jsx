@@ -80,10 +80,10 @@ const Notificaciones = ({ modulo }) => {
             }
             <div>
                 <Drawer open={open} onClose={() => setOpen(false)}>
-                    <Drawer.Header className="px-5 bg-dark">
+                    <Drawer.Header className="px-5 bg-primary">
                         <Drawer.Title className="text-white">Notificaciones ({notificaciones.length})</Drawer.Title>
                     </Drawer.Header>
-                    <Drawer.Body className="p-4 bg-dark">
+                    <Drawer.Body className="p-4" style={{background: "#EEE"}}>
                         <Stack spacing={10} direction="column" alignItems="flex-start" className="row ms-1 me-1">
                             {notificaciones.length > 0 ? (
                                 notificaciones.map(noti => (

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Para redirigir a la página de edición
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const ListarEditClientes = () => {
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +15,7 @@ const ListarEditClientes = () => {
   // Función para obtener todos los clientes
   const obtenerClientes = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/clientes/obtenerclientes");
+      const response = await axios.get(`${BASE_URL}/clientes/obtenerclientes`);
       setClientes(response.data);
       setError("");
     } catch (error) {

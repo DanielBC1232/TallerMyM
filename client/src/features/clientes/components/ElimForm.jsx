@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
+//URL Base
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
 const EliminarCliente = () => {
   const { cedula } = useParams(); // Obtener el idCliente de la URL
   const navigate = useNavigate();
@@ -18,7 +21,7 @@ const EliminarCliente = () => {
     const obtenerCliente = async () => {
       try {
         //implementar obtener un cliente por id /ocupo primero cargar los datos
-        const response = await axios.get(`http://localhost:3000/clientes/${cedula}`);
+        const response = await axios.get(`${BASE_URL}/clientes/${cedula}`);
         setCliente(response.data);
       } catch (error) {
         console.error("Error al obtener el cliente:", error);
@@ -35,7 +38,7 @@ const EliminarCliente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.delete(`http://localhost:3000/clientes/eliminar/${cedula}`);//!!
+      await axios.delete(`${BASE_URL}/clientes/eliminar/${cedula}`);//!!
       alert("Cliente Eliminado exitosamente");
       navigate("/clientes/listar-edit"); // Redirigir a la lista de clientes (edición)
     } catch (error) {

@@ -15,6 +15,23 @@ const SelectProductos = ({ idVenta }) => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    //Verificacion si existe un pago asociado a la venta
+    const [existePago, setExistePago] = useState(false);
+    useEffect(() => {
+        const verificarPago = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/ventas/existe-pago/${idVenta}`);
+                setExistePago(response.data === true);
+            } catch (error) {
+                console.error('Error al verificar pago:', error);
+                setExistePago(false); // En caso de error asumimos que no hay pago
+            }
+        };
+        verificarPago();
+
+    }, [idVenta]);
+    //console.log(existePago);
+
     const [formData, setFormData] = useState({//Parametros para filtro
         nombre: "",
         marca: "",
@@ -84,31 +101,42 @@ const SelectProductos = ({ idVenta }) => {
 
         if (verificarCantidad()) {
 
-            console.log(formDataPost);
+            if (existePago === false) {
 
-            axios.post(`${BASE_URL}/ventas/agregar-producto/`, formDataPost).then((res) => {
-                Swal.fire({
-                    icon: "success",
-                    title: "Producto agregado correctamente",
-                    showConfirmButton: false,
-                    timer: 1000,
-                }).then(() => {
-                    window.location.reload();
+                axios.post(`${BASE_URL}/ventas/agregar-producto/`, formDataPost).then((res) => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Producto agregado correctamente",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                }).catch((error) =>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error al agregar producto",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                );
+
+                setFormDataPost({
+                    ...formDataPost,
+                    cantidad: '',
                 });
-            }).catch((error) =>
-                Swal.fire({
-                    icon: "error",
-                    title: "Error al agregar producto",
-                    showConfirmButton: false,
-                    timer: 1000,
-                })
-            );
+                handleClose(true)
 
-            setFormDataPost({
-                ...formDataPost,
-                cantidad: '',
-            });
-            handleClose(true)
+            } else if (existePago === true) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "No se puede agregar un producto o servicio",
+                    text: "Ya ha sido efectuado un pago",
+                    showConfirmButton: false,
+                    timer: 2500,
+                })
+            }
+
         }
     };
 

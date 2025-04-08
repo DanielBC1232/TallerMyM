@@ -161,6 +161,7 @@ const IndexInventario = () => {
                 </Col>
                 <Col xs={11}>
                   <ModalSolicitarProducto />
+                  <Link to="/solicitudes" className="btn">Solicitudes</Link>
                 </Col>
               </Row>
             </div>
