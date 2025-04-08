@@ -694,6 +694,10 @@ BEGIN
 END;
 GO
 
-
-
-
+SELECT 
+			idCliente,
+          nombre +' '+ apellido as nombreCliente,
+          cedula,
+          correo,
+          telefono
+          FROM CLIENTE WHERE estado = 0

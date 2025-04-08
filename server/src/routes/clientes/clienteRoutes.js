@@ -13,6 +13,9 @@ router.delete('/eliminar/:cedula', clienteController.eliminarCliente);
 //Obtener
 router.get("/obtenerclientes", clienteController.obtenerTodosLosClientes);
 
+router.get("/obtener-clientes-inactivos", clienteController.getClientesInactivos);
+
 router.get("/:cedula", clienteController.obtenerClientePorCedula);
+
 
 export default router;

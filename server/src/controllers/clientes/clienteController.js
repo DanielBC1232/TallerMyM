@@ -99,11 +99,27 @@ const getHistorialOrdenesByCedula = async (req, res) => {
         res.status(500).json({ error: "Error al obtener el historial de órdenes" });
     }
 };
+
+// Obtener todos los clientes
+const getClientesInactivos = async (_req, res) => {
+    try {
+        const clientes = await clienteRepo.getClientesInactivos();
+        if (!clientes || clientes.length === 0) {
+            return res.status(404).json({ error: "No hay clientes inactivos" });
+        }
+        res.status(200).json(clientes);
+    } catch (error) {
+        console.error("Error al obtener clientes inactivos:", error);
+        res.status(500).json({ error: "Error al obtener los clientes inactivos" });
+    }
+};
+
 export {
     insertCliente,
     obtenerTodosLosClientes,
     obtenerClientePorCedula,
     getHistorialOrdenesByCedula,
     actualizarCliente,
-    eliminarCliente
+    eliminarCliente,
+    getClientesInactivos
 };

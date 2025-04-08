@@ -13,7 +13,6 @@ export class Cotizacion {
 }
 
 export class CotizacionRepository {
-
     // Método para insertar cotización
     async insertCotizacion(montoTotal, montoManoObra, tiempoEstimado, detalles, idCliente) {
         try {

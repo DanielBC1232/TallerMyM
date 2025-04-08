@@ -23,14 +23,13 @@ export class ClienteRepository {
         .request()
         .input("nombre", sql.VarChar, cliente.nombre)
         .input("apellido", sql.VarChar, cliente.apellido)
-        .input("cedula", sql.VarChar, cliente.cedula)
+        .input("cedula", sql.Int, parseInt(cedula))
         .input("correo", sql.VarChar, cliente.correo)
         .input("telefono", sql.VarChar, cliente.telefono)
         .input("fechaRegistro", sql.Date, cliente.fechaRegistro)
         .query(`
-                    INSERT INTO CLIENTE (nombre, apellido, cedula, correo, telefono, fechaRegistro)
-                    VALUES (@nombre, @apellido, @cedula, @correo, @telefono, @fechaRegistro)
-                `);
+        INSERT INTO CLIENTE (nombre, apellido, cedula, correo, telefono, fechaRegistro)
+        VALUES (@nombre, @apellido, @cedula, @correo, @telefono, @fechaRegistro)`);
       console.log("Cliente insertado exitosamente");
     } catch (error) {
       console.error("Error en insert:", error);
@@ -48,16 +47,14 @@ export class ClienteRepository {
       const result = await pool
         .request()
         .input("idCliente", sql.Int, id)
-        .input("cedula", sql.VarChar, cedula)
+        .input("cedula", sql.Int, parseInt(cedula))
         .input("nombre", sql.VarChar, nombre)
         .input("apellido", sql.VarChar, apellido)
         .input("correo", sql.VarChar, correo)
         .input("telefono", sql.VarChar, telefono)
-        .query(`
-                    UPDATE CLIENTE
-                    SET nombre = @nombre, apellido = @apellido, correo = @correo, telefono = @telefono
-                    WHERE cedula = @cedula
-                `);
+        .query(`UPDATE CLIENTE
+        SET nombre = @nombre, apellido = @apellido, correo = @correo, telefono = @telefono
+        WHERE cedula = @cedula`);
 
       return result.rowsAffected[0] > 0;
     } catch (error) {
@@ -74,10 +71,8 @@ export class ClienteRepository {
 
       const result = await pool
         .request()
-        .input("cedula", sql.VarChar, cedula)
-        .query(`
-                    DELETE FROM CLIENTE WHERE cedula = @cedula
-                `);
+        .input("cedula", sql.Int, parseInt(cedula))
+        .query(`DELETE FROM CLIENTE WHERE cedula = @cedula`);
 
       console.log("Resultado de la eliminación:", result);
       console.log("Filas afectadas:", result.rowsAffected[0]);
@@ -107,7 +102,7 @@ export class ClienteRepository {
       const pool = await connectDB();
       const result = await pool
         .request()
-        .input("cedula", sql.VarChar(10), cedula)
+        .input("cedula", sql.Int, parseInt(cedula))
         .query("SELECT * FROM CLIENTE WHERE cedula = @cedula");
 
       return result.recordset;
@@ -117,4 +112,27 @@ export class ClienteRepository {
       throw new Error("Error al consultar cliente");
     }
   }
+
+  // Obtener clientes
+  async getClientesInactivos() {
+    try {
+      const pool = await connectDB();
+      const result = await pool
+        .request()
+        .query(`SELECT
+          idCliente, 
+          nombre +' '+ apellido as nombreCliente,
+          correo,
+          telefono
+          FROM CLIENTE
+          `);
+
+      return result.recordset || [];
+
+    } catch (error) {
+      console.error("Error al consultar cliente:", error);
+      throw new Error("Error al consultar cliente");
+    }
+  }
+
 }

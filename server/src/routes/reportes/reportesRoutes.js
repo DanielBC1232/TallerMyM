@@ -5,6 +5,9 @@ const router = express.Router();
 import { CotizacionRepository } from '../../models/ventas/cotizacion.js';
 const CotizacionRepo = new CotizacionRepository();
 
+import {ClienteRepository} from "../../models/clientes/cliente.js";
+const ClienteRepo = new ClienteRepository();
+
 router.post('/generar-factura', async (req, res) => {
     try {
         const formData = req.body; //recibe los datos enviado de react
@@ -57,6 +60,7 @@ router.post('/generar-factura', async (req, res) => {
 router.post('/descargar-cotizacion/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id);//tomar el id de cotizacion
+        if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
 
         //traer datos de BD
         const cotizacion = await CotizacionRepo.getCotizacionById(id);
@@ -70,6 +74,12 @@ router.post('/descargar-cotizacion/:id', async (req, res) => {
 
         const workbook = new Excel.Workbook(); //nuevo xlsx
         const worksheet = workbook.addWorksheet('Factura'); //hoja de trabajo excel y empezar a escibir
+
+        const formatDate = (fecha) => {
+            if (!fecha) return 'N/A';
+            const dateObj = new Date(fecha);
+            return isNaN(dateObj.getTime()) ? 'N/A' : dateObj.toISOString().split('T')[0];
+        };
 
         //columnas
         worksheet.columns = [
@@ -87,20 +97,65 @@ router.post('/descargar-cotizacion/:id', async (req, res) => {
         worksheet.addRow({
             nombreCliente: cotizacion.nombreCliente || 'N/A',
             detalles: cotizacion.detalles || 'N/A',
-            fecha: cotizacion.fecha ? cotizacion.fecha.split('T')[0] : 'N/A',
-            montoTotal: cotizacion.montoTotal || 0,
-            montoManoObra: cotizacion.montoManoObra || 0,
+            fecha: formatDate(cotizacion.fecha),
+            montoTotal: Number(cotizacion.montoTotal || 0).toFixed(2),
+            montoManoObra: Number(cotizacion.montoManoObra || 0).toFixed(2),
         });
+
+        const buffer = await workbook.xlsx.writeBuffer();
 
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 
-        await workbook.xlsx.write(res);
-        res.end(); //terminar edicion de archivo y retornar
+        res.send(buffer);
     } catch (error) {
         console.error('Error al generar el archivo XLSX:', error);
         res.status(500).json({ error: 'Error al generar el archivo XLSX' });
     }
 });
+
+router.get('/reporte-clientes-inactivos', async (_req, res) => {
+    try {
+        const clientes = await ClienteRepo.getClientesInactivos();
+        if (!Array.isArray(clientes) || clientes.length === 0) {
+            return res.status(404).json({ error: 'No hay clientes inactivos para exportar' });
+        }
+
+        const fechaActual = new Date().toISOString().split('T')[0];
+        const fileName = `ClientesInactivos-${fechaActual}.xlsx`;
+
+        const workbook = new Excel.Workbook();
+        const worksheet = workbook.addWorksheet('Clientes Inactivos');
+
+        worksheet.columns = [
+            { header: 'ID', key: 'idCliente', width: 10 },
+            { header: 'Nombre Completo', key: 'nombreCliente', width: 30 },
+            { header: 'Correo', key: 'correo', width: 30 },
+            { header: 'Teléfono', key: 'telefono', width: 20 },
+        ];
+        worksheet.getRow(1).font = { bold: true };
+
+        clientes.forEach(cliente => {
+            worksheet.addRow({
+                idCliente: cliente.idCliente || 'N/A',
+                nombreCliente: cliente.nombreCliente || 'N/A',
+                correo: cliente.correo || 'N/A',
+                telefono: cliente.telefono || 'N/A'
+            });
+        });
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+        
+        await workbook.xlsx.write(res);
+        res.end();
+
+    } catch (error) {
+        console.error('Error al generar el reporte XLSX de clientes inactivos:', error);
+        res.status(500).json({ error: 'Error al generar el reporte' });
+    }
+});
+
+
 
 export default router;

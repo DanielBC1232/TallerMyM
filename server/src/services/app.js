@@ -81,7 +81,6 @@ app.use("/vehiculos", VehiculoRoute);
 app.use("/admin", AdministrativoRoute);
 //Ruta flujo-ordenes
 app.use("/flujo", ordenRoutes);
-
 //reportes
 app.use("/reportes", reportesRoutes);
 

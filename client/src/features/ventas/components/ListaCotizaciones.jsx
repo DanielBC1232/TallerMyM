@@ -70,11 +70,12 @@ const ListaCotizaciones = () => {
     }
 
     const descargarCotizacion = async (id) => {
-        console.log(id);
+        //console.log(id);
         try {
 
             const response = await axios.post(
                 `${BASE_URL}/reportes/descargar-cotizacion/${id}`,
+                null,
                 { responseType: 'blob' }
             );
 
