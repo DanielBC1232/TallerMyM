@@ -1,9 +1,8 @@
 import { Solicitud, SolicitudRepository } from "../../models/trabajadores/solicitud.js";
-
 const solicitudRepo = new SolicitudRepository();
 
+//Solicitud de Vacaciones--
 //Operaciones CRUD
-// Insertar una solicitud de vacaciones
 const InsertSolicitudVacaciones = async (req, res) => {
   try {
     const { fechaInicio, fechaFin, idTrabajador } = req.body;
@@ -49,7 +48,7 @@ const DeleteSolicitudVacaciones = async (req, res) => {
     res.status(500).json({ error: "Error al eliminar la solicitud de vacaciones" });
   }
 };
-//---------
+
 //Aprobar y Rechazar---
 const AprobarSolicitudVacaciones = async (req, res) => {
   try {
@@ -85,11 +84,9 @@ const RechazarSolicitudVacaciones = async (req, res) => {
 };
 
 //Metodos Get
-
-//Obtener Vacaciones listado Vacaciones solicitadas (aprobar vacaciones index)
+//ObtenerVacaciones
 const ObtenerVacacionesGest = async (req, res) => {
   try {
-    // Usar el método getVacacionesGest del repositorio
     const Vacaciones = await solicitudRepo.getVacacionesGest();
 
     res.status(200).json(Vacaciones);
@@ -99,7 +96,7 @@ const ObtenerVacacionesGest = async (req, res) => {
   }
 };
 
-
+//ObtenerVacacion
 const ObtenerVacacionxID = async (req, res) => {
   try {
     const { idVacaciones } = req.params; // Obtener el ID de la solicitud de vacaciones
