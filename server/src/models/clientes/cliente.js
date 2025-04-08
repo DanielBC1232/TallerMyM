@@ -2,7 +2,7 @@ import sql from 'mssql';
 import { connectDB } from '../../config/database.js';
 
 export class Cliente {
-  constructor(nombre, apellido, cedula, correo, telefono, fechaRegistro) {
+  constructor(nombre, apellido, cedula, correo, telefono, fechaRegistro, estado) {
     this.idCliente = 0;
     this.nombre = nombre;
     this.apellido = apellido;
@@ -10,58 +10,93 @@ export class Cliente {
     this.correo = correo;
     this.telefono = telefono;
     this.fechaRegistro = fechaRegistro;
+    this.estado = estado;
   }
 }
 //------------
 export class ClienteRepository {
+
+  async cedulaExiste(cedula) {
+    try {
+      const pool = await connectDB();
+      const result = await pool
+        .request()
+        .input("cedula", sql.VarChar, cedula)
+        .query(`SELECT 1 FROM CLIENTE WHERE cedula = @cedula`);
+
+      return result.recordset.length > 0;
+    } catch (error) {
+      console.error("Error al verificar cédula:", error);
+      throw new Error("Error al verificar cédula");
+    }
+  }
+
   // Insertar nuevos clientes
   async insert(cliente) {
-    console.log(cliente);
     try {
+      const existe = await this.cedulaExiste(cliente.cedula);
+      if (existe) {
+        const conflict = new Error("Ya existe un cliente con esa cédula");
+        conflict.status = 409;
+        throw conflict;
+      }
+
       const pool = await connectDB();
       await pool
         .request()
         .input("nombre", sql.VarChar, cliente.nombre)
         .input("apellido", sql.VarChar, cliente.apellido)
-        .input("cedula", sql.Int, parseInt(cedula))
+        .input("cedula", sql.VarChar, cliente.cedula)
         .input("correo", sql.VarChar, cliente.correo)
         .input("telefono", sql.VarChar, cliente.telefono)
-        .input("fechaRegistro", sql.Date, cliente.fechaRegistro)
         .query(`
-        INSERT INTO CLIENTE (nombre, apellido, cedula, correo, telefono, fechaRegistro)
-        VALUES (@nombre, @apellido, @cedula, @correo, @telefono, @fechaRegistro)`);
+          INSERT INTO CLIENTE (nombre, apellido, cedula, correo, telefono, fechaRegistro)
+          VALUES (@nombre, @apellido, @cedula, @correo, @telefono, GETDATE())
+        `);
+
       console.log("Cliente insertado exitosamente");
     } catch (error) {
+      if (error.status === 409) throw error;
       console.error("Error en insert:", error);
       throw new Error("Error al insertar cliente");
     }
   }
 
-
   // Actualizar cliente
   async updateCliente(cedula, datosActualizados) {
     try {
+      const existe = await this.cedulaExiste(cedula);
+      if (!existe) {
+        const conflict = new Error("No se encontró cliente con esa cédula");
+        conflict.status = 409;
+        throw conflict;
+      }
+
       const pool = await connectDB();
       const { id, nombre, apellido, correo, telefono } = datosActualizados;
 
       const result = await pool
         .request()
         .input("idCliente", sql.Int, id)
-        .input("cedula", sql.Int, parseInt(cedula))
+        .input("cedula", sql.VarChar, cedula)
         .input("nombre", sql.VarChar, nombre)
         .input("apellido", sql.VarChar, apellido)
         .input("correo", sql.VarChar, correo)
         .input("telefono", sql.VarChar, telefono)
-        .query(`UPDATE CLIENTE
-        SET nombre = @nombre, apellido = @apellido, correo = @correo, telefono = @telefono
-        WHERE cedula = @cedula`);
+        .query(`
+          UPDATE CLIENTE
+          SET nombre = @nombre, apellido = @apellido, correo = @correo, telefono = @telefono
+          WHERE cedula = @cedula
+        `);
 
       return result.rowsAffected[0] > 0;
     } catch (error) {
+      if (error.status === 409) throw error;
       console.error("Error al actualizar cliente:", error);
       throw new Error("Error al actualizar cliente");
     }
   }
+
 
   // Eliminar cliente
   async deleteCliente(cedula) {
@@ -71,8 +106,8 @@ export class ClienteRepository {
 
       const result = await pool
         .request()
-        .input("cedula", sql.Int, parseInt(cedula))
-        .query(`DELETE FROM CLIENTE WHERE cedula = @cedula`);
+        .input("cedula", sql.VarChar, cedula)
+        .query(`UPDATE CLIENTE SET estado = 0 WHERE cedula = @cedula`);
 
       console.log("Resultado de la eliminación:", result);
       console.log("Filas afectadas:", result.rowsAffected[0]);
@@ -83,12 +118,12 @@ export class ClienteRepository {
       throw new Error("Error al eliminar cliente");
     }
   }
-  //----CED
+
   //select todos
   async getAll() {
     try {
       const pool = await connectDB();
-      const result = await pool.request().query("SELECT * FROM CLIENTE");
+      const result = await pool.request().query("SELECT * FROM CLIENTE WHERE estado = 1");
       return result.recordset;
     } catch (error) {
       console.error("Error al obtener todos los clientes:", error);
@@ -102,8 +137,8 @@ export class ClienteRepository {
       const pool = await connectDB();
       const result = await pool
         .request()
-        .input("cedula", sql.Int, parseInt(cedula))
-        .query("SELECT * FROM CLIENTE WHERE cedula = @cedula");
+        .input("cedula", sql.VarChar, cedula)
+        .query("SELECT * FROM CLIENTE WHERE cedula = @cedula AND estado = 1");
 
       return result.recordset;
 

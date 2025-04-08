@@ -11,7 +11,7 @@ router.put('/editar/:cedula', clienteController.actualizarCliente);
 router.delete('/eliminar/:cedula', clienteController.eliminarCliente);
 
 //Obtener
-router.get("/obtenerclientes", clienteController.obtenerTodosLosClientes);
+router.get("/obtener-clientes", clienteController.obtenerTodosLosClientes);
 
 router.get("/obtener-clientes-inactivos", clienteController.getClientesInactivos);
 

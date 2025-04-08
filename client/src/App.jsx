@@ -26,7 +26,6 @@ import GastosOperativos from "./features/finanzas/pages/GastosOperativos.jsx";
 import Dashboard from "./features/finanzas/pages/Dashboard.jsx";
 import Reportes from "./features/finanzas/pages/Reportes.jsx";
 
-
 //flujo
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
 import AgregarOrden from './features/flujo/pages/Agregar.jsx';
@@ -41,38 +40,19 @@ import EditarTrabajador from "./features/trabajadores/pages/Editar.jsx";
 import AgregarSolicitudVacaciones from "./features/trabajadores/pages/AgregarSolicitud.jsx"
 import GestionarSolicitudVacaciones from "./features/trabajadores/pages/GestionarSolicitud.jsx";
 //--seccion gestion de salarios
-import GestionarSalarios from "./features/trabajadores/pages/ListaGestSalarios.jsx";
-import EditarTrabajadorSalario from "./features/trabajadores/pages/EditarSalario.jsx";
-import AprobarVacaciones from "./features/trabajadores/pages/AprobarVacaciones.jsx";
-//--Seccion Generar Amonestaciones
-import ListaTrabAmonestacion from"./features/trabajadores/pages/GestionarAmonest.jsx";
-import ListaAmonestaciones from "./features/trabajadores/pages/ListaAmonest.jsx";
-import AgregarAmonestacion from "./features/trabajadores/pages/AgregarAmonestacion.jsx";
-import EditarAmonestacion from "./features/trabajadores/pages/EditarAmonestacion.jsx";
-//--Seccion Ausencias
-import ListaGestionAusencias from "./features/trabajadores/pages/GestionarAusencias.jsx";
-import ListaAusencias from  "./features/trabajadores/pages/ListaAusencias.jsx";
+// import GestionarSalarios from "./features/trabajadores/pages/ListaGestSalariosPage.jsx";
+// import EditarTrabajadorSalario from "./features/trabajadores/pages/EditarSalario.jsx";
 
-import AgregarAusencia from "./features/trabajadores/pages/AgregarAusencia.jsx";
-import EditarAusencia from"./features/trabajadores/pages/EditarAusencia.jsx";
-//--Seccion de Justificaciones
-import AgregarJustificacion from "./features/trabajadores/pages/AgregarJustificacion.jsx";
-import EditarJustificacion from "./features/trabajadores/pages/EditarJustificacion.jsx";
-import ListaAusenciasJusti from "./features/trabajadores/pages/Lista-Ausencia-Justi.jsx";
-import ListaJustificacionesCreadas from "./features/trabajadores/pages/Lista-Justificaciones.jsx";
+// import AprobarVacaciones from "./features/trabajadores/pages/AprobarVacaciones.jsx";
 
 
 //administracion
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
 
 //imports clientes
-import IndexCli from "./features/clientes/pages/IndexCli.jsx";
-import ListarClientesPage from "./features/clientes/pages/ListarClientesPage.jsx";
-import ListarEditClientesPage from "./features/clientes/pages/ListarEditClientePage.jsx";
-import ListarElimClientesPage from "./features/clientes/pages/ListarElimClientePage.jsx";
-import AgregarCliente from "./features/clientes/pages/AgregarCli.jsx";
-import EditarCliente from "./features/clientes/pages/EditarCli.jsx";
-import EliminarCliente from "./features/clientes/pages/Eliminar.jsx";
+import IndexClientes from "./features/clientes/pages/IndexClientes.jsx";
+import AgregarCliente from "./features/clientes/pages/AgregarCliente.jsx";
+import EditarCliente from "./features/clientes/pages/EditarCliente.jsx";
 
 //imports vehiculos
 import IndexVehi from "./features/vehiculos/pages/IndexVehi.jsx";
@@ -95,20 +75,12 @@ import AgregarUsuario from "./features/adminn/pages/AgregarUser.jsx";
 import EditarUsuario from "./features/adminn/pages/EditarUser.jsx"
 import EliminarUsuario from "./features/adminn/pages/EliminarUser.jsx"
 
-
 const App = () => {
   return (
     <div className="app">
       <Header />
 
       <main style={{ minHeight: "95vh" }}>
-
-        {/* ******************
-          
-          Usar el url:
-          /[modulo]-acción 
-
-          ****************** */}
 
         <Routes>
           <Route path="/" element={<Index />} />
@@ -140,45 +112,24 @@ const App = () => {
 
 
           {/* Ruta para trabajadores*/}
-          <Route path="/trabajadores" element={<TrabajadoresIndex />} />
+          {/* <Route path="/trabajadores" element={<TrabajadoresIndex />} />
           <Route path="/trabajadores-agregar" element={<AgregarTrabajador />} />
           <Route path="/trabajadores-editar/:idTrabajador" element={<EditarTrabajador />} />
-          {/*Vacaciones*/}
-          <Route path="/AprobarVacaciones/:idVacaciones" element={<AprobarVacaciones />} />
+
           <Route path="/AgregarSolicitud-Vacaciones" element={<AgregarSolicitudVacaciones />} />
           <Route path="/GestionarSolicitud-Vacaciones" element={<GestionarSolicitudVacaciones />} />
-          {/*Salarios*/}
+
           <Route path="/Gestionar-Salarios" element={<GestionarSalarios />} />
           <Route path="/trabajadores-editar-salario/:idTrabajador" element={<EditarTrabajadorSalario />} />
-          {/*Amonestaciones*/}
-          <Route path="/Gestionar-Amonest-Trab-List" element={<ListaTrabAmonestacion />} />
-          <Route path="/Lista-Amonest-Trab-List" element={<ListaAmonestaciones />} />
-          <Route path="/amonestaciones-agregar/:idTrabajador" element={<AgregarAmonestacion />} />
-          <Route path="/amonestaciones-editar/:idAmonestacion" element={<EditarAmonestacion />} />
-          {/*Ausencias*/}
-          <Route path="/Gestionar-Ausencias-Trab-List" element={<ListaGestionAusencias />} />
-          <Route path="/Lista-Ausencia-Trab-List" element={<ListaAusencias />} />
-
-          <Route path="/ausencias-agregar/:idTrabajador" element={<AgregarAusencia />} />
-          <Route path="/ausencias-editar/:idAusencia" element={<EditarAusencia />} />
-          {/*Justificaciones*/}
-          <Route path="/justificar-ausencia/:idAusencia" element={<AgregarJustificacion />} />
-          <Route path="/justificacion-editar/:idAusencia" element={<EditarJustificacion />} />
-          <Route path="/Lista-Justificaciones" element={<ListaJustificacionesCreadas />} />
-          <Route path="/List-Ausencias-Justificaciones" element={<ListaAusenciasJusti />} />
+          */}
 
           {/* Ruta para perfil */}
           <Route path="/perfil-crear" element={<CrearPerfil />} />
 
           {/* Rutas para clientes */}
-          <Route path="/clientes/Index" element={<IndexCli />} />
-          <Route path="/clientes/obtenerclientes" element={<ListarClientesPage />} />
-          <Route path="/clientes/list-edit" element={<ListarEditClientesPage />} />
-          <Route path="/clientes/list-elim" element={<ListarElimClientesPage />} />
-
-          <Route path="/clientes/registrar" element={<AgregarCliente />} />
-          <Route path="/clientes/editar/:cedula" element={<EditarCliente />} />
-          <Route path="/clientes/eliminar/:cedula" element={<EliminarCliente />} />
+          <Route path="/clientes" element={<IndexClientes />} />
+          <Route path="/cliente-agregar" element={<AgregarCliente />} />
+          <Route path="/cliente-editar/:cedula" element={<EditarCliente />} />
 
           {/* Rutas para Vehiculos */}
           <Route path="/vehiculos/Index" element={<IndexVehi />} />
@@ -193,24 +144,15 @@ const App = () => {
           <Route path="/vehiculos/eliminar/:idVehiculo" element={<EliminarVehiculo />} />
 
           {/* Rutas para Admin */}
-          
           <Route path="/admin/listarUsuarios" element={<ListarUsuariosPage/>} />
           <Route path="/admin/listarEditUsuarios" element={<ListarEditUsuariosPage/>} />
           <Route path="/admin/listarElimUsuarios" element={<ListarElimUsuariosPage/>} />
-
-
 
 
           <Route path="/admin/Index" element={<IndexAdmin />} />
           <Route path="/admin/registrar" element={<AgregarUsuario />} />
           <Route path="/admin/editar/:idUsuario" element={<EditarUsuario />} />
           <Route path="/admin/eliminar/:idUsuario" element={<EliminarUsuario />} />
-
-
-
-
-
-
 
 
 

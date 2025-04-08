@@ -5,33 +5,42 @@ const clienteRepo = new ClienteRepository();
 // Insertar un cliente
 const insertCliente = async (req, res) => {
     try {
-        const { nombre, apellido, cedula, correo, telefono, fechaRegistro } = req.body;
-        const newCliente = new Cliente(nombre, apellido, cedula, correo, telefono, fechaRegistro);
+        const { nombre, apellido, cedula, correo, telefono } = req.body;
+        const newCliente = new Cliente(nombre, apellido, cedula, correo, telefono);
 
         await clienteRepo.insert(newCliente);
         res.status(201).json(newCliente);
     } catch (error) {
+        if (error.status === 409) {
+            return res.status(409).json({ error: error.message });
+        }
         console.error("Error al insertar cliente:", error);
         res.status(500).json({ error: "Error al insertar el cliente" });
     }
 };
+
 // Actualizar cliente
 const actualizarCliente = async (req, res) => {
     try {
         const cedula = req.params.cedula;
         const datosActualizados = req.body;
+
         const actualizacionExitosa = await clienteRepo.updateCliente(cedula, datosActualizados);
 
         if (!actualizacionExitosa) {
-            res.status(404).json({ error: "Cliente no encontrado o no se pudo actualizar" });
-        } else {
-            res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
+            return res.status(404).json({ error: "Cliente no encontrado o no se pudo actualizar" });
         }
+
+        res.status(200).json({ message: "Datos del cliente actualizados exitosamente" });
     } catch (error) {
+        if (error.status === 409) {
+            return res.status(409).json({ error: error.message });
+        }
         console.error("Error al actualizar cliente:", error);
         res.status(500).json({ error: "Error al actualizar los datos del cliente" });
     }
 };
+
 // Eliminar cliente
 const eliminarCliente = async (req, res) => {
     try {

@@ -1,0 +1,137 @@
+import React, { useEffect, useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Button, Form, Schema } from "rsuite";
+import Swal from "sweetalert2";
+import "../styles/form.css";
+
+export const BASE_URL = import.meta.env.VITE_API_URL;
+const { StringType } = Schema.Types;
+
+const model = Schema.Model({
+  nombre: StringType().isRequired("El nombre es obligatorio"),
+  apellido: StringType().isRequired("El apellido es obligatorio"),
+  cedula: StringType().isRequired("La cédula es obligatoria"),
+  correo: StringType().isEmail("Correo inválido").isRequired("El correo es obligatorio"),
+  telefono: StringType().isRequired("El teléfono es obligatorio")
+});
+
+const EditarCliente = () => {
+  const { cedula } = useParams();
+  const navigate = useNavigate();
+  const formRef = useRef();
+
+  const [formValue, setFormValue] = useState({
+    nombre: "",
+    apellido: "",
+    cedula: "",
+    correo: "",
+    telefono: ""
+  });
+
+  useEffect(() => {
+    const fetchCliente = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/clientes/${cedula}`);
+        if (!res.ok) throw new Error("No se pudo obtener el cliente");
+        const data = await res.json();
+        setFormValue(data);
+      } catch (err) {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo cargar la información del cliente"
+        });
+      }
+    };
+
+    fetchCliente();
+  }, [cedula]);
+
+  const handleSubmit = async () => {
+    if (!formRef.current.check()) {
+      Swal.fire({
+        icon: "warning",
+        title: "Validación",
+        text: "Por favor complete el formulario correctamente"
+      });
+      return;
+    }
+
+    try {
+      const res = await fetch(`${BASE_URL}/clientes/editar/${cedula}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formValue)
+      });
+
+      if (!res.ok) {
+        if (res.status === 409) {
+          Swal.fire({
+            icon: "warning",
+            title: "Cédula duplicada",
+            text: "Ya existe un cliente con esa cédula"
+          });
+        } else {
+          throw new Error("Error al actualizar");
+        }
+        return;
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Cliente actualizado correctamente",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      navigate("/clientes");
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un error al actualizar el cliente"
+      });
+    }
+  };
+
+  return (
+    <div className="form-container">
+      <Form
+        ref={formRef}
+        model={model}
+        onChange={setFormValue}
+        formValue={formValue}
+        fluid
+      >
+        <Form.Group>
+          <Form.ControlLabel>Nombre</Form.ControlLabel>
+          <Form.Control name="nombre" />
+        </Form.Group>
+        <Form.Group>
+          <Form.ControlLabel>Apellido</Form.ControlLabel>
+          <Form.Control name="apellido" />
+        </Form.Group>
+        <Form.Group>
+          <Form.ControlLabel>Cédula</Form.ControlLabel>
+          <Form.Control name="cedula" />
+        </Form.Group>
+        <Form.Group>
+          <Form.ControlLabel>Correo</Form.ControlLabel>
+          <Form.Control name="correo" type="email" />
+        </Form.Group>
+        <Form.Group>
+          <Form.ControlLabel>Teléfono</Form.ControlLabel>
+          <Form.Control name="telefono" />
+        </Form.Group>
+        <Form.Group>
+          <Button appearance="primary" onClick={handleSubmit}>
+            Guardar Cambios
+          </Button>
+        </Form.Group>
+      </Form>
+    </div>
+  );
+};
+
+export default EditarCliente;
