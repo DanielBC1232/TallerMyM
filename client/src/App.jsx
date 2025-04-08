@@ -31,21 +31,28 @@ import TrabajadoresIndex from "./features/trabajadores/pages/Index.jsx";
 import AgregarTrabajador from "./features/trabajadores/pages/Agregar.jsx";
 import EditarTrabajador from "./features/trabajadores/pages/Editar.jsx";
 //---Seccion de solicitud de vacaciones
-import AgregarSolicitudVacaciones from "./features/trabajadores/pages/AgregarSolicitud.jsx"
-import GestionarSolicitudVacaciones from "./features/trabajadores/pages/GestionarSolicitud.jsx";
+import AgregarSolicitudVacaciones from "./features/trabajadores/pages/AgregarSolicitudPage.jsx"
+import GestionarSolicitudVacaciones from "./features/trabajadores/pages/GestionarSolicitudPage.jsx";
 //--seccion gestion de salarios
 import GestionarSalarios from "./features/trabajadores/pages/ListaGestSalariosPage.jsx";
 import EditarTrabajadorSalario from "./features/trabajadores/pages/EditarSalario.jsx";
-import AprobarVacaciones from "./features/trabajadores/pages/AprobarVacaciones.jsx";
+import AprobarVacaciones from "./features/trabajadores/pages/AprobarVacacionesPage.jsx";
 //--Seccion Generar Amonestaciones
 import ListaTrabAmonestacion from"./features/trabajadores/pages/GestionarAmonestPage.jsx";
 import ListaAmonestaciones from "./features/trabajadores/pages/ListaAmonestPage.jsx";
 import AgregarAmonestacion from "./features/trabajadores/pages/AgregarAmonestacion.jsx";
 import EditarAmonestacion from "./features/trabajadores/pages/EditarAmonestacion.jsx";
 //--Seccion Ausencias
-import ListaGestionAusencias from "./features/trabajadores/pages/GestionarAusenciasPage.jsx"
-import ListaAusencias from  "./features/trabajadores/pages/ListaAusenciasPage.jsx"
+import ListaGestionAusencias from "./features/trabajadores/pages/GestionarAusenciasPage.jsx";
+import ListaAusencias from  "./features/trabajadores/pages/ListaAusenciasPage.jsx";
 
+import AgregarAusencia from "./features/trabajadores/pages/AgregarAusencia.jsx";
+import EditarAusencia from"./features/trabajadores/pages/EditarAusencia.jsx";
+//--Seccion de Justificaciones
+import AgregarJustificacion from "./features/trabajadores/pages/AgregarJustificacion.jsx";
+import EditarJustificacion from "./features/trabajadores/pages/EditarJustificacion.jsx";
+import ListaAusenciasJusti from "./features/trabajadores/pages/Lista-Ausencia-Justi.jsx";
+import ListaJustificacionesCreadas from "./features/trabajadores/pages/Lista-Justificaciones.jsx";
 
 //administracion
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
@@ -139,7 +146,20 @@ const App = () => {
           {/*Ausencias*/}
           <Route path="/Gestionar-Ausencias-Trab-List" element={<ListaGestionAusencias />} />
           <Route path="/Lista-Ausencia-Trab-List" element={<ListaAusencias />} />
-     
+
+          <Route path="/ausencias-agregar/:idTrabajador" element={<AgregarAusencia />} />
+          <Route path="/ausencias-editar/:idAusencia" element={<EditarAusencia />} />
+          {/*Justificaciones*/}
+          <Route path="/Lista-Justificaciones" element={<ListaJustificacionesCreadas />} />
+
+          {/*CRUD*/}
+          <Route path="/justificar-ausencia/:idAusencia" element={<AgregarJustificacion />} />
+          <Route path="/justificacion-editar/:idAusencia" element={<EditarJustificacion />} />
+
+          <Route path="/List-Ausencias-Justificaciones" element={<ListaAusenciasJusti />} />
+
+
+
 
 
           {/* Ruta para perfil */}

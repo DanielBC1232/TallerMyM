@@ -52,7 +52,7 @@ const ListaTrabajadores = ({ formData, trigger }) => {
                 
                 <button className="btn btn-secondary btn-sm text-white">
                   <Link
-                    to={`/amonestaciones-agregar/${trabajador.idTrabajador}`}// implementar backend
+                    to={`/ausencias-agregar/${trabajador.idTrabajador}`}// implementar backend
                     className="btn-link"
                   >
                     Registrar Ausencia

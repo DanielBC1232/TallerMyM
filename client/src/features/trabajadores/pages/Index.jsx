@@ -42,16 +42,14 @@ const IndexTrabajadores = () => {
             
             <Col xs={11}>
               <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
-                <Link to="/AgregarSolicitud-Vacaciones" className="btn-link">Solicitar Vacaciones</Link>
+                <Link to="#" className="btn-link">Filtrar</Link>
               </Button>
             </Col>
 
             <Col xs={11}>
-              <Link
-                to="/trabajadores-vacaciones"
-                type="submit"
-                className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px" ,margin:"10px"}}>
-              Filtrar</Link>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
+                <Link to="/AgregarSolicitud-Vacaciones" className="btn-link">Solicitar Vacaciones</Link>
+              </Button>
             </Col>
 
             <Col xs={2}>
@@ -87,6 +85,12 @@ const IndexTrabajadores = () => {
             </Col>
             <Col xs={2}>
               <Divider vertical />
+            </Col>
+            
+            <Col xs={11}>
+              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
+                <Link to="/List-Ausencias-Justificaciones" className="btn-link">Justificar Ausencia</Link>
+              </Button>
             </Col>
 
           </Row>

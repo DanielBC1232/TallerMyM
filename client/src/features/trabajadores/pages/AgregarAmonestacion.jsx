@@ -10,6 +10,7 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const AgregarAmonestacion = () => {
   const navigate = useNavigate();
   const { idTrabajador } = useParams(); // Obtener el ID del trabajador desde los parámetros de la URL
+  
   const [formData, setFormData] = useState({
     idTrabajador: idTrabajador,
     fechaAmonestacion: "",
@@ -33,6 +34,7 @@ const AgregarAmonestacion = () => {
       [name]: value
     });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -59,6 +61,7 @@ const AgregarAmonestacion = () => {
         });
     }
   };
+
   const validarFormulario = () => {
     if (!formData.idTrabajador) {
       errorNotification('El ID del trabajador es requerido');
