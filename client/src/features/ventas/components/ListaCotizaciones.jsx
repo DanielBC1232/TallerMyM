@@ -46,7 +46,7 @@ const ListaCotizaciones = () => {
                                 showConfirmButton: false,
                                 timer: 1500,
                             }).then(() => {
-                                //window.location.reload();//recargar pagina
+                                window.location.reload();//recargar pagina
                             });
                         } else {
                             Swal.fire({
@@ -139,25 +139,47 @@ const ListaCotizaciones = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {datos.map((cotizacion, index) => (
-                        <tr key={index}>
-                            <td>{cotizacion.nombre + " " + cotizacion.apellido}</td>
-                            <td>{"₡ " + cotizacion.montoTotal}</td>
-                            <td>{cotizacion.tiempoEstimado}</td>
-                            <td>{cotizacion.detalles}</td>
-
-                            <td>{new Date(cotizacion.fecha).toLocaleDateString()}</td>
-                            <td>
-                                <button type="button" onClick={() => deleteCotizacion(cotizacion.idCotizacion)}
-                                    className="btn btn-danger btn-sm text-white me-3">Eliminar</button>
-                                <button className="btn btn-secondary btn-sm text-white"><Link to={`/cotizacion-editar/${cotizacion.idCotizacion}`} className="btn-link">Editar</Link></button>
-                                <button type="button" onClick={() => descargarCotizacion(cotizacion.idCotizacion)}
-                                    className="btn btn-success btn-sm text-white ms-3">Decargar Cotizacion</button>
+                    {datos.length === 0 ? (
+                        <tr>
+                            <td colSpan="6" className="text-center text-muted py-3">
+                                No hay cotizaciones registradas.
                             </td>
                         </tr>
-                    ))}
+                    ) : (
+                        datos.map((cotizacion, index) => (
+                            <tr key={index}>
+                                <td>{cotizacion.nombre + " " + cotizacion.apellido}</td>
+                                <td>{"₡ " + cotizacion.montoTotal}</td>
+                                <td>{cotizacion.tiempoEstimado}</td>
+                                <td>{cotizacion.detalles}</td>
+                                <td>{new Date(cotizacion.fecha).toLocaleDateString()}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        onClick={() => deleteCotizacion(cotizacion.idCotizacion)}
+                                        className="btn btn-danger btn-sm text-white me-3"
+                                    >
+                                        Eliminar
+                                    </button>
+                                    <button className="btn btn-secondary btn-sm text-white">
+                                        <Link to={`/cotizacion-editar/${cotizacion.idCotizacion}`} className="btn-link">
+                                            Editar
+                                        </Link>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => descargarCotizacion(cotizacion.idCotizacion)}
+                                        className="btn btn-success btn-sm text-white ms-3"
+                                    >
+                                        Descargar Cotizacion
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
+
         </div>
     );
 }

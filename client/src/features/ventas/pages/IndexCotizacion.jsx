@@ -7,6 +7,7 @@ import {
 import axios from "axios";
 
 import ListaCotizaciones from "../components/ListaCotizaciones";
+import ModalAgregarCotizacion from "../components/ModalAgregarCotizacion";
 
 const IndexCotizacion = () => {
     return (
@@ -24,12 +25,7 @@ const IndexCotizacion = () => {
                         <div>
                             <Row gutter={10}>
                                 <Col xs={11}>
-                                    <Button
-                                        type="button"
-                                        className="btn btn-sm btn-secondary text-white"
-                                        style={{ minWidth: "50px", width: "135px" }}>
-                                        <Link to="/cotizacion-cotizar" className="btn-link">Generar Cotización</Link>
-                                    </Button>
+                                    <ModalAgregarCotizacion />
                                 </Col>
                             </Row>
                         </div>

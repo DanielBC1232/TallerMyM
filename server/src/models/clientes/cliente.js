@@ -32,9 +32,9 @@ export class ClienteRepository {
   }
 
   // Insertar nuevos clientes
-  async insert(cliente) {
+  async insert(nombre, apellido, cedula, correo, telefono) {
     try {
-      const existe = await this.cedulaExiste(cliente.cedula);
+      const existe = await this.cedulaExiste(cedula);
       if (existe) {
         const conflict = new Error("Ya existe un cliente con esa cédula");
         conflict.status = 409;
@@ -44,11 +44,11 @@ export class ClienteRepository {
       const pool = await connectDB();
       await pool
         .request()
-        .input("nombre", sql.VarChar, cliente.nombre)
-        .input("apellido", sql.VarChar, cliente.apellido)
-        .input("cedula", sql.VarChar, cliente.cedula)
-        .input("correo", sql.VarChar, cliente.correo)
-        .input("telefono", sql.VarChar, cliente.telefono)
+        .input("nombre", sql.VarChar, nombre)
+        .input("apellido", sql.VarChar, apellido)
+        .input("cedula", sql.VarChar, cedula)
+        .input("correo", sql.VarChar, correo)
+        .input("telefono", sql.VarChar, telefono)
         .query(`
           INSERT INTO CLIENTE (nombre, apellido, cedula, correo, telefono, fechaRegistro)
           VALUES (@nombre, @apellido, @cedula, @correo, @telefono, GETDATE())

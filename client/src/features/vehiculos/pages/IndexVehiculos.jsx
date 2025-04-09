@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import ModalAgregarVehiculo from "../components/ModalAgregarVehiculo";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -83,10 +84,9 @@ const IndexVehiculos = () => {
           placeholder="Buscar por placa (ej: abc123)"
           value={filtroPlaca}
           onChange={(e) => setFiltroPlaca(e.target.value)}
-          className="border p-2 rounded"
+          className="border p-2 rounded me-3"
         />
-        <Link to="/vehiculo-agregar"
-        className=" ms-4 text-white p-2 rounded btn btn-secondary btn-sm">Agregar Vehiculo</Link>
+        <ModalAgregarVehiculo />
       </div>
 
       {/* Tabla de vehículos */}

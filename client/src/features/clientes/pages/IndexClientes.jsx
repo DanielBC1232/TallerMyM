@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import ModalAgregarCliente from "../components/ModalAgregarCliente";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -88,9 +89,10 @@ const IndexClientes = () => {
           onChange={(e) => setFiltroCedula(e.target.value)}
           className="form-control w-50 me-3"
         />
-        <Link to="/cliente-agregar" className="btn btn-sm btn-secondary text-white">
+        {/* <Link to="/cliente-agregar" className="btn btn-sm btn-secondary text-white">
           Agregar Cliente
-        </Link>
+        </Link> */}
+        <ModalAgregarCliente />
         <Link to="/cotizacion" className="btn btn-sm btn-secondary text-white">
           Cotizaciones
         </Link>

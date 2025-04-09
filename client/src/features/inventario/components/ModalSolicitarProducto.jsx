@@ -4,7 +4,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-//URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const ModalSolicitarProducto = () => {
@@ -13,68 +12,35 @@ const ModalSolicitarProducto = () => {
   const [cuerpo, setCuerpo] = useState("");
   const navigate = useNavigate();
 
-  const errorNotification = (message) => {
-    Swal.fire({
-      text: message,
-      icon: "error",
-      showConfirmButton: false,
-    });
-  };
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // Funciones de verificación similares al componente Agregar
-  const verificarTitulo = () => {
-    const input = document.getElementById("titulo");
-    let pass = false;
-    if (!titulo.trim()) {
-      input.classList.remove("is-valid");
-      input.classList.add("is-invalid");
-      errorNotification("El campo de título está vacío");
-      pass = false;
-    } else {
-      input.classList.remove("is-invalid");
-      input.classList.add("is-valid");
-      pass = true;
+  const validarCampos = () => {
+    if (!titulo.trim() || !cuerpo.trim()) {
+      Swal.fire({
+        icon: "error",
+        text: "Todos los campos son obligatorios",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return false;
     }
-    return pass;
-  };
-
-  const verificarCuerpo = () => {
-    const input = document.getElementById("cuerpo");
-    let pass = false;
-    if (!cuerpo.trim()) {
-      input.classList.remove("is-valid");
-      input.classList.add("is-invalid");
-      errorNotification("El campo de solicitud (descripción) está vacío");
-      pass = false;
-    } else {
-      input.classList.remove("is-invalid");
-      input.classList.add("is-valid");
-      pass = true;
-    }
-    return pass;
-  };
-
-  // Verificación general: ambos campos deben ser válidos
-  const verificacion = () => {
-    return verificarTitulo() && verificarCuerpo();
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!verificacion()) return;
+    if (!validarCampos()) return;
 
-    // Valor quemado para usuario
     const usuario = "usuarioMecanico";
 
     try {
-      const response = await axios.post(
-        `${BASE_URL}/inventario/agregar-solicitud`,
-        { titulo, cuerpo, usuario }
-      );
-      console.log(response);
+      await axios.post(`${BASE_URL}/inventario/agregar-solicitud`, {
+        titulo,
+        cuerpo,
+        usuario,
+      });
+
       Swal.fire({
         icon: "success",
         title: "Solicitud enviada correctamente",
@@ -82,6 +48,9 @@ const ModalSolicitarProducto = () => {
         timer: 1500,
       });
 
+      setTitulo("");
+      setCuerpo("");
+      setOpen(false);
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -90,11 +59,6 @@ const ModalSolicitarProducto = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-    }finally{
-      // Reiniciar campos y cerrar modal
-      setTitulo("");
-      setCuerpo("");
-      setOpen(false);
     }
   };
 
@@ -120,6 +84,7 @@ const ModalSolicitarProducto = () => {
             className="form-control"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
+            required
           />
           <br />
           <span>Solicitud:</span>
@@ -130,6 +95,7 @@ const ModalSolicitarProducto = () => {
             rows={6}
             value={cuerpo}
             onChange={(e) => setCuerpo(e.target.value)}
+            required
           ></textarea>
           <br />
         </Modal.Body>

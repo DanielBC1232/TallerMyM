@@ -278,7 +278,7 @@ return (
                 className="btn btn-danger btn-sm text-white me-3"
                 style={{ maxWidth: "120px" }}
               >
-                Cancelar Orden
+                Eliminar Orden
               </button>
               <button
                 onClick={actualizarOrden}

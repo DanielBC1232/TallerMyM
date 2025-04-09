@@ -10,6 +10,7 @@ import ColPendiente from "../components/ColPendiente";
 import ColProgreso from "../components/ColProgreso";
 import ColListo from "../components/ColListo";
 import Notificaciones from "../../../components/Notificaciones";
+import ModalAgregarOrden from "../components/ModalAgregarOrden";
 
 const IndexFlujo = () => {
   const navigate = useNavigate(); // Hook para navegar
@@ -22,8 +23,7 @@ const IndexFlujo = () => {
         className="sidebar p-4 rounded-3 shadow-sm p-2"
         style={{ maxWidth: "550px" }}
       >
-        <Link to="/flujo-agregar" 
-        className="btn btn-secondary btn-sm text-white">Agregar orden</Link>
+        <ModalAgregarOrden />
       </nav>
 
       {/* FLUJO */}

@@ -17,7 +17,6 @@ import Solicitudes from "./features/inventario/pages/Solicitudes";
 //ventas
 import IndexVentas from './features/ventas/pages/index.jsx'
 import IndexCotizacion from "./features/ventas/pages/IndexCotizacion.jsx";
-import Cotizar from "./features/ventas/pages/Cotizar.jsx";
 import EditarCotizacion from "./features/ventas/pages/EditarCotizarcion.jsx";
 import Venta from "./features/ventas/pages/Venta.jsx";
 
@@ -28,7 +27,6 @@ import Reportes from "./features/finanzas/pages/Reportes.jsx";
 
 //flujo
 import IndexFlujo from "./features/flujo/pages/Index.jsx";
-import AgregarOrden from './features/flujo/pages/Agregar.jsx';
 import DetallesOrden from "./features/flujo/pages/Detalles.jsx";
 import EditarOrden from "./features/flujo/pages/Editar.jsx";
 
@@ -42,12 +40,10 @@ import AgregarAusencia from "./features/trabajadores/pages/AgregarAusencia.jsx";
 
 //imports clientes
 import IndexClientes from "./features/clientes/pages/IndexClientes.jsx";
-import AgregarCliente from "./features/clientes/pages/AgregarCliente.jsx";
 import EditarCliente from "./features/clientes/pages/EditarCliente.jsx";
 
 //imports vehiculos
 import IndexVehiculos from "./features/vehiculos/pages/IndexVehiculos.jsx";
-import AgregarVehiculo from "./features/vehiculos/pages/AgregarVehiculo.jsx";
 import EditarVehiculo from "./features/vehiculos/pages/EditarVehiculo.jsx";
 
 //Imports Modulo administrativo
@@ -71,14 +67,12 @@ const App = () => {
 
           {/* FLUJO */}
           <Route path="/flujo" element={<IndexFlujo />} />
-          <Route path="/flujo-agregar" element={<AgregarOrden />} />
           <Route path="/flujo-detalles/:idOrden" element={<DetallesOrden />} />
           <Route path="/flujo-editar/:idOrden" element={<EditarOrden />} />
 
           {/* Ventas */}
           <Route path="/ventas" element={<IndexVentas />} />
           <Route path="/cotizacion" element={<IndexCotizacion />} />
-          <Route path="/cotizacion-cotizar" element={<Cotizar />} />
           <Route path="/cotizacion-editar/:idCotizacion" element={<EditarCotizacion />} />
           <Route path="/detalles/:idVenta" element={<Venta />} />
 
@@ -95,31 +89,12 @@ const App = () => {
           <Route path="/trabajadores-agregar-amonestacion" element={<AgregarAmonestacion />} />
           <Route path="/trabajadores-registrar-ausencia" element={<AgregarAusencia />} />
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           {/* Rutas para clientes */}
           <Route path="/clientes" element={<IndexClientes />} />
-          <Route path="/cliente-agregar" element={<AgregarCliente />} />
           <Route path="/cliente-editar/:cedula" element={<EditarCliente />} />
 
           {/* Rutas para Vehiculos */}
           <Route path="/vehiculos" element={<IndexVehiculos />} />
-          <Route path="/vehiculo-agregar" element={<AgregarVehiculo />} />
           <Route path="/vehiculo-editar/:idVehiculo" element={<EditarVehiculo />} />
 
           {/* Rutas para Admin */}

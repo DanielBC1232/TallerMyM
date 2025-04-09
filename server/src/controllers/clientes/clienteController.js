@@ -6,10 +6,9 @@ const clienteRepo = new ClienteRepository();
 const insertCliente = async (req, res) => {
     try {
         const { nombre, apellido, cedula, correo, telefono } = req.body;
-        const newCliente = new Cliente(nombre, apellido, cedula, correo, telefono);
 
-        await clienteRepo.insert(newCliente);
-        res.status(201).json(newCliente);
+        await clienteRepo.insert(nombre, apellido, cedula, correo, telefono);
+        res.status(201).json();
     } catch (error) {
         if (error.status === 409) {
             return res.status(409).json({ error: error.message });

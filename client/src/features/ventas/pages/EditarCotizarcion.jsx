@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-// URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const EditarCotizacion = () => {
@@ -19,33 +18,29 @@ const EditarCotizacion = () => {
   });
 
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}/cotizacion/obtener-cotizacion/${idCotizacion}`)
-      .then((res) => {
-
-        const data = res.data[0];
+    const obtenerDatos = async () => {
+      try {
+        const respuesta = await axios.get(`${BASE_URL}/cotizacion/obtener-cotizacion/${idCotizacion}`);
+        const data = respuesta.data;
         setFormData({
           montoTotal: data.montoTotal,
           montoManoObra: data.montoManoObra,
           tiempoEstimado: data.tiempoEstimado,
           detalles: data.detalles,
         });
-      })
-      .catch(() => {
+      } catch {
         Swal.fire({
           text: "Error al obtener la cotización",
           icon: "error",
           showConfirmButton: false,
         });
-      });
+      }
+    };
+    obtenerDatos();
   }, [idCotizacion]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleChange = ({ target: { name, value } }) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const verificacion = () => {
@@ -68,28 +63,28 @@ const EditarCotizacion = () => {
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (verificacion()) {
-      axios
-        .put(`${BASE_URL}/cotizacion/actualizar-cotizacion/`, { idCotizacion: idCotizacion, ...formData })
-        .then(() => {
-          Swal.fire({
-            icon: "success",
-            title: "Cotización actualizada correctamente",
-            showConfirmButton: false,
-            timer: 1500,
-          }).then(() => {
-            navigate("/ventas");
-          });
-        })
-        .catch(() => {
-          Swal.fire({
-            text: "Error al actualizar cotización",
-            icon: "error",
-            showConfirmButton: false,
-          });
-        });
+    if (!verificacion()) return;
+
+    try {
+      await axios.put(`${BASE_URL}/cotizacion/actualizar-cotizacion/`, {
+        idCotizacion,
+        ...formData,
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Cotización actualizada correctamente",
+        showConfirmButton: false,
+        timer: 1500,
+      })
+      navigate("/cotizacion");
+    } catch {
+      Swal.fire({
+        text: "Error al actualizar cotización",
+        icon: "error",
+        showConfirmButton: false,
+      });
     }
   };
 
@@ -98,13 +93,12 @@ const EditarCotizacion = () => {
       <Grid>
         <form onSubmit={handleSubmit}>
           <Row className="show-grid" gutter={16}>
-            <Col xs={12} className="column">
+            <Col xs={12}>
               <label>
                 Monto Total:
                 <input
                   type="number"
                   name="montoTotal"
-                  id="montoTotal"
                   value={formData.montoTotal}
                   onChange={handleChange}
                   className="form-control"
@@ -117,7 +111,6 @@ const EditarCotizacion = () => {
                 <input
                   type="number"
                   name="montoManoObra"
-                  id="montoManoObra"
                   value={formData.montoManoObra}
                   onChange={handleChange}
                   className="form-control"
@@ -126,13 +119,12 @@ const EditarCotizacion = () => {
                 />
               </label>
             </Col>
-            <Col xs={12} className="column">
+            <Col xs={12}>
               <label>
                 Tiempo estimado:
                 <input
                   type="text"
                   name="tiempoEstimado"
-                  id="tiempoEstimado"
                   value={formData.tiempoEstimado}
                   onChange={handleChange}
                   className="form-control"
@@ -145,7 +137,6 @@ const EditarCotizacion = () => {
             Detalles:
             <textarea
               name="detalles"
-              id="detalles"
               value={formData.detalles}
               onChange={handleChange}
               className="form-control"
@@ -154,10 +145,7 @@ const EditarCotizacion = () => {
             />
           </label>
           <div className="d-flex justify-content-center mt-5">
-            <Button
-              type="submit"
-              className="btn btn-secondary text-white"
-            >
+            <Button type="submit" className="btn btn-secondary text-white">
               Guardar
             </Button>
           </div>
