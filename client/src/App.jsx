@@ -44,8 +44,6 @@ import GestionarSolicitudVacaciones from "./features/trabajadores/pages/Gestiona
 // import EditarTrabajadorSalario from "./features/trabajadores/pages/EditarSalario.jsx";
 
 // import AprobarVacaciones from "./features/trabajadores/pages/AprobarVacaciones.jsx";
-
-
 //administracion
 import CrearPerfil from "./features/perfil/pages/CrearPerfil";
 
@@ -55,14 +53,10 @@ import AgregarCliente from "./features/clientes/pages/AgregarCliente.jsx";
 import EditarCliente from "./features/clientes/pages/EditarCliente.jsx";
 
 //imports vehiculos
-import IndexVehi from "./features/vehiculos/pages/IndexVehi.jsx";
-import ListarVehiculosPage from "./features/vehiculos/pages/ListarVehiculosPage.jsx";
-import ListarEditVehiculosPage from "./features/vehiculos/pages/ListarEditVehiculosPage.jsx";
-import ListarElimVehiculosPage from "./features/vehiculos/pages/ListarElimVehiculosPage.jsx";
-
+import IndexVehiculos from "./features/vehiculos/pages/IndexVehiculos.jsx";
 import AgregarVehiculo from "./features/vehiculos/pages/AgregarVehiculo.jsx";
 import EditarVehiculo from "./features/vehiculos/pages/EditarVehiculo.jsx";
-import EliminarVehiculo from "./features/vehiculos/pages/EliminarVehiculo.jsx";
+
 
 //Imports Modulo administrativo
 import ListarUsuariosPage from "./features/adminn/pages/ListarUsuariosPage.jsx";
@@ -132,16 +126,9 @@ const App = () => {
           <Route path="/cliente-editar/:cedula" element={<EditarCliente />} />
 
           {/* Rutas para Vehiculos */}
-          <Route path="/vehiculos/Index" element={<IndexVehi />} />
-
-          <Route path="/vehiculos/listarVehiculos" element={<ListarVehiculosPage />} />
-          <Route path="/vehiculos/ListEditVehi" element={<ListarEditVehiculosPage />} />
-          <Route path="/vehiculos/ListElimVehi" element={<ListarElimVehiculosPage />} />
-
-
-          <Route path="/vehiculos/registrar" element={<AgregarVehiculo />} />
-          <Route path="/vehiculos/editar/:idVehiculo" element={<EditarVehiculo />} />
-          <Route path="/vehiculos/eliminar/:idVehiculo" element={<EliminarVehiculo />} />
+          <Route path="/vehiculos" element={<IndexVehiculos />} />
+          <Route path="/vehiculo-agregar" element={<AgregarVehiculo />} />
+          <Route path="/vehiculo-editar/:idVehiculo" element={<EditarVehiculo />} />
 
           {/* Rutas para Admin */}
           <Route path="/admin/listarUsuarios" element={<ListarUsuariosPage/>} />

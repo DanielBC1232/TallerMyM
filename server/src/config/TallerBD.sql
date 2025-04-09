@@ -154,6 +154,7 @@ CREATE TABLE CLIENTE_VEHICULO(
     marcaVehiculo VARCHAR (50) NOT NULL,
     annoVehiculo INT NOT NULL,
     tipoVehiculo VARCHAR(30) NOT NULL,
+	estado BIT NULL DEFAULT 1,
 
     idCliente INT NOT NULL
     FOREIGN KEY (idCliente) REFERENCES CLIENTE(idCliente) ON DELETE CASCADE

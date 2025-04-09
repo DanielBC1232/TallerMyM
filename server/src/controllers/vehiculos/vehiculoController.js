@@ -5,16 +5,23 @@ const VehiculoRepo = new VehiculoRepository();
 // Insertar un vehiculo
 const insertarVehiculo = async (req, res) => {
   try {
-    const { placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente } = req.body;//parametros
-    const newVehiculo = new Vehiculo(placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente);
+    const { placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente } = req.body;
 
-    await VehiculoRepo.insert(newVehiculo);
-    res.status(201).json(newVehiculo);
+    // Verificar si la placa ya existe
+    const vehiculoExistente = await VehiculoRepo.checkIfVehiculoExists(placaVehiculo);
+    if (vehiculoExistente) {
+      return res.status(409).json({ error: "La placa del vehículo ya está registrada" });
+    }
+    
+    // Insertar en la base de datos
+    await VehiculoRepo.insert(placaVehiculo, modeloVehiculo, marcaVehiculo, annoVehiculo, tipoVehiculo, idCliente);
+    res.status(201).json();
   } catch (error) {
     console.error("Error al insertar vehiculo:", error);
-    res.status(500).json({ error: "Error al insertar el vehiculo" });
+    res.status(500).json({ error: "Error al insertar el vehículo" });
   }
 };
+
 //-----------------------------------------------
 // Actualizar vehiculo
 

@@ -693,4 +693,14 @@ BEGIN
 END;
 GO
 
-
+SELECT 
+	CV.idVehiculo,
+	CV.placaVehiculo,
+	CV.modeloVehiculo,
+	CV.marcaVehiculo,
+	CV.annoVehiculo,
+	CV.tipoVehiculo,
+	C.nombre +' '+C.apellido as NombreCliente
+FROM CLIENTE_VEHICULO CV 
+INNER JOIN CLIENTE C ON C.idCliente = CV.idCliente
+WHERE estado = 1
