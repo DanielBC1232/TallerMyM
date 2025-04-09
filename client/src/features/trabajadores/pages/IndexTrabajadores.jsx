@@ -28,21 +28,11 @@ const IndexTrabajadores = () => {
     <div className="grid-container">
       <nav className="sidebar p-4 rounded-3 shadow-sm" style={{ maxWidth: "550px" }}>
 
-        <div className="row mx-1">
-          <Row gutter={10}>
+        <div className="row mx-1 gap-4 d-grid">
+          <Row gutter={12}>
             <Col xs={11}>
               <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px" ,margin:"10px"}}>
                 <Link to="/trabajadores-agregar" className="btn-link">Agregar Trabajador</Link>
-              </Button>
-            </Col>
-            
-            <Col xs={2}>
-              <Divider vertical />
-            </Col>
-            
-            <Col xs={11}>
-              <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
-                <Link to="#" className="btn-link">Filtrar</Link>
               </Button>
             </Col>
 
@@ -52,10 +42,8 @@ const IndexTrabajadores = () => {
               </Button>
             </Col>
 
-            <Col xs={2}>
-              <Divider vertical />
-            </Col>
-          
+            <Col xs={2}></Col>
+            
             <Col xs={11}>
               <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
                 <Link to="/GestionarSolicitud-Vacaciones" className="btn-link">Aprobar Vacaciones</Link>
@@ -68,24 +56,21 @@ const IndexTrabajadores = () => {
               </Button>
             </Col>
 
-            <Col xs={2}>
-              <Divider vertical />
-            </Col>
+            <Col xs={2}></Col>
 
             <Col xs={11}>
               <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
-                <Link to="/Gestionar-Amonest-Trab-List" className="btn-link">Generar Amonestacion</Link>
+                <Link to="/trabajadores-agregar-amonestacion" className="btn-link">Generar Amonestacion</Link>
               </Button>
             </Col>
 
             <Col xs={11}>
               <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>
-                <Link to="/Gestionar-Ausencias-Trab-List" className="btn-link">Registrar Ausencia</Link>
+                <Link to="/trabajadores-registrar-ausencia" className="btn-link">Registrar Ausencia</Link>
               </Button>
             </Col>
-            <Col xs={2}>
-              <Divider vertical />
-            </Col>
+
+            <Col xs={2}></Col>
             
             <Col xs={11}>
               <Button className="btn btn-sm btn-secondary text-white" style={{ minWidth: "50px", width: "155px",margin:"10px" }}>

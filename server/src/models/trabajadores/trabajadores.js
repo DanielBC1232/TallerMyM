@@ -45,7 +45,6 @@ export class TrabajadorRepository {
                 .query(`
                     SELECT * FROM TRABAJADOR
                     WHERE cedula = @cedula`);
-
             // Si no hay registros, result.recordset estara vacío
             return result.recordset.length > 0 ? result.recordset[0] : null;
         } catch (error) {
@@ -90,10 +89,8 @@ export class TrabajadorRepository {
             const result = await pool
                 .request()
                 .input('idTrabajador', sql.Int, idTrabajador)
-                .query(`
-                    SELECT * FROM TRABAJADOR
-                    WHERE idTrabajador = @idTrabajador
-                `);
+                .query(`SELECT * FROM TRABAJADOR
+                    WHERE idTrabajador = @idTrabajador`);
             return result.recordset[0]; // Devuelve el registro (el primero si existe)
         } catch (error) {
             console.error('Error en obtener trabajador:', error);

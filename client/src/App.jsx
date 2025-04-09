@@ -33,19 +33,12 @@ import DetallesOrden from "./features/flujo/pages/Detalles.jsx";
 import EditarOrden from "./features/flujo/pages/Editar.jsx";
 
 //Trabajadores
-import TrabajadoresIndex from "./features/trabajadores/pages/Index.jsx";
-import AgregarTrabajador from "./features/trabajadores/pages/Agregar.jsx";
-import EditarTrabajador from "./features/trabajadores/pages/Editar.jsx";
-//---Seccion de solicitud de vacaciones
-import AgregarSolicitudVacaciones from "./features/trabajadores/pages/AgregarSolicitud.jsx"
-import GestionarSolicitudVacaciones from "./features/trabajadores/pages/GestionarSolicitud.jsx";
-//--seccion gestion de salarios
-// import GestionarSalarios from "./features/trabajadores/pages/ListaGestSalariosPage.jsx";
-// import EditarTrabajadorSalario from "./features/trabajadores/pages/EditarSalario.jsx";
+import IndexTrabajadores from "./features/trabajadores/pages/IndexTrabajadores.jsx";
+import AgregarTrabajador from "./features/trabajadores/pages/AgregarTrabajador.jsx";
+import EditarTrabajador from "./features/trabajadores/pages/EditarTrabajador.jsx";
 
-// import AprobarVacaciones from "./features/trabajadores/pages/AprobarVacaciones.jsx";
-//administracion
-import CrearPerfil from "./features/perfil/pages/CrearPerfil";
+import AgregarAmonestacion from "./features/trabajadores/pages/AgregarAmonestacion.jsx";
+import AgregarAusencia from "./features/trabajadores/pages/AgregarAusencia.jsx";
 
 //imports clientes
 import IndexClientes from "./features/clientes/pages/IndexClientes.jsx";
@@ -57,7 +50,6 @@ import IndexVehiculos from "./features/vehiculos/pages/IndexVehiculos.jsx";
 import AgregarVehiculo from "./features/vehiculos/pages/AgregarVehiculo.jsx";
 import EditarVehiculo from "./features/vehiculos/pages/EditarVehiculo.jsx";
 
-
 //Imports Modulo administrativo
 import IndexUsuarios from "./features/admininstracion/pages/IndexUsuarios.jsx";
 import AgregarUsuario from "./features/admininstracion/pages/AgregarUsuario.jsx";
@@ -67,12 +59,9 @@ const App = () => {
   return (
     <div className="app">
       <Header />
-
       <main style={{ minHeight: "95vh" }}>
-
         <Routes>
           <Route path="/" element={<Index />} />
-
           {/* Rutas para inventario */}
           <Route path="/inventario-agregar" element={<Agregar />} />
           <Route path="/inventario" element={<IndexInventario />} />
@@ -98,18 +87,30 @@ const App = () => {
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="/Reportes" element={<Reportes />} />
 
-
           {/* Ruta para trabajadores*/}
-          {/* <Route path="/trabajadores" element={<TrabajadoresIndex />} />
+          <Route path="/trabajadores" element={<IndexTrabajadores />} />
           <Route path="/trabajadores-agregar" element={<AgregarTrabajador />} />
           <Route path="/trabajadores-editar/:idTrabajador" element={<EditarTrabajador />} />
+          
+          <Route path="/trabajadores-agregar-amonestacion" element={<AgregarAmonestacion />} />
+          <Route path="/trabajadores-registrar-ausencia" element={<AgregarAusencia />} />
 
-          <Route path="/AgregarSolicitud-Vacaciones" element={<AgregarSolicitudVacaciones />} />
-          <Route path="/GestionarSolicitud-Vacaciones" element={<GestionarSolicitudVacaciones />} />
 
-          <Route path="/Gestionar-Salarios" element={<GestionarSalarios />} />
-          <Route path="/trabajadores-editar-salario/:idTrabajador" element={<EditarTrabajadorSalario />} />
-          */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
           {/* Rutas para clientes */}
           <Route path="/clientes" element={<IndexClientes />} />
@@ -125,13 +126,6 @@ const App = () => {
           <Route path="/administracion" element={<IndexUsuarios />} />
           <Route path="/usuario-agregar" element={<AgregarUsuario/>} />
           <Route path="/usuario-editar/:idUsuario" element={<EditarUsuario />} />
-          {/*  
-          <Route path="/admin/listarElimUsuarios" element={<ListarElimUsuariosPage/>} />
-          <Route path="/admin/Index" element={<IndexAdmin />} />
-          <Route path="/admin/registrar" element={<AgregarUsuario />} />
-          <Route path="/admin/eliminar/:idUsuario" element={<EliminarUsuario />} />
-          */}
-
 
         </Routes>
       </main>
