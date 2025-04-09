@@ -14,7 +14,7 @@ const SelectClientes = ({ value, onChange }) => {
   useEffect(() => {
       const fetchClientes = async () => {
           try {
-              const { data } = await axios.get(`${BASE_URL}/clientes/obtenerclientes`);
+              const { data } = await axios.get(`${BASE_URL}/clientes/obtener-clientes`);
               const opcionesFormateadas = data.map(cliente => ({
                   value: cliente.idCliente,
                   label: `${cliente.nombre} ${cliente.apellido}`,

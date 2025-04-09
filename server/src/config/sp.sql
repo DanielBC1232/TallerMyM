@@ -703,4 +703,4 @@ SELECT
 	C.nombre +' '+C.apellido as NombreCliente
 FROM CLIENTE_VEHICULO CV 
 INNER JOIN CLIENTE C ON C.idCliente = CV.idCliente
-WHERE estado = 1
+WHERE CV.estado = 1

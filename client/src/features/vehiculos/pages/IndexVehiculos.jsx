@@ -133,7 +133,7 @@ const IndexVehiculos = () => {
 
       {/* Mensaje si no hay coincidencias */}
       {vehiculosFiltrados.length === 0 && filtroPlaca && (
-        <p className="text-red-500 mt-4">No se encontraron vehículos con esa placa.</p>
+        <p className="text-red-500 mt-4">No se encontraron vehículos.</p>
       )}
     </div>
   );

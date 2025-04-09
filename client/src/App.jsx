@@ -59,15 +59,9 @@ import EditarVehiculo from "./features/vehiculos/pages/EditarVehiculo.jsx";
 
 
 //Imports Modulo administrativo
-import ListarUsuariosPage from "./features/adminn/pages/ListarUsuariosPage.jsx";
-import ListarEditUsuariosPage from "./features/adminn/pages/ListarEditUsuariosPage.jsx";
-import ListarElimUsuariosPage from "./features/adminn/pages/ListarElimUsuariosPage.jsx"
-
-
-import IndexAdmin from "./features/adminn/pages/IndexAdm.jsx";
-import AgregarUsuario from "./features/adminn/pages/AgregarUser.jsx";
-import EditarUsuario from "./features/adminn/pages/EditarUser.jsx"
-import EliminarUsuario from "./features/adminn/pages/EliminarUser.jsx"
+import IndexUsuarios from "./features/admininstracion/pages/IndexUsuarios.jsx";
+import AgregarUsuario from "./features/admininstracion/pages/AgregarUsuario.jsx";
+import EditarUsuario from "./features/admininstracion/pages/EditarUsuario.jsx";
 
 const App = () => {
   return (
@@ -117,9 +111,6 @@ const App = () => {
           <Route path="/trabajadores-editar-salario/:idTrabajador" element={<EditarTrabajadorSalario />} />
           */}
 
-          {/* Ruta para perfil */}
-          <Route path="/perfil-crear" element={<CrearPerfil />} />
-
           {/* Rutas para clientes */}
           <Route path="/clientes" element={<IndexClientes />} />
           <Route path="/cliente-agregar" element={<AgregarCliente />} />
@@ -131,16 +122,15 @@ const App = () => {
           <Route path="/vehiculo-editar/:idVehiculo" element={<EditarVehiculo />} />
 
           {/* Rutas para Admin */}
-          <Route path="/admin/listarUsuarios" element={<ListarUsuariosPage/>} />
-          <Route path="/admin/listarEditUsuarios" element={<ListarEditUsuariosPage/>} />
+          <Route path="/administracion" element={<IndexUsuarios />} />
+          <Route path="/usuario-agregar" element={<AgregarUsuario/>} />
+          <Route path="/usuario-editar/:idUsuario" element={<EditarUsuario />} />
+          {/*  
           <Route path="/admin/listarElimUsuarios" element={<ListarElimUsuariosPage/>} />
-
-
           <Route path="/admin/Index" element={<IndexAdmin />} />
           <Route path="/admin/registrar" element={<AgregarUsuario />} />
-          <Route path="/admin/editar/:idUsuario" element={<EditarUsuario />} />
           <Route path="/admin/eliminar/:idUsuario" element={<EliminarUsuario />} />
-
+          */}
 
 
         </Routes>

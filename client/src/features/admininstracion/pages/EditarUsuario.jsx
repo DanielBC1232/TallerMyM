@@ -1,0 +1,143 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
+export const BASE_URL = import.meta.env.VITE_API_URL;
+
+const EditarUsuario = () => {
+  const { idUsuario } = useParams();
+  const navigate = useNavigate();
+
+  const [usuario, setUsuario] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  useEffect(() => {
+    const obtenerUsuario = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/admin/obtenerUsuario/${idUsuario}`);
+        setUsuario((prev) => ({
+          ...prev,
+          username: response.data.username,
+          email: response.data.email,
+        }));
+      } catch (error) {
+        console.error("Error al obtener el usuario:", error);
+        Swal.fire("Error", "No se pudieron cargar los datos del usuario", "error");
+      }
+    };
+    obtenerUsuario();
+  }, [idUsuario]);
+  
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUsuario((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!usuario.username.trim() || !usuario.email.trim()) {
+      Swal.fire("Campos vacíos", "El nombre de usuario y el correo son obligatorios", "warning");
+      return;
+    }
+
+    const pass = usuario.password.trim();
+    const confirm = usuario.confirmPassword.trim();
+
+    if ((pass || confirm) && pass !== confirm) {
+      Swal.fire("Error", "Las contraseñas no coinciden", "warning");
+      return;
+    }
+
+    const payload = {
+      username: usuario.username,
+      email: usuario.email,
+      password: usuario.password,
+    };
+
+    try {
+      await axios.put(`${BASE_URL}/admin/editar/${idUsuario}`, payload);
+      Swal.fire({
+        title: "Éxito",
+        text: "Usuario actualizado correctamente",
+        icon: "success",
+        timer: 2000,
+        timerProgressBar: true,
+      }).then(() => navigate("/administracion"));
+    } catch (error) {
+      console.error("Error al actualizar el usuario:", error);
+
+      if (error.response?.status === 409) {
+        Swal.fire("Error", "No puedes usar una contraseña antigua", "error");
+      } else {
+        Swal.fire("Error", "No se pudo actualizar el usuario", "error");
+      }
+    }
+  };
+
+  return (
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">Editar Usuario</h1>
+      <form onSubmit={handleSubmit} style={{ maxWidth: "400px" }} className="mx-auto">
+        <div className="mb-3">
+          <label htmlFor="username" className="form-label">Nombre de usuario:</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            className="form-control"
+            value={usuario.username}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Correo:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            className="form-control"
+            value={usuario.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Nueva contraseña (opcional):</label>
+          <input
+            type="password"
+            name="password"
+            className="form-control"
+            value={usuario.password}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Confirmar nueva contraseña:</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            className="form-control"
+            value={usuario.confirmPassword}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="d-flex justify-content-between">
+          <button type="submit" className="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default EditarUsuario;

@@ -17,20 +17,23 @@ export class Usuario {
   }
 }
 //------------
+
+//BCRYPT para encriptar (no desencripta pero es seguro)
+
 export class UsuarioRepository {
+
   // Insertar nuevos usuarios
-  async insertUser(usuario) {
-    console.log(usuario);
+  async insertUser(username, email, password) {
     try {
       const pool = await connectDB();
       await pool
         .request()
-        .input("username", sql.NVarChar(50), usuario.username)
-        .input("email", sql.NVarChar(100), usuario.email)
-        .input("password", sql.NVarChar(255), usuario.password) // ocupa hashear la contrasenia
+        .input("username", sql.NVarChar(50), username)
+        .input("email", sql.NVarChar(100), email)
+        .input("password", sql.NVarChar(255), password) // ocupa hashear la contrasenia
         .input("idRol", sql.Int, usuario.idRol)
         .query(`INSERT INTO USUARIO (username, email, password, idRol)
-                VALUES (@username, @email, @password, @idRol)`);
+        VALUES (@username, @email, @password, 2)`);
 
       console.log("Usuario insertado exitosamente");
     } catch (error) {
@@ -39,12 +42,11 @@ export class UsuarioRepository {
     }
   }
 
-
   async updateUsuario(idUsuario, datosActualizados) {
     try {
       const pool = await connectDB();
 
-      const { username, email, password, idRol } = datosActualizados;
+      const { username, email, password } = datosActualizados;
 
       const result = await pool
         .request()
@@ -52,13 +54,10 @@ export class UsuarioRepository {
         .input("username", sql.NVarChar(50), username)
         .input("email", sql.NVarChar(100), email)
         .input("password", sql.NVarChar(255), password) // ocupa hashear la contrasenia
-        .input("idRol", sql.Int, idRol)
         .query(`
-                    UPDATE USUARIO
-                    SET username = @username, email = @email, password = @password, idRol = @idRol
-                    WHERE idUsuario = @idUsuario
-                `);
-
+        UPDATE USUARIO
+        SET username = @username, email = @email, password = @password
+        WHERE idUsuario = @idUsuario`);
       return result.rowsAffected[0] > 0;
     } catch (error) {
       console.error("Error al actualizar el usuario:", error);
@@ -73,9 +72,7 @@ export class UsuarioRepository {
       const result = await pool
         .request()
         .input("idUsuario", sql.Int, idUsuario)
-        .query(`
-                    DELETE FROM USUARIO WHERE idUsuario = @idUsuario
-                `);
+        .query(`DELETE FROM USUARIO WHERE idUsuario = @idUsuario`);
 
       return result.rowsAffected[0] > 0;
     } catch (error) {
@@ -104,25 +101,11 @@ export class UsuarioRepository {
         .request()
         .input("idUsuario", sql.Int, idUsuario)
         .query("SELECT * FROM USUARIO WHERE idUsuario = @idUsuario");
-      return result.recordset;
+      return result.recordset[0];
     } catch (error) {
       console.error("Error al obtener el usuario por ID:", error);
       throw new Error("Error al obtener usuario");
     }
   }
 
-  //select uno por ID para editar (campos específicos)
-  async getOneByIDedit(idUsuario) {
-    try {
-      const pool = await connectDB();
-      const result = await pool
-        .request()
-        .input("idUsuario", sql.Int, idUsuario)
-        .query("SELECT idUsuario,username,email,password,idRol FROM USUARIO WHERE idUsuario = @idUsuario");
-      return result.recordset;
-    } catch (error) {
-      console.error("Error al obtener el usuario por ID para editar:", error);
-      throw new Error("Error al obtener usuario para editar");
-    }
-  }
 }

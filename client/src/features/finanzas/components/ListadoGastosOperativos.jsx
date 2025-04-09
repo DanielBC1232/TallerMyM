@@ -18,7 +18,7 @@ export const ListadoGastosOperativos = () => {
                 setGastosOperativos(data);
                 //console.log("Datos obtenidos:", data);
             } catch (error) {
-               //console.error("Error al obtener datos:", error);
+                //console.error("Error al obtener datos:", error);
                 setError("No se pudieron cargar los gastos operativos");
                 swal.fire("Error", "No se pudieron cargar los gastos operativos", "error");
             } finally {
@@ -35,31 +35,33 @@ export const ListadoGastosOperativos = () => {
     }
 
     return (
-        <div className="">
-            <h3>Listado Gastos Operativos</h3>
+        <div className="container mt-3">
+            <h3 className="mb-4 text-center">Listado de Gastos Operativos</h3>
 
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>Tipo de Gasto</th>
-                        <th>Monto</th>
-                        <th>Detalle</th>
-                        <th>Proveedor</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {gastosOperativos.map((gasto, index) => (
-                        <tr key={gasto._id || index}>
-                            <td>{gasto.tipoGasto}</td>
-                            <td>₡ {gasto.monto?.toLocaleString('es-CR') || 0}</td>
-                            <td>{gasto.detalle}</td>
-                            <td>{gasto.proveedor?.nombre || gasto.proveedor || "N/A"}</td>
-                            <td>{new Date(gasto.fecha).toLocaleDateString('es-CR')}</td>
+            <div className="table-responsive">
+                <table className="table table-bordered table-hover table-sm align-middle">
+                    <thead className="table-light">
+                        <tr>
+                            <th>Tipo de Gasto</th>
+                            <th>Monto</th>
+                            <th>Detalle</th>
+                            <th>Proveedor</th>
+                            <th>Fecha</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {gastosOperativos.map((gasto, index) => (
+                            <tr key={gasto._id || index}>
+                                <td>{gasto.tipoGasto}</td>
+                                <td>₡ {gasto.monto?.toLocaleString('es-CR') || 0}</td>
+                                <td>{gasto.detalle}</td>
+                                <td>{gasto.proveedor?.nombre || gasto.proveedor || "N/A"}</td>
+                                <td>{new Date(gasto.fecha).toLocaleDateString('es-CR')}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
