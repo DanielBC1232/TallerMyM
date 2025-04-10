@@ -79,10 +79,10 @@ const App = () => {
           <Route path="/cotizacion-editar/:idCotizacion" element={<EditarCotizacion />} />
           <Route path="/detalles/:idVenta" element={<Venta />} />
 
-          {/* Finanzas */}
-          <Route path="/gastos-operativos" element={<GastosOperativos />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/Reportes" element={<Reportes />} />
+          {/* Finanzas (Rutas protegidas) */}
+          <Route path="/gastos-operativos" element={<PrivateRoute element={<GastosOperativos />} />} />
+          <Route path="/Dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+          <Route path="/Reportes" element={<PrivateRoute element={<Reportes />} />} />
 
           {/* Trabajadores */}
           <Route path="/trabajadores" element={<IndexTrabajadores />} />

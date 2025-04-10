@@ -15,6 +15,8 @@ import { FaCarRear } from "react-icons/fa6";
 import { TbReport } from "react-icons/tb";
 
 const Index = () => {
+  const idRol = localStorage.getItem('idRol');
+
   return (
     <div className="container mt-5 p-3">
       <div className="row gap-5 justify-content-center">
@@ -37,14 +39,22 @@ const Index = () => {
           </Link>
         </div>
 
-        <div className="col-sm-3 align-self-center">
-          <Link to="/administracion" className="btn-link text-decoration-none">
-            <Card width={300} direction="row" className="p-2">
-              <Card.Header><MdAccountCircle size={55} color="#005ba5" className="d-flex align-self-baseline" /></Card.Header>
-              <Card.Body as="h4" className="d-flex align-self-baseline">Módulo Administrativo</Card.Body>
-            </Card>
-          </Link>
-        </div>
+        {idRol === 1 && (
+          <div className="col-sm-3 align-self-center">
+            <Link to="/administracion" className="btn-link text-decoration-none">
+              <Card width={300} direction="row" className="p-2">
+                <Card.Header>
+                  <MdAccountCircle size={55} color="#005ba5" className="d-flex align-self-baseline" />
+                </Card.Header>
+                <Card.Body as="h4" className="d-flex align-self-baseline">
+                  Módulo Administrativo
+                </Card.Body>
+              </Card>
+            </Link>
+          </div>
+        )}
+
+
 
         <div className="col-sm-3 align-self-center">
           <Link to="/clientes" className="btn-link text-decoration-none">
@@ -65,15 +75,17 @@ const Index = () => {
           </Link>
         </div>
 
-        <div className="col-sm-3 align-self-center">
-          <Link to="/gastos-operativos"
-          className="btn-link text-decoration-none">
-            <Card width={300} direction="row" className="p-2">
-              <Card.Header><FaMoneyCheckDollar size={55} color="#005ba5" className="d-flex align-self-baseline" /></Card.Header>
-              <Card.Body as="h4" className="d-flex align-self-baseline">Módulo Finanzas</Card.Body>
-            </Card>
-          </Link>
-        </div>
+        {idRol === 1 && (
+          <div className="col-sm-3 align-self-center">
+            <Link to="/gastos-operativos"
+              className="btn-link text-decoration-none">
+              <Card width={300} direction="row" className="p-2">
+                <Card.Header><FaMoneyCheckDollar size={55} color="#005ba5" className="d-flex align-self-baseline" /></Card.Header>
+                <Card.Body as="h4" className="d-flex align-self-baseline">Módulo Finanzas</Card.Body>
+              </Card>
+            </Link>
+          </div>
+        )}
 
         <div className="col-sm-3 align-self-center">
           <Link to="/vehiculos" className="btn-link text-decoration-none">
