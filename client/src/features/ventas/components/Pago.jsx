@@ -15,12 +15,40 @@ const Pago = () => {
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const { data } = await axios.get(`${BASE_URL}/finanzas/obtener-pago/${idVenta}`);
+        const { data } = await axios.get(`${BASE_URL}/finanzas/obtener-pago/${idVenta}`, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en los encabezados
+          }
+        });
         setFormData(data); // Asigna el objeto recibido en lugar de un arreglo
         //console.log(data);
       } catch (error) {
-        console.error("Error al obtener datos:", error);
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operación no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate("/login"); // Redirigir al login si el token es inválido o no hay sesión activa
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirigir al login si la sesión ha expirado
+          } else {
+            console.error("Error al obtener los datos:", error);
+          }
+        } else {
+          console.error("Error de conexión", error);
+        }
       }
+
     };
     obtenerDatos(); // Llamar a la función para obtener los datos
   }, [idVenta]);

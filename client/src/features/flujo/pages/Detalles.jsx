@@ -26,15 +26,58 @@ const Detalles = () => {
     useEffect(() => {
         const obtenerOrden = async () => {
             try {
-                const { data } = await axios.get(`${BASE_URL}/flujo/obtener-orden/${idOrden}`
-                ); //consumir api en backend por id
+                const { data } = await axios.get(`${BASE_URL}/flujo/obtener-orden/${idOrden}`, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}` // Incluir JWT en el encabezado
+                    }
+                });
+
                 setOrden(data);
                 setFase((prev) => ({ ...prev, estadoOrden: data.estadoOrden }));
 
                 //console.log(data); // imprimir JSON en consola
             } catch (error) {
-                console.error("Error al obtener el orden:", error);
+                if (error.response) {
+                    // Manejo de errores HTTP
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Advertencia",
+                            text: "Operación no autorizada",
+                            showConfirmButton: false,
+                        });
+                        navigate(0); // Redirige a la página de login si no está autorizado
+                    }
+                    else if (error.response.status === 403) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Autenticación",
+                            text: "Sesión expirada",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirige a login si la sesión ha expirado
+                    }
+                    else {
+                        console.error("Error al obtener el orden:", error);
+                        Swal.fire({
+                            title: 'Error al obtener el orden!',
+                            icon: 'error',
+                            showConfirmButton: false
+                        });
+                    }
+                } else {
+                    // Manejo de errores en caso de problemas de red u otros
+                    console.error("Error desconocido", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Hubo un error desconocido, por favor intente nuevamente",
+                        showConfirmButton: false,
+                    });
+                }
             }
+
         };
 
         obtenerOrden(); // llamar funcion
@@ -67,7 +110,11 @@ const Detalles = () => {
             });
 
             if (result.isConfirmed) {
-                const resFase = await axios.put(`${BASE_URL}/flujo/actualizar-fase-orden/`, fase); // Consumir API
+                const resFase = await axios.put(`${BASE_URL}/flujo/actualizar-fase-orden/`, fase, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}` // Incluir JWT en el encabezado
+                    }
+                });
 
                 if (resFase.status === 200) {
                     Swal.fire({
@@ -79,15 +126,47 @@ const Detalles = () => {
                 }
             }
         } catch (error) {
-            Swal.fire({
-                title: 'Error al actualizar orden!',
-                icon: 'error',
-                showConfirmButton: false
-            });
-            console.error("Error al actualizar fase:", error);
+            if (error.response) {
+                // Manejo de errores HTTP
+                if (error.response.status === 401) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Advertencia",
+                        text: "Operación no autorizada",
+                        showConfirmButton: false,
+                    });
+                    navigate(0); // Redirige a la página de login si no está autorizado
+                }
+                else if (error.response.status === 403) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Autenticación",
+                        text: "Sesión expirada",
+                        showConfirmButton: false,
+                    });
+                    localStorage.clear();
+                    navigate("/login"); // Redirige a login si la sesión ha expirado
+                }
+                else {
+                    console.error("Error al actualizar fase:", error);
+                    Swal.fire({
+                        title: 'Error al actualizar orden!',
+                        icon: 'error',
+                        showConfirmButton: false
+                    });
+                }
+            } else {
+                // Manejo de errores en caso de problemas de red u otros
+                console.error("Error desconocido", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Hubo un error desconocido, por favor intente nuevamente",
+                    showConfirmButton: false,
+                });
+            }
         }
     };
-
 
     return (
         <div className="container main p-5">

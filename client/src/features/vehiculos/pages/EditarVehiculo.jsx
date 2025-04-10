@@ -24,12 +24,43 @@ const EditarVehiculo = () => {
   useEffect(() => {
     const obtenerVehiculo = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/vehiculos/ObteneridVehiculo/${idVehiculo}`);
-        setVehiculo(response.data);
+        const response = await axios.get(`${BASE_URL}/vehiculos/ObteneridVehiculo/${idVehiculo}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el header
+          }
+        });
+        setVehiculo(response.data); // Establecer los datos del vehículo en el estado
       } catch (error) {
-        console.error("Error al obtener el Vehiculo:", error);
-        Swal.fire("Error", "Error al obtener los datos del Vehículo", "error");
+        if (error.response) {
+          // Manejo de errores específicos de la respuesta HTTP
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirigir a la página de login si no está autorizado
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirigir a login si la sesión ha expirado
+          } else {
+            console.error("Error al obtener el Vehículo:", error);
+            Swal.fire("Error", "Error al obtener los datos del Vehículo", "error");
+          }
+        } else {
+          // Si no hay respuesta del servidor
+          console.error(error);
+          Swal.fire("Error", "Error al obtener los datos del Vehículo", "error");
+        }
       }
+
     };
     obtenerVehiculo();
   }, [idVehiculo]);
@@ -44,12 +75,42 @@ const EditarVehiculo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`${BASE_URL}/vehiculos/editar/${idVehiculo}`, vehiculo);
+      await axios.put(`${BASE_URL}/vehiculos/editar/${idVehiculo}`, vehiculo, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el header
+        }
+      });
       Swal.fire("Éxito", "Vehículo actualizado exitosamente", "success");
-      navigate("/vehiculos");
+      navigate("/vehiculos"); // Redirigir a la lista de vehículos después de actualizar
     } catch (error) {
-      console.error("Error al actualizar el vehiculo:", error);
-      Swal.fire("Error", "Error al actualizar el vehículo", "error");
+      if (error.response) {
+        // Manejo de errores específicos de la respuesta HTTP
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operacion no Autorizada",
+            showConfirmButton: false,
+          });
+          navigate(0); // Redirigir a la página de login si no está autorizado
+        } else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirigir a login si la sesión ha expirado
+        } else {
+          console.error("Error al actualizar el vehículo:", error);
+          Swal.fire("Error", "Error al actualizar el vehículo", "error");
+        }
+      } else {
+        // Si no hay respuesta del servidor
+        console.error(error);
+        Swal.fire("Error", "Error al actualizar el vehículo", "error");
+      }
     }
   };
 

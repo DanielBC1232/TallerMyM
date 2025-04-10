@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import React from "react";
 import { Card } from "rsuite";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "../styles/style.css";
 

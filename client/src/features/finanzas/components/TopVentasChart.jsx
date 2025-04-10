@@ -10,11 +10,46 @@ const TopVentasChart = () => {
     useEffect(() => {
         const getDatos = async () => {
             try {
-                const ventasRes = await axios.get(`${BASE_URL}/finanzas/obtener-top-ventas/`);
+                const ventasRes = await axios.get(`${BASE_URL}/finanzas/obtener-top-ventas/`, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}` // Se agrega el token JWT
+                    }
+                });
                 setVentas(ventasRes.data);
             } catch (error) {
-                console.error("Error al obtener datos:", error);
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Advertencia",
+                            text: "Operacion no Autorizada",
+                            showConfirmButton: false,
+                        });
+                        navigate(0); // Redirigir si no autorizado
+                    } else if (error.response.status === 403) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Autenticación",
+                            text: "Sesión expirada",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirigir si la sesión ha expirado
+                    } else {
+                        console.error("Error al obtener datos:", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Hubo un error al obtener los datos.",
+                            showConfirmButton: false,
+                        });
+                    }
+                } else {
+                    console.error("Error al obtener datos:", error);
+                    Swal.fire("Error", "Hubo un problema de red o conexión.", "error");
+                }
             }
+
         };
         getDatos();
     }, []);

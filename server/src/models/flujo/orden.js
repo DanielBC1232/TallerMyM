@@ -108,7 +108,7 @@ export class OrdenRepository {
                     SET tiempoEstimado = @tiempoEstimado,
                         idTrabajador = @idTrabajador,
                         idVehiculo = @idVehiculo,
-                        [descripcion] = @descripcion,
+                        descripcion = @descripcion,
                         estadoAtrasado = @estadoAtrasado
                     WHERE idOrden = @idOrden`);
             return result.rowsAffected[0]; // Devuelve el número de filas afectadas

@@ -2,6 +2,8 @@ import express from 'express';
 import Excel from 'exceljs';
 const router = express.Router();
 
+import authMiddleware from '../../middleware/authMiddleware.js';
+
 import { CotizacionRepository } from '../../models/ventas/cotizacion.js';
 const CotizacionRepo = new CotizacionRepository();
 
@@ -11,7 +13,7 @@ const ClienteRepo = new ClienteRepository();
 import { TrabajadorRepository } from '../../models/trabajadores/trabajadores.js';
 const TrabajadorRepo = new TrabajadorRepository();
 
-router.post('/generar-factura', async (req, res) => {
+router.post('/generar-factura',authMiddleware, async (req, res) => {
     try {
         const formData = req.body; //recibe los datos enviado de react
         const fechaActual = new Date().toISOString().split('T')[0]; // FormatoYYYY-MM-DD
@@ -60,7 +62,7 @@ router.post('/generar-factura', async (req, res) => {
     }
 });
 
-router.post('/descargar-cotizacion/:id', async (req, res) => {
+router.post('/descargar-cotizacion/:id',authMiddleware, async (req, res) => {
     try {
         const id = parseInt(req.params.id);//tomar el id de cotizacion
         if (isNaN(id)) return res.status(400).json({ error: 'ID inválido' });
@@ -117,7 +119,7 @@ router.post('/descargar-cotizacion/:id', async (req, res) => {
     }
 });
 
-router.get('/reporte-clientes-inactivos', async (_req, res) => {
+router.get('/reporte-clientes-inactivos',authMiddleware, async (_req, res) => {
     try {
         const clientes = await ClienteRepo.getClientesInactivos();
         if (!Array.isArray(clientes) || clientes.length === 0) {
@@ -159,7 +161,7 @@ router.get('/reporte-clientes-inactivos', async (_req, res) => {
     }
 });
 
-router.get('/reporte-trabajadores-eficientes', async (_req, res) => {
+router.get('/reporte-trabajadores-eficientes',authMiddleware, async (_req, res) => {
     try {
         // Obtenemos los datos de trabajadores eficientes
         // Se espera que getTrabajadoresEficientes retorne objetos con { nombreCompleto, cedula, totalOrdenes }

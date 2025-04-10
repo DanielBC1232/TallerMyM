@@ -17,15 +17,46 @@ const IndexVehiculos = () => {
   // Función para obtener todos los vehículos
   const ObtenerVehiculos = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/vehiculos/ObtenerVehiculos`);
+      const response = await axios.get(`${BASE_URL}/vehiculos/ObtenerVehiculos`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el header
+        }
+      });
       setVehiculos(response.data); // Guardar los vehículos en el estado
       setError(""); // Limpiar el mensaje de error
     } catch (error) {
-      console.error("Error al obtener vehículos:", error);
-      setError("Error al obtener vehículos"); // Mostrar mensaje de error
+      if (error.response) {
+        // Manejo de errores específicos de la respuesta HTTP
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operacion no Autorizada",
+            showConfirmButton: false,
+          });
+          navigate(0); // Redirigir a la página de login si no está autorizado
+        } else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirigir a login si la sesión ha expirado
+        } else {
+          console.error("Error al obtener los vehículos:", error);
+          setError("Error al obtener vehículos"); // Mostrar mensaje de error
+        }
+      } else {
+        // Si no hay respuesta del servidor
+        console.error(error);
+        setError("Error al obtener vehículos"); // Mostrar mensaje de error
+      }
     } finally {
       setLoading(false); // Finalizar la carga
     }
+
   };
 
   // Obtener vehículos al cargar el componente
@@ -59,12 +90,42 @@ const IndexVehiculos = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`${BASE_URL}/vehiculos/eliminar/${idVehiculo}`);
+          await axios.delete(`${BASE_URL}/vehiculos/eliminar/${idVehiculo}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el header
+            }
+          });
           Swal.fire('¡Eliminado!', 'El vehículo ha sido eliminado.', 'success');
           ObtenerVehiculos(); // Recargar la lista después de eliminar
         } catch (error) {
-          Swal.fire('Error', 'Hubo un problema al eliminar el vehículo', 'error');
+          if (error.response) {
+            // Manejo de errores específicos de la respuesta HTTP
+            if (error.response.status === 401) {
+              Swal.fire({
+                icon: "warning",
+                title: "Advertencia",
+                text: "Operación no Autorizada",
+                showConfirmButton: false,
+              });
+              navigate(0); // Redirigir a la página de login si no está autorizado
+            } else if (error.response.status === 403) {
+              Swal.fire({
+                icon: "warning",
+                title: "Autenticación",
+                text: "Sesión expirada",
+                showConfirmButton: false,
+              });
+              localStorage.clear();
+              navigate("/login"); // Redirigir a login si la sesión ha expirado
+            } else {
+              Swal.fire('Error', 'Hubo un problema al eliminar el vehículo', 'error'); // Error genérico
+            }
+          } else {
+            // Si no hay respuesta del servidor
+            Swal.fire('Error', 'Hubo un problema al eliminar el vehículo', 'error'); // Error genérico
+          }
         }
+
       }
     });
   };

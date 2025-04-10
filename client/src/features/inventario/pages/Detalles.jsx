@@ -3,8 +3,7 @@ import { data, useParams } from "react-router-dom";
 import axios from "axios";
 import { Grid, Row, Col } from "rsuite";
 import Swal from "sweetalert2";
-import { BrowserRouter as Router, useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { BrowserRouter as Router, useNavigate, Link } from "react-router-dom";
 import { Image } from "rsuite";
 
 import "../styles/inv.css";
@@ -21,17 +20,48 @@ const Detalles = () => {
     const obtenerProducto = async () => {
       try {
         const { data } = await axios.get(
-         `${BASE_URL}/productos/${idProducto}`
-        ); //consumir api en backend por id
+          `${BASE_URL}/productos/${idProducto}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT al header
+            }
+          }
+        );
         setProducto(data);
-        //console.log(data); // imprimir JSON en consola
       } catch (error) {
-        console.error("Error al obtener el producto:", error);
+        if (error.response) {
+          // Manejo de errores HTTP
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirige si no está autorizado
+          }
+          else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirige si la sesión ha expirado
+          } else {
+            console.error("Error al obtener el producto:", error);
+          }
+        } else {
+          // Manejo de errores desconocidos
+          console.error("Error al obtener el producto:", error);
+        }
       }
     };
 
-    obtenerProducto(); // llamar funcion
+    obtenerProducto(); // Llamar la función para obtener el producto
   }, [idProducto]);
+
 
   if (!producto) return <p>Cargando...</p>;
 
@@ -70,25 +100,69 @@ const Detalles = () => {
       if (result.isConfirmed) {
         axios
           .delete(
-            `${BASE_URL}/productos/eliminar-producto/${idProducto}`
+            `${BASE_URL}/productos/eliminar-producto/${idProducto}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el encabezado
+              }
+            }
           )
           .then(() => {
-            // Redirigir a la pagina de inventario despues de eliminar
-            navigate("/inventario");
+            // Redirigir a la página de inventario después de eliminar
+            Swal.fire({
+              icon: "success",
+              title: "Producto eliminado",
+              text: "El producto o servicio ha sido eliminado correctamente.",
+              showConfirmButton: false,
+              timer: 1500
+            }).then(() => {
+              navigate("/inventario");
+            });
           })
           .catch((error) => {
-            // error
-            Swal.fire({
-              title: "Error",
-              text: "Error al eliminar producto o servicio",
-              icon: "error",
-              showCancelButton: false,
-            });
-            console.error("Error al eliminar producto:", error);
+            if (error.response) {
+              // Manejo de errores HTTP
+              if (error.response.status === 401) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Advertencia",
+                  text: "No estás autorizado para realizar esta acción",
+                  showConfirmButton: false,
+                });
+                navigate(0); // Redirige si no está autorizado
+              } else if (error.response.status === 403) {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Sesión expirada",
+                  text: "Tu sesión ha expirado, por favor inicia sesión nuevamente",
+                  showConfirmButton: false,
+                });
+                localStorage.clear();
+                navigate("/login"); // Redirige al login si la sesión expiró
+              } else {
+                Swal.fire({
+                  title: "Error",
+                  text: "Error al eliminar producto o servicio",
+                  icon: "error",
+                  showCancelButton: false,
+                });
+                console.error("Error al eliminar producto:", error);
+              }
+            } else {
+              // Manejo de otros errores
+              Swal.fire({
+                title: "Error",
+                text: "Error desconocido al eliminar el producto",
+                icon: "error",
+                showCancelButton: false,
+              });
+              console.error("Error al eliminar producto:", error);
+            }
           });
       }
     });
   };
+
 
   //url get imagen
   const getImg = (img) => img ? `${BASE_URL}/img/${img}` : "/noResult.png";
@@ -98,14 +172,14 @@ const Detalles = () => {
       <Grid fluid>
         <Row className="show-grid" gutter={16}>
           <Col xs={6}>
-          <Image
-            src={getImg(producto.img)}
-            fallbackSrc="https://placehold.co/300x200"
-            alt="nonexistent-image"
-            width={300}
-          />
+            <Image
+              src={getImg(producto.img)}
+              fallbackSrc="https://placehold.co/300x200"
+              alt="nonexistent-image"
+              width={300}
+            />
           </Col>
-          
+
           <Col
             xs={16}
             className="d-grid gap-5 bg-white shadow-sm p-5 rounded-3"
@@ -244,7 +318,7 @@ const Detalles = () => {
                     type="text"
                     name="porcentajeDescuento"
                     className="form-control"
-                    value={(producto.porcentajeDescuento)+"%"}
+                    value={(producto.porcentajeDescuento) + "%"}
                     readOnly
                   />
                 </div>

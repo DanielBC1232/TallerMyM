@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import ModalAgregarUsuario from "../components/ModalAgregarUsuario";
 
@@ -16,16 +16,49 @@ const ListarUsuarios = () => {
 
   const ObtenerUsuarios = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/admin/obtenerUsuarios`);
+      const response = await axios.get(`${BASE_URL}/admin/obtenerUsuarios`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+  
       setUsuarios(response.data);
       setError("");
     } catch (error) {
-      console.error("Error al obtener usuarios:", error);
-      setError("Error al obtener usuarios");
+      if (error.response) {
+        // Manejo de respuestas HTTP
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operación no autorizada",
+            showConfirmButton: false,
+          });
+          navigate("/login"); // Redirige al login si no está autorizado
+        } else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirige al login si la sesión ha expirado
+        } else {
+          console.error("Error al obtener usuarios:", error);
+          setError("Error al obtener usuarios");
+        }
+      } else {
+        // Error si no se recibe una respuesta (problemas de red, por ejemplo)
+        console.error("Error desconocido al obtener usuarios:", error);
+        setError("Error desconocido al obtener usuarios");
+      }
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     ObtenerUsuarios();
@@ -45,7 +78,7 @@ const ListarUsuarios = () => {
       estado === 1
         ? "Esta acción activará al usuario."
         : "Esta acción desactivará al usuario.";
-
+  
     const confirmacion = await Swal.fire({
       title: "¿Estás seguro?",
       text: textoConfirmacion,
@@ -54,25 +87,62 @@ const ListarUsuarios = () => {
       confirmButtonText: `Sí, ${accion}`,
       cancelButtonText: "Cancelar",
     });
-
+  
     if (confirmacion.isConfirmed) {
       try {
-        await axios.put(`${BASE_URL}/admin/cambiar-estado-usuario`, {
-          idUsuario,
-          isLocked: estado,
-        });
+        const response = await axios.put(
+          `${BASE_URL}/admin/cambiar-estado-usuario`,
+          {
+            idUsuario,
+            isLocked: estado,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+  
         Swal.fire(
           `${accion.charAt(0).toUpperCase() + accion.slice(1)}`,
           `El estado ha sido actualizado correctamente`,
           "success"
         );
-        ObtenerUsuarios(); // Refrescar
+        ObtenerUsuarios(); // Refrescar usuarios
       } catch (error) {
-        console.error(`Error al cambiar estado del usuario:`, error);
-        Swal.fire("Error", `No se pudo cambiar estado del usuario`, "error");
+        if (error.response) {
+          // Manejo de respuestas HTTP
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operación no autorizada",
+              showConfirmButton: false,
+            });
+            navigate("/login"); // Redirige al login si no está autorizado
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirige al login si la sesión ha expirado
+          } else {
+            console.error(`Error al cambiar estado del usuario:`, error);
+            Swal.fire("Error", `No se pudo cambiar estado del usuario`, "error");
+          }
+        } else {
+          // Error si no se recibe una respuesta (problemas de red, por ejemplo)
+          console.error("Error desconocido al cambiar estado del usuario:", error);
+          Swal.fire("Error", `No se pudo cambiar estado del usuario`, "error");
+        }
       }
     }
   };
+  
 
   if (loading) return <p>Cargando usuarios...</p>;
   if (error) return <p className="text-red-500">{error}</p>;

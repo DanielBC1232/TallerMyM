@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { Modal, Button } from "rsuite";
+import { useNavigate } from 'react-router-dom';
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const ModalAgregarUsuario = () => {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [formValue, setFormValue] = useState({
         username: "",
@@ -47,11 +49,15 @@ const ModalAgregarUsuario = () => {
         }
         const payload = { username, email, password };
         try {
-            console.log(payload);
             const response = await axios.post(// PETICION POST
                 `${BASE_URL}/admin/registrar-usuario`,
                 payload,
-                { headers: { "Content-Type": "application/json" } }
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
             );
 
             if (response.status === 200 || response.status === 201) {
@@ -71,10 +77,29 @@ const ModalAgregarUsuario = () => {
                     });
                     setOpen(false);
                 });
-                window.location.reload();
+                navigate(0);//recargar
             }
         } catch (error) {
-            if (error.response && error.response.status === 409) {
+            if (error.response.status === 401) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Advertencia",
+                    text: "Operacion no Autorizada",
+                    showConfirmButton: false,
+                });
+                navigate(0); //No autenticado
+            }
+            else if (error.response.status === 403) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Autenticación",
+                    text: "Sesión expirada",
+                    showConfirmButton: false,
+                });
+                localStorage.clear();
+                navigate("/login"); //No autenticado
+            }
+            else if (error.response && error.response.status === 409) {
                 Swal.fire({
                     icon: "warning",
                     title: "Advertencia",

@@ -45,9 +45,18 @@ const ModalAgregarOrden = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validarCampos()) return;
-
     try {
-      const res = await axios.post(`${BASE_URL}/flujo/agregar-orden/`, formData);
+      const res = await axios.post(
+        `${BASE_URL}/flujo/agregar-orden/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT aquí
+          }
+        }
+      );
+
       if (res.status === 201) {
         await Swal.fire({
           icon: "success",
@@ -77,12 +86,21 @@ const ModalAgregarOrden = () => {
       let message = "Error al agregar la orden";
       if (error.response) {
         const { status } = error.response;
-        if (status === 400) message = "Solicitud incorrecta, por favor verifique los datos ingresados";
-        else if (status === 404) message = "No se encontró el recurso solicitado";
-        else if (status === 500) message = "Error interno del servidor, por favor intente más tarde";
+        if (status === 401) {
+          message = "Operación no autorizada, por favor inicie sesión";
+        } else if (status === 403) {
+          message = "Sesión expirada, por favor inicie sesión nuevamente";
+        } else if (status === 400) {
+          message = "Solicitud incorrecta, por favor verifique los datos ingresados";
+        } else if (status === 404) {
+          message = "No se encontró el recurso solicitado";
+        } else if (status === 500) {
+          message = "Error interno del servidor, por favor intente más tarde";
+        }
       } else {
         message = "Error desconocido, por favor intente más tarde";
       }
+
       Swal.fire({
         icon: "error",
         title: message,
@@ -90,6 +108,7 @@ const ModalAgregarOrden = () => {
         timer: 1500,
       });
     }
+
   };
 
   const handleOpen = () => setOpen(true);

@@ -45,7 +45,10 @@ const ModalAgregarVehiculo = () => {
 
     try {
       const response = await axios.post(`${BASE_URL}/vehiculos/registrar`, formValue, {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el header
+        }
       });
 
       // Si la inserción es exitosa (HTTP 200 o 201)
@@ -57,16 +60,41 @@ const ModalAgregarVehiculo = () => {
           timer: 2000,
           timerProgressBar: true,
         });
-        window.location.reload();
+        window.location.reload(); // Recargar la página después del éxito
       }
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        Swal.fire("Error", "La placa del vehículo ya está registrada", "warning");
+      if (error.response) {
+        // Manejo de errores específicos de la respuesta HTTP
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operacion no Autorizada",
+            showConfirmButton: false,
+          });
+          navigate(0); // Redirigir al login si no está autorizado
+        } else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirigir al login si la sesión ha expirado
+        } else if (error.response.status === 409) {
+          Swal.fire("Error", "La placa del vehículo ya está registrada", "warning");
+        } else {
+          console.error(error);
+          Swal.fire("Error", "Hubo un error al registrar el Vehículo", "error");
+        }
       } else {
+        // Si no hay respuesta del servidor
         console.error(error);
         Swal.fire("Error", "Hubo un error al registrar el Vehículo", "error");
       }
     }
+
   };
 
   // Abre el modal

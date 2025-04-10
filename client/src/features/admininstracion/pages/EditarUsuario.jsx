@@ -20,22 +20,59 @@ const EditarUsuario = () => {
   useEffect(() => {
     const obtenerUsuario = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/admin/obtenerUsuario/${idUsuario}`);
+        const response = await axios.get(
+          `${BASE_URL}/admin/obtenerUsuario/${idUsuario}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+  
         setUsuario((prev) => ({
           ...prev,
           username: response.data.username,
           email: response.data.email,
-          idRol: response.data.idRol
+          idRol: response.data.idRol,
         }));
       } catch (error) {
         console.error("Error al obtener el usuario:", error);
-        Swal.fire("Error", "No se pudieron cargar los datos del usuario", "error");
+  
+        if (error.response) {
+          // Manejo de errores HTTP específicos
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operación no autorizada",
+              showConfirmButton: false,
+            });
+            navigate("/login"); // Redirige al login si no está autorizado
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirige al login si la sesión ha expirado
+          } else {
+            Swal.fire("Error", "No se pudieron cargar los datos del usuario", "error");
+          }
+        } else {
+          // Error si no se recibe respuesta (problemas de red, por ejemplo)
+          Swal.fire("Error", "No se pudieron cargar los datos del usuario", "error");
+        }
       }
     };
+  
     obtenerUsuario();
   }, [idUsuario]);
   
-  
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUsuario((prev) => ({ ...prev, [name]: value }));
@@ -71,7 +108,16 @@ const EditarUsuario = () => {
     };
 
     try {
-      await axios.put(`${BASE_URL}/admin/editar/${idUsuario}`, payload);
+      await axios.put(
+        `${BASE_URL}/admin/editar/${idUsuario}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
       Swal.fire({
         title: "Éxito",
         text: "Usuario actualizado correctamente",
@@ -80,14 +126,37 @@ const EditarUsuario = () => {
         timerProgressBar: true,
       }).then(() => navigate("/administracion"));
     } catch (error) {
-      console.error("Error al actualizar el usuario:", error);
-
-      if (error.response?.status === 409) {
-        Swal.fire("Error", "No puedes usar una contraseña antigua", "error");
+      if (error.response) {
+        // Manejo de errores HTTP específicos
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operación no autorizada",
+            showConfirmButton: false,
+          });
+          navigate("/login"); // Redirige al login si no está autorizado
+        } else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirige al login si la sesión ha expirado
+        } else if (error.response.status === 409) {
+          Swal.fire("Error", "No puedes usar una contraseña antigua", "error");
+        } else {
+          Swal.fire("Error", "No se pudo actualizar el usuario", "error");
+        }
       } else {
+        // Error si no se recibe respuesta (problemas de red, por ejemplo)
+        console.error("Error desconocido al actualizar el usuario:", error);
         Swal.fire("Error", "No se pudo actualizar el usuario", "error");
       }
     }
+
   };
 
   return (
@@ -122,8 +191,8 @@ const EditarUsuario = () => {
 
         <div className="mb-3">
           <label htmlFor="idRol" className="form-label">Rol:</label>
-          <select className="form-select" name="idRol" value={usuario.idRol} 
-            onChange={handleChange}> 
+          <select className="form-select" name="idRol" value={usuario.idRol}
+            onChange={handleChange}>
             <option value="2">Usuario</option>
             <option value="1">Administrador</option>
           </select>

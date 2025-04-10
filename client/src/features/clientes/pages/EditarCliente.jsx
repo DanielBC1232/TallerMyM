@@ -31,22 +31,50 @@ const EditarCliente = () => {
   useEffect(() => {
     const fetchCliente = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/clientes/${cedula}`);
+        const res = await fetch(`${BASE_URL}/clientes/${cedula}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Añadir JWT en los headers
+          },
+        });
+
         if (!res.ok) throw new Error("No se pudo obtener el cliente");
+
         const data = await res.json();
         setFormValue(data);
       } catch (err) {
         console.error(err);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No se pudo cargar la información del cliente"
-        });
+
+        // Manejo de errores HTTP
+        if (err.message.includes("401")) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operación no Autorizada",
+            showConfirmButton: false,
+          });
+          window.location.reload(); // Recarga la página si no está autorizado
+        } else if (err.message.includes("403")) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          window.location.href = "/login"; // Redirige al login si la sesión ha expirado
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se pudo cargar la información del cliente",
+          });
+        }
       }
     };
 
     fetchCliente();
   }, [cedula]);
+
 
   const handleSubmit = async () => {
     if (!formRef.current.check()) {
@@ -61,7 +89,10 @@ const EditarCliente = () => {
     try {
       const res = await fetch(`${BASE_URL}/clientes/editar/${cedula}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Añadir JWT en los headers
+        },
         body: JSON.stringify(formValue)
       });
 
@@ -72,6 +103,23 @@ const EditarCliente = () => {
             title: "Cédula duplicada",
             text: "Ya existe un cliente con esa cédula"
           });
+        } else if (res.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operación no autorizada",
+            showConfirmButton: false
+          });
+          window.location.reload(); // Recarga la página si no está autorizado
+        } else if (res.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Sesión expirada",
+            text: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
+            showConfirmButton: false
+          });
+          localStorage.clear();
+          window.location.href = "/login"; // Redirige al login si la sesión ha expirado
         } else {
           throw new Error("Error al actualizar");
         }
@@ -93,6 +141,7 @@ const EditarCliente = () => {
         text: "Hubo un error al actualizar el cliente"
       });
     }
+
   };
 
   return (

@@ -4,68 +4,69 @@ import * as SolicitudController from '../../controllers/trabajadores/SolicitudCo
 import * as AmonestacionController from '../../controllers/trabajadores/AmonestacionesController.js';
 import * as AusenciaController from '../../controllers/trabajadores/AusenciasController.js';
 import * as JustificacionController from '../../controllers/trabajadores/JustificacionesController.js';
+import authMiddleware from '../../middleware/authMiddleware.js';
 
 
 const router = express.Router();
 //TRABAJADORES
 // Rutas CRUD Trabajadores
-router.post("/agregar-trabajador/", trabajadorController.insertTrabajador);
-router.put("/actualizar-trabajador/", trabajadorController.updateTrabajador);
-router.delete("/eliminar-trabajador/:id", trabajadorController.deleteTrabajador);
+router.post("/agregar-trabajador/",authMiddleware, trabajadorController.insertTrabajador);
+router.put("/actualizar-trabajador/",authMiddleware, trabajadorController.updateTrabajador);
+router.delete("/eliminar-trabajador/:id",authMiddleware, trabajadorController.deleteTrabajador);
 //Rutas Obtener
-router.get("/obtener-trabajadores", trabajadorController.getTrabajadores);
-router.get("/obtener-trabajador/:id", trabajadorController.getTrabajadorById);
+router.get("/obtener-trabajadores",authMiddleware, trabajadorController.getTrabajadores);
+router.get("/obtener-trabajador/:id",authMiddleware, trabajadorController.getTrabajadorById);
 
 
 //TRABAJAORES-VACACIONES
 // Rutas CRUD Vacaciones
-router.post("/Solicitud-Vacaciones", SolicitudController.InsertSolicitudVacaciones);
-router.put("/Edit-Vacaciones/:idVacaciones", SolicitudController.UpdateSolicitudVacaciones);
-router.delete("/Elim-Vacaciones/:idVacaciones", SolicitudController.DeleteSolicitudVacaciones);
+router.post("/Solicitud-Vacaciones",authMiddleware, SolicitudController.InsertSolicitudVacaciones);
+router.put("/Edit-Vacaciones/:idVacaciones",authMiddleware, SolicitudController.UpdateSolicitudVacaciones);
+router.delete("/Elim-Vacaciones/:idVacaciones",authMiddleware, SolicitudController.DeleteSolicitudVacaciones);
 //Rutas Get
-router.get("/obteneTrabajadoresMenu", trabajadorController.obtenerTrabajadoresMenuDesplegable);
-router.get("/obtenerSolicitudVacaciones", SolicitudController.ObtenerVacacionesGest);
-router.get("/obtenerSolicitudVacacion/:idVacaciones", SolicitudController.ObtenerVacacionxID);
+router.get("/obteneTrabajadoresMenu",authMiddleware, trabajadorController.obtenerTrabajadoresMenuDesplegable);
+router.get("/obtenerSolicitudVacaciones",authMiddleware, SolicitudController.ObtenerVacacionesGest);
+router.get("/obtenerSolicitudVacacion/:idVacaciones",authMiddleware, SolicitudController.ObtenerVacacionxID);
 //aprobar y rechazar
-router.put("/Aprob-Vacaciones/:idVacaciones", SolicitudController.AprobarSolicitudVacaciones);
-router.put("/Rechazar-Vacaciones/:idVacaciones", SolicitudController.RechazarSolicitudVacaciones);
+router.put("/Aprob-Vacaciones/:idVacaciones",authMiddleware, SolicitudController.AprobarSolicitudVacaciones);
+router.put("/Rechazar-Vacaciones/:idVacaciones",authMiddleware, SolicitudController.RechazarSolicitudVacaciones);
 
 
 // AMONESATACIONES--
 // Operaciones CRUD
-router.post("/Insert-Amonestacion", AmonestacionController.InsertAmonestacion);
-router.put("/Edit-Amonestacion/:idAmonestacion", AmonestacionController.UpdateAmonestacion);
-router.delete("/Elim-Amonestacion/:idAmonestacion", AmonestacionController.DeleteAmonestacion);
+router.post("/Insert-Amonestacion",authMiddleware, AmonestacionController.InsertAmonestacion);
+router.put("/Edit-Amonestacion/:idAmonestacion",authMiddleware, AmonestacionController.UpdateAmonestacion);
+router.delete("/Elim-Amonestacion/:idAmonestacion",authMiddleware, AmonestacionController.DeleteAmonestacion);
 // Rutas Get
-router.get("/obtenerAmonestaciones", AmonestacionController.ObtenerAmonestaciones);
-router.get("/obtenerAmonestacion/:idAmonestacion", AmonestacionController.ObtenerAmonestacionxID);
+router.get("/obtenerAmonestaciones",authMiddleware, AmonestacionController.ObtenerAmonestaciones);
+router.get("/obtenerAmonestacion/:idAmonestacion",authMiddleware, AmonestacionController.ObtenerAmonestacionxID);
 
 
 // AUSENCIAS--
 // Operaciones CRUD
-router.post("/insert-ausencia", AusenciaController.insertAusencia);
-router.put("/update-ausencia/:idAusencia", AusenciaController.updateAusencia);
-router.delete("/delete-ausencia/:idAusencia", AusenciaController.deleteAusencia);
+router.post("/insert-ausencia",authMiddleware, AusenciaController.insertAusencia);
+router.put("/update-ausencia/:idAusencia",authMiddleware, AusenciaController.updateAusencia);
+router.delete("/delete-ausencia/:idAusencia",authMiddleware, AusenciaController.deleteAusencia);
 // Rutas Get
-router.get("/obtener-ausencias", AusenciaController.obtenerAusencias);
-router.get("/obtener-ausencia/:idAusencia", AusenciaController.obtenerAusenciaPorId);
-router.get("/obtener-ausencias-trabajador/:idTrabajador", AusenciaController.obtenerAusenciasPorTrabajador);
+router.get("/obtener-ausencias",authMiddleware, AusenciaController.obtenerAusencias);
+router.get("/obtener-ausencia/:idAusencia",authMiddleware, AusenciaController.obtenerAusenciaPorId);
+router.get("/obtener-ausencias-trabajador/:idTrabajador",authMiddleware, AusenciaController.obtenerAusenciasPorTrabajador);
 
 
 // JUSTIFICACIONES
 // Operaciones CRUD
-router.post("/insert-justificacion", JustificacionController.insertJustificacion);
-router.put("/update-justificacion/:idJustificacion", JustificacionController.updateJustificacion);
-router.delete("/delete-justificacion/:idJustificacion", JustificacionController.deleteJustificacion);
+router.post("/insert-justificacion",authMiddleware, JustificacionController.insertJustificacion);
+router.put("/update-justificacion/:idJustificacion",authMiddleware, JustificacionController.updateJustificacion);
+router.delete("/delete-justificacion/:idJustificacion",authMiddleware, JustificacionController.deleteJustificacion);
 // Rutas Get
-router.get("/obtener-justificaciones", JustificacionController.obtenerJustificaciones);
-router.get("/obtener-justificacion/:idJustificacion", JustificacionController.obtenerJustificacionPorId);
-router.get("/obtener-justificacion-ausencia/:idAusencia", JustificacionController.obtenerJustificacionPorAusencia);
+router.get("/obtener-justificaciones",authMiddleware, JustificacionController.obtenerJustificaciones);
+router.get("/obtener-justificacion/:idJustificacion",authMiddleware, JustificacionController.obtenerJustificacionPorId);
+router.get("/obtener-justificacion-ausencia/:idAusencia",authMiddleware, JustificacionController.obtenerJustificacionPorAusencia);
 
 
 //REPORTES--
 //Reporte de trabajadores mas eficientes
-router.get("/trabajadores-eficientes", trabajadorController.getTrabajadoresEficientes);
+router.get("/trabajadores-eficientes",authMiddleware, trabajadorController.getTrabajadoresEficientes);
 
 // Exporta el router usando Module ES
 export default router;

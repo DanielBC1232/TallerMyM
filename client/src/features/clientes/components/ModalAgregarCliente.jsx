@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { Modal, Button, Grid, Row, Col } from "rsuite";
 import axios from "axios";
+import { Link, useNavigate } from 'react-router-dom';
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const ModalAgregarCliente = () => {
+  const navigate = useNavigate();
+
   const [open, setOpen] = useState(false);
   const [formValue, setFormValue] = useState({
     nombre: "",
@@ -39,10 +42,17 @@ const ModalAgregarCliente = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post(`${BASE_URL}/clientes/registrar`, formValue, {
-        headers: { "Content-Type": "application/json" },
-      });
-
+      const response = await axios.post(
+        `${BASE_URL}/clientes/registrar`,
+        formValue,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Añadir JWT en el header
+          },
+        }
+      );
+    
       // Si la inserción es exitosa (HTTP 200 o 201)
       if (response.status === 200 || response.status === 201) {
         Swal.fire({
@@ -55,15 +65,39 @@ const ModalAgregarCliente = () => {
         window.location.reload();
       }
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        // Si el error es 409, es porque la cédula ya existe
-        Swal.fire("Advertencia", "La cédula ya está registrada", "warning");
+      if (error.response) {
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operación no Autorizada",
+            showConfirmButton: false,
+          });
+          window.location.reload(); // Recarga la página si no está autorizado
+        } else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          window.location.href = "/login"; // Redirige al login si la sesión ha expirado
+        } else if (error.response.status === 409) {
+          // Si el error es 409, es porque la cédula ya está registrada
+          Swal.fire("Advertencia", "La cédula ya está registrada", "warning");
+        } else {
+          // En caso de otros errores
+          console.error(error);
+          Swal.fire("Error", "Hubo un error al registrar el Cliente", "error");
+        }
       } else {
-        // En caso de otros errores
+        // En caso de no recibir respuesta (error de red, etc.)
         console.error(error);
-        Swal.fire("Error", "Hubo un error al registrar el Cliente", "error");
+        Swal.fire("Error", "Hubo un problema con la conexión", "error");
       }
     }
+    
   };
 
   // Abre el modal

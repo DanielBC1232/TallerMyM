@@ -20,7 +20,14 @@ const EditarCotizacion = () => {
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const respuesta = await axios.get(`${BASE_URL}/cotizacion/obtener-cotizacion/${idCotizacion}`);
+        const respuesta = await axios.get(
+          `${BASE_URL}/cotizacion/obtener-cotizacion/${idCotizacion}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`, // Agregar JWT al header
+            }
+          }
+        );
         const data = respuesta.data;
         setFormData({
           montoTotal: data.montoTotal,
@@ -28,16 +35,43 @@ const EditarCotizacion = () => {
           tiempoEstimado: data.tiempoEstimado,
           detalles: data.detalles,
         });
-      } catch {
-        Swal.fire({
-          text: "Error al obtener la cotización",
-          icon: "error",
-          showConfirmButton: false,
-        });
+      } catch (error) {
+        if (error.response) {
+          // Manejo de errores según el código de estado
+          if (error.response.status === 401) {
+            Swal.fire({
+              text: "Operación no Autorizada",
+              icon: "warning",
+              showConfirmButton: false,
+            });
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              text: "Sesión expirada. Inicie sesión nuevamente.",
+              icon: "warning",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirigir a login si la sesión ha expirado
+          } else {
+            Swal.fire({
+              text: "Error al obtener la cotización",
+              icon: "error",
+              showConfirmButton: false,
+            });
+          }
+        } else {
+          // Manejo de errores de red
+          Swal.fire({
+            text: "Hubo un error al realizar la solicitud. Intente nuevamente.",
+            icon: "error",
+            showConfirmButton: false,
+          });
+        }
       }
     };
     obtenerDatos();
   }, [idCotizacion]);
+
 
   const handleChange = ({ target: { name, value } }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -68,24 +102,59 @@ const EditarCotizacion = () => {
     if (!verificacion()) return;
 
     try {
-      await axios.put(`${BASE_URL}/cotizacion/actualizar-cotizacion/`, {
-        idCotizacion,
-        ...formData,
-      });
+      await axios.put(
+        `${BASE_URL}/cotizacion/actualizar-cotizacion/`,
+        {
+          idCotizacion,
+          ...formData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Agregar JWT al header
+          }
+        }
+      );
       Swal.fire({
         icon: "success",
         title: "Cotización actualizada correctamente",
         showConfirmButton: false,
         timer: 1500,
-      })
-      navigate("/cotizacion");
-    } catch {
-      Swal.fire({
-        text: "Error al actualizar cotización",
-        icon: "error",
-        showConfirmButton: false,
       });
+      navigate("/cotizacion");
+    } catch (error) {
+      if (error.response) {
+        // Manejo de errores según el código de estado
+        if (error.response.status === 401) {
+          Swal.fire({
+            text: "Operación no Autorizada",
+            icon: "warning",
+            showConfirmButton: false,
+          });
+        } else if (error.response.status === 403) {
+          Swal.fire({
+            text: "Sesión expirada. Inicie sesión nuevamente.",
+            icon: "warning",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirigir a login si la sesión ha expirado
+        } else {
+          Swal.fire({
+            text: "Error al actualizar cotización",
+            icon: "error",
+            showConfirmButton: false,
+          });
+        }
+      } else {
+        // Manejo de errores de red
+        Swal.fire({
+          text: "Hubo un error al realizar la solicitud. Intente nuevamente.",
+          icon: "error",
+          showConfirmButton: false,
+        });
+      }
     }
+
   };
 
   return (

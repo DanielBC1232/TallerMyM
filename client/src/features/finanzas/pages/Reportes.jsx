@@ -2,38 +2,92 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Stat, StatGroup, HStack } from "rsuite";
 import Swal from "sweetalert2";
+import { Link, useNavigate } from 'react-router-dom';
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const Reportes = () => {
     const [clientes, setClientes] = useState([]);
     const [mecanicos, setMecanicos] = useState(null);
+    const navigate = useNavigate();
+
     useEffect(() => {
         const getClientesInactivos = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/clientes/obtener-clientes-inactivos`);
+                const response = await axios.get(
+                    `${BASE_URL}/clientes/obtener-clientes-inactivos`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}` // Añadir el JWT al header
+                        }
+                    }
+                );
                 setClientes(response.data);
             } catch (error) {
-                console.error("Error al obtener datos:", error);
+                if (error.response) {
+                    // Manejo de respuestas HTTP
+                    if (error.response.status === 401) {
+                        swal.fire("Advertencia", "Operacion no Autorizada", "warning");
+                        navigate(0); // Redirigir a login si no está autorizado
+                    }
+                    else if (error.response.status === 403) {
+                        swal.fire("Autenticación", "Sesión expirada", "warning");
+                        localStorage.clear();
+                        navigate("/login"); // Redirigir a login si la sesión ha expirado
+                    } else {
+                        console.error("Error al obtener clientes inactivos:", error);
+                    }
+                } else {
+                    console.error("Error desconocido al obtener clientes inactivos:", error);
+                }
             }
         };
-        getClientesInactivos();
 
         const getMecanicosEficientes = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/trabajadores/trabajadores-eficientes`);
+                const response = await axios.get(
+                    `${BASE_URL}/trabajadores/trabajadores-eficientes`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}` // Añadir el JWT al header
+                        }
+                    }
+                );
                 setMecanicos(response.data);
             } catch (error) {
-                console.error("Error al obtener datos:", error);
+                if (error.response) {
+                    // Manejo de respuestas HTTP
+                    if (error.response.status === 401) {
+                        swal.fire("Advertencia", "Operacion no Autorizada", "warning");
+                        navigate(0); // Redirigir a login si no está autorizado
+                    }
+                    else if (error.response.status === 403) {
+                        swal.fire("Autenticación", "Sesión expirada", "warning");
+                        localStorage.clear();
+                        navigate("/login"); // Redirigir a login si la sesión ha expirado
+                    } else {
+                        console.error("Error al obtener mecánicos eficientes:", error);
+                    }
+                } else {
+                    console.error("Error desconocido al obtener mecánicos eficientes:", error);
+                }
             }
         };
-        getMecanicosEficientes();
 
+        getClientesInactivos();
+        getMecanicosEficientes();
     }, []);
+
 
     const descargarReporteClientes = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/reportes/reporte-clientes-inactivos`, { responseType: 'blob' });
+            const response = await axios.get(`${BASE_URL}/reportes/reporte-clientes-inactivos`,
+                {
+                    responseType: 'blob',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar JWT en los headers
+                    }
+                });
 
             if (response.status === 200 || response.status === 201) {
                 await Swal.fire({
@@ -74,17 +128,45 @@ export const Reportes = () => {
             }
 
         } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Error al descargar la reporte",
-                text: "No se pudo generar el archivo XLSX.",
-            });
+            if (error.response) {
+                // Manejo de respuestas HTTP
+                if (error.response.status === 401) {
+                    Swal.fire("Advertencia", "Operacion no Autorizada", "warning");
+                    navigate(0); // Redirigir a login si no está autorizado
+                }
+                else if (error.response.status === 403) {
+                    Swal.fire("Autenticación", "Sesión expirada", "warning");
+                    localStorage.clear();
+                    navigate("/login"); // Redirigir a login si la sesión ha expirado
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error al descargar el reporte",
+                        text: "No se pudo generar el archivo XLSX.",
+                    });
+                }
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error al descargar el reporte",
+                    text: "No se pudo generar el archivo XLSX.",
+                });
+            }
         }
+
     }
 
     const descargarReporteTrabajadores = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/reportes/reporte-trabajadores-eficientes`, { responseType: 'blob' });
+            const response = await axios.get(
+                `${BASE_URL}/reportes/reporte-trabajadores-eficientes`,
+                {
+                    responseType: 'blob',
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}` // Se agrega el token JWT
+                    }
+                }
+            );
 
             if (response.status === 200 || response.status === 201) {
                 await Swal.fire({
@@ -125,11 +207,39 @@ export const Reportes = () => {
             }
 
         } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Error al descargar la reporte",
-                text: "No se pudo generar el archivo XLSX.",
-            });
+            if (error.response) {
+                if (error.response.status === 401) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Advertencia",
+                        text: "Operacion no Autorizada",
+                        showConfirmButton: false,
+                    });
+                    navigate(0); // Redirigir si no autorizado
+                } else if (error.response.status === 403) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Autenticación",
+                        text: "Sesión expirada",
+                        showConfirmButton: false,
+                    });
+                    localStorage.clear();
+                    navigate("/login"); // Redirigir si la sesión ha expirado
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error al descargar el reporte",
+                        text: "No se pudo generar el archivo XLSX.",
+                    });
+                }
+            } else {
+                // En caso de un error de red o no se recibe respuesta
+                Swal.fire({
+                    icon: "error",
+                    title: "Error desconocido",
+                    text: "Hubo un error al intentar obtener el reporte.",
+                });
+            }
         }
     }
 

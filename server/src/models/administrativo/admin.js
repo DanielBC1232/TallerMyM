@@ -1,6 +1,8 @@
 import sql from 'mssql';
 import { connectDB } from '../../config/database.js';
 import crypto from "crypto";
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../../services/jwtUtils.js';
 
 export class Usuario {
   constructor(username, email, password, idRol) {
@@ -27,7 +29,7 @@ export class UsuarioRepository {
 
   async iniciarSesion(email, password) {
     const pool = await connectDB();
-
+  
     const result = await pool
       .request()
       .input("email", sql.NVarChar, email)
@@ -37,18 +39,25 @@ export class UsuarioRepository {
         FROM USUARIO 
         WHERE email = @email
       `);
+    
     const usuario = result.recordset[0];
+    
     if (!usuario) {
       return { statusCode: 401, message: "Credenciales no validas" };
     }
-
+  
+    // Si la cuenta está bloqueada
     if (usuario.isLocked === true) {
       return { statusCode: 423, message: "La cuenta esta bloqueada" };
     }
-
+  
+    // Compara la contraseña proporcionada con la almacenada (encriptada)
     const hashInput = await this.sha1Hash(password);
-
-    if (hashInput === usuario.password && usuario.isLocked === false) {
+  
+    if (hashInput === usuario.password) {
+      // Si las credenciales son correctas y la cuenta no está bloqueada
+  
+      // Actualizamos la fecha de último login y reestablecemos los intentos fallidos
       await pool
         .request()
         .input("idUsuario", sql.Int, usuario.idUsuario)
@@ -58,12 +67,27 @@ export class UsuarioRepository {
               failedLoginAttempts = 5
           WHERE idUsuario = @idUsuario
         `);
-      const { idUsuario, username, email, idRol, isLocked } = usuario;
-      return {//return sin contrasena
+  
+      // Creamos el token JWT
+      const { idUsuario, username, email, idRol } = usuario;
+      const token = jwt.sign(
+        { idUsuario, username, email, idRol },
+        JWT_SECRET,
+        { expiresIn: "1h" } // El token expira en 1 hora
+      );
+  
+      return {
         statusCode: 200,
-        data: { idUsuario, username, email, idRol, isLocked }
+        data: { 
+          idUsuario, 
+          username, 
+          email, 
+          idRol, 
+          token  //JWT generado
+        }
       };
     } else {
+      // Si las credenciales son incorrectas, actualizamos los intentos fallidos
       if (usuario.idRol === 2) {
         await pool
           .request()

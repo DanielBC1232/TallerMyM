@@ -5,31 +5,72 @@ import '../styles/Notificaciones.css';
 import { MdDeleteSweep } from "react-icons/md";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { Link, useNavigate } from 'react-router-dom';
 
 //URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Notificaciones = ({ modulo }) => {
     const [notificaciones, setNotificaciones] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const obtenerNotificaciones = async () => {
             try {
-                const { data } = await axios.post(`${BASE_URL}/notificaciones/obtener-notificaciones/`, { modulo });
-                const listaDatos = data.map(noti => ({
+                const { data } = await axios.post(
+                    `${BASE_URL}/notificaciones/obtener-notificaciones/`,
+                    { modulo },
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    }
+                );
+
+                const listaDatos = data.map((noti) => ({
                     idNotificacion: noti.idNotificacion,
                     titulo: noti.titulo,
                     cuerpo: noti.cuerpo,
                     fecha: noti.fecha.split('T')[0],
-                    tipo: noti.tipo
+                    tipo: noti.tipo,
                 }));
                 setNotificaciones(listaDatos);
             } catch (error) {
                 console.error("Error al obtener notificaciones:", error);
+
+                if (error.response) {
+                    // Manejo de errores HTTP específicos
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Advertencia",
+                            text: "Operación no autorizada",
+                            showConfirmButton: false,
+                        });
+                        navigate("/login"); // Redirige al login si no está autorizado
+                    } else if (error.response.status === 403) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Autenticación",
+                            text: "Sesión expirada",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirige al login si la sesión ha expirado
+                    } else {
+                        Swal.fire("Error", "Hubo un problema al obtener las notificaciones", "error");
+                    }
+                } else {
+                    // Error si no se recibe respuesta (problemas de red, por ejemplo)
+                    Swal.fire("Error", "Hubo un problema al obtener las notificaciones", "error");
+                }
             }
-        }
+        };
+
         obtenerNotificaciones();
     }, [modulo]);
+
 
     const [open, setOpen] = React.useState(false);
 
@@ -45,19 +86,54 @@ const Notificaciones = ({ modulo }) => {
         });
 
         if (result.isConfirmed) {
-            axios.delete(`${BASE_URL}/notificaciones/eliminar-notificacion/${idNotificacion}`)
-                .then(() => {
-                    window.location.reload(); // Recargar la página después de eliminar
-                })
-                .catch((error) => {
+            try {
+                await axios.delete(`${BASE_URL}/notificaciones/eliminar-notificacion/${idNotificacion}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                    }
+                });
+                window.location.reload(); // Recargar la página después de eliminar
+            } catch (error) {
+                console.error("Error al eliminar notificación:", error);
+
+                if (error.response) {
+                    // Manejo de errores HTTP específicos
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Advertencia",
+                            text: "Operación no autorizada",
+                            showConfirmButton: false,
+                        });
+                        navigate("/login"); // Redirige al login si no está autorizado
+                    } else if (error.response.status === 403) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Autenticación",
+                            text: "Sesión expirada",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirige al login si la sesión ha expirado
+                    } else {
+                        Swal.fire({
+                            title: "Error",
+                            text: "No se pudo eliminar la notificación",
+                            icon: "error",
+                            showCancelButton: false,
+                        });
+                    }
+                } else {
+                    // Error si no se recibe respuesta (problemas de red, por ejemplo)
                     Swal.fire({
                         title: "Error",
-                        text: "Error al eliminar la notificación",
+                        text: "Hubo un problema al eliminar la notificación",
                         icon: "error",
                         showCancelButton: false,
                     });
-                    console.error("Error al eliminar notificación:", error);
-                });
+                }
+            }
         }
     };
 
@@ -83,7 +159,7 @@ const Notificaciones = ({ modulo }) => {
                     <Drawer.Header className="px-5 bg-primary">
                         <Drawer.Title className="text-white">Notificaciones ({notificaciones.length})</Drawer.Title>
                     </Drawer.Header>
-                    <Drawer.Body className="p-4" style={{background: "#EEE"}}>
+                    <Drawer.Body className="p-4" style={{ background: "#EEE" }}>
                         <Stack spacing={10} direction="column" alignItems="flex-start" className="row ms-1 me-1">
                             {notificaciones.length > 0 ? (
                                 notificaciones.map(noti => (

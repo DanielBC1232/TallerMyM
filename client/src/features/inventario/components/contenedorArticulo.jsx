@@ -1,26 +1,61 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { Image } from "rsuite";
+import { Link, useNavigate } from 'react-router-dom';
 
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 //constante de Productos
-const ContenedorProductos = ({formData}) => {
-
+const ContenedorProductos = ({ formData }) => {
+  const navigate = useNavigate();
   const [listado, setLista] = useState([]);
 
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 500));//delay para evitar consumo innecesario
-        const { data } = await axios.post(`${BASE_URL}/productos`,formData);
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Delay para evitar consumo innecesario
+        const { data } = await axios.post(
+          `${BASE_URL}/productos`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT
+            }
+          }
+        );
 
         setLista(data);
       } catch (error) {
-        console.error("Error obteniendo las categorías:", error);
+        if (error.response) {
+          // Manejo de respuestas HTTP
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirige a la página de login si no está autorizado
+          }
+          else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirige a login si la sesión ha expirado
+          } else {
+            console.error("Error obteniendo las categorías:", error);
+          }
+        } else {
+          console.error("Error desconocido", error);
+        }
       }
+
     };
 
     if (formData) {
@@ -28,8 +63,8 @@ const ContenedorProductos = ({formData}) => {
     }
   }, [formData]);
 
-   //url get imagen para las previsualizaciones
-   const getImg = (img) => img ? `${BASE_URL}/img/${img}` : "/noResult.png";
+  //url get imagen para las previsualizaciones
+  const getImg = (img) => img ? `${BASE_URL}/img/${img}` : "/noResult.png";
 
 
   return (

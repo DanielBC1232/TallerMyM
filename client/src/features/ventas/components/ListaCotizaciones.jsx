@@ -15,14 +15,48 @@ const ListaCotizaciones = () => {
     useEffect(() => {
         const getCotizaciones = async () => {
             try {
-                const { data } = await axios.get(`${BASE_URL}/cotizacion/obtener-cotizaciones/`);
+                const { data } = await axios.get(
+                    `${BASE_URL}/cotizacion/obtener-cotizaciones/`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`, // Agregar JWT al header
+                        }
+                    }
+                );
                 setDatos(data);
             } catch (error) {
-                console.error("Error al obtener cotizaciones:", error);
+                if (error.response) {
+                    // Manejo de errores según el código de estado
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            text: "Operación no Autorizada",
+                            icon: "warning",
+                            showConfirmButton: false,
+                        });
+                    } else if (error.response.status === 403) {
+                        Swal.fire({
+                            text: "Sesión expirada. Inicie sesión nuevamente.",
+                            icon: "warning",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirigir a login si la sesión ha expirado
+                    } else {
+                        console.error("Error al obtener cotizaciones:", error);
+                    }
+                } else {
+                    Swal.fire({
+                        text: "Hubo un error al realizar la solicitud. Intente nuevamente.",
+                        icon: "error",
+                        showConfirmButton: false,
+                    });
+                }
             }
         };
+
         getCotizaciones();
     }, []);
+
 
     function deleteCotizacion(id) {
         Swal.fire({
@@ -33,9 +67,12 @@ const ListaCotizaciones = () => {
             confirmButtonText: "Eliminar",
             cancelButtonText: "Cancelar",
         }).then((result) => {
-            if (result.isConfirmed) {// al confirmar
-
-                axios.delete(`${BASE_URL}/cotizacion/eliminar-cotizacion/${id}`)
+            if (result.isConfirmed) { // al confirmar
+                axios.delete(`${BASE_URL}/cotizacion/eliminar-cotizacion/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`, // Incluir el token JWT en los headers
+                    },
+                })
                     .then((res) => {
                         console.log(res);
 
@@ -46,7 +83,7 @@ const ListaCotizaciones = () => {
                                 showConfirmButton: false,
                                 timer: 1500,
                             }).then(() => {
-                                window.location.reload();//recargar pagina
+                                window.location.reload(); // recargar página
                             });
                         } else {
                             Swal.fire({
@@ -57,26 +94,58 @@ const ListaCotizaciones = () => {
                             });
                         }
                     })
-                    .catch(() => {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "No se pudo eliminar la cotizacion",
-                            showConfirmButton: true,
-                        });
+                    .catch((error) => {
+                        if (error.response) {
+                            // Manejo de errores según el código de estado
+                            if (error.response.status === 401) {
+                                Swal.fire({
+                                    text: "Operación no Autorizada",
+                                    icon: "warning",
+                                    showConfirmButton: false,
+                                });
+                            } else if (error.response.status === 403) {
+                                Swal.fire({
+                                    text: "Sesión expirada. Inicie sesión nuevamente.",
+                                    icon: "warning",
+                                    showConfirmButton: false,
+                                });
+                                localStorage.clear();
+                                navigate("/login"); // Redirigir a login si la sesión ha expirado
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error al eliminar la cotización",
+                                    text: "No se pudo completar la solicitud.",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                });
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error de conexión",
+                                text: "Hubo un error al conectar con el servidor.",
+                                showConfirmButton: true,
+                            });
+                        }
                     });
             }
+
         });
     }
 
     const descargarCotizacion = async (id) => {
         //console.log(id);
         try {
-
             const response = await axios.post(
                 `${BASE_URL}/reportes/descargar-cotizacion/${id}`,
                 null,
-                { responseType: 'blob' }
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`, // Incluir el token JWT en los headers
+                    },
+                    responseType: 'blob',
+                }
             );
 
             if (response.status === 200 || response.status === 201) {
@@ -118,12 +187,38 @@ const ListaCotizaciones = () => {
             }
 
         } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Error al descargar la cotizacion",
-                text: "No se pudo generar el archivo XLSX.",
-            });
+            if (error.response) {
+                // Manejo de errores según el código de estado
+                if (error.response.status === 401) {
+                    Swal.fire({
+                        text: "Operación no Autorizada",
+                        icon: "warning",
+                        showConfirmButton: false,
+                    });
+                } else if (error.response.status === 403) {
+                    Swal.fire({
+                        text: "Sesión expirada. Inicie sesión nuevamente.",
+                        icon: "warning",
+                        showConfirmButton: false,
+                    });
+                    localStorage.clear();
+                    navigate("/login"); // Redirigir a login si la sesión ha expirado
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error al descargar la cotización",
+                        text: "No se pudo generar el archivo XLSX.",
+                    });
+                }
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error de conexión",
+                    text: "Hubo un error al conectar con el servidor.",
+                });
+            }
         }
+
     }
     return (
         <div className="p-5">

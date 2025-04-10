@@ -28,12 +28,52 @@ const ListadoVentas = () => {
     useEffect(() => {
         const getOrdenes = async () => {
             try {
-                const { data } = await axios.post(`${BASE_URL}/ventas/obtener-ventas`, filtroData);
+                const { data } = await axios.post(`${BASE_URL}/ventas/obtener-ventas`, filtroData, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en las cabeceras
+                    }
+                });
                 setDatos(data);
                 //console.log(data);
-
             } catch (error) {
-                console.error("Error al obtener Ordenes:", error);
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Advertencia",
+                            text: "Operación no Autorizada",
+                            showConfirmButton: false,
+                        });
+                        navigate("/login"); // Redirigir al login si el token es inválido o no hay sesión activa
+                    } else if (error.response.status === 403) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Autenticación",
+                            text: "Sesión expirada",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirigir al login si la sesión ha expirado
+                    } else {
+                        console.error("Error al obtener ordenes", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Hubo un error al obtener las órdenes",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                    }
+                } else {
+                    console.error("Error de conexión", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error de conexión",
+                        text: "No se pudo conectar al servidor",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    });
+                }
             }
         };
         getOrdenes();
@@ -41,7 +81,6 @@ const ListadoVentas = () => {
 
     return (
         <div>
-
             <div className="d-flex gap-4 ms-4">
                 <span>
                     Orden:

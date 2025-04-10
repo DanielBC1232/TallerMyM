@@ -1,23 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactApexChart from 'react-apexcharts';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const IngresosChart = () => {
     const [ingresos, setIngresos] = useState([]);
     const [gastos, setGastos] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getDatos = async () => {
             try {
-                const ingresosRes = await axios.get(`${BASE_URL}/finanzas/obtener-ganancias-mes/`);
-                const gastosRes = await axios.get(`${BASE_URL}/finanzas/obtener-gastos-mes/`);
+                const ingresosRes = await axios.get(`${BASE_URL}/finanzas/obtener-ganancias-mes/`, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}` // Se agrega el token JWT
+                    }
+                });
+
+                const gastosRes = await axios.get(`${BASE_URL}/finanzas/obtener-gastos-mes/`, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}` // Se agrega el token JWT
+                    }
+                });
+
                 setIngresos(ingresosRes.data);
                 setGastos(gastosRes.data);
+
             } catch (error) {
-                console.error("Error al obtener datos:", error);
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Advertencia",
+                            text: "Operacion no Autorizada",
+                            showConfirmButton: false,
+                        });
+                        navigate(0); // Redirigir si no autorizado
+                    } else if (error.response.status === 403) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Autenticación",
+                            text: "Sesión expirada",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirigir si la sesión ha expirado
+                    } else {
+                        console.error("Error al obtener datos:", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Hubo un error al obtener los datos.",
+                            showConfirmButton: false,
+                        });
+                    }
+                } else {
+                    console.error("Error al obtener datos:", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error desconocido",
+                        text: "Hubo un error de red o de conexión.",
+                    });
+                }
             }
+
         };
         getDatos();
     }, []);

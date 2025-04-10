@@ -37,18 +37,49 @@ const Editar = () => {
   useEffect(() => {
     const cargarDatos = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/productos/${idProducto}`);
-        const fechaFormateada = res.data.fechaIngreso.split("T")[0]; //formateo de fecha 
-        setFormData({ ...res.data, fechaIngreso: fechaFormateada });//toma los datos de BD y los percarga en inputs
+        const res = await axios.get(`${BASE_URL}/productos/${idProducto}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Agregar el token JWT en el header
+          },
+        });
+        const fechaFormateada = res.data.fechaIngreso.split("T")[0]; // Formateo de fecha
+        setFormData({ ...res.data, fechaIngreso: fechaFormateada }); // Carga los datos en el formulario
 
-        //console.log(res.data);
       } catch (error) {
         console.error("Error al obtener el producto:", error.message);
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirigir si no autorizado
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirigir si sesión expirada
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Hubo un error al obtener el producto",
+              showConfirmButton: false,
+            });
+          }
+        }
       }
     };
 
     cargarDatos();
   }, [idProducto]);
+
 
   const errorNotification = (message) => {
     Swal.fire({
@@ -277,20 +308,60 @@ const Editar = () => {
 
     if (verificacion()) {
       axios
-        .put(`${BASE_URL}/productos/actualizar-producto/`, formData)
+        .put(
+          `${BASE_URL}/productos/actualizar-producto/`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`, // Añadir el token JWT en el header
+            },
+          }
+        )
         .then((res) => {
-
           Swal.fire({
             icon: "success",
             title: "Producto editado correctamente",
             showConfirmButton: false,
             timer: 1000,
           }).then(() => {
+            // Aquí podrías agregar alguna lógica si es necesario después del éxito
           });
-        }).finally(
-          navigate(`/inventario-detalles/${idProducto}`)
-        )
+        })
+        .catch((error) => {
+          console.error("Error al actualizar el producto:", error.message);
+          if (error.response) {
+            if (error.response.status === 401) {
+              Swal.fire({
+                icon: "warning",
+                title: "Advertencia",
+                text: "Operacion no Autorizada",
+                showConfirmButton: false,
+              });
+              navigate(0); // Redirigir si no autorizado
+            } else if (error.response.status === 403) {
+              Swal.fire({
+                icon: "warning",
+                title: "Autenticación",
+                text: "Sesión expirada",
+                showConfirmButton: false,
+              });
+              localStorage.clear();
+              navigate("/login"); // Redirigir si sesión expirada
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Hubo un error al editar el producto",
+                showConfirmButton: false,
+              });
+            }
+          }
+        })
+        .finally(() => {
+          navigate(`/inventario-detalles/${idProducto}`); // Redirigir al detalle del producto después de la operación
+        });
     }
+
   };
 
   return (

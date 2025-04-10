@@ -15,16 +15,49 @@ const IndexClientes = () => {
 
   const obtenerClientes = async () => {
     try {
-      const { data } = await axios.get(`${BASE_URL}/clientes/obtener-clientes`);
+      const { data } = await axios.get(
+        `${BASE_URL}/clientes/obtener-clientes`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Añadir JWT en el header
+          },
+        }
+      );
       setClientes(data);
       setError("");
     } catch (error) {
-      console.error("Error al obtener clientes:", error);
-      setError("Error al obtener clientes");
+      if (error.response) {
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operación no Autorizada",
+            showConfirmButton: false,
+          });
+          window.location.reload(); // Recarga la página si no está autorizado
+        } else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          window.location.href = "/login"; // Redirige al login si la sesión ha expirado
+        } else {
+          console.error("Error al obtener clientes:", error);
+          setError("Error al obtener clientes");
+        }
+      } else {
+        // En caso de no recibir respuesta (error de red, etc.)
+        console.error("Error de conexión:", error);
+        setError("Error al obtener clientes");
+      }
     } finally {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     obtenerClientes();
@@ -54,24 +87,59 @@ const IndexClientes = () => {
     });
     if (confirmResult.isConfirmed) {
       try {
-        await axios.delete(`${BASE_URL}/clientes/eliminar/${cedula}`);
+        // Realizar la eliminación con JWT en el header
+        await axios.delete(`${BASE_URL}/clientes/eliminar/${cedula}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Añadir JWT en los headers
+          }
+        });
+
         Swal.fire({
           icon: "success",
           title: "Cliente eliminado exitosamente",
           showConfirmButton: false,
           timer: 1500,
         });
-        // Se actualiza la lista. Ademas, se navega a la ruta base de clientes
+
+        // Actualizar la lista de clientes
         obtenerClientes();
         navigate("/clientes");
       } catch (error) {
         console.error("Error al eliminar cliente:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No se pudo eliminar el cliente.",
-        });
+
+        // Manejo de errores según el código de respuesta
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Operación no autorizada",
+              text: "No tienes permisos para realizar esta operación.",
+            });
+            window.location.reload(); // Recargar si la autorización es inválida
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Sesión expirada",
+              text: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
+            });
+            localStorage.clear();
+            window.location.href = "/login"; // Redirigir al login si la sesión ha expirado
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "No se pudo eliminar el cliente.",
+            });
+          }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error desconocido",
+            text: "Hubo un error desconocido al eliminar el cliente.",
+          });
+        }
       }
+
     }
   };
 

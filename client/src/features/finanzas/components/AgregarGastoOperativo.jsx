@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import swal from "sweetalert2";
 import SelectProveedor from "../../inventario/components/SelectProveedor";
 import axios from "axios";
+import { Link, useNavigate } from 'react-router-dom';
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const AgregarGastoOperativo = () => {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         tipoGasto: "",
         detalle: "",
@@ -54,7 +57,17 @@ const AgregarGastoOperativo = () => {
         }
 
         try {
-            const response = await axios.post(`${BASE_URL}/finanzas/agregar-gasto-operativo/`, formData);
+            const response = await axios.post(
+                `${BASE_URL}/finanzas/agregar-gasto-operativo/`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem('token')}` // Añadido el token JWT al header
+                    }
+                }
+            );
+
             if (response.status === 201) {
                 swal.fire("Éxito", "Gasto operativo registrado correctamente", "success");
                 // Reiniciar el formulario a su estado inicial
@@ -64,11 +77,30 @@ const AgregarGastoOperativo = () => {
                     monto: 0,
                     proveedor: ""
                 });
+                navigate(0)
             }
         } catch (error) {
-            console.error("Error al registrar el gasto:", error);
-            swal.fire("Error", "Hubo un problema al registrar el gasto operativo", "error");
+            if (error.response) {
+                // Manejo de respuestas HTTP
+                if (error.response.status === 401) {
+                    swal.fire("Advertencia", "Operacion no Autorizada", "warning");
+                    navigate(0); // Redirigir a login si no está autorizado
+                }
+                else if (error.response.status === 403) {
+                    swal.fire("Autenticación", "Sesión expirada", "warning");
+                    localStorage.clear();
+                    navigate("/login"); // Redirigir a login si la sesión ha expirado
+                } else {
+                    console.error("Error al registrar el gasto:", error);
+                    swal.fire("Error", "Hubo un problema al registrar el gasto operativo", "error");
+                }
+            } else {
+                // Manejo de errores en caso de que no haya respuesta del servidor (por ejemplo, problemas de red)
+                console.error("Error desconocido al registrar el gasto:", error);
+                swal.fire("Error", "Hubo un problema desconocido, por favor intente nuevamente", "error");
+            }
         }
+
     };
 
     return (

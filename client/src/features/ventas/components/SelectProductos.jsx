@@ -20,12 +20,40 @@ const SelectProductos = ({ idVenta }) => {
     useEffect(() => {
         const verificarPago = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/ventas/existe-pago/${idVenta}`);
+                const response = await axios.get(`${BASE_URL}/ventas/existe-pago/${idVenta}`, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en los encabezados
+                    }
+                });
                 setExistePago(response.data === true);
             } catch (error) {
-                console.error('Error al verificar pago:', error);
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Advertencia",
+                            text: "Operación no Autorizada",
+                            showConfirmButton: false,
+                        });
+                        navigate("/login"); // Redirigir al login si el token es inválido o no hay sesión activa
+                    } else if (error.response.status === 403) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Autenticación",
+                            text: "Sesión expirada",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirigir al login si la sesión ha expirado
+                    } else {
+                        console.error("Error al verificar pago:", error);
+                    }
+                } else {
+                    console.error("Error de conexión", error);
+                }
                 setExistePago(false); // En caso de error asumimos que no hay pago
             }
+
         };
         verificarPago();
 
@@ -66,13 +94,41 @@ const SelectProductos = ({ idVenta }) => {
     const obtenerDatos = async () => {
         try {
             setLoading(true); // Empieza la carga
-            const { data } = await axios.post(`${BASE_URL}/productos/`, formData);
+            const { data } = await axios.post(`${BASE_URL}/productos/`, formData, {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en los encabezados
+                }
+            });
             setProductos(data);
         } catch (error) {
-            console.error("Error al obtener datos:", error);
+            if (error.response) {
+                if (error.response.status === 401) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Advertencia",
+                        text: "Operación no Autorizada",
+                        showConfirmButton: false,
+                    });
+                    navigate("/login"); // Redirigir al login si el token es inválido o no hay sesión activa
+                } else if (error.response.status === 403) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Autenticación",
+                        text: "Sesión expirada",
+                        showConfirmButton: false,
+                    });
+                    localStorage.clear();
+                    navigate("/login"); // Redirigir al login si la sesión ha expirado
+                } else {
+                    console.error("Error al obtener datos:", error);
+                }
+            } else {
+                console.error("Error de conexión", error);
+            }
         } finally {
             setLoading(false); // Termina la carga
         }
+
     };
 
     async function AgregarProducto(id) {
@@ -103,7 +159,12 @@ const SelectProductos = ({ idVenta }) => {
 
             if (existePago === false) {
 
-                axios.post(`${BASE_URL}/ventas/agregar-producto/`, formDataPost).then((res) => {
+                axios.post(`${BASE_URL}/ventas/agregar-producto/`, formDataPost, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem('token')}` // Añadimos el JWT en el header
+                    }
+                }).then((res) => {
                     Swal.fire({
                         icon: "success",
                         title: "Producto agregado correctamente",
@@ -112,14 +173,46 @@ const SelectProductos = ({ idVenta }) => {
                     }).then(() => {
                         window.location.reload();
                     });
-                }).catch((error) =>
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error al agregar producto",
-                        showConfirmButton: false,
-                        timer: 1500,
-                    })
-                );
+                }).catch((error) => {
+                    if (error.response) {
+                        // Manejo de errores relacionados con la autorización
+                        if (error.response.status === 401) {
+                            Swal.fire({
+                                icon: "warning",
+                                title: "Advertencia",
+                                text: "Operacion no Autorizada",
+                                showConfirmButton: false,
+                            });
+                            navigate(0); // Redirige o recarga si no está autorizado
+                        } else if (error.response.status === 403) {
+                            Swal.fire({
+                                icon: "warning",
+                                title: "Sesión expirada",
+                                text: "Su sesión ha expirado, por favor inicie sesión nuevamente",
+                                showConfirmButton: false,
+                            });
+                            localStorage.clear();
+                            navigate("/login"); // Redirige al login si la sesión ha expirado
+                        } else {
+                            // Otros errores
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error al agregar producto",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+                        }
+                    } else {
+                        // Errores que no son respuestas del servidor
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error desconocido",
+                            text: "Hubo un error al agregar el producto, por favor intente nuevamente",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    }
+                });
 
                 setFormDataPost({
                     ...formDataPost,
@@ -134,10 +227,11 @@ const SelectProductos = ({ idVenta }) => {
                     text: "Ya ha sido efectuado un pago",
                     showConfirmButton: false,
                     timer: 2500,
-                })
+                });
             }
 
         }
+
     };
 
     return (

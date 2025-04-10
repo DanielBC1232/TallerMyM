@@ -24,15 +24,56 @@ const ListadoOrdenes = () => {
     useEffect(() => {
         const getOrdenes = async () => {
             try {
-                const { data } = await axios.get(`${BASE_URL}/flujo/obtener-ordenes/${4}`,);
-                setDatos(data);
+                const { data } = await axios.get(`${BASE_URL}/flujo/obtener-ordenes/${4}`, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT
+                    }
+                });
+                setDatos(data); // Asignar los datos recibidos
                 //console.log(data);
-
             } catch (error) {
-                console.error("Error al obtener Ordenes:", error);
+                if (error.response) {
+                    // Manejo de respuestas HTTP de error
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Advertencia",
+                            text: "Operación no Autorizada",
+                            showConfirmButton: false,
+                        });
+                        // Redirigir al login si el token es inválido o ha expirado
+                        navigate("/login");
+                    } else if (error.response.status === 403) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Autenticación",
+                            text: "Sesión expirada",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirigir al login si la sesión ha expirado
+                    } else {
+                        console.error("Error al obtener las órdenes:", error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Hubo un error al obtener las órdenes",
+                            showConfirmButton: false,
+                        });
+                    }
+                } else {
+                    console.error("Error al obtener las órdenes:", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Hubo un error desconocido, por favor intente nuevamente",
+                        showConfirmButton: false,
+                    });
+                }
             }
         };
-        getOrdenes();
+
+        getOrdenes(); // Llamar la función para obtener las órdenes
     }, []);
 
     const verificarDetalle = () => {
@@ -68,7 +109,11 @@ const ListadoOrdenes = () => {
         //console.log(formData);
 
         if (verificarDetalle()) {
-            axios.post(`${BASE_URL}/ventas/registrar-venta/`, formData).then((res) => {
+            axios.post(`${BASE_URL}/ventas/registrar-venta/`, formData, {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en la cabecera
+                }
+            }).then((res) => {
                 Swal.fire({
                     icon: "success",
                     title: "Venta generada correctamente",
@@ -77,18 +122,48 @@ const ListadoOrdenes = () => {
                 }).then(() => {
                     handleOpen(false);
                     handleClose(true);
-
                 });
-            }).catch((error) =>
-                Swal.fire({
-                    icon: "error",
-                    title: "Error al generar venta",
-                    text: error,
-                    showConfirmButton: false,
-                    timer: 1000,
-                })
-            );
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Advertencia",
+                            text: "Operación no Autorizada",
+                            showConfirmButton: false,
+                        });
+                        // Redirigir al login si el token es inválido o ha expirado
+                        navigate("/login");
+                    } else if (error.response.status === 403) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Autenticación",
+                            text: "Sesión expirada",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirigir al login si la sesión ha expirado
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error al generar venta",
+                            text: error.response.data ? error.response.data.message : error.message,
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error al generar venta",
+                        text: "Hubo un error desconocido, por favor intente nuevamente.",
+                        showConfirmButton: false,
+                        timer: 1000,
+                    });
+                }
+            });
         }
+
     };
 
     return (

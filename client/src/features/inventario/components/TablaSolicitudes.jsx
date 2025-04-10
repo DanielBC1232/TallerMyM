@@ -3,39 +3,14 @@ import { Table, Button, Modal } from "rsuite";
 import axios from "axios";
 import Swal from "sweetalert2";
 const { Column, HeaderCell, Cell } = Table;
+import { Link, useNavigate } from 'react-router-dom';
 
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
-//al dar al boton aprovar o rechazar trae el id del elemento mas el bool de true o false del boton
-//donde envia un post para hace un update put donde se cambie su estado de aprobado.
-const handleDecision = async (idSolicitud, aprobado) => {
-  console.log(`ID: ${idSolicitud}, Decisión: ` + aprobado);
-
-  try {
-    const response = await axios.put(
-      `${BASE_URL}/inventario/procesar-solicitud`,{ idSolicitud, aprobado });
-    console.log(response);
-    Swal.fire({
-      icon: "success",
-      title: "Solicitud procesada correctamente",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-  } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Error al procesarla solicitud",
-      text: error.message,
-      showConfirmButton: false,
-      timer: 1500,
-    });
-  }finally {
-    window.location.reload();
-  }  
-};
-
 const TablaSolicitudes = () => {
+  const navigate = useNavigate();
+
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -43,12 +18,103 @@ const TablaSolicitudes = () => {
   // Obtener listado
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/inventario/solicitud`)
+      .get(`${BASE_URL}/inventario/solicitud`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT al header
+        }
+      })
       .then((response) => {
         setData(response.data);
       })
-      .catch((error) => console.error("Error fetching solicitudes:", error));
+      .catch((error) => {
+        if (error.response) {
+          // Manejo de errores HTTP
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirige si no está autorizado
+          }
+          else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirige si la sesión ha expirado
+          } else {
+            console.error("Error fetching solicitudes:", error);
+          }
+        } else {
+          console.error("Error desconocido:", error);
+        }
+      });
   }, []);
+
+  //al dar al boton aprovar o rechazar trae el id del elemento mas el bool de true o false del boton
+  //donde envia un post para hace un update put donde se cambie su estado de aprobado.
+  const handleDecision = async (idSolicitud, aprobado) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/inventario/procesar-solicitud`,
+        { idSolicitud, aprobado },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el header
+          }
+        }
+      );
+      console.log(response);
+      Swal.fire({
+        icon: "success",
+        title: "Solicitud procesada correctamente",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      if (error.response) {
+        // Manejo de respuestas HTTP
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operacion no Autorizada",
+            showConfirmButton: false,
+          });
+          navigate(0); // Redirige a la página de login si no está autorizado
+        }
+        else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirige a login si la sesión ha expirado
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error al procesar la solicitud",
+            text: error.message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      } else {
+        // Error desconocido
+        console.error("Error desconocido", error);
+      }
+    } finally {
+      window.location.reload(); // Recargar la página al finalizar
+    }
+
+  };
 
   // Abrir modal y setear la fila seleccionada
   const handleOpen = (rowData) => {

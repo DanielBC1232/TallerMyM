@@ -35,11 +35,20 @@ const ModalSolicitarProducto = () => {
     const usuario = "usuarioMecanico";
 
     try {
-      await axios.post(`${BASE_URL}/inventario/agregar-solicitud`, {
-        titulo,
-        cuerpo,
-        usuario,
-      });
+      await axios.post(
+        `${BASE_URL}/inventario/agregar-solicitud`,
+        {
+          titulo,
+          cuerpo,
+          usuario,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el header
+          }
+        }
+      );
 
       Swal.fire({
         icon: "success",
@@ -52,14 +61,41 @@ const ModalSolicitarProducto = () => {
       setCuerpo("");
       setOpen(false);
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error al enviar la solicitud",
-        text: error.message,
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      if (error.response) {
+        // Manejo de respuestas HTTP
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operacion no Autorizada",
+            showConfirmButton: false,
+          });
+          navigate(0); // Redirige a la página de login si no está autorizado
+        }
+        else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirige a login si la sesión ha expirado
+        } else {
+          console.error("Error al enviar la solicitud", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error al enviar la solicitud",
+            text: error.message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      } else {
+        console.error("Error desconocido", error);
+      }
     }
+
   };
 
   return (

@@ -8,7 +8,6 @@ import proveedorRoute from '../routes/inventario/proveedorRoute.js';
 import vehiculosCompatiblesRoutes from '../routes/inventario/vehiculosCompatiblesRoutes.js';
 import productoRoutes from '../routes/inventario/productoRoutes.js';
 import solicitudRoutes from '../routes/inventario/solicitudRoutes.js';
-import usuarioRoutes from '../routes/perfil/usuarioRoutes.js';
 import ordenRoutes from '../routes/flujo/ordenRoutes.js';
 import cotizacionRoutes from '../routes/ventas/cotizacionRoutes.js';
 import trabajadoresRoutes from '../routes/trabajadores/trabajadoresRoutes.js';
@@ -67,11 +66,6 @@ app.use("/finanzas", gastoOperativoRoutes);
 app.use("/finanzas", dashboardRoutes);
 //trabajadores
 app.use("/trabajadores", trabajadoresRoutes);
-
-//* Rutas Perfil
-
-// Ruta de Usuario Api
-app.use("/api/usuario", usuarioRoutes);
 
 //Ruta modulo de clientes
 app.use("/clientes", ClienteRoutes);

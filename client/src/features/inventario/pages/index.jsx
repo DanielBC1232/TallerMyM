@@ -34,7 +34,12 @@ const IndexInventario = () => {
     async function obtenerPrecios() {
       try {
         const response = await axios.get(
-          `${BASE_URL}/productos/precios`
+          `${BASE_URL}/productos/precios`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`, // Agregar el token JWT aquí
+            },
+          }
         );
         setPrecios(response.data);
         if (response.data) {
@@ -46,11 +51,38 @@ const IndexInventario = () => {
         }
       } catch (error) {
         console.error("Error obteniendo precios:", error);
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirigir si no autorizado
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirigir si sesión expirada
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Hubo un error al obtener los precios",
+              showConfirmButton: false,
+            });
+          }
+        }
       }
     }
-
+  
     obtenerPrecios();
-  }, []);
+  }, []);  
 
   const handleChange = (e) => {
     const { name, value } = e.target;

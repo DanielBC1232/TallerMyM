@@ -478,7 +478,7 @@ BEGIN
 END;
 GO
 
-CREATE TRIGGER TR_AUDIT_ORDEN_UPDATE
+CREATE OR ALTER TRIGGER TR_AUDIT_ORDEN_UPDATE
 ON ORDEN
 AFTER UPDATE
 AS
@@ -521,12 +521,6 @@ BEGIN
     INNER JOIN deleted d ON i.idOrden = d.idOrden
     WHERE i.idTrabajador <> d.idTrabajador
 
-    UNION ALL
-
-    SELECT 'U', 'ORDEN', i.idOrden, 'descripcion', d.descripcion, i.descripcion, GETDATE(), SUSER_NAME(), HOST_NAME()
-    FROM inserted i
-    INNER JOIN deleted d ON i.idOrden = d.idOrden
-    WHERE i.descripcion <> d.descripcion;
 END;
 GO
 

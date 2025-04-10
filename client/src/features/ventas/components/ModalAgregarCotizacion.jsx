@@ -39,21 +39,55 @@ const ModalAgregarCotizacion = ({ onClose, onSuccess }) => {
     }
 
     try {
-      await axios.post(`${BASE_URL}/cotizacion/agregar-cotizacion/`, formData);
+      await axios.post(
+        `${BASE_URL}/cotizacion/agregar-cotizacion/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Agregar JWT al header
+          }
+        }
+      );
       Swal.fire({
         icon: "success",
         title: "Cotización generada correctamente",
         showConfirmButton: false,
         timer: 1500,
-      })
-      window.location.reload();//recargar pagina
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        text: "Hubo un error al generar la cotización.",
-        showConfirmButton: false,
       });
+      window.location.reload(); // Recargar la página
+    } catch (err) {
+      if (err.response) {
+        // Manejo de errores según el código de estado
+        if (err.response.status === 401) {
+          Swal.fire({
+            text: "Operación no Autorizada",
+            icon: "warning",
+            showConfirmButton: false,
+          });
+        } else if (err.response.status === 403) {
+          Swal.fire({
+            text: "Sesión expirada. Inicie sesión nuevamente.",
+            icon: "warning",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirigir a login si la sesión ha expirado
+        } else {
+          Swal.fire({
+            icon: "error",
+            text: "Hubo un error al generar la cotización.",
+            showConfirmButton: false,
+          });
+        }
+      } else {
+        Swal.fire({
+          icon: "error",
+          text: "Hubo un error en la conexión. Intente nuevamente.",
+          showConfirmButton: false,
+        });
+      }
     }
+
   };
 
   const handleOpen = () => setOpen(true);

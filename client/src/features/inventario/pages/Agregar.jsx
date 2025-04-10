@@ -8,7 +8,7 @@ import { Grid, Row, Col } from "rsuite";
 import "../styles/inv.css";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -47,8 +47,8 @@ const Agregar = () => {
         name === "precio" || name === "stock"
           ? Number(value)
           : name === "vehiculosCompatibles"
-          ? JSON.stringify(value)
-          : value,
+            ? JSON.stringify(value)
+            : value,
     });
   };
 
@@ -258,7 +258,15 @@ const Agregar = () => {
 
     if (verificacion()) {
       axios
-        .post(`${BASE_URL}/productos/agregar-producto/`, formData)
+        .post(
+          `${BASE_URL}/productos/agregar-producto/`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT al header
+            }
+          }
+        )
         .then((res) => {
           Swal.fire({
             icon: "success",
@@ -269,15 +277,47 @@ const Agregar = () => {
             navigate("/inventario");
           });
         })
-        .catch((error) =>
-          Swal.fire({
-            icon: "error",
-            title: "Error al agregar un producto / servicio:",
-            text: error,
-            showConfirmButton: false,
-            timer: 1000,
-          })
-        );
+        .catch((error) => {
+          if (error.response) {
+            // Manejo de errores HTTP
+            if (error.response.status === 401) {
+              Swal.fire({
+                icon: "warning",
+                title: "Advertencia",
+                text: "Operacion no Autorizada",
+                showConfirmButton: false,
+              });
+              navigate(0); // Redirige si no está autorizado
+            }
+            else if (error.response.status === 403) {
+              Swal.fire({
+                icon: "warning",
+                title: "Autenticación",
+                text: "Sesión expirada",
+                showConfirmButton: false,
+              });
+              localStorage.clear();
+              navigate("/login"); // Redirige si la sesión ha expirado
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Error al agregar un producto / servicio",
+                text: error.response.data || error.message,
+                showConfirmButton: false,
+                timer: 1000,
+              });
+            }
+          } else {
+            // Manejo de errores desconocidos
+            Swal.fire({
+              icon: "error",
+              title: "Error desconocido",
+              text: error.message,
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          }
+        });
     }
   };
 

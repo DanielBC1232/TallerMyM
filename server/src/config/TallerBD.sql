@@ -40,7 +40,7 @@ CREATE TABLE USUARIO (
     FOREIGN KEY (idRol) REFERENCES Roles(idRol) -- Relación con la tabla Roles
 );
 GO
-Select * from USUARIO
+
 INSERT INTO USUARIO(username, email, password, idRol)
 VALUES ('johndoe', 'johndoe@example.com', 'hashedpassword123', 1);
 -- MODULO TRABAJADORES --

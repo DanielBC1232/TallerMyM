@@ -16,23 +16,56 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
   useEffect(() => {
     const verificarPago = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/ventas/existe-pago/${idVenta}`);
+        const response = await axios.get(`${BASE_URL}/ventas/existe-pago/${idVenta}`, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en las cabeceras
+          }
+        });
         setExistePago(response.data === true);
       } catch (error) {
-        console.error('Error al verificar pago:', error);
-        setExistePago(false); // En caso de error asumimos que no hay pago
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operación no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate("/login"); // Redirigir al login si el token es inválido o no hay sesión activa
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirigir al login si la sesión ha expirado
+          } else {
+            console.error("Error al verificar el pago", error);
+            setExistePago(false); // En caso de error, asumimos que no hay pago
+          }
+        } else {
+          console.error("Error de conexión", error);
+          setExistePago(false); // En caso de error, asumimos que no hay pago
+        }
       }
     };
     verificarPago();
 
   }, [idVenta]);
+
   //console.log(existePago);
 
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const { data } = await axios.get(`${BASE_URL}/ventas/obtener-productos-venta/${parseInt(idVenta)}`);
-        setProductos(data)
+        const { data } = await axios.get(`${BASE_URL}/ventas/obtener-productos-venta/${parseInt(idVenta)}`, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en los encabezados
+          }
+        });
+        setProductos(data);
 
         // Calcular y enviar el subtotal al padre
         const nuevoSubtotal = data.reduce((acc, p) =>
@@ -40,8 +73,32 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
         );
         onUpdateMontoTotal(nuevoSubtotal);
       } catch (error) {
-        console.error("Error al obtener datos:", error);
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operación no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate("/login"); // Redirigir al login si el token es inválido o no hay sesión activa
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirigir al login si la sesión ha expirado
+          } else {
+            console.error("Error al obtener productos de venta", error);
+          }
+        } else {
+          console.error("Error de conexión", error);
+        }
       }
+
     };
     if (idVenta) {
       obtenerDatos();
@@ -75,7 +132,12 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
             cantidad: parseInt(cantidadParam)
           };
 
-          await axios.post(`${BASE_URL}/ventas/eliminar-producto-venta/`, deleteData);
+          await axios.post(`${BASE_URL}/ventas/eliminar-producto-venta/`, deleteData, {
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en los encabezados
+            }
+          });
+
           setReload(prev => prev + 1);
 
           Swal.fire({
@@ -86,12 +148,35 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
           });
 
         } catch (error) {
-          Swal.fire({
-            text: "Error al remover producto",
-            icon: "error",
-            showConfirmButton: false
-          });
-          console.error("Error al eliminar el producto:", error);
+          if (error.response) {
+            if (error.response.status === 401) {
+              Swal.fire({
+                icon: "warning",
+                title: "Advertencia",
+                text: "Operación no Autorizada",
+                showConfirmButton: false,
+              });
+              navigate("/login"); // Redirigir al login si el token es inválido o no hay sesión activa
+            } else if (error.response.status === 403) {
+              Swal.fire({
+                icon: "warning",
+                title: "Autenticación",
+                text: "Sesión expirada",
+                showConfirmButton: false,
+              });
+              localStorage.clear();
+              navigate("/login"); // Redirigir al login si la sesión ha expirado
+            } else {
+              Swal.fire({
+                text: "Error al remover producto",
+                icon: "error",
+                showConfirmButton: false
+              });
+              console.error("Error al eliminar el producto:", error);
+            }
+          } else {
+            console.error("Error de conexión", error);
+          }
         }
       }
     });

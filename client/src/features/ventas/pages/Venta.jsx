@@ -20,11 +20,41 @@ const Venta = () => {
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const { data } = await axios.get(`${BASE_URL}/ventas/obtener-venta/${idVenta}`);
+        const { data } = await axios.get(`${BASE_URL}/ventas/obtener-venta/${idVenta}`, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}` // Añadimos el JWT en el header
+          }
+        });
         setFormData(data);
       } catch (error) {
-        console.error("Error al obtener datos:", error);
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirige o recarga si no está autorizado
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Sesión expirada",
+              text: "Su sesión ha expirado, por favor inicie sesión nuevamente",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirige al login si la sesión ha expirado
+          } else {
+            // Otros errores del servidor
+            console.error("Error al obtener datos:", error);
+          }
+        } else {
+          // Errores que no son respuestas del servidor
+          console.error("Error al obtener datos:", error);
+        }
       }
+
     };
     if (idVenta) obtenerDatos();
   }, [idVenta]);
@@ -43,14 +73,14 @@ const Venta = () => {
 
   const handleChangePago = (e) => {
     const { name, value } = e.target;
-    
+
     setFormDataPago((prev) => {
       const newPago = {
         ...prev,
         [name]: isNaN(value) || value.trim() === "" ? value : parseInt(value, 10),
       };
       handleUpdateMontoTotal(newPago.subtotal);
-      
+
       return newPago;
     });
   };
@@ -95,9 +125,12 @@ const Venta = () => {
 
     if (verificarMetodoPago() && verificarPagoCompleto()) {
       try {
-        //console.log(formDataPago);
+        const res = await axios.post(`${BASE_URL}/finanzas/registrar-pago/`, formDataPago, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}` // Añadido el JWT al header
+          }
+        });
 
-        const res = await axios.post(`${BASE_URL}/finanzas/registrar-pago/`, formDataPago);
         if (res.status === 200 || res.status === 201) {
           await Swal.fire({
             icon: "success",
@@ -106,25 +139,55 @@ const Venta = () => {
             timer: 1000,
           });
           setOpenPago(false);
+          navigate(0);
         }
       } catch (error) {
-        if (error.response && error.response.status === 409) {
-          await Swal.fire({
-            icon: "warning",
-            title: "Pago ya registrado",
-            text: "Esta venta ya tiene un pago asociado.",
-            showConfirmButton: true,
-          });
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operación no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirige o recarga en caso de no estar autorizado
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Sesión expirada",
+              text: "Su sesión ha expirado. Inicie sesión nuevamente.",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirige a login si la sesión expiró
+          } else if (error.response.status === 409) {
+            await Swal.fire({
+              icon: "warning",
+              title: "Pago ya registrado",
+              text: "Esta venta ya tiene un pago asociado.",
+              showConfirmButton: true,
+            });
+          } else {
+            await Swal.fire({
+              icon: "error",
+              title: "Error al registrar pago",
+              text: "Hubo un problema con el servidor. Inténtalo de nuevo.",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          }
         } else {
+          // Manejo de errores si no hay respuesta del servidor
           await Swal.fire({
             icon: "error",
-            title: "Error al registrar pago",
-            text: "Hubo un problema con el servidor. Inténtalo de nuevo.",
+            title: "Error de conexión",
+            text: "Hubo un problema al intentar conectar con el servidor. Intenta nuevamente.",
             showConfirmButton: false,
             timer: 1000,
           });
         }
       }
+
     }
   };
 
@@ -183,7 +246,12 @@ const Venta = () => {
     e.preventDefault();
     if (verificarMotivoDevolucion() && verificarDevolucionCompleta()) {
       try {
-        const res = await axios.post(`${BASE_URL}/finanzas/registrar-devolucion/`, formDataDevolucion);
+        const res = await axios.post(`${BASE_URL}/finanzas/registrar-devolucion/`, formDataDevolucion, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}` // Añadido el JWT al header
+          }
+        });
+
         if (res.status === 200 || res.status === 201) {
           await Swal.fire({
             icon: "success",
@@ -192,25 +260,55 @@ const Venta = () => {
             timer: 1000,
           });
           setOpenDevolucion(false);
+          navigate(0);
         }
       } catch (error) {
-        if (error.response && error.response.status === 409) {
-          await Swal.fire({
-            icon: "warning",
-            title: "Devolución ya registrada",
-            text: "Esta venta ya tiene una devolución asociada.",
-            showConfirmButton: true,
-          });
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operación no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirige o recarga en caso de no estar autorizado
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Sesión expirada",
+              text: "Su sesión ha expirado. Inicie sesión nuevamente.",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirige a login si la sesión expiró
+          } else if (error.response.status === 409) {
+            await Swal.fire({
+              icon: "warning",
+              title: "Devolución ya registrada",
+              text: "Esta venta ya tiene una devolución asociada.",
+              showConfirmButton: true,
+            });
+          } else {
+            await Swal.fire({
+              icon: "error",
+              title: "Error al registrar devolución",
+              text: "Hubo un problema con el servidor. Inténtalo de nuevo.",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          }
         } else {
+          // Manejo de errores si no hay respuesta del servidor
           await Swal.fire({
             icon: "error",
-            title: "Error al registrar devolución",
-            text: "Hubo un problema con el servidor. Inténtalo de nuevo.",
+            title: "Error de conexión",
+            text: "Hubo un problema al intentar conectar con el servidor. Intenta nuevamente.",
             showConfirmButton: false,
             timer: 1000,
           });
         }
       }
+
     }
   };
 
@@ -219,10 +317,10 @@ const Venta = () => {
     setFormDataPago(prev => {
       const nuevoIva = nuevosubtotal * 0.13;
       const nuevoTotal = nuevosubtotal + nuevoIva;
-      const dineroVuelto = parseFloat(prev.monto) 
-        ? parseFloat(prev.monto) - nuevoTotal 
+      const dineroVuelto = parseFloat(prev.monto)
+        ? parseFloat(prev.monto) - nuevoTotal
         : 0;
-      
+
       return {
         ...prev,
         subtotal: nuevosubtotal,
@@ -242,7 +340,12 @@ const Venta = () => {
       const response = await axios.post(
         `${BASE_URL}/reportes/generar-factura/`,
         payload,
-        { responseType: 'blob' }
+        {
+          responseType: 'blob',
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}`, // Agregar el JWT en el header
+          },
+        }
       );
 
       if (response.status === 200 || response.status === 201) {
@@ -270,6 +373,7 @@ const Venta = () => {
             fileName = fileNameMatch[1];
           }
         }
+
         // Si no se recibió el nombre, se genera uno con la fecha actual
         if (!fileName) {
           const fechaActual = new Date().toISOString().split('T')[0];
@@ -283,14 +387,45 @@ const Venta = () => {
         window.URL.revokeObjectURL(downloadUrl);
       }
     } catch (error) {
-      console.error("Error al generar la factura:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error al generar la factura",
-        text: "No se pudo generar el archivo XLSX.",
-      });
+      if (error.response) {
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operacion no Autorizada",
+            showConfirmButton: false,
+          });
+          navigate(0); // Redirigir a login si no está autorizado
+        } else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirigir a login si la sesión ha expirado
+        } else {
+          console.error("Error al generar la factura:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error al generar la factura",
+            text: "No se pudo generar el archivo XLSX.",
+          });
+        }
+      } else {
+        // Manejo de errores si no hay respuesta del servidor (por ejemplo, error de red)
+        console.error("Error desconocido al generar factura:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema desconocido, por favor intente nuevamente.",
+          showConfirmButton: false,
+        });
+      }
     }
   };
+
 
   /* ============= RENDER ============= */
   return (

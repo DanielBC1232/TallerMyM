@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from "axios";
 
-
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
@@ -38,7 +37,14 @@ const Login = () => {
             if (response.status === 200) {
                 // Login exitoso, redirige -- GENERAR SESION
 
-                
+                //Guardar datos de login a localStorage
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('idUsuario', response.data.idUsuario);
+                localStorage.setItem('username', response.data.username);
+                localStorage.setItem('email', response.data.email);
+                localStorage.setItem('idRol', response.data.idRol);//1-admin,2-user
+
+                //console.log(response.data);
 
                 navigate('/');
             }
@@ -71,7 +77,7 @@ const Login = () => {
     };
 
     return (
-        <div className="container mt-5">
+        <div className="mt-5 d-flex justify-content-center">
             <form onSubmit={handleSubmit}>
                 <div className="ms-5 mt-3">
                     <div className="mb-3">
@@ -101,13 +107,17 @@ const Login = () => {
                         />
                     </div>
 
-                    <div className="d-flex justify-content-between mt-4">
-                        <button className="btn btn-sm btn-secondary text-white" type="submit">
-                            Iniciar sesión
-                        </button>
-                        <Link href="/forgot-password" className="text-decoration-none">
-                            ¿Olvidaste tu contraseña?
-                        </Link>
+                    <div >
+                        <div className="d-flex justify-content-center mt-4">
+                            <button className="btn btn-sm btn-secondary text-white" type="submit">
+                                Iniciar sesión
+                            </button>
+                        </div>
+                        <div className="d-flex justify-content-center mt-4">
+                            <Link href="/forgot-password" className="text-decoration-none">
+                                ¿Olvidaste tu contraseña?
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </form>

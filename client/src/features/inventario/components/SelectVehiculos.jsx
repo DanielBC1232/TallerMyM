@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from 'react-router-dom';
 import Select from "react-select";
 import axios from "axios";
 
@@ -7,23 +8,54 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const SelectVehiculos = ({ value, onChange }) => {
   const [opciones, setOpciones] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const obtenerVehiculos = async () => {
       try {
-        const { data } = await axios.get(`${BASE_URL}/vehiculos-compatibles`);
+        const { data } = await axios.get(`${BASE_URL}/vehiculos-compatibles`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el header
+          }
+        });
         const opcionesFormateadas = data.map((vehiculo) => ({
           value: vehiculo.modelo,
           label: vehiculo.modelo,
         }));
         setOpciones(opcionesFormateadas);
       } catch (error) {
-        console.error("Error obteniendo los vehículos:", error);
+        if (error.response) {
+          // Manejo de respuestas HTTP
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirige a la página de login si no está autorizado
+          }
+          else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirige a login si la sesión ha expirado
+          } else {
+            console.error("Error obteniendo los vehículos:", error);
+          }
+        } else {
+          console.error("Error desconocido", error);
+        }
       }
     };
   
     obtenerVehiculos();
-  }, []);  
+  }, []);
+  
 
   const handleChange = (selectedOptions) => {
     // Si no se selecciona nada, pasamos un arreglo vacío

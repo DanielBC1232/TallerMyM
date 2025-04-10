@@ -15,15 +15,58 @@ const Devolucion = () => {
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const { data } = await axios.get(`${BASE_URL}/finanzas/obtener-devolucion/${idVenta}`);
+        const { data } = await axios.get(`${BASE_URL}/finanzas/obtener-devolucion/${idVenta}`, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT
+          }
+        });
         setFormData(data); // Asigna los datos recibidos
-        //console.log(data);
+        // console.log(data);
       } catch (error) {
-        console.error("Error al obtener datos:", error);
+        if (error.response) {
+          // Manejo de respuestas HTTP de error
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            // Puedes redirigir al login si la sesión no es válida
+            navigate("/login");
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirigir al login si la sesión ha expirado
+          } else {
+            console.error("Error al obtener los datos:", error);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Hubo un error al obtener los datos",
+              showConfirmButton: false,
+            });
+          }
+        } else {
+          console.error("Error al obtener los datos:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Hubo un error desconocido, por favor intente nuevamente",
+            showConfirmButton: false,
+          });
+        }
       }
     };
+
     obtenerDatos(); // Llamar la función para obtener los datos
   }, [idVenta]);
+
 
   if (!formData) {
     return <div></div>;

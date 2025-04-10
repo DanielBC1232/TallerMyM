@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
 
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const ListarVehiculos = () => {
+  const navigate = useNavigate();
   const [vehiculos, setVehiculos] = useState([]); // Todos los vehículos
   const [loading, setLoading] = useState(true); // Estado para manejar la carga
   const [error, setError] = useState(""); // Estado para manejar errores
@@ -13,15 +15,47 @@ const ListarVehiculos = () => {
   // Función para obtener todos los vehículos
   const ObtenerVehiculos = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/vehiculos/ObtenerVehiculos`);
+      const response = await axios.get(`${BASE_URL}/vehiculos/ObtenerVehiculos`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el header
+        }
+      });
       setVehiculos(response.data); // Guardar los vehículos en el estado
       setError(""); // Limpiar el mensaje de error
     } catch (error) {
-      console.error("Error al obtener vehículos:", error);
-      setError("Error al obtener vehículos"); // Mostrar mensaje de error
+      if (error.response) {
+        // Manejo de errores específicos de la respuesta HTTP
+        if (error.response.status === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Advertencia",
+            text: "Operacion no Autorizada",
+            showConfirmButton: false,
+          });
+          navigate(0); // Redirige a la página de login si no está autorizado
+        }
+        else if (error.response.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "Autenticación",
+            text: "Sesión expirada",
+            showConfirmButton: false,
+          });
+          localStorage.clear();
+          navigate("/login"); // Redirige a login si la sesión ha expirado
+        } else {
+          console.error("Error al obtener vehículos:", error);
+          setError("Error al obtener vehículos"); // Mostrar mensaje de error genérico
+        }
+      } else {
+        // Manejo de errores si no hay respuesta del servidor
+        console.error("Error desconocido", error);
+        setError("Error al obtener vehículos"); // Mostrar mensaje de error genérico
+      }
     } finally {
       setLoading(false); // Finalizar la carga
     }
+
   };
 
   // Obtener vehículos al cargar el componente
@@ -80,7 +114,7 @@ const ListarVehiculos = () => {
               <td className="py-2 px-4 border">{vehiculo.annoVehiculo}</td>
               <td className="py-2 px-4 border">{vehiculo.tipoVehiculo}</td>
               <td className="py-2 px-4 border">{vehiculo.idCliente}</td>
-              
+
             </tr>
           ))}
         </tbody>

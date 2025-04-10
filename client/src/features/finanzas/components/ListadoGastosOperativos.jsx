@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import swal from "sweetalert2";
 import axios from "axios";
+import { Link, useNavigate } from 'react-router-dom';
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -9,21 +10,52 @@ export const ListadoGastosOperativos = () => {
     const [gastosOperativos, setGastosOperativos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const obtenerDatos = async () => {
             try {
                 setLoading(true);
-                const { data } = await axios.get(`${BASE_URL}/finanzas/obtener-gastos-operativos/`);
+                const { data } = await axios.get(`${BASE_URL}/finanzas/obtener-gastos-operativos/`, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}` // Se agrega el token JWT
+                    }
+                });
                 setGastosOperativos(data);
                 //console.log("Datos obtenidos:", data);
             } catch (error) {
-                //console.error("Error al obtener datos:", error);
-                setError("No se pudieron cargar los gastos operativos");
-                swal.fire("Error", "No se pudieron cargar los gastos operativos", "error");
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Advertencia",
+                            text: "Operacion no Autorizada",
+                            showConfirmButton: false,
+                        });
+                        navigate(0); // Redirigir si no autorizado
+                    } else if (error.response.status === 403) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Autenticación",
+                            text: "Sesión expirada",
+                            showConfirmButton: false,
+                        });
+                        localStorage.clear();
+                        navigate("/login"); // Redirigir si la sesión ha expirado
+                    } else {
+                        console.error("Error al obtener datos:", error);
+                        setError("No se pudieron cargar los gastos operativos");
+                        Swal.fire("Error", "No se pudieron cargar los gastos operativos", "error");
+                    }
+                } else {
+                    console.error("Error al obtener datos:", error);
+                    setError("Error de red o conexión");
+                    Swal.fire("Error", "Hubo un problema con la conexión o el servidor.", "error");
+                }
             } finally {
                 setLoading(false);
             }
+
         };
         obtenerDatos();
     }, []);
