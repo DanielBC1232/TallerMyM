@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Drawer, Notification, Stack, Text, Badge, Col, Message } from "rsuite";
 import { IoIosNotifications } from "react-icons/io";
-import '../styles/notificaciones.css';
 import { MdDeleteSweep } from "react-icons/md";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -13,7 +12,6 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const Notificaciones = ({ modulo }) => {
     const [notificaciones, setNotificaciones] = useState([]);
     const navigate = useNavigate();
-
     useEffect(() => {
         const obtenerNotificaciones = async () => {
             try {
