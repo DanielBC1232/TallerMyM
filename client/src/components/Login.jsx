@@ -114,7 +114,7 @@ const Login = () => {
                             </button>
                         </div>
                         <div className="d-flex justify-content-center mt-4">
-                            <Link href="/forgot-password" className="text-decoration-none">
+                            <Link to="/verificar-correo" className="text-decoration-none">
                                 ¿Olvidaste tu contraseña?
                             </Link>
                         </div>

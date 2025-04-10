@@ -5,7 +5,7 @@ import React from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute.jsx";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from "react-router-dom";
 
 // Rutas para Inventario
 import Index from './components/Index.jsx';
@@ -50,16 +50,22 @@ import EditarVehiculo from "./features/vehiculos/pages/EditarVehiculo.jsx";
 import IndexUsuarios from "./features/admininstracion/pages/IndexUsuarios.jsx";
 import EditarUsuario from "./features/admininstracion/pages/EditarUsuario.jsx";
 import Login from "./components/Login.jsx";
-
+import CambiarContrasena from "./components/CambiarContrasena.jsx";
+import VerificarCorreo from "./components/EnviarCorreoRecuperacion.jsx";
 const App = () => {
+  const location = useLocation();
+  // Definir las rutas en las que NO se debe mostrar el Header
+  const hideHeaderRoutes = ["/login", "/cambiar-contrasena", "/verificar-correo"];
   return (
     <div className="app">
-      <Header />
+      {!hideHeaderRoutes.includes(location.pathname) && <Header />}
       <main style={{ minHeight: "95vh" }}>
         <Routes>
           {/* Rutas públicas */}
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
+          <Route path="/verificar-correo" element={<VerificarCorreo />} />
 
           {/* Inventario */}
           <Route path="/inventario-agregar" element={<Agregar />} />
@@ -99,15 +105,9 @@ const App = () => {
           <Route path="/vehiculos" element={<IndexVehiculos />} />
           <Route path="/vehiculo-editar/:idVehiculo" element={<EditarVehiculo />} />
 
-          {/* Rutas protegidas para Administración */}
-          <Route
-            path="/administracion"
-            element={<PrivateRoute element={<IndexUsuarios />} />}
-          />
-          <Route
-            path="/usuario-editar/:idUsuario"
-            element={<PrivateRoute element={<EditarUsuario />} />}
-          />
+          {/* Administración (Rutas protegidas) */}
+          <Route path="/administracion" element={<PrivateRoute element={<IndexUsuarios />} />} />
+          <Route path="/usuario-editar/:idUsuario" element={<PrivateRoute element={<EditarUsuario />} />} />
         </Routes>
       </main>
       <Footer />
