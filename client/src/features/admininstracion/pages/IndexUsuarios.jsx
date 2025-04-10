@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import ModalAgregarUsuario from "../components/ModalAgregarUsuario";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -38,31 +39,43 @@ const ListarUsuarios = () => {
     navigate(`/usuario-editar/${idUsuario}`);
   };
 
-  const handleDesactivar = async (idUsuario) => {
+  const handleCambiarEstado = async (idUsuario, estado) => {
+    const accion = estado === 1 ? "activar" : "desactivar";
+    const textoConfirmacion =
+      estado === 1
+        ? "Esta acción activará al usuario."
+        : "Esta acción desactivará al usuario.";
+
     const confirmacion = await Swal.fire({
       title: "¿Estás seguro?",
-      text: "Esta acción desactivará al usuario.",
+      text: textoConfirmacion,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Sí, desactivar",
+      confirmButtonText: `Sí, ${accion}`,
       cancelButtonText: "Cancelar",
     });
 
     if (confirmacion.isConfirmed) {
       try {
-        await axios.post(`${BASE_URL}/admin/desactivarUsuario`, { idUsuario });
-        Swal.fire("Desactivado", "El usuario ha sido desactivado correctamente", "success");
-        ObtenerUsuarios(); // Refrescar lista
+        await axios.put(`${BASE_URL}/admin/cambiar-estado-usuario`, {
+          idUsuario,
+          isLocked: estado,
+        });
+        Swal.fire(
+          `${accion.charAt(0).toUpperCase() + accion.slice(1)}`,
+          `El estado ha sido actualizado correctamente`,
+          "success"
+        );
+        ObtenerUsuarios(); // Refrescar
       } catch (error) {
-        console.error("Error al desactivar usuario:", error);
-        Swal.fire("Error", "No se pudo desactivar el usuario", "error");
+        console.error(`Error al cambiar estado del usuario:`, error);
+        Swal.fire("Error", `No se pudo cambiar estado del usuario`, "error");
       }
     }
   };
 
   if (loading) return <p>Cargando usuarios...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
-
   return (
     <div className="p-6 m-5">
       <div className="mb-4">
@@ -71,11 +84,9 @@ const ListarUsuarios = () => {
           placeholder="Buscar por nombre de usuario"
           value={FiltroUsuario}
           onChange={(e) => setFiltroUsuario(e.target.value)}
-          className="border p-2 rounded"
+          className="border p-2 rounded me-3 form-control-sm"
         />
-        <Link to="/usuario-agregar" className="btn btn-sm btn-secondary text-white ms-3">
-          Agregar Usuario
-        </Link>
+        <ModalAgregarUsuario />
       </div>
 
       <table className="min-w-full bg-white border">
@@ -83,36 +94,55 @@ const ListarUsuarios = () => {
           <tr>
             <th className="py-2 px-4 border">Nombre Usuario</th>
             <th className="py-2 px-4 border">Email</th>
+            <th className="py-2 px-4 border">Estado</th>
+            <th className="py-2 px-4 border">Último cambio de contraseña</th>
             <th className="py-2 px-4 border">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {UsuariosFiltrados.map((usuario) => (
-            <tr key={usuario.idUsuario}>
-              <td className="py-2 px-4 border">{usuario.username}</td>
-              <td className="py-2 px-4 border">{usuario.email}</td>
-              <td className="py-2 px-4 border">
-                <button
-                  className="btn btn-sm btn-secondary text-white me-2"
-                  onClick={() => handleEditar(usuario.idUsuario)}
-                >
-                  Editar
-                </button>
-                <button
-                  className="btn btn-sm btn-danger text-white"
-                  onClick={() => handleDesactivar(usuario.idUsuario)}
-                >
-                  Desactivar
-                </button>
+          {UsuariosFiltrados.length === 0 ? (
+            <tr>
+              <td colSpan="3" className="text-center text-muted py-3">
+                {FiltroUsuario
+                  ? "No se encontraron usuarios con ese nombre."
+                  : "No hay usuarios registrados."}
               </td>
             </tr>
-          ))}
+          ) : (
+            UsuariosFiltrados.map((usuario) => (
+              <tr key={usuario.idUsuario}>
+                <td className="py-2 px-4 border">{usuario.username}</td>
+                <td className="py-2 px-4 border">{usuario.email}</td>
+                <td className="py-2 px-4 border">{usuario.isLocked ? "Bloqueado" : "Activo"}</td>
+                <td className="py-2 px-4 border">{usuario.lastPasswordChange ? new Date(usuario.lastPasswordChange).toLocaleDateString() : 'Ninguno'}</td>
+                <td className="py-2 px-4 border">
+                  <button
+                    className="btn btn-sm btn-secondary text-white me-2"
+                    onClick={() => handleEditar(usuario.idUsuario)}
+                  >
+                    Editar
+                  </button>
+                  {usuario.isLocked ? (
+                    <button
+                      className="btn btn-sm btn-success text-white"
+                      onClick={() => handleCambiarEstado(usuario.idUsuario, 0)}
+                    >
+                      Activar
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-sm btn-danger text-white"
+                      onClick={() => handleCambiarEstado(usuario.idUsuario, 1)}
+                    >
+                      Desactivar
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
-
-      {UsuariosFiltrados.length === 0 && FiltroUsuario && (
-        <p className="text-red-500 mt-4">No se encontraron usuarios con ese nombre.</p>
-      )}
     </div>
   );
 };

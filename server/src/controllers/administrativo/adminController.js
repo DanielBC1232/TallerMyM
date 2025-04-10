@@ -5,47 +5,47 @@ const UsuarioRepo = new UsuarioRepository();
 // Registrar un usuario
 const registrarUsuario = async (req, res) => {
   try {
-    const { username, email, password} = req.body;//parametros
+    const { username, email, password } = req.body;//parametros
     //------
     await UsuarioRepo.insertUser(username, email, password);
+
     res.status(201).json();
   } catch (error) {
+    if (error.status === 409) {
+      return res.status(409).json({ error: error.message });
+    }
     console.error("Error al insertar usuario:", error);
     res.status(500).json({ error: "Error al insertar el usuario" });
   }
 };
 
-//-----------------------------------------------
-
 const actualizarUsuario = async (req, res) => {
-
   try {
     const idUsuario = req.params.idUsuario;
-    const datosActualizados = req.body;
-    const actualizacionExitosa = await UsuarioRepo.updateUsuario(idUsuario, datosActualizados);
+    const { username, email, idRol, password } = req.body;
+    const usuario = await UsuarioRepo.updateUsuario(idUsuario, username, email, idRol, password);
 
-    if (!actualizacionExitosa) {
-      res.status(404).json({ error: "Usuario no encontrado o no se pudo actualizar" });
-    } else {
-      res.status(200).json({ message: "Datos del usuario actualizados exitosamente" });
-    }
+    res.status(200).json(usuario);
   } catch (error) {
+    if (!usuario) {
+      res.status(404).json({ error: "Usuario no encontrado o no se pudo actualizar" });
+    }
     console.error("Error al actualizar usuario:", error);
     res.status(500).json({ error: "Error al actualizar los datos del usuario" });
   }
 };
 
-const eliminarUsuario = async (req, res) => {
+const cambiarEstadoUsuario = async (req, res) => {
   try {
-    const idUsuario = parseInt(req.params.idUsuario);
-    const UsuarioEliminado = await UsuarioRepo.deleteUsuario(idUsuario);
+    const { idUsuario, isLocked } = req.body;//parametros
 
-    if (!UsuarioEliminado) {
-      res.status(404).json({ error: "Usuario no encontrado o no se pudo eliminar" });
-    } else {
-      res.status(200).json({ message: "Usuario eliminado exitosamente" });
-    }
+    const usuario = await UsuarioRepo.cambiarEstadoUsuario(idUsuario, isLocked);
+
+    res.status(200).json(usuario);
   } catch (error) {
+    if (!usuario) {
+      res.status(404).json({ error: "Usuario no encontrado o no se pudo eliminar" });
+    }
     console.error("Error al eliminar Usuario:", error);
     res.status(500).json({ error: "Error al eliminar Usuario" });
   }
@@ -78,10 +78,23 @@ const obtenerUsuario = async (req, res) => {
   }
 };
 
+const iniciarSesion = async (req, res) => {
+  const { email, password } = req.body;
+  const resultado = await UsuarioRepo.iniciarSesion(email, password);
+
+  if (resultado.statusCode === 200) {
+    return res.status(200).json(resultado.data);
+  }
+
+  return res.status(resultado.statusCode).json({ message: resultado.message });
+};
+
+
 export {
   registrarUsuario,
   actualizarUsuario,
-  eliminarUsuario,
+  cambiarEstadoUsuario,
   obtenerUsuarios,//plural
   obtenerUsuario,//singular
+  iniciarSesion,
 };

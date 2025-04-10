@@ -48,8 +48,8 @@ import EditarVehiculo from "./features/vehiculos/pages/EditarVehiculo.jsx";
 
 //Imports Modulo administrativo
 import IndexUsuarios from "./features/admininstracion/pages/IndexUsuarios.jsx";
-import AgregarUsuario from "./features/admininstracion/pages/AgregarUsuario.jsx";
 import EditarUsuario from "./features/admininstracion/pages/EditarUsuario.jsx";
+import Login from "./components/Login.jsx";
 
 const App = () => {
   return (
@@ -99,8 +99,8 @@ const App = () => {
 
           {/* Rutas para Admin */}
           <Route path="/administracion" element={<IndexUsuarios />} />
-          <Route path="/usuario-agregar" element={<AgregarUsuario/>} />
           <Route path="/usuario-editar/:idUsuario" element={<EditarUsuario />} />
+          <Route path="/login" element={<Login />} />
 
         </Routes>
       </main>

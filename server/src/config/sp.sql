@@ -693,14 +693,114 @@ BEGIN
 END;
 GO
 
-SELECT 
-	CV.idVehiculo,
-	CV.placaVehiculo,
-	CV.modeloVehiculo,
-	CV.marcaVehiculo,
-	CV.annoVehiculo,
-	CV.tipoVehiculo,
-	C.nombre +' '+C.apellido as NombreCliente
-FROM CLIENTE_VEHICULO CV 
-INNER JOIN CLIENTE C ON C.idCliente = CV.idCliente
-WHERE CV.estado = 1
+CREATE OR ALTER PROCEDURE SP_LOGIN
+@username NVARCHAR(50),
+@email NVARCHAR(100),
+@password NVARCHAR(255)
+AS BEGIN
+
+	INSERT INTO USUARIO(username,email,password)
+	VALUES(@username,@email, @password)
+
+END;
+GO
+
+CREATE OR ALTER PROCEDURE SP_ACTUALIZAR_USUARIO
+    @idUsuario INT,
+    @username NVARCHAR(50),
+    @email NVARCHAR(100),
+    @idRol INT,
+    @password NVARCHAR(255) = NULL -- El parámetro password es opcional
+AS
+BEGIN
+    DECLARE @sql NVARCHAR(MAX);
+
+    -- Inicializamos la consulta SQL básica
+    SET @sql = 'UPDATE USUARIO SET 
+                    username = @username,
+                    email = @email,
+                    idRol = @idRol';
+
+    -- Si se ha pasado un password, añadimos la actualización de password y lastPasswordChange
+    IF @password IS NOT NULL AND LTRIM(RTRIM(@password)) <> ''
+    BEGIN
+        -- La contraseña debe ser encriptada en el código antes de pasarla al procedimiento
+        SET @sql = @sql + ',
+                        password = @password,
+                        lastPasswordChange = GETDATE()';
+    END
+
+    SET @sql = @sql + ' WHERE idUsuario = @idUsuario';
+
+    -- consulta dinámica
+    EXEC sp_executesql @sql,
+                       N'@idUsuario INT, @username NVARCHAR(50), @email NVARCHAR(100), @idRol INT,@password NVARCHAR(255)',
+                       @idUsuario, @username, @email, @idRol, @password;
+END;
+GO
+
+
+CREATE OR ALTER PROCEDURE SP_BLOQUEO_INACTIVIDAD
+AS
+BEGIN
+    -- Actualizar los usuarios cuyo lastPasswordChange sea mayor a 9 meses
+    UPDATE USUARIO
+    SET isLocked = 1
+    WHERE DATEDIFF(MONTH, lastLogin, GETDATE()) > 6
+    AND isLocked = 0;  -- Solo actualiza si el usuario no esta bloqueado
+END;
+GO
+
+
+CREATE OR ALTER PROCEDURE SP_LOGIN
+    @email NVARCHAR(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE 
+        @idUsuario INT,
+        @dbPassword NVARCHAR(255),
+        @failedAttempts INT,
+        @isLocked BIT,
+        @idRol INT;
+
+    -- Se busca el usuario por email y se asignan las variables
+    SELECT 
+        @idUsuario = idUsuario, 
+        @dbPassword = password, 
+        @failedAttempts = failedLoginAttempts,
+        @isLocked = isLocked,
+        @idRol = idRol
+    FROM USUARIO
+    WHERE email = @email;
+
+    IF @idUsuario IS NULL
+    BEGIN
+        RAISERROR('Credenciales no válidas', 16, 1);
+        RETURN;
+    END
+
+    -- Si la cuenta está bloqueada (isLocked = 1) y el usuario no es admin (idRol <> 1)
+    IF (@isLocked = 1 AND @idRol <> 1)
+    BEGIN
+        RAISERROR('La cuenta está bloqueada', 16, 1);
+        RETURN;
+    END
+
+    -- Retornar los datos necesarios, incluido el hash de la contraseña
+    SELECT 
+        idUsuario, 
+        username, 
+        email, 
+        idRol, 
+        password,       -- El hash almacenado
+        lastLogin, 
+        failedLoginAttempts
+    FROM USUARIO
+    WHERE idUsuario = @idUsuario;
+END;
+GO
+
+Select * from USUARIO
+

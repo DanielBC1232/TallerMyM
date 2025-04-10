@@ -12,6 +12,7 @@ const EditarUsuario = () => {
   const [usuario, setUsuario] = useState({
     username: "",
     email: "",
+    idRol: "",
     password: "",
     confirmPassword: "",
   });
@@ -24,6 +25,7 @@ const EditarUsuario = () => {
           ...prev,
           username: response.data.username,
           email: response.data.email,
+          idRol: response.data.idRol
         }));
       } catch (error) {
         console.error("Error al obtener el usuario:", error);
@@ -32,6 +34,7 @@ const EditarUsuario = () => {
     };
     obtenerUsuario();
   }, [idUsuario]);
+  
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,6 +52,12 @@ const EditarUsuario = () => {
     const pass = usuario.password.trim();
     const confirm = usuario.confirmPassword.trim();
 
+
+    if (pass.length < 8 && pass.length > 0) {
+      Swal.fire("Advertencia", "La contraseña debe tener al menos 8 caracteres", "warning");
+      return;
+    }
+
     if ((pass || confirm) && pass !== confirm) {
       Swal.fire("Error", "Las contraseñas no coinciden", "warning");
       return;
@@ -57,6 +66,7 @@ const EditarUsuario = () => {
     const payload = {
       username: usuario.username,
       email: usuario.email,
+      idRol: parseInt(usuario.idRol),
       password: usuario.password,
     };
 
@@ -108,6 +118,15 @@ const EditarUsuario = () => {
             onChange={handleChange}
             required
           />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="idRol" className="form-label">Rol:</label>
+          <select className="form-select" name="idRol" value={usuario.idRol} 
+            onChange={handleChange}> 
+            <option value="2">Usuario</option>
+            <option value="1">Administrador</option>
+          </select>
         </div>
 
         <div className="mb-3">

@@ -31,16 +31,16 @@ CREATE TABLE USUARIO (
     password NVARCHAR(255) NOT NULL, -- Contraseña (hash)
     idRol INT NOT NULL DEFAULT 2, -- FK al rol del usuario, DEFAULT "user"
 
-    failedLoginAttempts INT DEFAULT 0, -- Intentos fallidos de inicio de sesión
+    failedLoginAttempts INT DEFAULT 5, -- Intentos fallidos de inicio de sesión
     isLocked BIT DEFAULT 0, -- Indica si la cuenta está bloqueada (0 = no, 1 = sí)
-    resetToken NVARCHAR(255), -- Token para recuperación de contraseña
-    resetTokenExpiry DATETIME, -- Fecha de expiración del token
-    lastLogin DATETIME, -- Fecha del último inicio de sesión
-    lastPasswordChange DATETIME, -- Fecha del último cambio de contraseña
+    resetToken NVARCHAR(255) NULL, -- Token para recuperación de contraseña
+    resetTokenExpiry DATETIME NULL, -- Fecha de expiración del token
+    lastLogin DATETIME NULL, -- Fecha del último inicio de sesión
+    lastPasswordChange DATETIME NULL, -- Fecha del último cambio de contraseña
     FOREIGN KEY (idRol) REFERENCES Roles(idRol) -- Relación con la tabla Roles
 );
 GO
-
+Select * from USUARIO
 INSERT INTO USUARIO(username, email, password, idRol)
 VALUES ('johndoe', 'johndoe@example.com', 'hashedpassword123', 1);
 -- MODULO TRABAJADORES --
