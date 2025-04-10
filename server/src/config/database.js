@@ -1,10 +1,25 @@
 import sql from 'mssql';
+import dotenv from 'dotenv';
+dotenv.config();
+
+// Carga el archivo .env correspondiente según el entorno
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+dotenv.config({ path: envFile });
+
+const SERVER_NAME = process.env.SERVER_NAME;
+const DATABASE = process.env.DATABASE;
+const USER = process.env.USER;
+const PASSWORD = process.env.PASSWORD;
+
+if (!SERVER_NAME || !DATABASE || !USER || !PASSWORD) {
+    throw new Error('Faltan variables de entorno necesarias para la conexión a la base de datos.');
+}
 
 const dbConfig = {
-    server: "localhost",
-    database: "MYM_DB",
-    user: "MYM_User",
-    password: "T4ll3RMyM-",
+    server: SERVER_NAME,
+    database: DATABASE,
+    user: USER,
+    password: PASSWORD,
     options: {
         trustedConnection: true,
         trustServerCertificate: true,

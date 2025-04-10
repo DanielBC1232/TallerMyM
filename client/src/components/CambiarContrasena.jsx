@@ -8,6 +8,7 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const CorreoRecuperacion = () => {
     const navigate = useNavigate();
     const [formValue, setFormValue] = useState({
+        email: '',
         password: '',
         confirmPassword: '',
     });
