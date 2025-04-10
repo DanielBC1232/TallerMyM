@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Drawer, Notification, Stack, Text, Badge, Col, Message } from "rsuite";
 import { IoIosNotifications } from "react-icons/io";
-import '../styles/Notificaciones.css';
+import '../styles/notificaciones.css';
 import { MdDeleteSweep } from "react-icons/md";
 import axios from "axios";
 import Swal from "sweetalert2";
