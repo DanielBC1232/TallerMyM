@@ -39,7 +39,7 @@ const Index = () => {
           </Link>
         </div>
 
-        {idRol === 1 && (
+        {idRol != 2 && (
           <div className="col-sm-3 align-self-center">
             <Link to="/administracion" className="btn-link text-decoration-none">
               <Card width={300} direction="row" className="p-2">
@@ -53,8 +53,6 @@ const Index = () => {
             </Link>
           </div>
         )}
-
-
 
         <div className="col-sm-3 align-self-center">
           <Link to="/clientes" className="btn-link text-decoration-none">
@@ -75,7 +73,7 @@ const Index = () => {
           </Link>
         </div>
 
-        {idRol === 1 && (
+        {idRol != 2 && (
           <div className="col-sm-3 align-self-center">
             <Link to="/gastos-operativos"
               className="btn-link text-decoration-none">
