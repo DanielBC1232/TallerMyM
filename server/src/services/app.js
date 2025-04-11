@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+import './tasksCron.js';
 import imgRoutes from '../routes/inventario/imgRoutes.js';
 import categoriaRoutes from '../routes/inventario/categoriaRoutes.js';
 import marcaRoutes from '../routes/inventario/marcaRoutes.js';

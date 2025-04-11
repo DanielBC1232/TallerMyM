@@ -42,9 +42,9 @@ CREATE TABLE USUARIO (
 GO
 
 INSERT INTO USUARIO(username, email, password, idRol)
-VALUES ('admin', 'adminMYM@gmail.com', '74ed6b87b226e62b276b8a4399cdbb3efc3e22fd', 1);
+VALUES ('admin', 'adminMYM@gmail.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 1);--password:password
+--select * from USUARIO
 -- MODULO TRABAJADORES --
-
 CREATE TABLE TRABAJADOR(
 
     idTrabajador INT IDENTITY(1,1) PRIMARY KEY,
@@ -132,7 +132,6 @@ CREATE TABLE JUSTIFICACION_ASISTENCIA(
 GO
 
 -- MODULO CLIENTES --
-
 CREATE TABLE CLIENTE(
 
     idCliente INT IDENTITY(1,1) PRIMARY KEY,
@@ -163,7 +162,6 @@ CREATE TABLE CLIENTE_VEHICULO(
 GO
 
 -- MODULO INVENTARIO --
-
 CREATE TABLE CATEGORIA(
     idCategoria INT IDENTITY(1,1) PRIMARY KEY,
     nombreCategoria VARCHAR(100) NOT NULL
@@ -238,7 +236,6 @@ CREATE TABLE AUDITORIA_TABLAS(
 GO
 
 -- MODULO CONTROL DE FLUJO --
-
 CREATE TABLE ORDEN(
 
     idOrden INT IDENTITY(1,1) PRIMARY KEY,
@@ -320,9 +317,6 @@ CREATE TABLE NOTIFICACIONES(
 GO
 
 -- MODULO FINANZAS --
-
---JOB notificacion de atrasado y correo al cliente: VENTA.fechaVenta > 3 semanas and VENTA.ventaConsumada = 0 (no pagado)
---Listado de pagos atrasados: VENTA.fechaVenta > 3 semanas and VENTA.ventaConsumada = 0
 CREATE TABLE PAGO_CLIENTE(
 
     idPago BIGINT IDENTITY(1,1) PRIMARY KEY,
