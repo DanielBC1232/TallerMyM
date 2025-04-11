@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import imgRoutes from '../routes/inventario/imgRoutes.js';
@@ -18,19 +18,24 @@ import VehiculoRoute from '../routes/vehiculos/vehiculosRoutes.js';
 import pagoClienteRoutes from '../routes/finanzas/pagoClienteRoutes.js';
 import devolucionRoutes from '../routes/finanzas/devolucionRoutes.js';
 import AdministrativoRoute from '../routes/administrativo/AdminRoutes.js';
-import { connectDB } from '../config/database.js';
 import gastoOperativoRoutes from '../routes/finanzas/gastoOperativoRoutes.js';
 import reportesRoutes from '../routes/reportes/reportesRoutes.js';
 import dashboardRoutes from '../routes/finanzas/dashboardRoutes.js';
+import { connectDB } from '../config/database.js';
+
+dotenv.config({
+    path: `.env.${process.env.NODE_ENV}` // Carga el archivo .env según el entorno
+});
 
 const app = express();
-app.use(express.json()); // Middleware
-const PORT = 3000; // Iniciar servidor
+
+const PORT = process.env.PORT || 3000; // Usa el puerto desde el archivo .env
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
 });
+
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5173",//react
     methods: 'GET, POST, PUT, PATCH, DELETE',
 }));
 connectDB() // conexion BD
