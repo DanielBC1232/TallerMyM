@@ -8,7 +8,7 @@ GO
 
 --CREAR USUARIO (para conexion)
 
-CREATE LOGIN MYM_User WITH PASSWORD = 'T4ll3RMyM-';
+CREATE LOGIN MYM_User WITH PASSWORD = 'J}q`bJ758u*x';
 go
 
 --************  TABLAS  ***********--
@@ -42,7 +42,7 @@ CREATE TABLE USUARIO (
 GO
 
 INSERT INTO USUARIO(username, email, password, idRol)
-VALUES ('johndoe', 'johndoe@example.com', 'hashedpassword123', 1);
+VALUES ('admin', 'adminMYM@gmail.com', '74ed6b87b226e62b276b8a4399cdbb3efc3e22fd', 1);
 -- MODULO TRABAJADORES --
 
 CREATE TABLE TRABAJADOR(
