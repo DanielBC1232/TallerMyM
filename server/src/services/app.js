@@ -28,14 +28,14 @@ dotenv.config({
 });
 
 const app = express();
-
+app.use(express.json());
 const PORT = process.env.PORT || 3000; // Usa el puerto desde el archivo .env
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
 });
 
 app.use(cors({
-    origin: "http://localhost:5173",//react
+    origin: process.env.REACT_URL|| 'http://localhost:5173/',//react
     methods: 'GET, POST, PUT, PATCH, DELETE',
 }));
 connectDB() // conexion BD

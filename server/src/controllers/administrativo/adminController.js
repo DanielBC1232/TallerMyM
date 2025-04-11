@@ -80,6 +80,8 @@ const obtenerUsuario = async (req, res) => {
 
 const iniciarSesion = async (req, res) => {
   const { email, password } = req.body;
+  console.log(email);
+  
   const resultado = await UsuarioRepo.iniciarSesion(email, password);
 
   if (resultado.statusCode === 200) {

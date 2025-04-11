@@ -34,6 +34,8 @@ const Login = () => {
         }
         try {
             const response = await axios.post(`${BASE_URL}/admin/iniciar-sesion`, formValue);
+            console.log(formValue);
+            
             if (response.status === 200) {
                 // Login exitoso, redirige -- GENERAR SESION
 

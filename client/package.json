@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "cross-env dotenv -e .env.development vite",
+    "dev": "vite",
     "build": "cross-env dotenv -e .env.production vite build",
     "lint": "eslint .",
     "preview": "vite preview",
