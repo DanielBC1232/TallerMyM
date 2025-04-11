@@ -16,10 +16,9 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
@@ -28,20 +27,12 @@ jobs:
         working-directory: ./server
         run: npm install
 
-      - name: Create .env.production file
-        working-directory: ./server
-        run: |
-          echo "VAR1=${{ secrets.VAR1 }}" >> .env.production
-          echo "VAR2=${{ secrets.VAR2 }}" >> .env.production
-          echo "VAR3=${{ secrets.VAR3 }}" >> .env.production
-          # Agrega tantas como necesites
-
-      - name: Zip artifact for deployment
+      - name: Build ZIP from server folder only
         run: |
           cd server
           zip -r ../release.zip .
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: node-app
@@ -58,20 +49,20 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: node-app
 
-      - name: Unzip artifact for deployment
+      - name: Unzip artifact
         run: unzip release.zip
 
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6A9A3FDB968448BA8306C48525036639 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FB7C8BCA594F4AFCBA404AABE9A342A3 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2F12C8A9A4DD469D9AFC48ECA308A413 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -79,4 +70,5 @@ jobs:
         with:
           app-name: 'ExpressMYM'
           slot-name: 'Production'
-          package: ./server
+          package: .
+
