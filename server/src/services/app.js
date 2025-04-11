@@ -29,7 +29,7 @@ dotenv.config({
 
 const app = express();
 app.use(express.json());
-const PORT = process.env.PORT || 3000; // Usa el puerto desde el archivo .env
+const PORT = process.env.PORT; // Usa el puerto desde el archivo .env
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
 });
@@ -82,8 +82,6 @@ app.use("/admin", AdministrativoRoute);
 app.use("/flujo", ordenRoutes);
 //reportes
 app.use("/reportes", reportesRoutes);
-
-
 
 //pruebas de enviar correo al arrancar app
 /*
