@@ -23,8 +23,8 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: Install server dependencies
-        working-directory: ./server/package.json
+      - name: Install dependencies
+        working-directory: ./server
         run: npm install
 
       - name: Build ZIP from server folder only
