@@ -129,6 +129,7 @@ const ModalAgregarVehiculo = () => {
                       onChange={handleChange}
                       className="form-control form-select-sm"
                       required
+                      placeholder="* * * * * *"
                     />
                   </div>
                   <div className="mb-3">
@@ -140,6 +141,7 @@ const ModalAgregarVehiculo = () => {
                       onChange={handleChange}
                       className="form-control form-select-sm"
                       required
+                      placeholder="Ejemplo: Corolla, Sentra, ..."
                     />
                   </div>
                 </Col>
@@ -154,6 +156,7 @@ const ModalAgregarVehiculo = () => {
                       onChange={handleChange}
                       className="form-control form-select-sm"
                       required
+                      placeholder="Ejemplo: BMW, Honda, Nissan,..."
                     />
                   </div>
                   <div className="mb-3">
@@ -165,6 +168,7 @@ const ModalAgregarVehiculo = () => {
                       onChange={handleChange}
                       className="form-control form-select-sm"
                       required
+                      placeholder="Ejemplo: 2020"
                     />
                   </div>
                 </Col>
@@ -181,6 +185,7 @@ const ModalAgregarVehiculo = () => {
                       onChange={handleChange}
                       className="form-control form-select-sm"
                       required
+                      placeholder="Ejemplo: Sendán, Suv,..."
                     />
                   </div>
                 </Col>
