@@ -1,4 +1,4 @@
-import { Usuario, UsuarioRepository } from "../../models/administrativo/admin.js";
+import { UsuarioRepository } from "../../models/administrativo/admin.js";
 
 const UsuarioRepo = new UsuarioRepository();
 
@@ -80,8 +80,7 @@ const obtenerUsuario = async (req, res) => {
 
 const iniciarSesion = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email);
-  
+
   const resultado = await UsuarioRepo.iniciarSesion(email, password);
 
   if (resultado.statusCode === 200) {
@@ -91,12 +90,63 @@ const iniciarSesion = async (req, res) => {
   return res.status(resultado.statusCode).json({ message: resultado.message });
 };
 
+const enviarCorreoToken = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const resultado = await UsuarioRepo.enviarCorreoToken(email);
+
+    if (!resultado) {
+      return res.status(404).json({ error: "Correo no encontrado o no se pudo actualizar" });
+    }
+
+    res.status(200).json({ mensaje: "Token enviado exitosamente al correo" });
+
+  } catch (error) {
+    console.error("Error en enviarCorreoToken:", error);
+    res.status(500).json({ error: "Error al enviar correo" });
+  }
+};
+
+
+const verificarToken = async (req, res) => {
+  try {
+    const { email, token } = req.body;
+
+    const resultado = await UsuarioRepo.verificarToken(email, token);
+    if (resultado) {
+      res.status(200).json({ mensaje: "Token verificado correctamente" });
+    } else if (!resultado) {
+      res.status(404).json({ mensaje: "Token incorrecto" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error al validar token" });
+  }
+}
+
+const updateContrasena = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const resultado = await UsuarioRepo.updateContrasena(email, password);
+    if (resultado) {
+      res.status(200).json(true);
+    } else if (!resultado) {
+      res.status(404).json(false);
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error al cambiar constrasena" });
+  }
+}
 
 export {
   registrarUsuario,
   actualizarUsuario,
   cambiarEstadoUsuario,
-  obtenerUsuarios,//plural
-  obtenerUsuario,//singular
+  obtenerUsuarios,  //plural
+  obtenerUsuario, //singular
   iniciarSesion,
+  enviarCorreoToken,
+  verificarToken,
+  updateContrasena
 };

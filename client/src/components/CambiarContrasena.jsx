@@ -8,9 +8,8 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const CorreoRecuperacion = () => {
     const navigate = useNavigate();
     const [formValue, setFormValue] = useState({
-        email: '',
-        password: '',
-        confirmPassword: '',
+        email: localStorage.getItem("emailRecuperacion"),
+        password: ''
     });
 
     const handleChange = (e) => {
@@ -45,7 +44,8 @@ const CorreoRecuperacion = () => {
         }
 
         try {
-            const response = await axios.post(`${BASE_URL}/admin/cambiar-contrasena`, { email, password });
+            const response = await axios.put(`${BASE_URL}/admin/actualizar-contrasena`, { email, password });
+            console.log(response);
 
             if (response.status === 200) {
                 Swal.fire({
@@ -54,7 +54,10 @@ const CorreoRecuperacion = () => {
                     icon: "success",
                     timer: 2000,
                     timerProgressBar: true,
-                }).then(() => navigate('/login'));
+                }).then(() => {
+                    localStorage.removeItem("emailRecuperacion");
+                    navigate('/login');
+                });
             }
         } catch (error) {
             Swal.fire("Error", "No se pudo cambiar la contraseña", "error");

@@ -54,4 +54,22 @@ async function enviarCorreo(nombreCliente, correo, codigoOrden, vehiculo, estado
     }
 }
 
-export { enviarCorreo };
+// Función para enviar correo
+async function enviarCorreoVerificacion(email, token) {
+
+    const mailOptions = {
+        from: 'mymtaller.cr@gmail.com', // Correo del sistema
+        to: email, // Correo del cliente
+        subject: `Cambio de contraseña`,
+        text: `Saludos, \n\nSu código de verificacion es: ${token} \n\n El codigo expira en 1 hora.`
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`Correo enviado sobre cambio de contraseña`);
+    } catch (error) {
+        console.error("Error enviando correo:", error);
+    }
+}
+
+export { enviarCorreo, enviarCorreoVerificacion };

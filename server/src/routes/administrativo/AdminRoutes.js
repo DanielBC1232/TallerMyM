@@ -13,4 +13,9 @@ router.put('/editar/:idUsuario', authMiddleware, adminController.actualizarUsuar
 router.get('/obtenerUsuario/:id', authMiddleware, adminController.obtenerUsuario);
 router.put('/cambiar-estado-usuario', authMiddleware, adminController.cambiarEstadoUsuario);
 
+//Recuperacion por correo
+router.put("/enviar-correo-token", adminController.enviarCorreoToken);
+router.post("/verificar-token", adminController.verificarToken);
+router.put("/actualizar-contrasena", adminController.updateContrasena);
+
 export default router;

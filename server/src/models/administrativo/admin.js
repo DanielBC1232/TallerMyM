@@ -3,6 +3,7 @@ import { connectDB } from '../../config/database.js';
 import crypto from "crypto";
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../../services/jwtUtils.js';
+import { enviarCorreoVerificacion } from '../../config/mailerConfig.js';
 
 export class Usuario {
   constructor(username, email, password, idRol) {
@@ -22,6 +23,16 @@ export class Usuario {
 
 export class UsuarioRepository {
 
+  //Generar token
+  async generateToken() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let token = '';
+    for (let i = 0; i < 8; i++) {
+      token += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return token;
+  }
+
   // hash sha1
   async sha1Hash(plainText) {
     return await crypto.createHash("sha1").update(plainText).digest("hex");
@@ -29,7 +40,7 @@ export class UsuarioRepository {
 
   async iniciarSesion(email, password) {
     const pool = await connectDB();
-  
+
     const result = await pool
       .request()
       .input("email", sql.NVarChar, email)
@@ -39,24 +50,24 @@ export class UsuarioRepository {
         FROM USUARIO 
         WHERE email = @email
       `);
-    
+
     const usuario = result.recordset[0];
-    
+
     if (!usuario) {
       return { statusCode: 401, message: "Credenciales no validas" };
     }
-  
+
     // Si la cuenta está bloqueada
     if (usuario.isLocked === true) {
       return { statusCode: 423, message: "La cuenta esta bloqueada" };
     }
-  
+
     // Compara la contraseña proporcionada con la almacenada (encriptada)
     const hashInput = await this.sha1Hash(password);
-  
+
     if (hashInput === usuario.password) {
       // Si las credenciales son correctas y la cuenta no está bloqueada
-  
+
       // Actualizamos la fecha de último login y reestablecemos los intentos fallidos
       await pool
         .request()
@@ -67,7 +78,7 @@ export class UsuarioRepository {
               failedLoginAttempts = 5
           WHERE idUsuario = @idUsuario
         `);
-  
+
       // Creamos el token JWT
       const { idUsuario, username, email, idRol } = usuario;
       const token = jwt.sign(
@@ -75,14 +86,14 @@ export class UsuarioRepository {
         JWT_SECRET,
         { expiresIn: "1h" } // El token expira en 1 hora
       );
-  
+
       return {
         statusCode: 200,
-        data: { 
-          idUsuario, 
-          username, 
-          email, 
-          idRol, 
+        data: {
+          idUsuario,
+          username,
+          email,
+          idRol,
           token  //JWT generado
         }
       };
@@ -225,6 +236,84 @@ export class UsuarioRepository {
     } catch (error) {
       console.error("Error al obtener el usuario por ID:", error);
       throw new Error("Error al obtener usuario");
+    }
+  }
+
+  // Verificar/enviar correo con token generado (recuperacion de contrasena)
+  async enviarCorreoToken(email) {
+    try {
+      const resetToken = await this.generateToken();//Generar token
+      const resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000);//tiempo de expiracion
+
+      const pool = await connectDB();
+      const result = await pool
+        .request()
+        .input("email", sql.NVarChar(100), email)
+        .input("resetToken", sql.NVarChar(100), resetToken)
+        .input("resetTokenExpiry", sql.DateTime, resetTokenExpiry)
+        .query(`
+          UPDATE USUARIO
+          SET resetToken = @resetToken,
+              resetTokenExpiry = @resetTokenExpiry
+          WHERE email = @email
+        `);
+      if (result.rowsAffected[0] > 0) {
+        await enviarCorreoVerificacion(email, resetToken);
+      }
+      return result.rowsAffected[0];
+
+    } catch (error) {
+      console.error("Error al verificar el correo:", error);
+      throw new Error("Error al verificar existencia de correo");
+    }
+  }
+
+  // Verificar token (recuperacion de contrasena) - cuando el usuario ingresa el token
+  async verificarToken(email, token) {
+    try {
+
+      const pool = await connectDB();
+      const result = await pool
+        .request()
+        .input("email", sql.NVarChar(100), email)
+        .input("resetToken", sql.NVarChar(100), token)
+        .query(`
+          SELECT * FROM USUARIO
+          WHERE resetToken = @resetToken AND resetTokenExpiry > GETDATE()
+        `);
+      return result.recordset[0];
+    } catch (error) {
+      console.error("Error al verificar el correo:", error);
+      throw new Error("Error al verificar existencia de correo");
+    }
+  }
+
+  // Cambiar contrasena
+  async updateContrasena(email, password) {
+    try {
+      const pool = await connectDB();
+
+      if (password && password.trim() !== "") {
+        // Hashear la contraseña
+        var hashedPassword = await this.sha1Hash(password);
+      }
+
+      const result = await pool
+        .request()
+        .input("email", sql.NVarChar(100), email)
+        .input("password", sql.NVarChar(255), hashedPassword)
+        .query(`
+          UPDATE USUARIO
+          SET password = @password,
+              resetToken = NULL,
+              resetTokenExpiry = NULL,
+              lastPasswordChange = GETDATE()
+          WHERE email = @email
+        `);
+      return result.rowsAffected[0];
+    } catch (error) {
+      console.error("Error al actualizar el usuario:", error);
+      throw new Error("Error al actualizar usuario");
     }
   }
 
