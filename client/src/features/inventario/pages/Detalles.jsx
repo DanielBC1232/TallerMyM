@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { BrowserRouter as Router, useNavigate, Link } from "react-router-dom";
 import { Image } from "rsuite";
 
-import "../styles/inv.module.css";
+import "../styles/inv.css";
 
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;

@@ -5,7 +5,7 @@ import SelectProveedor from "../components/SelectProveedor";
 import SubirImagen from "../components/SubirImagen";
 import SelectVehiculos from "../components/SelectVehiculos";
 import { Grid, Row, Col } from "rsuite";
-import "../styles/inv.module.css";
+import "../styles/inv.css";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";

@@ -1,6 +1,4 @@
 import "rsuite/dist/rsuite.min.css";
-//import "./styles/custom.css";
-//import "./styles/style.css";
 import './styles/app.css';
 import React from "react";
 import Header from "./components/Header";

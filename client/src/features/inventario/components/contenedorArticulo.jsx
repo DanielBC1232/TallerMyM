@@ -66,44 +66,34 @@ const ContenedorProductos = ({ formData }) => {
   //url get imagen para las previsualizaciones
   const getImg = (img) => img ? `${BASE_URL}/img/${img}` : "/noResult.png";
 
-
   return (
-    <div className="article-container article-scroll">
-      {listado.map((productos) => (
-        <div
-          key={productos.idProducto}
-          className="card article border-0 rounded rounded-4"
-        >
-          <div className="imgFrame">
-            <Link
-              to={`/inventario-detalles/${productos.idProducto}`}
-              className="btn-link"
-            >
-              <Image
-                className="card-img-top"
-                //src={getImg+productos.img}
-                src={getImg(productos.img)}
-                fallbackSrc="/noResult.png"
-                alt=""
-                style={{ width: "100%", minHeight: "120px" }}
-              />
-            </Link>
+    <div className="article-container mt-3">
+      {listado.map((producto) => (
+        <div key={producto.idProducto} className="article card border-0 rounded rounded-4 pb-2" style={{ width: "300px" }}>
+          <div className="d-flex justify-content-center">
+            <Image src={getImg(producto.img)} fallbackSrc="/noResult.png" alt={producto.nombre}
+              style={{ width: "150px", height: "250px" }} />
           </div>
-          <div className="card-body">
-            <h5 className="card-title">
-              <strong className="text-secondary">{productos.nombre}</strong>
-            </h5>
-            <span className="card-text">
-              <strong className="text-dark">Categoría:</strong>{" "}
-              {productos.categoria}
-            </span>
-            <br />
-            <span className="card-text">
-              <strong>Stock:</strong> {productos.stock}
-            </span><br />
-            <span className="card-text">
-              <strong>Precio:</strong> ₡{productos.precio}
-            </span>
+          <div className="card-body p-3">
+            <div className="text-center">
+              <h5 className="fw-bolder text-secondary">{producto.nombre}</h5>
+              <span className="d-block">
+                <strong className="text-dark">Categoría:</strong> {producto.categoria}
+              </span>
+              <span className="d-block">
+                <strong>Stock:</strong> {producto.stock}
+              </span>
+              <span className="d-block">
+                <strong>Precio:</strong> ₡{producto.precio}
+              </span>
+            </div>
+          </div>
+          <div className="card-footer pt-0 border-top-0 bg-transparent">
+            <div className="text-center">
+              <Link className="btn btn-outline-dark mt-auto" to={`/inventario-detalles/${producto.idProducto}`}>
+                Ver Detalles
+              </Link>
+            </div>
           </div>
         </div>
       ))}
