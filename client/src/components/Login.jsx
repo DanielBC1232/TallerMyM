@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from "axios";
+import { Text } from "rsuite";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -35,7 +36,7 @@ const Login = () => {
         try {
             const response = await axios.post(`${BASE_URL}/admin/iniciar-sesion`, formValue);
             //console.log(formValue);
-            
+
             if (response.status === 200) {
                 // Login exitoso, redirige -- GENERAR SESION
 
@@ -48,7 +49,7 @@ const Login = () => {
 
                 //console.log(response.data);
 
-                navigate('/');
+                navigate('/flujo');
             }
         } catch (error) {
             const status = error.response?.status;
@@ -79,50 +80,53 @@ const Login = () => {
     };
 
     return (
-        <div className="mt-5 d-flex justify-content-center">
-            <form onSubmit={handleSubmit}>
-                <div className="ms-5 mt-3">
-                    <div className="mb-3">
-                        <label htmlFor="email" className="form-label">
-                            Correo:
-                        </label>
-                        <input
-                            type="email"
-                            className="form-control form-select-sm"
-                            name="email"
-                            value={formValue.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="password" className="form-label">
-                            Contraseña:
-                        </label>
-                        <input
-                            type="password"
-                            className="form-control form-select-sm"
-                            name="password"
-                            value={formValue.password}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
+        <div className='login-page'>
+            <div className="container d-flex align-items-center justify-content-center min-vh-100">
+                <div className="row w-100">
+                    <div className="col-12 col-md-6 col-lg-4 mx-auto">
+                        <div className="card shadow-sm">
+                            <div className='card-header'>
+                                <h1 className='text-center text-primary'><strong>Taller MyM</strong></h1>
+                                <hr className='text-primary'></hr>
+                            </div>
+                            <div className="card-body">
+                                <form onSubmit={handleSubmit}>
+                                    <div className="mb-3">
+                                        <label htmlFor="email" className="form-label">
+                                            Correo:
+                                        </label>
+                                        <input type="email" className="form-control rounded-5"
+                                            name="email"
+                                            value={formValue.email}
+                                            onChange={handleChange}
+                                            required />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="password" className="form-label">Contraseña:</label>
+                                        <input type="password" className="form-control rounded-5"
+                                            id="password"
+                                            name="password"
+                                            value={formValue.password}
+                                            onChange={handleChange}
+                                            required />
+                                    </div>
+                                    <div className="d-flex justify-content-center mt-5">
+                                        <button className="btn btn-primary text-white rounded-5" type="submit">
+                                            Iniciar sesión
+                                        </button>
+                                    </div>
 
-                    <div >
-                        <div className="d-flex justify-content-center mt-4">
-                            <button className="btn btn-sm btn-secondary text-white" type="submit">
-                                Iniciar sesión
-                            </button>
-                        </div>
-                        <div className="d-flex justify-content-center mt-4">
-                            <Link to="/verificar-correo" className="text-decoration-none">
-                                ¿Olvidaste tu contraseña?
-                            </Link>
+                                    <div className="d-flex justify-content-center mt-3">
+                                        <Link to="/verificar-correo" className="text-decoration-none">
+                                            <Text muted color="blue">¿Olvidaste tu contraseña?</Text>
+                                        </Link>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     );
 };

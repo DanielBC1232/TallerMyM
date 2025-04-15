@@ -4,7 +4,7 @@ import { IoIosNotifications } from "react-icons/io";
 import { MdDeleteSweep } from "react-icons/md";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 //URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -136,57 +136,46 @@ const Notificaciones = ({ modulo }) => {
     };
 
     return (
-        <div>
-            {
-                notificaciones.length > 0 ? (
-                    <div className="badge-wrapper">
-                        <Badge content={notificaciones.length} maxCount={99}>
-                            <Button onClick={() => setOpen(true)} className="floating-button">
-                                <IoIosNotifications size={28} />
-                            </Button>
-                        </Badge>
-                    </div>
-                ) : (
-                    <Button onClick={() => setOpen(true)} className="floating-button">
-                        <IoIosNotifications size={28} />
-                    </Button>
-                )
-            }
-            <div>
-                <Drawer open={open} onClose={() => setOpen(false)}>
-                    <Drawer.Header className="px-5 bg-primary">
-                        <Drawer.Title className="text-white">Notificaciones ({notificaciones.length})</Drawer.Title>
-                    </Drawer.Header>
-                    <Drawer.Body className="p-4" style={{ background: "#EEE" }}>
-                        <Stack spacing={10} direction="column" alignItems="flex-start" className="row ms-1 me-1">
-                            {notificaciones.length > 0 ? (
-                                notificaciones.map(noti => (
-                                    <Notification key={noti.idNotificacion} className="rounded-4 row notification p-0"
-                                        type={noti.tipo} header={noti.titulo}>
-                                        <hr />
-                                        <div className="d-flex align-items-center">
-                                            <Col xs={20}>
-                                                <Text size="md">{noti.cuerpo}</Text>
-                                                <Text size="sm" muted>{noti.fecha}</Text>
-                                            </Col>
-                                            <Col xs={2} className="mx-auto">
-                                                <Button className="btn-eliminar" onClick={() => Eliminar(noti.idNotificacion)}>
-                                                    <MdDeleteSweep style={{ fontSize: "30px" }} />
-                                                </Button>
-                                            </Col>
-                                        </div>
-                                    </Notification>
-                                ))
-                            ) : (
-                                <Message type="info" >
-                                    <strong>Sin Notificaciones</strong> No tienes nuevas notificaciones en este momento.
-                                </Message>
-                            )}
-                        </Stack>
-                    </Drawer.Body>
-                </Drawer>
-            </div>
+        <>
+        <div className="floating-button-wrapper">
+            <button onClick={() => setOpen(true)} className="floating-button position-relative">
+                <IoIosNotifications size={28} />
+                {notificaciones.length > 0 && (
+                    <span className="notification-badge">{notificaciones.length}</span>
+                )}
+            </button>
         </div>
+
+        <Drawer open={open} onClose={() => setOpen(false)}>
+            <Drawer.Header className="px-5 bg-primary">
+                <Drawer.Title className="text-white">
+                    Notificaciones ({notificaciones.length})
+                </Drawer.Title>
+            </Drawer.Header>
+            <Drawer.Body className="p-4" style={{ background: "#EEE" }}>
+                <Stack spacing={10} direction="column" alignItems="flex-start" className="row ms-1 me-1">
+                    {notificaciones.length > 0 ? (
+                        notificaciones.map((noti) => (
+                            <div key={noti.idNotificacion} className="rounded-4 row notification p-3 bg-white w-100 mb-2 shadow-sm">
+                                <div className="fw-bold">{noti.titulo}</div>
+                                <div>{noti.cuerpo}</div>
+                                <div className="text-muted" style={{ fontSize: "0.8rem" }}>{noti.fecha}</div>
+                                <div className="text-end mt-2">
+                                    <button className="btn btn-danger btn-sm" onClick={() => Eliminar(noti.idNotificacion)}>
+                                        <MdDeleteSweep size={20} />
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <Message type="info">
+                            <strong>Sin Notificaciones</strong> No tienes nuevas notificaciones en este momento.
+                        </Message>
+                    )}
+                </Stack>
+            </Drawer.Body>
+        </Drawer>
+    </>
     )
 }
 export default Notificaciones;

@@ -1,9 +1,9 @@
 import "rsuite/dist/rsuite.min.css";
-import "./styles/custom.css";
-import "./styles/style.css";
+//import "./styles/custom.css";
+//import "./styles/style.css";
+import './styles/app.css';
 import React from "react";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import { Routes, Route, useLocation } from "react-router-dom";
 
@@ -52,65 +52,63 @@ import EditarUsuario from "./features/admininstracion/pages/EditarUsuario.jsx";
 import Login from "./components/Login.jsx";
 import CambiarContrasena from "./components/CambiarContrasena.jsx";
 import VerificarCorreo from "./components/EnviarCorreoRecuperacion.jsx";
+
 const App = () => {
+
   const location = useLocation();
-  // Definir las rutas en las que NO se debe mostrar el Header
-  const hideHeaderRoutes = ["/login", "/cambiar-contrasena", "/verificar-correo"];
+  const hideHeaderRoutes = ["/login", "/cambiar-contrasena", "/verificar-correo"];// Definir las rutas en las que NO se debe mostrar el Header
+
   return (
-    <div className="app">
-      {!hideHeaderRoutes.includes(location.pathname) && <Header />}
-      <main style={{ minHeight: "95vh" }}>
+    <div className="">
+      {hideHeaderRoutes.includes(location.pathname) ? (
         <Routes>
-          {/* Rutas públicas */}
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
           <Route path="/verificar-correo" element={<VerificarCorreo />} />
 
-          {/* Inventario */}
-          <Route path="/inventario-agregar" element={<Agregar />} />
-          <Route path="/inventario" element={<IndexInventario />} />
-          <Route path="/inventario-detalles/:idProducto" element={<Detalles />} />
-          <Route path="/inventario-editar/:idProducto" element={<Editar />} />
-          <Route path="/solicitudes" element={<Solicitudes />} />
-
-          {/* Flujo */}
-          <Route path="/flujo" element={<IndexFlujo />} />
-          <Route path="/flujo-detalles/:idOrden" element={<DetallesOrden />} />
-          <Route path="/flujo-editar/:idOrden" element={<EditarOrden />} />
-
-          {/* Ventas */}
-          <Route path="/ventas" element={<IndexVentas />} />
-          <Route path="/cotizacion" element={<IndexCotizacion />} />
-          <Route path="/cotizacion-editar/:idCotizacion" element={<EditarCotizacion />} />
-          <Route path="/detalles/:idVenta" element={<Venta />} />
-
-          {/* Finanzas (Rutas protegidas) */}
-          <Route path="/gastos-operativos" element={<PrivateRoute element={<GastosOperativos />} />} />
-          <Route path="/Dashboard" element={<PrivateRoute element={<Dashboard />} />} />
-          <Route path="/Reportes" element={<PrivateRoute element={<Reportes />} />} />
-
-          {/* Trabajadores */}
-          <Route path="/trabajadores" element={<IndexTrabajadores />} />
-          <Route path="/trabajadores-agregar" element={<AgregarTrabajador />} />
-          <Route path="/trabajadores-editar/:idTrabajador" element={<EditarTrabajador />} />
-          <Route path="/trabajadores-agregar-amonestacion" element={<AgregarAmonestacion />} />
-          <Route path="/trabajadores-registrar-ausencia" element={<AgregarAusencia />} />
-
-          {/* Clientes */}
-          <Route path="/clientes" element={<IndexClientes />} />
-          <Route path="/cliente-editar/:cedula" element={<EditarCliente />} />
-
-          {/* Vehículos */}
-          <Route path="/vehiculos" element={<IndexVehiculos />} />
-          <Route path="/vehiculo-editar/:idVehiculo" element={<EditarVehiculo />} />
-
-          {/* Administración (Rutas protegidas) */}
-          <Route path="/administracion" element={<PrivateRoute element={<IndexUsuarios />} />} />
-          <Route path="/usuario-editar/:idUsuario" element={<PrivateRoute element={<EditarUsuario />} />} />
         </Routes>
-      </main>
-      <Footer />
+      ) : (
+        <Header>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            {/* Rutas de Inventario */}
+            <Route path="/inventario-agregar" element={<Agregar />} />
+            <Route path="/inventario" element={<IndexInventario />} />
+            <Route path="/inventario-detalles/:idProducto" element={<Detalles />} />
+            <Route path="/inventario-editar/:idProducto" element={<Editar />} />
+            <Route path="/solicitudes" element={<Solicitudes />} />
+            {/* Rutas de Flujo */}
+            <Route path="/flujo" element={<IndexFlujo />} />
+            <Route path="/flujo-detalles/:idOrden" element={<DetallesOrden />} />
+            <Route path="/flujo-editar/:idOrden" element={<EditarOrden />} />
+            {/* Rutas de Ventas */}
+            <Route path="/ventas" element={<IndexVentas />} />
+            <Route path="/cotizacion" element={<IndexCotizacion />} />
+            <Route path="/cotizacion-editar/:idCotizacion" element={<EditarCotizacion />} />
+            <Route path="/detalles/:idVenta" element={<Venta />} />
+            {/* Rutas de Finanzas (protegidas) */}
+            <Route path="/gastos-operativos" element={<PrivateRoute element={<GastosOperativos />} />} />
+            <Route path="/Dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+            <Route path="/Reportes" element={<PrivateRoute element={<Reportes />} />} />
+            {/* Rutas de Trabajadores */}
+            <Route path="/trabajadores" element={<IndexTrabajadores />} />
+            <Route path="/trabajadores-agregar" element={<AgregarTrabajador />} />
+            <Route path="/trabajadores-editar/:idTrabajador" element={<EditarTrabajador />} />
+            <Route path="/trabajadores-agregar-amonestacion" element={<AgregarAmonestacion />} />
+            <Route path="/trabajadores-registrar-ausencia" element={<AgregarAusencia />} />
+            {/* Rutas de Clientes */}
+            <Route path="/clientes" element={<IndexClientes />} />
+            <Route path="/cliente-editar/:cedula" element={<EditarCliente />} />
+            {/* Rutas de Vehiculos */}
+            <Route path="/vehiculos" element={<IndexVehiculos />} />
+            <Route path="/vehiculo-editar/:idVehiculo" element={<EditarVehiculo />} />
+            {/* Rutas de Administracion (protegidas) */}
+            <Route path="/administracion" element={<PrivateRoute element={<IndexUsuarios />} />} />
+            <Route path="/usuario-editar/:idUsuario" element={<PrivateRoute element={<EditarUsuario />} />} />
+          </Routes>
+        </Header>
+      )}
     </div>
   );
 };

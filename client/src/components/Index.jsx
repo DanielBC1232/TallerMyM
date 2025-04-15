@@ -2,8 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import React from "react";
 import { Card } from "rsuite";
 import { Link, useNavigate } from "react-router-dom";
-
-import "../styles/style.css";
+import '../styles/app.css';
 
 import { FaInbox } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
@@ -12,7 +11,6 @@ import { FaUserFriends } from "react-icons/fa";
 import { FaUserTie } from "react-icons/fa";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
 import { FaCarRear } from "react-icons/fa6";
-import { TbReport } from "react-icons/tb";
 
 const Index = () => {
   const idRol = localStorage.getItem('idRol');

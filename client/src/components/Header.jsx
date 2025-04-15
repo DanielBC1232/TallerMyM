@@ -1,63 +1,142 @@
-import { Navbar, Nav, Image, Button } from "rsuite";
-import MoveDownIcon from "@rsuite/icons/MoveDown";
-import CogIcon from "@rsuite/icons/legacy/Cog";
-import logo from "../assets/Logo.png";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-
-const Header = ({ onSelect, activeKey, ...props }) => {
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { Text } from "rsuite";
+// Iconos
+import { FiAlignLeft } from "react-icons/fi";
+//Iconos
+const Header = ({ children }) => {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
-
   useEffect(() => {
-    // si no hay sesino iniciada, devualve al login
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
     }
   }, [navigate]);
-
   const handleLogout = () => {
     localStorage.clear();
-    // Redirect to login page
     navigate("/login");
   };
-
+  const toggleSidebar = (e) => {
+    e.preventDefault();
+    setSidebarCollapsed((prev) => !prev);
+  };
   return (
-    <Navbar {...props} appearance="inverse" className="shadow-sm">
-      <Navbar.Brand as={Link} to="/"
-        style={{ display: "flex", alignItems: "center" }}>
-        <Image
-          circle
-          src={logo}
-          alt="Logo"
-          style={{
-            position: "relative",
-            width: "65px",
-            height: "65px",
-            objectFit: "contain",
-          }}
-        />
-      </Navbar.Brand>
-      <Nav onSelect={onSelect} activeKey={activeKey}>
-        <Nav.Menu title="Inventario">
-          <Nav.Item as={Link} to="/inventario" eventKey="1">Productos y Servicios</Nav.Item>
-          <Nav.Item as={Link} to="/solicitudes" eventKey="1">Solicitudes</Nav.Item>
-        </Nav.Menu>
-        <Nav.Item eventKey="3">Trabajadores</Nav.Item>
-        <Nav.Item eventKey="4">Clientes</Nav.Item>
-        <Nav.Menu title="Administrativo">
-          <Nav.Item as={Link} to="/perfil-crear" eventKey="5">CrearPerfil</Nav.Item>
-        </Nav.Menu>
-      </Nav>
-      <Nav pullRight>
-        <Nav.Menu icon={<CogIcon />} title="Ajustes">
-          <Nav.Item eventKey="2">
-            <Button onClick={handleLogout}>Cerrar Sesión</Button>
-            <MoveDownIcon />
-          </Nav.Item>
-        </Nav.Menu>
-      </Nav>
-    </Navbar>
+    <div className={`wrapper ${sidebarCollapsed ? "collapsed" : ""}`}>
+      <nav id="sidebar" className="sidebar">
+        <div className="sidebar-content">
+          <Link className="sidebar-brand" to="/">
+            Taller MyM
+          </Link>
+          {/* icono *** */}
+          <hr className="text-primary mx-3 m-0"></hr>
+          <ul className="sidebar-nav">
+            {/* Flujo */}
+            <li className="sidebar-header">Flujo de Trabajo</li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/flujo">
+                Ordenes
+              </Link>
+            </li>
+
+            {/* Clientes */}
+            <li className="sidebar-header">Clientes</li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/clientes">
+                Lista de clientes
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/vehiculos">
+                Vehiculos
+              </Link>
+            </li>
+
+            {/* Ventas */}
+            <li className="sidebar-header">Ventas</li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/ventas">
+                Ordenes Finalizadas
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/ventas">
+                Lista de ventas
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/cotizacion">
+                Cotizar
+              </Link>
+            </li>
+
+            {/* Inventario */}
+            <li className="sidebar-header">Inventario</li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/inventario">
+                Catalogo de Inventario
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/solicitudes">
+                Solicitudes de repuestos
+              </Link>
+            </li>
+
+            {/* Administracion */}
+            <li className="sidebar-header">Administracion</li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/Dashboard">
+                Dashboard
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/administracion">
+                Administracion
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/Reportes">
+                Reportes
+              </Link>
+            </li>
+            {/* Trabajadores - Administracion */}
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/trabajadores">
+                Empleados
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div className="main">
+        <nav className="navbar navbar-expand navbar-light">
+          <a className="sidebar-toggle"
+            href="#"
+            onClick={toggleSidebar}><FiAlignLeft /></a>
+          <div className="navbar-collapse collapse">
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" role="button" id="userDropdown" data-bs-toggle="dropdown">
+                  {localStorage.getItem("username")}
+                </a>
+                <div className="dropdown-menu dropdown-menu-end border-0 shadow" aria-labelledby="userDropdown">
+                  <button id="logout-option" className="dropdown-item custom-logout" onClick={handleLogout}>
+                    <Text size='md'>Cerrar Sesión</Text>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </nav>
+        <div className="content-wrapper p-3">
+          {children}
+        </div>
+      </div>
+    </div>
   );
 };
 

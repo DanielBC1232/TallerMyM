@@ -9,7 +9,6 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const SelectProveedor = ({ value, onChange }) => {
   const navigate = useNavigate();
   const [opciones, setOpciones] = useState([]);
-
   useEffect(() => {
     const obtenerProveedors = async () => {
       try {
@@ -56,7 +55,7 @@ const SelectProveedor = ({ value, onChange }) => {
 
   return (
     <div className="">
-      <select id="proveedor" name="proveedor" className="form-select" value={value} onChange={onChange}>
+      <select id="proveedor" name="proveedor" className="form-select rounded-5 py-2" value={value} onChange={onChange} >
         <option value="">Seleccione...</option>
         {opciones.map((Proveedor) => (
           <option key={Proveedor.idProveedor} value={Proveedor.nombreProveedor}>

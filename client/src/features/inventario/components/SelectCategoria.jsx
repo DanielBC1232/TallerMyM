@@ -54,7 +54,7 @@ const SelectCategoria = ({ value, onChange }) => {
 
   return (
     <div className="">
-      <select id="categoria" name="categoria" className="form-select" value={value} onChange={onChange}>
+      <select id="categoria" name="categoria" className="form-select rounded-5 py-2 custom-select" value={value} onChange={onChange}>
         <option value="">Seleccione...</option>
         {opciones.map((categoria) => (
           <option key={categoria.idCategoria} value={categoria.nombreCategoria}>

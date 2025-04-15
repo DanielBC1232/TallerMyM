@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Row, Col } from "rsuite";
-import "../styles/flu.css";
+import "../styles/flu.module.css";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate, useParams, Link } from "react-router-dom";

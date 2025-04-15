@@ -3,15 +3,6 @@ body {
   min-height: 100vh;
 }
 
-footer {
-  background-color: #d9e2e9;
-  text-align: center;
-  min-height: 550px;
-  position:relative;
-  background: linear-gradient(to right, #004680, #005ba5);
-  backdrop-filter: blur(10px); /* Efecto blur (vidrio esmerilado) */
-}
-
 footer.footer-white-text{
 
  color: #fff 

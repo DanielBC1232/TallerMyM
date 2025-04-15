@@ -40,7 +40,7 @@ CREATE TABLE USUARIO (
     FOREIGN KEY (idRol) REFERENCES Roles(idRol) -- Relación con la tabla Roles
 );
 GO
-
+select * from USUARIO
 INSERT INTO USUARIO(username, email, password, idRol)
 VALUES ('admin', 'adminMYM@gmail.com', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 1);--password:password
 --select * from USUARIO

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import axios from "axios";
 import TablaSolicitudes from "../components/TablaSolicitudes";
-import "../styles/inv.css";
+import "../styles/inv.module.css";
 
 const Solicitudes = () => {
   const navigate = useNavigate(); // Hook para navegar

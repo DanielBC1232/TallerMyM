@@ -5,7 +5,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { Grid, Row, Col, Text } from "rsuite";
-import "../styles/flu.css";
+import "../styles/flu.module.css";
 import ColPendiente from "../components/ColPendiente";
 import ColProgreso from "../components/ColProgreso";
 import ColListo from "../components/ColListo";
@@ -16,13 +16,10 @@ const IndexFlujo = () => {
   const navigate = useNavigate(); // Hook para navegar
 
   return (
-    <div className="grid-container">
+    <div className="">
       {/* OPCIONES */}
       <Notificaciones modulo={'FLUJO'}/>
-      <nav
-        className="sidebar p-4 rounded-3 shadow-sm p-2"
-        style={{ maxWidth: "550px" }}
-      >
+      <nav className="p-4 rounded-3 shadow-sm p-2" style={{ maxWidth: "550px" }}>
         <ModalAgregarOrden />
       </nav>
 

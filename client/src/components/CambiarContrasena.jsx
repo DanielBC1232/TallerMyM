@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from "axios";
+import { Text } from "rsuite";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -65,36 +66,52 @@ const CorreoRecuperacion = () => {
     };
 
     return (
-        <div className="mt-5 d-flex justify-content-center">
-            <form onSubmit={handleSubmit}>
-                <div className="ms-5 mt-3">
-                    <div className="mb-3">
-                        <label className="form-label">Nueva contraseña:</label>
-                        <input
-                            type="password"
-                            name="password"
-                            className="form-control"
-                            value={formValue.password}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label">Confirmar nueva contraseña:</label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            className="form-control"
-                            value={formValue.confirmPassword}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="d-flex justify-content-center mt-4">
-                        <button className="btn btn-sm btn-secondary text-white" type="submit">
-                            Cambiar contraseña
-                        </button>
+        <div className='login-page'>
+            <div className="container d-flex align-items-center justify-content-center min-vh-100">
+                <div className="row w-100">
+                    <div className="col-12 col-md-6 col-lg-4 mx-auto">
+                        <div className="card shadow-sm">
+                            <div className='card-header'>
+                                <Text size='xxl' weight="bold" className='text-center text-primary'>Cambiar contraseña</Text>
+                                <hr className='text-primary'></hr>
+                            </div>
+                            <div className="card-body">
+                                <form onSubmit={handleSubmit}>
+                                    <div className="mb-3">
+                                        <label htmlFor="password" className="form-label">Nueva contraseña:</label>
+                                        <input
+                                            type="password"
+                                            className="form-control rounded-5"
+                                            id="password"
+                                            name="password"
+                                            value={formValue.password}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="confirmPassword" className="form-label">Confirmar nueva contraseña:</label>
+                                        <input
+                                            type="password"
+                                            className="form-control rounded-5"
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            value={formValue.confirmPassword}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="d-flex justify-content-center mt-5">
+                                        <button className="btn btn-primary text-white rounded-5" type="submit">
+                                            Cambiar contraseña
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     );
 };

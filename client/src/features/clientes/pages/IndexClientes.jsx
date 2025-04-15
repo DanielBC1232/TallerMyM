@@ -157,9 +157,6 @@ const IndexClientes = () => {
           onChange={(e) => setFiltroCedula(e.target.value)}
           className="form-control w-50 me-3"
         />
-        {/* <Link to="/cliente-agregar" className="btn btn-sm btn-secondary text-white">
-          Agregar Cliente
-        </Link> */}
         <ModalAgregarCliente />
         <Link to="/cotizacion" className="btn btn-sm btn-secondary text-white">
           Cotizaciones

@@ -56,7 +56,7 @@ const SelectMarca = ({ value, onChange }) => {
 
   return (
     <div className="">
-      <select id="marca" name="marca" className="form-select" value={value} onChange={onChange}>
+      <select id="marca" name="marca" className="form-select rounded-5 py-2" value={value} onChange={onChange}>
         <option value="">Seleccione...</option>
         {opciones.map((Marca) => (
           <option key={Marca.idMarca} value={Marca.nombreMarca}>

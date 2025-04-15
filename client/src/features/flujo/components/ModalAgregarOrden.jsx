@@ -72,7 +72,7 @@ const ModalAgregarOrden = () => {
           descripcion: ""
         });
         setOpen(false);
-        window.location.reload();
+        navigate(0);
       } else {
         Swal.fire({
           icon: "warning",
@@ -100,7 +100,6 @@ const ModalAgregarOrden = () => {
       } else {
         message = "Error desconocido, por favor intente más tarde";
       }
-
       Swal.fire({
         icon: "error",
         title: message,
@@ -108,28 +107,20 @@ const ModalAgregarOrden = () => {
         timer: 1500,
       });
     }
-
   };
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   return (
     <>
-      <Button
-        style={{ minWidth: "80px", maxWidth: "350px" }}
-        className="btn btn-primary btn-sm text-white"
-        onClick={handleOpen}
-      >
-        Agregar Orden
-      </Button>
-
+      <Button style={{ minWidth: "80px", maxWidth: "350px" }} className="btn btn-primary rounded-5 text-white"
+        onClick={handleOpen}>Agregar Orden</Button>
       <Modal open={open} onClose={handleClose} size="lg">
-        <Modal.Header>
+        <Modal.Header className="p-3">
           <Modal.Title>Agregar Orden</Modal.Title>
+          <hr className="text-primary px-3" />
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit}>
+          <form className="p-3" onSubmit={handleSubmit}>
             <Grid fluid>
               <Row gutter={16}>
                 <Col xs={24} md={12}>
@@ -148,27 +139,20 @@ const ModalAgregarOrden = () => {
                     <label>Mecánico:</label>
                     <SelectTrabajadores
                       value={formData.idTrabajador}
-                      onChange={(e) =>
-                        setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))
-                      }
+                      onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))}
                       className="form-select-sm"
-                      required
-                    />
+                      required />
                   </div>
                 </Col>
-
                 <Col xs={24} md={12}>
                   <div className="mb-3">
                     <label>Vehículo:</label>
                     <SelectVehiculos
                       idCliente={formData.idCliente}
                       value={formData.idVehiculo}
-                      onChange={(e) =>
-                        setFormData(prev => ({ ...prev, idVehiculo: e.target.value }))
-                      }
-                      className="form-select-sm"
-                      required
-                    />
+                      onChange={(e) => setFormData(prev => ({ ...prev, idVehiculo: e.target.value }))}
+                      className="form-select rounded-5"
+                      required />
                   </div>
                   <div className="mb-3">
                     <label>Tiempo estimado:</label>
@@ -177,10 +161,9 @@ const ModalAgregarOrden = () => {
                       name="tiempoEstimado"
                       value={formData.tiempoEstimado}
                       onChange={handleChange}
-                      className="form-control"
+                      className="form-control rounded-5"
                       style={{ maxWidth: "355px" }}
-                      required
-                    />
+                      required />
                   </div>
                 </Col>
               </Row>
@@ -191,12 +174,11 @@ const ModalAgregarOrden = () => {
                   rows={4}
                   value={formData.descripcion}
                   onChange={handleChange}
-                  className="form-control form-select-sm"
-                  required
-                />
+                  className="form-control rounded-4"
+                  required />
               </div>
-              <div className="d-flex justify-content-end">
-                <Button appearance="primary" type="submit">
+              <div className="d-flex row justify-content-end">
+                <Button className="btn btn-primary rounded-5" type="submit">
                   Agregar
                 </Button>
               </div>
@@ -204,9 +186,6 @@ const ModalAgregarOrden = () => {
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose} appearance="default">
-            Cancelar
-          </Button>
         </Modal.Footer>
       </Modal>
     </>

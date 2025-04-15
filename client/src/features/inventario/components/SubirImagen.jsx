@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Uploader, Message, Loader, toaster } from "rsuite";
-import FileUploadIcon from "@rsuite/icons/FileUpload";
+import { PiUploadSimpleThin } from "react-icons/pi";
 
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -47,14 +47,13 @@ const urlImg = BASE_URL+`/img/upload`
         setUploading(false);
         toaster.push(<Message type="error">Error al subir</Message>);
         console.log(error);
-      }}
-    >
-      <button type="button" style={{ width: 150, height: 150 }}>
+      }}>
+      <button type="button" style={{ width: 220, height: 220 }}>
         {uploading && <Loader backdrop center />}
         {fileInfo ? (
           <img src={fileInfo} width="100%" height="100%" />
         ) : (
-          <FileUploadIcon style={{ fontSize: 120 }} />
+          <PiUploadSimpleThin style={{ fontSize: 160 }} />
         )}
       </button>
     </Uploader>

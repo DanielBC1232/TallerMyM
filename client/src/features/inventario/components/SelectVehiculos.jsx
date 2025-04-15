@@ -10,6 +10,60 @@ const SelectVehiculos = ({ value, onChange }) => {
   const [opciones, setOpciones] = useState([]);
   const navigate = useNavigate();
 
+  const customSelectStyles = {
+    control: (base, state) => ({
+      ...base,
+      backgroundColor: '#fff',
+      borderColor: state.isFocused ? '#86b7fe' : '#ced4da',
+      borderRadius: '1.75rem', // similar a rounded-5
+      minHeight: '38px',
+      boxShadow: state.isFocused ? '0 0 0 0.25rem rgba(13,110,253,.25)' : 'none',
+      '&:hover': {
+        borderColor: '#86b7fe',
+      },
+    }),
+    menu: (base) => ({
+      ...base,
+      borderRadius: '1rem',
+      zIndex: 9999,
+    }),
+    option: (base, { isFocused, isSelected, isDisabled }) => ({
+      ...base,
+      backgroundColor: isDisabled
+        ? '#e9ecef'
+        : isSelected
+        ? '#0d6efd'
+        : isFocused
+        ? '#e2e6ea'
+        : '#fff',
+      color: isSelected ? '#fff' : '#212529',
+      cursor: isDisabled ? 'not-allowed' : 'default',
+    }),
+    multiValue: (base) => ({
+      ...base,
+      backgroundColor: '#e9ecef',
+      borderRadius: '1rem',
+    }),
+    multiValueLabel: (base) => ({
+      ...base,
+      color: '#495057',
+      fontWeight: 500,
+    }),
+    multiValueRemove: (base) => ({
+      ...base,
+      color: '#6c757d',
+      ':hover': {
+        backgroundColor: '#ced4da',
+        color: '#000',
+      },
+    }),
+    placeholder: (base) => ({
+      ...base,
+      color: '#6c757d',
+    }),
+  };
+
+
   useEffect(() => {
     const obtenerVehiculos = async () => {
       try {
@@ -52,10 +106,10 @@ const SelectVehiculos = ({ value, onChange }) => {
         }
       }
     };
-  
+
     obtenerVehiculos();
   }, []);
-  
+
 
   const handleChange = (selectedOptions) => {
     // Si no se selecciona nada, pasamos un arreglo vacío
@@ -71,6 +125,8 @@ const SelectVehiculos = ({ value, onChange }) => {
     <div>
       <Select
         id="vehiculosCompatibles"
+        className="custom-select"
+        classNamePrefix="select"
         isMulti
         options={opciones}
         value={opciones.filter((opcion) => value.includes(opcion.value))} // Filtramos las opciones seleccionadas
@@ -78,6 +134,7 @@ const SelectVehiculos = ({ value, onChange }) => {
         placeholder="Seleccione..."
         noOptionsMessage={() => "No hay vehículos disponibles"}
         maxMenuHeight={185}
+        styles={customSelectStyles}
       />
     </div>
   );

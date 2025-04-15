@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { Button, Grid, Row, Col, FlexboxGrid, Divider } from "rsuite";
 import Notificaciones from "../../../components/Notificaciones";
-import "../styles/inv.css";
+import "../styles/inv.module.css";
 
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;

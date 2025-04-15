@@ -103,25 +103,24 @@ const ModalSolicitarProducto = () => {
       <Button
         style={{ minWidth: "80px", maxWidth: "350px" }}
         className="btn btn-primary btn-sm text-white"
-        onClick={handleOpen}
-      >
-        Solicitar Producto
-      </Button>
+        onClick={handleOpen}>
+        Solicitar Producto</Button>
+        
       <Modal open={open} onClose={handleClose}>
-        <Modal.Header>
-          <Modal.Title>Solicitar Productos</Modal.Title>
+        <Modal.Header className="p-3">
+          <Modal.Title className="text-primary">Solicitar Productos</Modal.Title>
+          <hr className="text-primary" />
         </Modal.Header>
         <Modal.Body className="p-3">
-          <span>Título:</span>
-          <input
+          <span>Título de solicitud:</span>
+          <input 
             id="titulo"
             name="titulo"
             type="text"
             className="form-control"
             value={titulo}
             onChange={(e) => setTitulo(e.target.value)}
-            required
-          />
+            required/>
           <br />
           <span>Solicitud:</span>
           <textarea
@@ -135,12 +134,9 @@ const ModalSolicitarProducto = () => {
           ></textarea>
           <br />
         </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={handleSubmit} appearance="primary" type="button">
+        <Modal.Footer className="p-3 row">
+          <Button onClick={handleSubmit} className="btn btn-primary rounded-5" type="button">
             Enviar
-          </Button>
-          <Button onClick={handleClose} appearance="default">
-            Cancelar
           </Button>
         </Modal.Footer>
       </Modal>

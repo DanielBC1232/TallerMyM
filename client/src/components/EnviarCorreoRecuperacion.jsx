@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { Text } from "rsuite";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -47,27 +48,51 @@ const VerificarCorreo = () => {
     };
     
     return (
-        <div className="container mt-5" style={{ maxWidth: '500px' }}>
-            <div className="mb-3">
-                <label className="form-label">Correo electrónico</label>
-                <input
-                    type="email"
-                    className="form-control"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value.trim())}
-                    placeholder='*****@gmail.com' />
-                <button className="btn btn-primary mt-2" onClick={handleEnviarCorreo}>
-                    Enviar correo
-                </button>
-            </div>
-            <div className="mt-4">
-                <label className="form-label">Código de verificacion:</label>
-                <input type="text" className="form-control"
-                    value={token}
-                    onChange={(e) => setToken(e.target.value.trim())}/>
-                <button className="btn btn-primary mt-2" onClick={handleVerificarToken}>
-                    Verificar código
-                </button>
+        <div className='login-page'>
+            <div className="container d-flex align-items-center justify-content-center min-vh-100">
+                <div className="row w-100">
+                    <div className="col-12 col-md-6 col-lg-4 mx-auto">
+                        <div className="card shadow-sm">
+                            <div className='card-header'>
+                                <Text size='xxl' weight="bold" className='text-center text-primary'>Verificación</Text>
+                                <hr className='text-primary'></hr>
+                            </div>
+                            <div className="card-body">
+                                <div className="mb-3">
+                                    <label className="form-label">Correo electrónico:</label>
+                                    <input
+                                        type="email"
+                                        className="form-control rounded-5"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value.trim())}
+                                        placeholder="*****@gmail.com"
+                                        required
+                                    />
+                                    <div className="d-flex justify-content-center mt-3">
+                                        <button className="btn btn-primary text-white rounded-5" onClick={handleEnviarCorreo}>
+                                            Enviar correo
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="mt-4">
+                                    <label className="form-label">Código de verificación:</label>
+                                    <input
+                                        type="text"
+                                        className="form-control rounded-5"
+                                        value={token}
+                                        onChange={(e) => setToken(e.target.value.trim())}
+                                        required
+                                    />
+                                    <div className="d-flex justify-content-center mt-3">
+                                        <button className="btn btn-primary text-white rounded-5" onClick={handleVerificarToken}>
+                                            Verificar código
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
