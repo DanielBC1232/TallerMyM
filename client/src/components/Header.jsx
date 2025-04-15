@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Text } from "rsuite";
 // Iconos
-import { FiAlignLeft } from "react-icons/fi";
+import { GiHamburgerMenu } from "react-icons/gi";
 //Iconos
 const Header = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -112,10 +112,8 @@ const Header = ({ children }) => {
       </nav>
 
       <div className="main">
-        <nav className="navbar navbar-expand navbar-light">
-          <a className="sidebar-toggle"
-            href="#"
-            onClick={toggleSidebar}><FiAlignLeft /></a>
+        <nav className="navbar navbar-expand navbar-white bg-white">
+          <a className="sidebar-toggle text-dark" onClick={toggleSidebar}><GiHamburgerMenu size="xxl" /></a>
           <div className="navbar-collapse collapse">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item dropdown">

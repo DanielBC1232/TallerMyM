@@ -53,9 +53,8 @@ const VerificarCorreo = () => {
                 <div className="row w-100">
                     <div className="col-12 col-md-6 col-lg-4 mx-auto">
                         <div className="card shadow-sm">
-                            <div className='card-header'>
+                            <div className='card-header bg-white mb-3'>
                                 <Text size='xxl' weight="bold" className='text-center text-primary'>Verificación</Text>
-                                <hr className='text-primary'></hr>
                             </div>
                             <div className="card-body">
                                 <div className="mb-3">

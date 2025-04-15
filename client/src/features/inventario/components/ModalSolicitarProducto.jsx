@@ -32,7 +32,7 @@ const ModalSolicitarProducto = () => {
     e.preventDefault();
     if (!validarCampos()) return;
 
-    const usuario = "usuarioMecanico";
+    const usuario = localStorage.getItem('username');
 
     try {
       await axios.post(

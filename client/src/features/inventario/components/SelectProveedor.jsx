@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Select from "react-select";
 
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -9,28 +10,32 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const SelectProveedor = ({ value, onChange }) => {
   const navigate = useNavigate();
   const [opciones, setOpciones] = useState([]);
+
   useEffect(() => {
-    const obtenerProveedors = async () => {
+    const obtenerProveedores = async () => {
       try {
         const { data } = await axios.get(`${BASE_URL}/proveedor`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT en el header
-          }
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
-        setOpciones(data);
+
+        // Formatear opciones para react-select
+        const opcionesFormateadas = data.map((proveedor) => ({
+          value: proveedor.nombreProveedor,
+          label: proveedor.nombreProveedor,
+        }));
+
+        setOpciones(opcionesFormateadas);
       } catch (error) {
         if (error.response) {
-          // Manejo de respuestas HTTP
           if (error.response.status === 401) {
             Swal.fire({
               icon: "warning",
               title: "Advertencia",
-              text: "Operacion no Autorizada",
+              text: "Operación no Autorizada",
               showConfirmButton: false,
             });
-            navigate(0); // Redirige a la página de login si no está autorizado
-          }
-          else if (error.response.status === 403) {
+            navigate(0);
+          } else if (error.response.status === 403) {
             Swal.fire({
               icon: "warning",
               title: "Autenticación",
@@ -38,31 +43,94 @@ const SelectProveedor = ({ value, onChange }) => {
               showConfirmButton: false,
             });
             localStorage.clear();
-            navigate("/login"); // Redirige a login si la sesión ha expirado
+            navigate("/login");
           } else {
-            console.error("Error obteniendo las Proveedors:", error);
+            console.error("Error obteniendo los proveedores:", error);
           }
         } else {
           console.error("Error desconocido", error);
         }
       }
     };
-  
-    obtenerProveedors();
-  }, []);
-  
-  
+
+    obtenerProveedores();
+  }, [navigate]);
+
+  const handleChange = (selectedOption) => {
+    onChange({
+      target: {
+        name: "proveedor", // Nombre del campo que se actualiza
+        value: selectedOption ? selectedOption.value : '', // Extraer el valor
+      },
+    });
+  };
+  const customSelectStyles = {
+    control: (base, state) => ({
+      ...base,
+      backgroundColor: '#fff',
+      borderColor: state.isFocused ? '#86b7fe' : '#ced4da',
+      borderRadius: '1.75rem', // similar a rounded-5
+      minHeight: '38px',
+      boxShadow: state.isFocused ? '0 0 0 0.25rem rgba(13,110,253,.25)' : 'none',
+      '&:hover': {
+        borderColor: '#86b7fe',
+      },
+    }),
+    menu: (base) => ({
+      ...base,
+      borderRadius: '1rem',
+      zIndex: 9999,
+    }),
+    option: (base, { isFocused, isSelected, isDisabled }) => ({
+      ...base,
+      backgroundColor: isDisabled
+        ? '#e9ecef'
+        : isSelected
+          ? '#0d6efd'
+          : isFocused
+            ? '#e2e6ea'
+            : '#fff',
+      color: isSelected ? '#fff' : '#212529',
+      cursor: isDisabled ? 'not-allowed' : 'default',
+    }),
+    multiValue: (base) => ({
+      ...base,
+      backgroundColor: '#e9ecef',
+      borderRadius: '1rem',
+    }),
+    multiValueLabel: (base) => ({
+      ...base,
+      color: '#495057',
+      fontWeight: 500,
+    }),
+    multiValueRemove: (base) => ({
+      ...base,
+      color: '#6c757d',
+      ':hover': {
+        backgroundColor: '#ced4da',
+        color: '#000',
+      },
+    }),
+    placeholder: (base) => ({
+      ...base,
+      color: '#6c757d',
+    }),
+  };
 
   return (
     <div className="">
-      <select id="proveedor" name="proveedor" className="form-select rounded-5 py-2" value={value} onChange={onChange} >
-        <option value="">Seleccione...</option>
-        {opciones.map((Proveedor) => (
-          <option key={Proveedor.idProveedor} value={Proveedor.nombreProveedor}>
-            {Proveedor.nombreProveedor}
-          </option>
-        ))}
-      </select>
+      <Select
+        id="proveedor"
+        name="proveedor"
+        className="custom-select rounded-5 py-2"
+        classNamePrefix="select"
+        options={opciones}
+        value={opciones.find(op => op.value === value)} // Mapear valor externo
+        onChange={handleChange}
+        placeholder="Seleccione..."
+        noOptionsMessage={() => "No hay proveedores disponibles"}
+        styles={customSelectStyles}
+      />
     </div>
   );
 };

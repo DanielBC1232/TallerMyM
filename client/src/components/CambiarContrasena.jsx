@@ -71,9 +71,8 @@ const CorreoRecuperacion = () => {
                 <div className="row w-100">
                     <div className="col-12 col-md-6 col-lg-4 mx-auto">
                         <div className="card shadow-sm">
-                            <div className='card-header'>
-                                <Text size='xxl' weight="bold" className='text-center text-primary'>Cambiar contraseña</Text>
-                                <hr className='text-primary'></hr>
+                            <div className='card-header bg-white'>
+                                <Text size='xxl' weight="bold" className='text-center text-primary mb-3'>Cambiar contraseña</Text>
                             </div>
                             <div className="card-body">
                                 <form onSubmit={handleSubmit}>

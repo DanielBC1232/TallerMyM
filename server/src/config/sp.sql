@@ -33,7 +33,7 @@ BEGIN
         SET @SQL = @SQL + ' AND stock <= @stock';
 
     IF (@precioMin IS NOT NULL AND @precioMax IS NOT NULL)
-        SET @SQL = @SQL + ' AND precio BETWEEN @precioMin AND @precioMax';
+        SET @SQL = @SQL + ' AND precio BETWEEN @precioMin-1 AND @precioMax+1';
 
     -- Ejecutar la consulta dinamica con los parametros correctamente pasados
     EXEC sp_executesql 

@@ -103,7 +103,7 @@ const IndexInventario = () => {
   };
 
   return (
-    <div className="grid-container px-5 py-3">
+    <div className="grid-container px-3 py-3">
       <Notificaciones modulo={'INVENTARIO'} />
       <div className="p-4 rounded-3 shadow-sm bg-white py-5">
         <form onSubmit={handleSubmit}>
@@ -124,7 +124,7 @@ const IndexInventario = () => {
               <div>
                 <span>Stock:</span>
                 <select
-                  className="form-select rounded-5 py-2"
+                  className="form-select rounded-5 py-2 mt-2"
                   name="stock"
                   value={formData.stock}
                   onChange={handleChange}>
@@ -140,7 +140,7 @@ const IndexInventario = () => {
                 <span>Producto:</span>
                 <input
                   name="nombre"
-                  className="form-control rounded-5 py-2"
+                  className="form-control rounded-5 py-2 mt-2"
                   placeholder="Buscar por nombre"
                   value={formData.nombre}
                   onChange={handleChange}

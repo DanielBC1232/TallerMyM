@@ -328,7 +328,7 @@ const Agregar = () => {
         <Grid fluid>
           <Row className="show-grid" gutter={24}>
             <Col xs={24} className="d-grid gap-5 bg-white shadow-sm p-5 rounded-3">
-              <Row className="show-grid px-5" gutter={16}>
+              <Row className="show-grid px-3" gutter={16}>
 
                 <Col xs={6}>
                   <div className="position-relative">
@@ -339,7 +339,7 @@ const Agregar = () => {
                   </div>
                 </Col>
 
-                <Col xs={12} sm={6} className="column">
+                <Col xs={12} sm={6} className="">
                   <div className="mb-3">
                     <label htmlFor="nombre" className="form-label">
                       Nombre:
@@ -369,7 +369,7 @@ const Agregar = () => {
                       onChange={handleChange} />
                   </div>
                 </Col>
-                <Col xs={12} sm={6} className="column">
+                <Col xs={12} sm={6} className="">
                   <div className="mb-3">
                     <label htmlFor="precio" className="form-label">
                       Precio:
@@ -386,15 +386,11 @@ const Agregar = () => {
                       onChange={(e) => handleChange(e, 'precio')} />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="fechaIngreso" className="form-label">
-                      Fecha de ingreso:
+                    <label htmlFor="categoria" className="form-label">
+                      Categoría:
                     </label>
-                    <input
-                      id="fechaIngreso"
-                      name="fechaIngreso"
-                      type="date"
-                      className="form-control rounded-5 py-2"
-                      value={formData.fechaIngreso}
+                    <SelectCategoria
+                      value={formData.categoria}
                       onChange={handleChange} />
                   </div>
                   <div className="mb-3">
@@ -410,17 +406,21 @@ const Agregar = () => {
                       onChange={handleChange} />
                   </div>
                 </Col>
-                <Col xs={12} sm={6} className="column">
+                <Col xs={12} sm={6} className="">
                   <div className="mb-3">
-                    <label htmlFor="categoria" className="form-label">
-                      Categoría:
+                    <label htmlFor="fechaIngreso" className="form-label">
+                      Fecha de ingreso:
                     </label>
-                    <SelectCategoria
-                      value={formData.categoria}
+                    <input
+                      id="fechaIngreso"
+                      name="fechaIngreso"
+                      type="date"
+                      className="form-control rounded-5 py-2"
+                      value={formData.fechaIngreso}
                       onChange={handleChange} />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="stock" className="form-label">
+                    <label htmlFor="stock" className="form-label mb-3">
                       Stock:
                     </label>
                     <input
@@ -462,12 +462,12 @@ const Agregar = () => {
               <Row className="d-flex justify-content-end pe-5">
                 <div className="">
                   <Link to="/inventario" className="btn btn-secondary rounded-5">
-                    <IoMdReturnLeft size="20"/> Volver
+                    <IoMdReturnLeft size="20" /> Volver
                   </Link>
                 </div>
                 <div className="ms-3">
                   <button type="submit" className="btn btn-primary rounded-5" style={{ maxWidth: "120px" }}>
-                  <IoMdAdd size="20"/> Agregar 
+                    <IoMdAdd size="20" /> Agregar
                   </button>
                 </div>
               </Row>

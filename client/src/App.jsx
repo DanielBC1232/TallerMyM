@@ -52,7 +52,6 @@ import CambiarContrasena from "./components/CambiarContrasena.jsx";
 import VerificarCorreo from "./components/EnviarCorreoRecuperacion.jsx";
 
 const App = () => {
-
   const location = useLocation();
   const hideHeaderRoutes = ["/login", "/cambiar-contrasena", "/verificar-correo"];// Definir las rutas en las que NO se debe mostrar el Header
 

@@ -84,7 +84,7 @@ const ContenedorProductos = ({ formData }) => {
                 <strong>Stock:</strong> {producto.stock}
               </span>
               <span className="d-block">
-                <strong>Precio:</strong> ₡{producto.precio}
+                <strong>Precio:</strong> ₡ {producto.precio}
               </span>
             </div>
           </div>

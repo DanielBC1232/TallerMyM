@@ -8,7 +8,8 @@ import { Grid, Row, Col } from "rsuite";
 import "../styles/inv.css";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { IoMdReturnLeft } from "react-icons/io";
 
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -366,96 +367,68 @@ const Editar = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="container main mx-auto p-5">
+      <div className="mx-auto p-3">
         <Grid fluid>
-          <Row className="show-grid" gutter={16}>
-            <Col xs={6}>
-              <SubirImagen
-                value={formData.img}
-                onChange={(newPath) =>
-                  setFormData((prev) => ({ ...prev, img: newPath }))
-                }
-              />
-            </Col>
-            <Col
-              xs={16}
-              className="d-grid gap-5 bg-white shadow-sm p-5 rounded-3"
-            >
-              <Row className="show-grid" gutter={16}>
-                <Col xs={12} className="column">
+          <Row className="show-grid" gutter={24}>
+            <Col xs={24} className="d-grid gap-5 bg-white shadow-sm p-5 rounded-3">
+              {/* Contenedor principal */}
+              <Row className="show-grid px-5" gutter={16}>
+                {/* Columna de imagen */}
+                <Col xs={6}>
+                  <div className="position-relative">
+                    <SubirImagen
+                      value={formData.img}
+                      onChange={(newPath) => setFormData((prev) => ({ ...prev, img: newPath }))}
+                      className="position-absolute top-0 end-0 p-2"
+                    />
+                  </div>
+                </Col>
+
+                {/* Primera columna de datos */}
+                <Col xs={12} sm={6} className="">
                   <div className="mb-3">
-                    <label htmlFor="nombre" className="form-label">
-                      Nombre:
-                    </label>
+                    <label htmlFor="nombre" className="form-label">Nombre:</label>
                     <input
                       id="nombre"
                       name="nombre"
                       type="text"
-                      className="form-control"
+                      className="form-control rounded-5"
                       value={formData.nombre}
                       onChange={handleChange}
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="marca" className="form-label">
-                      Marca:
-                    </label>
+                    <label htmlFor="marca" className="form-label">Marca:</label>
                     <SelectMarca
                       value={formData.marca}
                       onChange={handleChange}
+                      className="rounded-5"
                     />
                   </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="vehiculos" className="form-label">
-                      Vehículos compatibles:
-                    </label>
+                  <div style={{marginBottom: "11px"}}>
+                    <label htmlFor="vehiculos" className="form-label">Vehículos compatibles:</label>
                     <SelectVehiculos
                       value={formData.vehiculosCompatibles}
                       onChange={handleChange}
+                      className="rounded-5"
                     />
                   </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="categoria" className="form-label">
-                      Categoría:
-                    </label>
-                    <SelectCategoria
-                      value={formData.categoria}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="proveedor" className="form-label">
-                      Proveedor:
-                    </label>
-                    <SelectProveedor
-                      value={formData.proveedor}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="serviceProduct" className="form-label">
-                      Servicio o Producto
-                    </label>
-                    <select
-                      id="tipo"
-                      name="tipo"
-                      className="form-select"
-                      value={formData.tipo}
-                      onChange={handleChange}
-                    >
-                      <option value="">Seleccione el tipo</option>
-                      <option value="producto">Producto</option>
-                      <option value="servicio">Servicio</option>
-                    </select>
-                  </div>
+                  <div className="mt-2">
+                      <label htmlFor="stockMinimo" className="form-label">Stock Mínimo:</label>
+                      <input
+                        type="number"
+                        name="stockMinimo"
+                        className="form-control rounded-5"
+                        value={formData.stockMinimo ?? 0}
+                        onChange={handleChange}
+                      />
+                    </div>
                 </Col>
-                <Col xs={12} className="column">
+
+                {/* Segunda columna de datos */}
+                <Col xs={12} sm={6} className="">
                   <div className="mb-3">
-                    <label htmlFor="precio" className="form-label">
-                      Precio:
-                    </label>
+                    <label htmlFor="precio" className="form-label">Precio:</label>
                     <div className="input-group">
                       <span className="input-group-text">₡</span>
                       <input
@@ -464,60 +437,70 @@ const Editar = () => {
                         type="number"
                         min={0}
                         step={0.01}
-                        className="form-control"
-                        value={Number(formData.precio)}
+                        className="form-control rounded-5"
+                        value={formData.precio}
                         onChange={handleChange}
                       />
                     </div>
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="fechaIngreso" className="form-label">
-                      Fecha de ingreso:
-                    </label>
+                    <label htmlFor="fechaIngreso" className="form-label">Fecha de ingreso:</label>
                     <input
                       id="fechaIngreso"
                       name="fechaIngreso"
                       type="date"
-                      className="form-control"
+                      className="form-control rounded-5 py-2"
                       value={formData.fechaIngreso}
                       onChange={handleChange}
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="ubicacion" className="form-label">
-                      Ubicación en almacén:
-                    </label>
+                    <label htmlFor="ubicacion" className="form-label">Ubicación en almacén:</label>
                     <input
                       id="ubicacionAlmacen"
                       name="ubicacionAlmacen"
                       type="text"
-                      className="form-control"
+                      className="form-control rounded-5"
                       value={formData.ubicacionAlmacen}
                       onChange={handleChange}
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="stock" className="form-label">
-                      Stock:
-                    </label>
+                    <label htmlFor="stock" className="form-label">Stock:</label>
                     <input
                       id="stock"
                       name="stock"
                       type="number"
                       min={0}
-                      className="form-control"
+                      className="form-control rounded-5"
                       value={formData.stock}
                       onChange={handleChange}
                     />
                   </div>
+                </Col>
+
+                {/* Tercera columna de datos */}
+                <Col xs={12} sm={6} className="">
                   <div className="mb-3">
-                    <label htmlFor="descripcion" className="form-label">
-                      Descuento:
-                    </label>
+                    <label htmlFor="tipo" className="form-label">Tipo:</label>
+                    <select
+                      id="tipo"
+                      name="tipo"
+                      className="form-select rounded-5"
+                      value={formData.tipo}
+                      onChange={handleChange}
+                    >
+                      <option value="">Seleccione el tipo</option>
+                      <option value="producto">Producto</option>
+                      <option value="servicio">Servicio</option>
+                    </select>
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="porcentajeDescuento" className="form-label">Descuento:</label>
                     <input
                       type="number"
                       name="porcentajeDescuento"
-                      className="form-control"
+                      className="form-control rounded-5"
                       value={formData.porcentajeDescuento}
                       onChange={handleChange}
                       placeholder="%"
@@ -526,41 +509,62 @@ const Editar = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="descripcion" className="form-label">
-                      Descripción:
-                    </label>
-                    <textarea
-                      id="descripcion"
-                      name="descripcion"
-                      className="form-control"
-                      value={(formData.descripcion)}
+                    <label htmlFor="proveedor" className="form-label">Proveedor:</label>
+                    <SelectProveedor
+                      value={formData.proveedor}
                       onChange={handleChange}
+                      className="rounded-5"
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="stockMinimo" className="form-label">
-                      Stock Minimo:
-                    </label>
-                    <input
-                      type="number"
-                      name="stockMinimo"
-                      className="form-control"
-                      value={(formData.stockMinimo)}
+                    <label htmlFor="categoria" className="form-label">Categoría:</label>
+                    <SelectCategoria
+                      value={formData.categoria}
                       onChange={handleChange}
+                      className="rounded-5"
                     />
                   </div>
-
                 </Col>
               </Row>
-              <div className="d-grid justify-content-end me-5">
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  style={{ maxWidth: "120px" }}
-                >
-                  Guardar
-                </button>
-              </div>
+
+              {/* Fila de descripción y stock mínimo */}
+              <Row className="px-5">
+                <Col xs={6}></Col>
+                <Col xs={18}>
+                  <div className="row g-3">
+                    <div className="col-12">
+                      <label htmlFor="descripcion" className="form-label">Descripción:</label>
+                      <textarea
+                        id="descripcion"
+                        name="descripcion"
+                        className="form-control rounded-4"
+                        value={formData.descripcion}
+                        onChange={handleChange}
+                        rows={4}
+                      />
+                    </div>
+                    
+                  </div>
+                </Col>
+              </Row>
+
+              {/* Botones de acción */}
+              <Row className="d-flex justify-content-end pe-5">
+                <div className="d-flex justify-content-start col">
+                  <Link to="/inventario" className="btn btn-secondary rounded-5">
+                    <IoMdReturnLeft size="20" /> Volver
+                  </Link>
+                </div>
+                <div className="ms-3">
+                  <button
+                    type="submit"
+                    className="btn btn-primary rounded-5"
+                    style={{ maxWidth: "120px" }}
+                  >
+                    Guardar
+                  </button>
+                </div>
+              </Row>
             </Col>
           </Row>
         </Grid>
