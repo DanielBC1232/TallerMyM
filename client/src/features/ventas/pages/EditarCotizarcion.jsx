@@ -1,4 +1,4 @@
-import { Button, Grid, Row, Col } from "rsuite";
+import { Button, Text } from "rsuite";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -158,68 +158,59 @@ const EditarCotizacion = () => {
   };
 
   return (
-    <div className="container bg-white mt-5 p-5">
-      <Grid>
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+      <div className="bg-darkest p-4 rounded-4" style={{ minHeight: "70vh", maxWidth: "600px" }}>
         <form onSubmit={handleSubmit}>
-          <Row className="show-grid" gutter={16}>
-            <Col xs={12}>
-              <label>
-                Monto Total:
-                <input
-                  type="number"
-                  name="montoTotal"
-                  value={formData.montoTotal}
-                  onChange={handleChange}
-                  className="form-control"
-                  min="0"
-                  style={{ minWidth: "250px" }}
-                />
-              </label>
-              <label>
-                Monto por mano de obra:
-                <input
-                  type="number"
-                  name="montoManoObra"
-                  value={formData.montoManoObra}
-                  onChange={handleChange}
-                  className="form-control"
-                  min="0"
-                  style={{ minWidth: "250px" }}
-                />
-              </label>
-            </Col>
-            <Col xs={12}>
-              <label>
-                Tiempo estimado:
-                <input
-                  type="text"
-                  name="tiempoEstimado"
-                  value={formData.tiempoEstimado}
-                  onChange={handleChange}
-                  className="form-control"
-                  style={{ minWidth: "250px" }}
-                />
-              </label>
-            </Col>
-          </Row>
-          <label>
-            Detalles:
-            <textarea
-              name="detalles"
-              value={formData.detalles}
-              onChange={handleChange}
-              className="form-control"
-              rows="4"
-              style={{ minWidth: "250px" }}
-            />
-          </label>
-          <div className="d-flex justify-content-center mt-5">
-            <Button type="submit" className="btn btn-secondary text-white">
+          <div className="d-flex flex-column justify-content-center row p-5 gap-4" >
+
+            <span className="row">
+              <Text size="md" className="text-white">Monto Total:</Text>
+              <input
+                type="number"
+                name="montoTotal"
+                value={formData.montoTotal}
+                onChange={handleChange}
+                className="form-control rounded-5"
+                min="0" />
+            </span>
+            <span className="row">
+              <Text size="md" className="text-white">Monto por mano de obra:</Text>
+              <input
+                type="number"
+                name="montoManoObra"
+                value={formData.montoManoObra}
+                onChange={handleChange}
+                className="form-control rounded-5"
+                min="0" />
+            </span>
+            <span className="row">
+              <Text size="md" className="text-white">Tiempo estimado:</Text>
+              <input
+                type="text"
+                name="tiempoEstimado"
+                value={formData.tiempoEstimado}
+                onChange={handleChange}
+                className="form-control rounded-5" />
+            </span>
+            <span className="row">
+              <Text size="md" className="text-white">Detalles:</Text>
+              <textarea
+                name="detalles"
+                value={formData.detalles}
+                onChange={handleChange}
+                className="form-control rounded-4"
+                rows="4"
+                style={{ minWidth: "250px" }}
+              />
+            </span>
+          </div>
+          <div className="d-flex justify-content-center mt-5 row px-5">
+            <Button type="submit" className="btn btn-primary rounded-5 text-white align-items-center justify-content-center gap-1">
               Guardar
             </Button>
           </div>
         </form>
-      </Grid>
+      </div>
     </div>
   );
 };

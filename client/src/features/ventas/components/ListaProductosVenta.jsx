@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { MdDelete } from "react-icons/md";
+import { Text } from "rsuite";
 
 //URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -186,10 +188,9 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
       <table className="table table-hover">
         <thead>
           <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Monto Unitario</th>
-            <th> </th>
+            <th className="text-center">Producto</th>
+            <th className="text-center">Cantidad</th>
+            <th className="text-center">Monto Unitario</th>
           </tr>
         </thead>
         <tbody>
@@ -197,54 +198,51 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
             <>
               {productos.map((producto) => (
                 <tr key={producto.idProducto}>
-                  <td className="text-center">{producto.nombreProducto}</td>
-                  <td className="text-center">x {producto.cantidad}</td>
-                  <td className="text-center">₡ {producto.montoFinalUnitario}</td>
+                  <td className="text-center"><Text size="lg" className="text-white">{producto.nombreProducto}</Text></td>
+                  <td className="text-center"> <Text size="lg" className="text-white">x {producto.cantidad}</Text></td>
+                  <td className="text-center"><Text size="lg" className="text-white" weight="medium">₡ {producto.montoFinalUnitario}</Text></td>
                   <td className="text-center">
                     {!existePago && (
-                      <button
-                        className="btn btn-sm text-white btn-danger"
+                      <button className="btn btn-sm text-white btn-danger rounded-5 d-flex align-items-center justify-content-center gap-1"
                         onClick={() =>
                           RemoverProductoVenta(
                             producto.idProductoVenta,
                             producto.idProducto,
                             producto.cantidad
                           )
-                        }
-                      >
-                        Eliminar
-                      </button>
+                        }><MdDelete size={20} /></button>
                     )}
                   </td>
                 </tr>
               ))}
+              <td className="p-1 bg-darkest border-0"></td>
               {/* Fila Subtotal */}
               <tr>
                 <td colSpan="2" className="text-center">
-                  Subtotal
+                  <Text size="lg" className="text-white" weight="semibold">Subtotal</Text>
                 </td>
                 <td className="text-center">
-                  ₡ {subtotal.toFixed(2)}
+                  <Text size="lg" className="text-white" weight="medium">₡ {subtotal.toFixed(2)}</Text>
                 </td>
                 <td></td>
               </tr>
               {/* Fila IVA */}
               <tr>
                 <td colSpan="2" className="text-center">
-                  IVA (13%)
+                  <Text size="lg" className="text-white" weight="semibold">IVA (13%)</Text>
                 </td>
                 <td className="text-center">
-                  ₡ {iva.toFixed(2)}
+                  <Text size="lg" className="text-white" weight="medium">₡ {iva.toFixed(2)}</Text>
                 </td>
                 <td></td>
               </tr>
               {/* Fila Total con IVA */}
               <tr>
                 <td colSpan="2" className="text-center">
-                  <strong>Total con IVA</strong>
+                  <Text size="lg" className="text-white" weight="semibold">Total con IVA</Text>
                 </td>
                 <td className="text-center">
-                  <strong>₡ {totalConIva.toFixed(2)}</strong>
+                  <Text size="lg" className="text-white" weight="semibold">₡ {totalConIva.toFixed(2)}</Text>
                 </td>
                 <td></td>
               </tr>

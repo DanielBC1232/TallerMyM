@@ -498,12 +498,12 @@ const Venta = () => {
                 </button>
                 <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
                   onClick={() => GenerarFactura()}>
-                  <IoDocumentTextOutline size={20}/>Generar Factura
+                  <IoDocumentTextOutline size={20} />Generar Factura
                 </button>
                 {/* BTN ABRIR MODAL DE DEVOLUCIÓN */}
                 <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
                   onClick={() => GenerarDevolucion(formData.idVenta)}>
-                  <TbCreditCardPay size={20}/>Realizar reembolso</button>
+                  <TbCreditCardPay size={20} />Realizar reembolso</button>
               </div>
               <hr className="text-success" />
               {/* COlUMNA PAGO */}
@@ -511,25 +511,15 @@ const Venta = () => {
                 <Pago />
               </Col>
               <Col xs={16}>
-
                 {/* Lista de productos asociados a la venta */}
                 <ListaProductosVenta onUpdateMontoTotal={handleUpdateMontoTotal} />
               </Col>
-
             </Row>
-
-            {/* COMPONENTES QUE MUESTRAN DATOS DE PAGO Y DEVOLUCIÓN */}
-            <hr className="text-success" />
-            <Devolucion />
-            {/* COLUMNA PRODUCTOS VINCULADOS + PRECIOS */}
-            <Col xs={13} className="d-grid gap-4">
-
-            </Col>
-
-          </div>
-          <div className="d-flex flex-column gap-3">
-
-
+            <Row>
+              {/* COMPONENTES QUE MUESTRAN DATOS DE PAGO Y DEVOLUCIÓN */}
+              <hr className="text-success" />
+              <Devolucion />
+            </Row>
           </div>
         </div>
 
@@ -544,10 +534,6 @@ const Venta = () => {
             </div>
           </div>
         </div>
-        {/* COLUMNA SELECCIÓN DE PRODUCTOS */}
-        <Col xs={2}>
-
-        </Col>
       </Row>
 
       {/* MODAL PARA REGISTRAR PAGO */}
@@ -555,65 +541,55 @@ const Venta = () => {
         <form onSubmit={handleSubmitPago}>
           <Modal.Header className="px-3 pt-3">
             <Modal.Title className="text-center">
-              <Text size="xxl" className="text-secondary">Generar venta</Text>
+              <Text size="xxl" className="text-success">Registrar Pago</Text>
             </Modal.Title>
-            <hr className="text-secondary" />
+            <hr className="text-success" />
           </Modal.Header>
-          <Modal.Body className="px-4 d-flex flex-column gap-4">
-            <div>
-              <span>subtotal:</span>
+          <Modal.Body className="px-4 d-flex flex-column gap-4 row">
+            <div className="row">
+              <span>Subtotal:</span>
               <input
                 type="number"
                 value={formDataPago.subtotal.toFixed(2)}
                 readOnly
-                className="form-control form-control-sm"
+                className="form-control rounded-5"
               />
             </div>
-            <div>
+            <div className="row">
               <span>IVA (13%):</span>
               <input
                 type="number"
                 value={formDataPago.iva.toFixed(2)}
                 readOnly
-                className="form-control form-control-sm"
+                className="form-control rounded-5"
               />
             </div>
-            <div>
+            <div className="row">
               <span>Total:</span>
-              <input
-                type="number"
-                value={formDataPago.total.toFixed(2)}
+              <input type="number" value={formDataPago.total.toFixed(2)}
                 readOnly
-                className="form-control form-control-sm"
-              />
+                className="form-control rounded-5" />
             </div>
-            <div>
+            <div className="row">
               <span>Monto:</span>
-              <input
-                type="number"
-                min="0"
-                name="monto"
-                className="form-control form-control-sm"
+              <input type="number" min="0" name="monto"
+                className="form-control rounded-5"
                 onChange={handleChangePago}
-                value={formDataPago.monto}
-              />
+                value={formDataPago.monto} />
             </div>
-            <div>
+            <div className="row">
               <span>Método de pago:</span>
-              <select
-                onChange={handleChangePago}
-                value={formDataPago.metodoPago}
-                className="form-select form-select-sm"
-                name="metodoPago"
-              >
+              <select onChange={handleChangePago} value={formDataPago.metodoPago}
+                className="form-select rounded-5 py-2"
+                name="metodoPago">
                 <option value="">Seleccionar...</option>
                 <option value="efectivo">Efectivo</option>
                 <option value="transferencia">Transferencia</option>
               </select>
             </div>
           </Modal.Body>
-          <Modal.Footer className="p-3 mb-3">
-            <Button appearance="primary" type="submit">Generar</Button>
+          <Modal.Footer className="p-3 mb-3 row px-4">
+            <button type="submit" className="btn text-white btn-success rounded-5 d-flex py-3 align-items-center justify-content-center gap-1">Generar</button>
           </Modal.Footer>
         </form>
       </Modal>
@@ -623,35 +599,27 @@ const Venta = () => {
         <form onSubmit={handleSubmitDevolucion}>
           <Modal.Header className="px-3 pt-3">
             <Modal.Title className="text-center">
-              <Text size="xxl" className="text-secondary">Registrar Devolución</Text>
+              <Text size="xxl" className="text-primary">Registrar Devolución</Text>
             </Modal.Title>
-            <hr className="text-secondary" />
+            <hr className="text-primary" />
           </Modal.Header>
           <Modal.Body className="px-4 d-flex flex-column gap-4">
-            <div>
+            <div className="row">
               <span>Monto:</span>
-              <input
-                type="number"
-                min="0"
-                name="monto"
-                className="form-control form-control-sm"
+              <input type="number" min="0" name="monto"
+                className="form-control rounded-5"
                 onChange={handleChangeDevolucion}
-                value={formDataDevolucion.monto}
-              />
+                value={formDataDevolucion.monto} />
             </div>
-            <div>
+            <div className="row">
               <span>Motivo:</span>
-              <textarea
-                rows="3"
-                name="motivo"
-                className="form-control form-control-sm"
+              <textarea rows="3" name="motivo" className="form-control rounded-4"
                 onChange={handleChangeDevolucion}
-                value={formDataDevolucion.motivo}
-              />
+                value={formDataDevolucion.motivo} />
             </div>
           </Modal.Body>
-          <Modal.Footer className="p-3 mb-3">
-            <Button appearance="primary" type="submit">Generar</Button>
+          <Modal.Footer className="p-3 mb-3 row">
+            <button className="btn text-white btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">Generar</button>
           </Modal.Footer>
         </form>
       </Modal>

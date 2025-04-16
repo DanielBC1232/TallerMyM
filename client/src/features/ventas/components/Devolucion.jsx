@@ -78,16 +78,16 @@ const Devolucion = () => {
   return (
     <div className="mt-3 d-flex flex-column gap-3">
       <span>
-        <Text xs="xl" className="text-white">Monto reembolsado:</Text>
-        <Text xs="xl" muted>{formData.monto}</Text>
+        <Text size="xl" className="text-white">Monto reembolsado:</Text>
+        <Text size="xl" muted>{formData.monto}</Text>
       </span>
       <span>
-        <Text xs="xl" className="text-white">Fecha de devolucion:</Text>
-        <Text xs="xl" muted>{formData.fecha.split("T")[0]}</Text> {/* Solo muestra la fecha sin hora */}
+        <Text size="xl" className="text-white">Fecha de devolucion:</Text>
+        <Text size="xl" muted>{formData.fecha.split("T")[0]}</Text> {/* Solo muestra la fecha sin hora */}
       </span>
       <span>
-        <Text xs="xl" className="text-white">Motivo:</Text>
-        <Text xs="xl" muted>{formData.motivo || "No hay observaciones"}</Text>
+        <Text size="xl" className="text-white">Motivo:</Text>
+        <Text size="xl" muted>{formData.motivo || "No hay observaciones"}</Text>
       </span>
     </div>
   );

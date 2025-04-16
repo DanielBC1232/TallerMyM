@@ -1,9 +1,11 @@
 .main {
-    background-color: rgb(239, 239, 240) !important; /* fondo oscuro elegante */
+    background-color: rgb(239, 239, 240) !important;
+    /* fondo oscuro elegante */
 }
 
 .main {
-    background-color: rgb(229, 229, 230) !important; /* fondo oscuro elegante */
+    background-color: rgb(229, 229, 230) !important;
+    /* fondo oscuro elegante */
 }
 
 table {
@@ -62,7 +64,7 @@ tbody tr:last-child td:last-child {
 
 .background-darkest,
 .background-darkest * {
-    color: #878D92 !important;
+    color: #5A6B7D !important;
 }
 
 .background-darkest .btn {
@@ -74,7 +76,11 @@ tbody tr:last-child td:last-child {
     color: rgb(44, 57, 71) !important;
 }
 
-.btn{
+.btn {
     height: 31px;
 }
 
+.select__control {
+    border-radius: 1.75rem !important;
+  }
+  

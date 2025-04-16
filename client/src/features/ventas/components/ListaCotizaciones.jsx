@@ -1,12 +1,14 @@
 import { Button, Grid, Row, Col } from "rsuite";
 import React, { useState, useEffect } from "react";
-import axios, { Axios } from "axios";
+import axios from "axios";
 import Swal from "sweetalert2";
 import {
     BrowserRouter as Router,
     Link,
 } from "react-router-dom";
-
+import { MdDelete } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
+import { IoIosDownload } from "react-icons/io";
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -221,7 +223,7 @@ const ListaCotizaciones = () => {
 
     }
     return (
-        <div className="p-5">
+        <div className="">
             <table className="table table-hover table-striped shadow-sm">
                 <thead>
                     <tr>
@@ -249,25 +251,21 @@ const ListaCotizaciones = () => {
                                 <td>{cotizacion.detalles}</td>
                                 <td>{new Date(cotizacion.fecha).toLocaleDateString()}</td>
                                 <td>
-                                    <button
-                                        type="button"
-                                        onClick={() => deleteCotizacion(cotizacion.idCotizacion)}
-                                        className="btn btn-danger btn-sm text-white me-3"
-                                    >
-                                        Eliminar
-                                    </button>
-                                    <button className="btn btn-secondary btn-sm text-white">
-                                        <Link to={`/cotizacion-editar/${cotizacion.idCotizacion}`} className="btn-link">
-                                            Editar
+                                    <div className="d-flex">
+                                        <button type="button" onClick={() => deleteCotizacion(cotizacion.idCotizacion)}
+                                            className="btn btn-danger rounded-5 text-white me-3 d-flex align-items-center justify-content-center gap-1">
+                                            <MdDelete size={20} />Eliminar
+                                        </button>
+                                        <Link to={`/cotizacion-editar/${cotizacion.idCotizacion}`} className="btn btn-warning rounded-5 text-white align-items-center justify-content-center gap-1">
+                                            <MdEdit size={20} />Editar
                                         </Link>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => descargarCotizacion(cotizacion.idCotizacion)}
-                                        className="btn btn-success btn-sm text-white ms-3"
-                                    >
-                                        Descargar Cotizacion
-                                    </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => descargarCotizacion(cotizacion.idCotizacion)}
+                                            className="btn btn-success rounded-5 text-white ms-3 d-flex align-items-center justify-content-center gap-1">
+                                            <IoIosDownload size={20} />Descargar
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))
