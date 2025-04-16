@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+ import React, { useState } from "react";
 import { Modal, Button } from "rsuite";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { FaSave } from "react-icons/fa";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -102,7 +103,7 @@ const ModalSolicitarProducto = () => {
     <>
       <Button
         style={{ minWidth: "80px", maxWidth: "350px" }}
-        className="btn btn-primary rounded-5 text-white"
+        className="btn btn-primary rounded-5 text-white d-flex align-items-center justify-content-center gap-1"
         onClick={handleOpen}>
         Solicitar Producto</Button>
 
@@ -136,8 +137,8 @@ const ModalSolicitarProducto = () => {
           ></textarea>
         </Modal.Body>
         <Modal.Footer className="p-3 row">
-          <Button onClick={handleSubmit} className="btn btn-primary rounded-5" type="button">
-            Enviar
+          <Button onClick={handleSubmit} className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1" type="button">
+            <FaSave size="20"/> Guardar
           </Button>
         </Modal.Footer>
       </Modal>

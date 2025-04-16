@@ -3,7 +3,6 @@ import { Modal } from "rsuite";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
-//import '../../../styles/tables.css';
 
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -128,70 +127,54 @@ const TablaSolicitudes = () => {
   };
 
   return (
-    <div className="p-3 row">
-      <div className="card flex-fill" style={{border: "0"}}>
-        <div className="card-header">
-          <h5 className="card-title mb-0">Últimas Solicitudes</h5>
-        </div>
-        {/* Tabla nativa con Bootstrap */}
-        <div className="">
-          <table className="">
-            <thead>
-              <tr className="">
-                <th>Titulo</th>
-                <th className="d-none d-xl-table-cell">Usuario</th>
-                <th className="d-none d-xl-table-cell">Fecha</th>
-                <th>Aprobado</th>
-                <th className="d-none d-md-table-cell">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((rowData) => (
-                <tr key={rowData.idSolicitud}>
-                  <td>{rowData.titulo}</td>
-                  <td className="d-none d-md-table-cell">{rowData.usuario}</td>
-                  <td className="d-none d-xl-table-cell">
-                    <input
-                      type="date"
-                      className="form-control rounded-5"
-                      value={rowData.fecha ? rowData.fecha.split("T")[0] : ""}
-                      readOnly />
-                  </td>
-                  <td>
-                    <div className="d-flex gap-2">
-                      <button
-                        className="btn btn-success rounded-5"
-                        onClick={() => handleDecision(rowData.idSolicitud, true)}>
-                        Aprobar
-                      </button>
-                      <button
-                        className="btn btn-danger rounded-5"
-                        onClick={() => handleDecision(rowData.idSolicitud, false)}>
-                        Rechazar
-                      </button>
-                    </div>
-                  </td>
-                  <td className="d-none d-md-table-cell">
+    <>
+      <div className="p-3 bg-darkest rounded-4" style={{ minHeight: "90vh" }}>
+        <table className="table-hover">
+          <thead>
+            <tr className="">
+              <th>Titulo</th>
+              <th className="d-none d-xl-table-cell">Usuario</th>
+              <th className="d-none d-xl-table-cell">Fecha</th>
+              <th className="d-none d-md-table-cell">Detalle</th>
+              <th>Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((rowData) => (
+              <tr key={rowData.idSolicitud}>
+                <td>{rowData.titulo}</td>
+                <td className="d-none d-md-table-cell">{rowData.usuario}</td>
+                <td className="d-none d-xl-table-cell">
+                  <input
+                    type="date"
+                    style={{ maxWidth: "150px" }}
+                    className="form-control rounded-5"
+                    value={rowData.fecha ? rowData.fecha.split("T")[0] : ""}
+                    readOnly />
+                </td>
+                <td className="d-none d-md-table-cell">
+                  {rowData.cuerpo}
+                </td>
+                <td>
+                  <div className="d-flex gap-2">
                     <button
-                      className="btn btn-outline-dark rounded-5"
-                      onClick={() => handleOpen(rowData)}>
-                      Detalle
+                      className="btn btn-success rounded-5"
+                      onClick={() => handleDecision(rowData.idSolicitud, true)}>
+                      Aprobar
                     </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Modal (se mantiene igual) */}
-        {selectedRow && (
-          <Modal open={open} onClose={handleClose}>
-            {/* ... (contenido del modal original) */}
-          </Modal>
-        )}
+                    <button
+                      className="btn btn-danger rounded-5"
+                      onClick={() => handleDecision(rowData.idSolicitud, false)}>
+                      Rechazar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    </div>
+    </>
   );
 };
 

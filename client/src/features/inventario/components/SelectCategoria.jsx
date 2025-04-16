@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
-
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 

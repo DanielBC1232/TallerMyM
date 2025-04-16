@@ -82,21 +82,21 @@ export const Dashboard = () => {
 
     return (
         <div>
-            <div className="mx-5 mt-4">
+            <div className="mx-5 mt-4 bg-darkest p-3 rounded-4">
                 <StatGroup>
                     {/* Ingresos */}
                     <Stat>
-                        <Stat.Label>Ingresos del mes anterior</Stat.Label>
+                        <Stat.Label className="text-secondary"><strong>Ingresos del mes anterior</strong></Stat.Label>
                         <HStack spacing={10}>
-                            <Stat.Value>₡ {finanzas?.totalMesAnterior?.toLocaleString() ?? "Cargando..."}</Stat.Value>
+                            <Stat.Value className="text-white">₡ {finanzas?.totalMesAnterior?.toLocaleString() ?? "Cargando..."}</Stat.Value>
                         </HStack>
                     </Stat>
 
                     <Stat>
-                        <Stat.Label>Ingresos de este mes</Stat.Label>
+                        <Stat.Label className="text-secondary"><strong>Ingresos de este mes</strong></Stat.Label>
                         <HStack spacing={10}>
-                            <Stat.Value>₡ {finanzas?.totalMesActual?.toLocaleString() ?? "Cargando..."}</Stat.Value>
-                            <Stat.Trend
+                            <Stat.Value className="text-white">₡ {finanzas?.totalMesActual?.toLocaleString() ?? "Cargando..."}</Stat.Value>
+                            <Stat.Trend 
                                 indicator={finanzas?.diferenciaPorcentaje > 0 ? "up" : "down"}
                             >
                                 {finanzas?.diferenciaPorcentaje?.toFixed(2) ?? "0"}%
@@ -106,16 +106,16 @@ export const Dashboard = () => {
 
                     {/* Gastos */}
                     <Stat>
-                        <Stat.Label>Gastos del mes anterior</Stat.Label>
+                        <Stat.Label className="text-secondary"><strong>Gastos del mes anterior</strong></Stat.Label>
                         <HStack spacing={10}>
-                            <Stat.Value>₡ {gastos?.totalMesAnterior?.toLocaleString() ?? "Cargando..."}</Stat.Value>
+                            <Stat.Value className="text-white">₡ {gastos?.totalMesAnterior?.toLocaleString() ?? "Cargando..."}</Stat.Value>
                         </HStack>
                     </Stat>
 
                     <Stat>
-                        <Stat.Label>Gastos de este mes</Stat.Label>
+                        <Stat.Label className="text-secondary"><strong>Gastos de este mes</strong></Stat.Label>
                         <HStack spacing={10}>
-                            <Stat.Value>₡ {gastos?.totalMesActual?.toLocaleString() ?? "Cargando..."}</Stat.Value>
+                            <Stat.Value className="text-white">₡ {gastos?.totalMesActual?.toLocaleString() ?? "Cargando..."}</Stat.Value>
                             <Stat.Trend
                                 indicator={gastos?.diferenciaPorcentual > 0 ? "up" : "down"}
                             >

@@ -1,6 +1,7 @@
 :root,
 [data-bs-theme=light] {
-    --bs-darkest: rgb(34,47,61);
+    --bs-darkest: rgb(34, 47, 61);
+    --bs-darkest-secondary: rgb(44, 57, 71);
     --bs-blue: #3b7ddd;
     --bs-indigo: #0a0a0a;
     --bs-purple: #6f42c1;
@@ -120,6 +121,13 @@
     --bs-form-invalid-border-color: #dc3545
 }
 
+.article-container {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    gap: 1.5rem !important;
+    justify-items: center !important;
+}
+
 .login-page {
     position: relative;
     min-height: 100vh;
@@ -199,7 +207,7 @@ button:active {
 .floating-button {
     width: 55px;
     height: 55px;
-    background-color: #005ba5;
+    background-color: #3B7CDC;
     color: #fff;
     border-radius: 50%;
     display: flex;
@@ -8077,7 +8085,17 @@ fieldset:disabled .btn {
 
 .bg-darkest {
     --bs-bg-opacity: 1;
-    background-color: rgba(var(--bs-darkest), var(--bs-bg-opacity)) !important
+    background-color: rgb(34, 47, 61) !important
+}
+
+.background-darkest {
+    --bs-bg-opacity: 1;
+    background-color: rgb(34, 47, 61) !important
+}
+
+.bg-darkest-secondary {
+    --bs-bg-opacity: 1;
+    background-color: rgb(44, 57, 71) !important
 }
 
 .bg-black {
@@ -14890,7 +14908,7 @@ a.sidebar-link svg {
 .sidebar-header {
     background: transparent;
     color: #ced4da;
-    font-size: .75rem;
+    font-size: .90rem;
     padding: 1.5rem 1.5rem .375rem
 }
 

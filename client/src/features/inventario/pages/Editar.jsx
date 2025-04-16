@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { IoMdReturnLeft } from "react-icons/io";
-
+import { FaSave } from "react-icons/fa";
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -558,11 +558,9 @@ const Editar = () => {
                 <div className="ms-3">
                   <button
                     type="submit"
-                    className="btn btn-primary rounded-5"
-                    style={{ maxWidth: "120px" }}
-                  >
-                    Guardar
-                  </button>
+                    className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1"
+                    style={{ maxWidth: "120px", height: "31px" }}>
+                    <FaSave size="20"/> Guardar </button>
                 </div>
               </Row>
             </Col>

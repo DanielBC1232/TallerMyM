@@ -6,9 +6,9 @@ import Swal from "sweetalert2";
 import { BrowserRouter as Router, useNavigate, Link } from "react-router-dom";
 import { Image } from "rsuite";
 import { IoMdReturnLeft } from "react-icons/io";
-
 import "../styles/inv.css";
-
+import { MdDelete } from "react-icons/md";
+import { MdModeEdit } from "react-icons/md";
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -216,16 +216,16 @@ const Detalles = () => {
                   />
                 </div>
                 <div className="mt-2">
-                      <label htmlFor="stockMinimo" className="form-label">Stock Mínimo:</label>
-                      <input
-                        type="number"
-                        name="stockMinimo"
-                        className="form-control rounded-5"
-                        value={producto.stockMinimo ?? 0}
-                        readOnly
-                        placeholder="Sin asignar"
-                      />
-                    </div>
+                  <label htmlFor="stockMinimo" className="form-label">Stock Mínimo:</label>
+                  <input
+                    type="number"
+                    name="stockMinimo"
+                    className="form-control rounded-5"
+                    value={producto.stockMinimo ?? 0}
+                    readOnly
+                    placeholder="Sin asignar"
+                  />
+                </div>
               </Col>
 
               {/* Segunda columna de datos */}
@@ -335,27 +335,24 @@ const Detalles = () => {
 
             <Row className="d-flex justify-content-end pe-5">
               <div className="d-flex justify-content-start col">
-                <Link to="/inventario" className="btn btn-secondary rounded-5">
+                <Link to="/inventario" className="btn btn-secondary rounded-5 d-flex align-items-center justify-content-center gap-1">
                   <IoMdReturnLeft size="20" /> Volver
                 </Link>
               </div>
               <div className="">
                 <button
                   onClick={Eliminar}
-                  className="btn btn-danger text-white rounded-5"
-                  style={{ maxWidth: "120px" }}
-                >
-                  Eliminar
+                  className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                  style={{ maxWidth: "120px", height: "31px" }}>
+                  <MdDelete size="20" /> Eliminar
                 </button>
               </div>
               <div className="ms-3">
                 <Link
                   to={`/inventario-editar/${idProducto}`}
-                  className="btn btn-warning text-white rounded-5"
-                  style={{ maxWidth: "120px" }}
-                >
-                  Editar
-                </Link>
+                  className="btn btn-warning text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                  style={{ maxWidth: "120px", height: "31px" }}
+                ><MdModeEdit size="20"/> Editar</Link>
               </div>
             </Row>
           </Col>

@@ -13,7 +13,7 @@ import axios from "axios";
 import { Row } from "rsuite";
 import Notificaciones from "../../../components/Notificaciones";
 import "../styles/inv.css";
-
+import { IoAddSharp } from "react-icons/io5";
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -105,7 +105,7 @@ const IndexInventario = () => {
   return (
     <div className="grid-container px-3 py-3">
       <Notificaciones modulo={'INVENTARIO'} />
-      <div className="p-4 rounded-3 shadow-sm bg-white py-5">
+      <div className="p-4 rounded-3 shadow-sm py-5 background-darkest">
         <form onSubmit={handleSubmit}>
           <div className="row my-2">
             <Row className="d-flex gap-4 justify-content-start">
@@ -153,9 +153,8 @@ const IndexInventario = () => {
           </div>
           <hr className="text-primary" />
           <Row className="d-flex gap-4 justify-content-start">
-            <Link to="/inventario-agregar" className="btn btn-primary rounded-5">
-              Agregar producto
-            </Link>
+            <Link to="/inventario-agregar" className="btn btn-primary rounded-5 text-white d-flex align-items-center justify-content-center gap-1">
+              Agregar producto</Link>
             <ModalSolicitarProducto />
           </Row>
         </form>
