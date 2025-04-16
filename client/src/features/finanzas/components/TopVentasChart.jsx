@@ -102,7 +102,7 @@ const TopVentasChart = () => {
     ];
 
     return (
-        <div>
+        <div className='bg-white rounded-4 p-3 shadow-sm'>
             <ReactApexChart
                 options={options}
                 series={series}

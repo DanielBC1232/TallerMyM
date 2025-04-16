@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { IoMdReturnLeft } from "react-icons/io";
+import { FaSave } from "react-icons/fa";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -29,7 +31,7 @@ const EditarUsuario = () => {
             },
           }
         );
-  
+
         setUsuario((prev) => ({
           ...prev,
           username: response.data.username,
@@ -38,7 +40,7 @@ const EditarUsuario = () => {
         }));
       } catch (error) {
         console.error("Error al obtener el usuario:", error);
-  
+
         if (error.response) {
           // Manejo de errores HTTP específicos
           if (error.response.status === 401) {
@@ -67,10 +69,10 @@ const EditarUsuario = () => {
         }
       }
     };
-  
+
     obtenerUsuario();
   }, [idUsuario]);
-  
+
 
 
   const handleChange = (e) => {
@@ -160,16 +162,17 @@ const EditarUsuario = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">Editar Usuario</h1>
-      <form onSubmit={handleSubmit} style={{ maxWidth: "400px" }} className="mx-auto">
+    <div className="p-4 rounded-4 bg-darkest shadow-sm" style={{minHeight: "85vh"}}>
+      <h2 className="text-center mb-4 text-primary">Editar Usuario</h2>
+      <hr className="text-primary"/>
+      <form onSubmit={handleSubmit} style={{ maxWidth: "400px" }} className="mx-auto mt-5">
         <div className="mb-3">
           <label htmlFor="username" className="form-label">Nombre de usuario:</label>
           <input
             type="text"
             id="username"
             name="username"
-            className="form-control"
+            className=" form-control rounded-5 py-1"
             value={usuario.username}
             onChange={handleChange}
             required
@@ -182,7 +185,7 @@ const EditarUsuario = () => {
             type="email"
             id="email"
             name="email"
-            className="form-control"
+            className=" form-control rounded-5"
             value={usuario.email}
             onChange={handleChange}
             required
@@ -191,7 +194,7 @@ const EditarUsuario = () => {
 
         <div className="mb-3">
           <label htmlFor="idRol" className="form-label">Rol:</label>
-          <select className="form-select" name="idRol" value={usuario.idRol}
+          <select className="form-select rounded-5" name="idRol" value={usuario.idRol}
             onChange={handleChange}>
             <option value="2">Usuario</option>
             <option value="1">Administrador</option>
@@ -203,7 +206,7 @@ const EditarUsuario = () => {
           <input
             type="password"
             name="password"
-            className="form-control"
+            className=" form-control rounded-5"
             value={usuario.password}
             onChange={handleChange}
           />
@@ -214,14 +217,14 @@ const EditarUsuario = () => {
           <input
             type="password"
             name="confirmPassword"
-            className="form-control"
+            className=" form-control rounded-5"
             value={usuario.confirmPassword}
             onChange={handleChange}
           />
         </div>
 
-        <div className="d-flex justify-content-between">
-          <button type="submit" className="btn btn-primary">Guardar Cambios</button>
+        <div className="mt-5 px-2 row d-flex justify-content-center">
+          <button type="submit" className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1">Guardar Cambios</button>
         </div>
       </form>
     </div>

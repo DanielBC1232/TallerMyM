@@ -2,20 +2,25 @@ import React, { useState } from "react";
 import swal from "sweetalert2";
 import SelectProveedor from "../../inventario/components/SelectProveedor";
 import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import { Modal } from 'rsuite';
+import { TbCashRegister } from "react-icons/tb";
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const AgregarGastoOperativo = () => {
     const navigate = useNavigate();
-
+    const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         tipoGasto: "",
         detalle: "",
         monto: 0,
         proveedor: ""
     });
+
+    // Función para abrir y cerrar modal
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     // Función genérica para actualizar cualquier campo
     const handleChange = (name, value) => {
@@ -104,59 +109,68 @@ const AgregarGastoOperativo = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <span>
-                    Tipo de gasto:
-                    <select
-                        className="form-select form-select-sm"
-                        name="tipoGasto"
-                        style={{ height: "40px", fontSize: "16px" }}
-                        onChange={handleInputChange}
-                        value={formData.tipoGasto}>
-                        <option value="">Seleccione...</option>
-                        <option value="Servicios Basicos">Servicios Básicos</option>
-                        <option value="Adquisicion Inventario">Adquisición de Inventario</option>
-                    </select>
-                </span>
+        <>
+            <button
+                style={{ minWidth: "80px", maxWidth: "350px" }}
+                className="btn btn-primary rounded-5 text-white d-flex align-items-center justify-content-center gap-1"
+                onClick={handleOpen}><TbCashRegister size={20} />Registrar</button>
 
-                <span>
-                    Detalle:
-                    <input
-                        className="form-control form-control-sm"
-                        type="text"
-                        name="detalle"
-                        onChange={handleInputChange}
-                        value={formData.detalle}
-                        placeholder="Ejemplo: Factura electrica, Factura de agua,..."
-                    />
-                </span>
+            <Modal open={open} onClose={handleClose}>
+                <Modal.Header className="p-3">
+                    <Modal.Title className="text-primary">Registrar Gasto Operativo</Modal.Title>
+                    <hr className="text-primary" />
+                </Modal.Header>
+                <Modal.Body className="px-3">
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-3">
+                            <label>Tipo de gasto:</label>
+                            <select className="form-select rounded-5"
+                                name="tipoGasto"
+                                style={{ height: "40px", fontSize: "16px" }}
+                                onChange={handleInputChange}
+                                value={formData.tipoGasto}>
+                                <option value="">Seleccione...</option>
+                                <option value="Servicios Basicos">Servicios Básicos</option>
+                                <option value="Adquisicion Inventario">Adquisición de Inventario</option>
+                            </select>
+                        </div>
 
-                <span>
-                    Monto:
-                    <input
-                        className="form-control form-control-sm"
-                        type="number"
-                        name="monto"
-                        onChange={handleInputChange}
-                        value={formData.monto}
-                        min={0}
-                    />
-                </span>
+                        <div className="mb-3">
+                            <label>Detalle:</label>
+                            <input className="form-control rounded-5"
+                                type="text"
+                                name="detalle"
+                                onChange={handleInputChange}
+                                value={formData.detalle}
+                                placeholder="Ejemplo: Factura eléctrica, Factura de agua, ..." />
+                        </div>
 
-                <span>
-                    Proveedor ("Ninguno" si no aplica):
-                    <SelectProveedor
-                        onChange={handleInputChange}
-                        value={formData.proveedor}
-                    />
-                </span>
+                        <div className="mb-3">
+                            <label>Monto:</label>
+                            <input className="form-control rounded-5"
+                                type="number"
+                                name="monto"
+                                onChange={handleInputChange}
+                                value={formData.monto}
+                                min={0} />
+                        </div>
 
-                <button type="submit" className="btn btn-sm text-white btn-secondary">
-                    Registrar
-                </button>
-            </div>
-        </form>
+                        <div className="mb-3" style={{ maxWidth: "400px" }}>
+                            <label>Proveedor ("Ninguno" si no aplica):</label>
+                            <SelectProveedor onChange={handleInputChange} value={formData.proveedor} />
+                        </div>
+                    </form>
+                </Modal.Body>
+                <Modal.Footer className="p-3 row">
+                    <button
+                        onClick={handleSubmit}
+                        className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1"
+                        type="button">
+                        Registrar
+                    </button>
+                </Modal.Footer>
+            </Modal>
+        </>
     );
 }
 

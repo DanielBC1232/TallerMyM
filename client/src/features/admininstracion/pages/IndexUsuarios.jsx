@@ -3,7 +3,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import ModalAgregarUsuario from "../components/ModalAgregarUsuario";
-
+import { Row, Col } from 'rsuite';
+import { IoIosRadioButtonOff } from "react-icons/io";
+import { MdModeEdit } from "react-icons/md";
+import { IoIosRadioButtonOn } from "react-icons/io";
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const ListarUsuarios = () => {
@@ -22,7 +25,7 @@ const ListarUsuarios = () => {
           "Authorization": `Bearer ${localStorage.getItem('token')}`
         }
       });
-  
+
       setUsuarios(response.data);
       setError("");
     } catch (error) {
@@ -58,7 +61,7 @@ const ListarUsuarios = () => {
       setLoading(false);
     }
   };
-  
+
 
   useEffect(() => {
     ObtenerUsuarios();
@@ -78,7 +81,7 @@ const ListarUsuarios = () => {
       estado === 1
         ? "Esta acción activará al usuario."
         : "Esta acción desactivará al usuario.";
-  
+
     const confirmacion = await Swal.fire({
       title: "¿Estás seguro?",
       text: textoConfirmacion,
@@ -87,7 +90,7 @@ const ListarUsuarios = () => {
       confirmButtonText: `Sí, ${accion}`,
       cancelButtonText: "Cancelar",
     });
-  
+
     if (confirmacion.isConfirmed) {
       try {
         const response = await axios.put(
@@ -103,7 +106,7 @@ const ListarUsuarios = () => {
             },
           }
         );
-  
+
         Swal.fire(
           `${accion.charAt(0).toUpperCase() + accion.slice(1)}`,
           `El estado ha sido actualizado correctamente`,
@@ -142,31 +145,32 @@ const ListarUsuarios = () => {
       }
     }
   };
-  
-
   if (loading) return <p>Cargando usuarios...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
   return (
-    <div className="p-6 m-5">
+    <div className="p-4 bg-darkest rounded-4" style={{ minHeight: "87vh" }}>
       <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Buscar por nombre de usuario"
-          value={FiltroUsuario}
-          onChange={(e) => setFiltroUsuario(e.target.value)}
-          className="border p-2 rounded me-3 form-control-sm"
-        />
-        <ModalAgregarUsuario />
+        <Row className="d-flex align-items-center">
+          <Col>
+            <input type="text" placeholder="Buscar usuario"
+              value={FiltroUsuario}
+              onChange={(e) => setFiltroUsuario(e.target.value)}
+              className="form-control p-2 rounded-5"
+              style={{ width: "250px" }} />
+          </Col>
+          <Col>
+            <ModalAgregarUsuario />
+          </Col>
+        </Row>
       </div>
-
-      <table className="min-w-full bg-white border">
+      <table className="table table-hover table-fluid">
         <thead>
           <tr>
-            <th className="py-2 px-4 border">Nombre Usuario</th>
-            <th className="py-2 px-4 border">Email</th>
-            <th className="py-2 px-4 border">Estado</th>
-            <th className="py-2 px-4 border">Último cambio de contraseña</th>
-            <th className="py-2 px-4 border">Acciones</th>
+            <th className="py-2 px-4">Nombre Usuario</th>
+            <th className="py-2 px-4">Email</th>
+            <th className="py-2 px-4">Estado</th>
+            <th className="py-2 px-4">Último cambio de contraseña</th>
+            <th className="py-2 px-4">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -181,32 +185,34 @@ const ListarUsuarios = () => {
           ) : (
             UsuariosFiltrados.map((usuario) => (
               <tr key={usuario.idUsuario}>
-                <td className="py-2 px-4 border">{usuario.username}</td>
-                <td className="py-2 px-4 border">{usuario.email}</td>
-                <td className="py-2 px-4 border">{usuario.isLocked ? "Bloqueado" : "Activo"}</td>
-                <td className="py-2 px-4 border">{usuario.lastPasswordChange ? new Date(usuario.lastPasswordChange).toLocaleDateString() : 'Ninguno'}</td>
-                <td className="py-2 px-4 border">
-                  <button
-                    className="btn btn-sm btn-secondary text-white me-2"
-                    onClick={() => handleEditar(usuario.idUsuario)}
-                  >
-                    Editar
-                  </button>
-                  {usuario.isLocked ? (
+                <td className="py-2 px-4">{usuario.username}</td>
+                <td className="py-2 px-4">{usuario.email}</td>
+                <td className="py-2 px-4">{usuario.isLocked ? "Bloqueado" : "Activo"}</td>
+                <td className="py-2 px-4">{usuario.lastPasswordChange ? new Date(usuario.lastPasswordChange).toLocaleDateString() : 'Ninguno'}</td>
+                <td className="py-2 px-4">
+                  <div className="d-flex">
                     <button
-                      className="btn btn-sm btn-success text-white"
-                      onClick={() => handleCambiarEstado(usuario.idUsuario, 0)}
-                    >
-                      Activar
+                      className="btn btn-warning rounded-5 d-flex align-items-center justify-content-center gap-1 me-2"
+                      onClick={() => handleEditar(usuario.idUsuario)}>
+                      <MdModeEdit size="20" /> Editar
                     </button>
-                  ) : (
-                    <button
-                      className="btn btn-sm btn-danger text-white"
-                      onClick={() => handleCambiarEstado(usuario.idUsuario, 1)}
-                    >
-                      Desactivar
-                    </button>
-                  )}
+                    {usuario.isLocked ? (
+                      <button
+                        className="btn btn-success rounded-5 d-flex align-items-center justify-content-center gap-1"
+                        onClick={() => handleCambiarEstado(usuario.idUsuario, 0)}
+                      >
+                        <IoIosRadioButtonOn size={20} />Activar
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-danger rounded-5 d-flex align-items-center justify-content-center gap-1"
+                        onClick={() => handleCambiarEstado(usuario.idUsuario, 1)}
+                      >
+                        <IoIosRadioButtonOff size={20} /> Desactivar
+                      </button>
+                    )}
+                  </div>
+
                 </td>
               </tr>
             ))

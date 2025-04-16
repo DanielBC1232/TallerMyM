@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Stat, StatGroup, HStack } from "rsuite";
+import { Row, Col } from "rsuite";
 import Swal from "sweetalert2";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { FaFileDownload } from "react-icons/fa";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -77,7 +78,6 @@ export const Reportes = () => {
         getClientesInactivos();
         getMecanicosEficientes();
     }, []);
-
 
     const descargarReporteClientes = async () => {
         try {
@@ -244,75 +244,76 @@ export const Reportes = () => {
     }
 
     return (
-        <div className="container mt-5">
-            <div className="row">
-
-                {/* Reportes Clientes inactivos */}
-                <div className="col col-6">
-                    <h3>Clientes Inactivos</h3>
-                    <button className="btn btn-sm btn-primary"
-                        onClick={() => descargarReporteClientes()}>Generar Reporte</button>
-                    <table className="table mt-3">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Correo</th>
-                                <th>Teléfono</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {clientes.length > 0 ? (
-                                clientes.map((cliente) => (
-                                    <tr key={cliente.idCliente}>
-                                        <td>{cliente.nombreCliente}</td>
-                                        <td>{cliente.correo}</td>
-                                        <td>{cliente.telefono}</td>
-                                    </tr>
-                                ))
-                            ) : (
+        <div className="p-5 bg-darkest rounded-4" style={{height: "85vh"}}>
+            <Row>
+                <Col xs={12}>
+                    {/* Reportes Clientes inactivos */}
+                    <div className="row">
+                        <h3 className="text-white">Clientes Inactivos</h3>
+                        <button className="btn btn-primary rounded-5 "
+                            onClick={() => descargarReporteClientes()}><FaFileDownload size={20}/> Generar Reporte</button>
+                        <table className="table table-hover mt-3">
+                            <thead>
                                 <tr>
-                                    <td colSpan="3" style={{ textAlign: "center" }}>
-                                        No hay resultados
-                                    </td>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Teléfono</th>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
-
-                </div>
-
-                {/* Reporte Trabajadores Eficientes (Mecánicos) */}
-                <div className="col-6">
-                    <h3>Mecánicos Más Eficientes</h3>
-                    <button className="btn btn-sm btn-primary" onClick={descargarReporteTrabajadores}>
-                        Generar Reporte
-                    </button>
-                    <table className="table mt-3">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Cédula</th>
-                                <th>Total Órdenes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {mecanicos && mecanicos.length > 0 ? (
-                                mecanicos.map((mecanico) => (
-                                    <tr key={mecanico.cedula}>
-                                        <td>{mecanico.nombreCompleto}</td>
-                                        <td>{mecanico.cedula}</td>
-                                        <td>{mecanico.totalOrdenes}</td>
+                            </thead>
+                            <tbody>
+                                {clientes.length > 0 ? (
+                                    clientes.map((cliente) => (
+                                        <tr key={cliente.idCliente}>
+                                            <td>{cliente.nombreCliente}</td>
+                                            <td>{cliente.correo}</td>
+                                            <td>{cliente.telefono}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="3" style={{ textAlign: "center" }}>
+                                            No hay resultados
+                                        </td>
                                     </tr>
-                                ))
-                            ) : (
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </Col>
+                <Col xs={12}>
+                    {/* Reporte Trabajadores Eficientes (Mecánicos) */}
+                    <div className="row ms-3">
+                        <h3 className="text-white">Mejores Empleados</h3>
+                        <button className="btn btn-primary rounded-5" onClick={descargarReporteTrabajadores}>
+                        <FaFileDownload size={20}/> Generar Reporte
+                        </button>
+                        <table className="table table-hover mt-3">
+                            <thead>
                                 <tr>
-                                    <td colSpan="3" style={{ textAlign: "center" }}>No hay resultados</td>
+                                    <th>Nombre</th>
+                                    <th>Cédula</th>
+                                    <th>Total Órdenes</th>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                            </thead>
+                            <tbody>
+                                {mecanicos && mecanicos.length > 0 ? (
+                                    mecanicos.map((mecanico) => (
+                                        <tr key={mecanico.cedula}>
+                                            <td>{mecanico.nombreCompleto}</td>
+                                            <td>{mecanico.cedula}</td>
+                                            <td>{mecanico.totalOrdenes}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="3" style={{ textAlign: "center" }}>No hay resultados</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </Col>
+            </Row>
         </div>
     )
 }

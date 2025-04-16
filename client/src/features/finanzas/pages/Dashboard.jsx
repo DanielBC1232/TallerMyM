@@ -82,7 +82,7 @@ export const Dashboard = () => {
 
     return (
         <div>
-            <div className="mx-5 mt-4 bg-darkest p-3 rounded-4">
+            <div className="mx-5 mt-4 bg-darkest p-3 rounded-4 shadow-sm">
                 <StatGroup>
                     {/* Ingresos */}
                     <Stat>

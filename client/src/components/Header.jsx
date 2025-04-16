@@ -18,7 +18,7 @@ import { AiFillDashboard } from "react-icons/ai";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
 import { BsPersonGear } from "react-icons/bs";
-
+import { MdOutlineAttachMoney } from "react-icons/md";
 //Iconos
 const Header = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -109,6 +109,11 @@ const Header = ({ children }) => {
             <li className="sidebar-item">
               <Link className="sidebar-link" to="/administracion">
               <MdAdminPanelSettings size={20}/>Administracion
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/gastos-operativos">
+              <MdOutlineAttachMoney  size={20}/>Gastos Operativos
               </Link>
             </li>
             <li className="sidebar-item">
