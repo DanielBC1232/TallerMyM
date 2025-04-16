@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Text } from 'rsuite';
 import Swal from "sweetalert2";
-const { Column, HeaderCell, Cell } = Table;
 import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
-
+import { MdOutlineManageSearch } from "react-icons/md";
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -80,67 +78,69 @@ const ListadoVentas = () => {
     }, [filtroData]);
 
     return (
-        <div>
-            <div className="d-flex gap-4 ms-4">
-                <span>
-                    Orden:
-                    <input className="form-control form-control-sm"
-                        name="codigoOrden"
-                        type="text"
-                        value={filtroData.codigoOrden}
-                        onChange={handleChange}
-                    />
-                </span>
-                <span>
-                    Cliente:
-                    <input className="form-control form-control-sm"
-                        name="nombreCliente"
-                        type="text"
-                        value={filtroData.nombreCliente}
-                        onChange={handleChange}
-                    />
-                </span>
+        <>
+            <div className="p-3 bg-darkest" style={{minHeight: "85vh"}}>
+                {/* Sección de filtros */}
+                <div className="d-flex gap-4">
+                    <span>
+                        <label className="text-gray">Orden:</label>
+                        <input
+                            placeholder=" # de orden"
+                            className="form-control form-control-sm rounded-5"
+                            name="codigoOrden"
+                            type="text"
+                            value={filtroData.codigoOrden}
+                            onChange={handleChange}/>
+                    </span>
+                    <span>
+                        <label className="text-gray">Cliente:</label>
+                        <input
+                            placeholder=" nombre de cliente"
+                            className="form-control form-control-sm rounded-5"
+                            name="nombreCliente"
+                            type="text"
+                            value={filtroData.nombreCliente}
+                            onChange={handleChange}/>
+                    </span>
+                </div>
+                {/* Tabla de ventas o mensaje "Sin resultados" */}
+                {datos.length > 0 ? (
+                    <table className="table table-hover">
+                        <thead>
+                            <tr>
+                                <th className="text-center">Codigo de Orden</th>
+                                <th className="text-center">Cliente</th>
+                                <th className="text-center">Fecha de venta</th>
+                                <th className="text-center">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {datos.map((rowData) => {
+                                const fecha = new Date(rowData.fechaVenta);
+                                const fechaFormateada = `${fecha.getFullYear()}-${(fecha.getMonth() + 1)
+                                    .toString()
+                                    .padStart(2, "0")}-${fecha.getDate().toString().padStart(2, "0")}`;
+                                return (
+                                    <tr key={rowData.idVenta}>
+                                        <td className="text-center">{rowData.codigoOrden}</td>
+                                        <td className="text-center">{rowData.nombreCliente}</td>
+                                        <td className="text-center">{fechaFormateada}</td>
+                                        <td className="d-flex justify-content-center">
+                                            <Link to={`/detalles/${rowData.idVenta}`} style={{ width: "200px" }}
+                                                className="btn btn-primary rounded-4 d-flex align-items-center justify-content-center gap-1">
+                                                <MdOutlineManageSearch size={20} />Gestionar Venta
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                ) : (
+                    <div className="text-center text-white">Sin resultados</div>
+                )}
             </div>
-            <Table
-                width={1200}
-                height={800}
-                data={datos}
-            >
-                <Column width={200}>
-                    <HeaderCell className="text-center">Codigo de Orden</HeaderCell>
-                    <Cell className="text-center" dataKey="codigoOrden" />
-                </Column>
-
-                <Column width={200}>
-                    <HeaderCell className="text-center">Cliente</HeaderCell>
-                    <Cell className="text-center" dataKey="nombreCliente" />
-                </Column>
-
-                <Column width={400}>
-                    <HeaderCell className="text-center">Fecha de venta</HeaderCell>
-                    <Cell className="text-center">
-                        {rowData => {
-                            const fecha = new Date(rowData.fechaVenta);
-                            return `${fecha.getFullYear()}-${(fecha.getMonth() + 1).toString().padStart(2, "0")}-${fecha.getDate().toString().padStart(2, "0")}`;
-                        }}
-                    </Cell>
-                </Column>
-
-                <Column width={350} fixed="right">
-                    <HeaderCell className="text-center">Accion</HeaderCell>
-
-                    <Cell className="text-center" style={{ padding: '6px' }}>
-                        {rowData => (
-                            <Link className="btn btn-sm text-white btn-secondary rounded-1"
-                                to={`/detalles/${rowData.idVenta}`}>
-                                Gestionar Venta
-                            </Link>
-                        )}
-                    </Cell>
-                </Column>
-            </Table>
-        </div>
-
+        </>
     );
 }
 export default ListadoVentas;

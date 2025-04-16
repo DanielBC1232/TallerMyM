@@ -65,20 +65,20 @@ const Pago = () => {
   return (
     <div className="mt-3 d-flex flex-column gap-3">
       <span>
-        <Text xs="lg">Monto pagado:</Text>
-        <Text xs="lg" muted>{formData.monto}</Text>
+        <Text size="xl" className="text-white">Monto pagado:</Text>
+        <Text size="xl" muted>{formData.monto}</Text>
       </span>
       <span>
-        <Text xs="lg">Dinero vuelto:</Text>
-        <Text xs="lg" muted>{formData.dineroVuelto}</Text>
+        <Text size="xl" className="text-white">Dinero vuelto:</Text>
+        <Text size="xl" muted>{formData.dineroVuelto}</Text>
       </span>
       <span>
-        <Text xs="lg">Metodo de pago:</Text>
-        <Text xs="lg" muted>{formData.metodoPago}</Text>
+        <Text size="xl" className="text-white">Metodo de pago:</Text>
+        <Text size="xl" muted>{formData.metodoPago}</Text>
       </span>
       <span>
-        <Text xs="lg">Fecha:</Text>
-        <Text xs="lg" muted>{formData.fecha.split("T")[0]}</Text>
+        <Text size="xl" className="text-white">Fecha:</Text>
+        <Text size="xl" muted>{formData.fecha.split("T")[0]}</Text>
       </span>
     </div>
   );

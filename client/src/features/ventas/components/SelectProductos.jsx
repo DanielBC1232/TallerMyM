@@ -4,6 +4,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import SelectMarca from "../../inventario/components/SelectMarca";
 import SelectCategoria from "../../inventario/components/SelectCategoria";
+import { FaSearch } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 
 //URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -233,28 +235,25 @@ const SelectProductos = ({ idVenta }) => {
         }
 
     };
-
     return (
-        <div className="">
+        <div className="bg-darkest">
             <div className="px-4">
                 <div className="row">
-                    <div className="mb-3">
+                    <div className="ms-0 mb-3 row">
                         <span>Producto:</span>
                         <input
                             name="nombre"
-                            className="form-control"
+                            className="form-control rounded-5 py-2"
                             placeholder="Buscar por nombre"
                             value={formData.nombre}
-                            onChange={handleChange}
-                        />
+                            onChange={handleChange} />
                     </div>
                     <div className="col-6">
                         <div>
                             <span>Marca:</span>
                             <SelectMarca
                                 value={formData.marca}
-                                onChange={handleChange}
-                            />
+                                onChange={handleChange} />
                         </div>
                     </div>
                     <div className="col-6">
@@ -262,12 +261,11 @@ const SelectProductos = ({ idVenta }) => {
                             <span>Categoria:</span>
                             <SelectCategoria
                                 value={formData.categoria}
-                                onChange={handleChange}
-                            />
+                                onChange={handleChange} />
                         </div>
                     </div>
-                    <div className="mt-3 row px-4">
-                        <button className="btn btn-primary" onClick={handleBuscar}>Buscar</button>
+                    <div className="mt-3 px-4">
+                        <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={handleBuscar}><FaSearch size={15} />Buscar</button>
                     </div>
                 </div>
             </div>
@@ -276,11 +274,11 @@ const SelectProductos = ({ idVenta }) => {
                 <form onSubmit={handleSubmit}>
                     <Modal.Header className="px-3 pt-3">
                         <Modal.Title className="text-center">
-                            <Text size="xxl" className="text-secondary">
+                            <Text size="xxl" className="text-primary">
                                 Agregar Producto
                             </Text>
                         </Modal.Title>
-                        <hr className="text-secondary" />
+                        <hr className="text-primary p-0" />
                     </Modal.Header>
                     <Modal.Body className="px-3">
                         <div>
@@ -288,33 +286,30 @@ const SelectProductos = ({ idVenta }) => {
                             <input
                                 name="cantidad"
                                 type="number"
-                                className="form-control form-control-sm"
+                                className="form-control rounded-5"
                                 min={1}
                                 onChange={handleChangePost}
                                 value={formDataPost.cantidad}
                             ></input>
                         </div>
-                        <div className="my-4">
-
-                        </div>
                     </Modal.Body>
-                    <Modal.Footer className="p-3 mb-3">
-                        <Button appearance="primary" type="submit">
-                            Generar
-                        </Button>
+                    <Modal.Footer className="mb-3 d-flex justify-content-center">
+                        <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+                            <FaPlus size={15} />Generar
+                        </button>
                     </Modal.Footer>
                 </form>
             </Modal>
 
             {/* Listado de productos */}
-            <div className="p-4">
+            <div className="p-4 px-2">
 
                 {loading ? (
                     <div></div>
                 ) : (
                     <div className="scroll-container">
                         {/* Listado de productos */}
-                        <table className="table table-stripped table-hover">
+                        <table className="table table-hover">
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
@@ -331,9 +326,9 @@ const SelectProductos = ({ idVenta }) => {
                                         <td>₡ {producto.precio}</td>
                                         <td className="d-flex justify-content-center">
                                             {/* USAR MODAL AGREGAR */}
-                                            <button className="btn btn-sm btn-primary"
+                                            <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
                                                 onClick={() => AgregarProducto(producto.idProducto)}
-                                            >Agregar</button>
+                                            ><FaPlus size={15} />Agregar</button>
                                         </td>
                                     </tr>
                                 ))}

@@ -72,11 +72,6 @@ const Header = ({ children }) => {
             <li className="sidebar-header">Ventas</li>
             <li className="sidebar-item">
               <Link className="sidebar-link" to="/ventas">
-              <IoIosCheckmarkCircle size={20}/>Ordenes Finalizadas
-              </Link>
-            </li>
-            <li className="sidebar-item">
-              <Link className="sidebar-link" to="/ventas">
               <RiShoppingBagFill size={20}/>Lista de ventas
               </Link>
             </li>

@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 const { Column, HeaderCell, Cell } = Table;
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { IoMdAdd } from "react-icons/io";
+
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -163,60 +165,53 @@ const ListadoOrdenes = () => {
                 }
             });
         }
-
     };
-
     return (
-        <div>
-            <Table
-                width={1200}
-                height={800}
-                data={datos}
-            >
-                <Column width={250}>
-                    <HeaderCell className="text-center">Codigo de Orden</HeaderCell>
-                    <Cell className="text-center" dataKey="codigoOrden" />
-                </Column>
-
-                <Column width={250}>
-                    <HeaderCell className="text-center">Fecha de ingreso</HeaderCell>
-                    <Cell className="text-center" dataKey="fechaIngreso" />
-                </Column>
-
-                <Column width={200}>
-                    <HeaderCell className="text-center">Cliente</HeaderCell>
-                    <Cell className="text-center" dataKey="nombreCliente" />
-                </Column>
-                <Column width={500} fixed="right">
-                    <HeaderCell className="text-center">Accion</HeaderCell>
-
-                    <Cell className="text-center" style={{ padding: '6px' }}>
-                        {rowData => (
-                            <Button className="btn btn-sm text-white btn-secondary rounded-1"
-                                onClick={() => GenerarVenta(rowData.idOrden)}>
-                                Generar Venta
-                            </Button>
-                        )}
-                    </Cell>
-                </Column>
-            </Table>
+        <>
+            <div className="p-3 bg-darkest mt-3" style={{ minHeight: "90vh" }}>
+                <table className="table table-hover">
+                    <thead>
+                        <tr>
+                            <th className="text-center" style={{ width: "250px" }}>Codigo de Orden</th>
+                            <th className="text-center" style={{ width: "250px" }}>Fecha de ingreso</th>
+                            <th className="text-center" style={{ width: "200px" }}>Cliente</th>
+                            <th className="text-center" style={{ width: "500px" }}>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {datos.map((rowData) => (
+                            <tr key={rowData.idOrden}>
+                                <td className="text-center">{rowData.codigoOrden}</td>
+                                <td className="text-center">{rowData.fechaIngreso}</td>
+                                <td className="text-center">{rowData.nombreCliente}</td>
+                                <td className="d-flex justify-content-center">
+                                    <button
+                                        className="text-white btn btn-primary rounded-4 d-flex align-items-center justify-content-center gap-1"
+                                        onClick={() => GenerarVenta(rowData.idOrden)}>
+                                        <IoMdAdd size={20} />Generar Venta</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             <Modal open={open} onClose={handleClose}>
                 <form onSubmit={handleSubmit}>
                     <Modal.Header className="px-3 pt-3">
                         <Modal.Title className="text-center">
-                            <Text size="xxl" className="text-secondary">
+                            <Text size="xxl" className="text-primary">
                                 Generar venta
                             </Text>
                         </Modal.Title>
-                        <hr className="text-secondary" />
+                        <hr className="text-primary" />
                     </Modal.Header>
                     <Modal.Body className="px-3">
                         <div>
                             <span>Detalles:</span>
                             <textarea
                                 name="detalles"
-                                className="form-control form-control-sm"
+                                className="form-control rounded-4"
                                 rows={4}
                                 placeholder="Espacio opcional"
                                 onChange={handleChange}
@@ -225,13 +220,14 @@ const ListadoOrdenes = () => {
                         </div>
                     </Modal.Body>
                     <Modal.Footer className="p-3 mb-3">
-                        <Button appearance="primary" type="submit">
-                            Generar
-                        </Button>
+                        <button type="submit" className="text-white btn btn-primary rounded-4 d-flex align-items-center justify-content-center gap-1">
+                            <IoMdAdd size={20} />Generar
+                        </button>
                     </Modal.Footer>
                 </form>
             </Modal>
-        </div>
+        </>
     );
+
 }
 export default ListadoOrdenes;

@@ -8,6 +8,10 @@ import ListaProductosVenta from "../components/ListaProductosVenta";
 import Swal from "sweetalert2";
 import Pago from "../components/Pago";
 import Devolucion from "../components/Devolucion";
+import { IoMdAdd } from "react-icons/io";
+import { MdPayment } from "react-icons/md";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { TbCreditCardPay } from "react-icons/tb";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -429,99 +433,120 @@ const Venta = () => {
 
   /* ============= RENDER ============= */
   return (
-    <div className="mx-5 mt-3">
+    <div className="p-4 bg-darkest rounded-4">
       <Row>
         {/* COLUMNA DETALLES DE VENTA */}
-        <Col xs={14}>
-          <div className="ven-col">
-            <div className="d-flex flex-row ven-header bg-primary p-4 py-3">
-              <Text size="xl" className="text-white">Detalles de Venta</Text>
-            </div>
-            <div className="p-4">
-              <Row>
-                {/* COLUMNA INFORMACIÓN */}
-                <Col xs={11} className="d-grid gap-4">
-                  <span>
-                    <Text size="xxl">Código de orden:</Text>
-                    <Text size="xl" muted>{formData.codigoOrden}</Text>
-                  </span>
-                  <span>
-                    <Text size="xxl">Cliente:</Text>
-                    <Text size="xl" muted>{formData.nombreCliente}</Text>
-                  </span>
-                  <span>
-                    <Text size="xxl">Fecha de ingreso:</Text>
-                    <Text size="xl" muted>
-                      {formData.fechaIngreso ? new Date(formData.fechaIngreso).toLocaleDateString("es-CR") : ""}
-                    </Text>
-                  </span>
-                  <span>
-                    <Text size="xxl">Fecha de venta:</Text>
-                    <Text size="xl" muted>
-                      {formData.fechaVenta ? new Date(formData.fechaVenta).toLocaleDateString("es-CR") : ""}
-                    </Text>
-                  </span>
-                  <span>
-                    <Text size="xxl">Detalles de venta:</Text>
-                    <Text size="xl" muted>{formData.VentaDetalles}</Text>
-                  </span>
-                  <span>
-                    <Text size="xxl">Detalles de Orden:</Text>
-                    <Text size="xl" muted>{formData.descripcionOrden}</Text>
-                  </span>
-                  <span>
-                    <Text size="xxl">Vehículo:</Text>
-                    <Text size="xl" muted>{formData.vehiculo}</Text>
-                  </span>
-                  <hr />
-                  <div className="d-flex flex-column gap-3">
-                    {/* BTN ABRIR MODAL REGISTRAR PAGO */}
-                    <button className="btn btn-sm btn-secondary text-white"
-                      onClick={() => GenerarPago(formData.idVenta)}
-                    >
-                      Registrar Pago
-                    </button>
-                    {/* BTN ABRIR MODAL DE DEVOLUCIÓN */}
-                    <button className="btn btn-sm btn-secondary text-white"
-                      onClick={() => GenerarDevolucion(formData.idVenta)}
-                    >
-                      Realizar reembolso
-                    </button>
-                    <button className="btn btn-sm btn-secondary text-white"
-                      onClick={() => GenerarFactura()}
-                    >
-                      Generar Factura
-                    </button>
-                  </div>
-                  {/* COMPONENTES QUE MUESTRAN DATOS DE PAGO Y DEVOLUCIÓN */}
-                  <Pago />
-                  <hr />
-                  <Devolucion />
-                </Col>
-                {/* COLUMNA PRODUCTOS VINCULADOS + PRECIOS */}
-                <Col xs={13} className="d-grid gap-4">
-                  {/* Lista de productos asociados a la venta */}
-                  <ListaProductosVenta
 
-                    onUpdateMontoTotal={handleUpdateMontoTotal}
-                  />
-                </Col>
-              </Row>
-            </div>
+        <div className="">
+          <div className="d-flex justify-content-center bg-success py-2 rounded-4">
+            <Text size="xxl" className="text-white">Detalles de Venta</Text>
           </div>
-        </Col>
+          <div className="p-4">
+            <Row>
+              {/* COLUMNA INFORMACIÓN */}
+              <Col xs={8} className="d-grid gap-3">
+                <span>
+                  <Text size="xl" className="text-white">Código de orden:</Text>
+                  <Text size="xl" muted>{formData.codigoOrden}</Text>
+                </span>
+                <span>
+                  <Text size="xl" className="text-white">Cliente:</Text>
+                  <Text size="xl" muted>{formData.nombreCliente}</Text>
+                </span>
+                <span>
+                  <Text size="xxl" className="text-white">Fecha de ingreso:</Text>
+                  <Text size="xl" muted>
+                    {formData.fechaIngreso ? new Date(formData.fechaIngreso).toLocaleDateString("es-CR") : ""}
+                  </Text>
+                </span>
 
-        {/* COLUMNA SELECCIÓN DE PRODUCTOS */}
-        <Col xs={10}>
-          <div className="ven-col">
-            <div className="d-flex flex-row ven-header bg-primary p-4 py-3">
+              </Col>
+              <Col xs={8} className="d-grid gap-3">
+                <span>
+                  <Text size="xl" className="text-white">Detalles de venta:</Text>
+                  <Text size="xl" muted>{formData.VentaDetalles}</Text>
+                </span>
+
+                <span>
+                  <Text size="xxl" className="text-white">Vehículo:</Text>
+                  <Text size="xl" muted>{formData.vehiculo}</Text>
+                </span>
+              </Col>
+              <Col xs={8} className="d-grid gap-3">
+                <span>
+                  <Text size="xl" className="text-white">Fecha de venta:</Text>
+                  <Text size="xl" muted>
+                    {formData.fechaVenta ? new Date(formData.fechaVenta).toLocaleDateString("es-CR") : ""}
+                  </Text>
+                </span>
+                <span>
+                  <Text size="xl" className="text-white">Detalles de Orden:</Text>
+                  <Text size="xl" muted>{formData.descripcionOrden}</Text>
+                </span>
+              </Col>
+            </Row>
+            <hr className="text-success" />
+            <Row>
+              <div className="d-flex justify-content-between px-4">
+                {/* BTN ABRIR MODAL REGISTRAR PAGO */}
+                <button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                  onClick={() => GenerarPago(formData.idVenta)}>
+                  <MdPayment size={20} />Registrar Pago
+                </button>
+                <button class="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#productos">
+                  <IoMdAdd size={20} />Producto/Servicio
+                </button>
+                <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                  onClick={() => GenerarFactura()}>
+                  <IoDocumentTextOutline size={20}/>Generar Factura
+                </button>
+                {/* BTN ABRIR MODAL DE DEVOLUCIÓN */}
+                <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                  onClick={() => GenerarDevolucion(formData.idVenta)}>
+                  <TbCreditCardPay size={20}/>Realizar reembolso</button>
+              </div>
+              <hr className="text-success" />
+              {/* COlUMNA PAGO */}
+              <Col xs={8}>
+                <Pago />
+              </Col>
+              <Col xs={16}>
+
+                {/* Lista de productos asociados a la venta */}
+                <ListaProductosVenta onUpdateMontoTotal={handleUpdateMontoTotal} />
+              </Col>
+
+            </Row>
+
+            {/* COMPONENTES QUE MUESTRAN DATOS DE PAGO Y DEVOLUCIÓN */}
+            <hr className="text-success" />
+            <Devolucion />
+            {/* COLUMNA PRODUCTOS VINCULADOS + PRECIOS */}
+            <Col xs={13} className="d-grid gap-4">
+
+            </Col>
+
+          </div>
+          <div className="d-flex flex-column gap-3">
+
+
+          </div>
+        </div>
+
+        <div class="offcanvas offcanvas-end px-0 bg-darkest" id="productos" style={{ width: "800px" }}>
+          <div className="">
+            <div className="d-flex justify-content-center bg-primary py-2">
               <Text size="xl" className="text-white">Agregar productos</Text>
             </div>
-            <div className="p-4">
+            <div className="p-2 pt-3">
               {/* FILTRO PRODUCTOS */}
               <SelectProductos idVenta={idVenta} />
             </div>
           </div>
+        </div>
+        {/* COLUMNA SELECCIÓN DE PRODUCTOS */}
+        <Col xs={2}>
+
         </Col>
       </Row>
 

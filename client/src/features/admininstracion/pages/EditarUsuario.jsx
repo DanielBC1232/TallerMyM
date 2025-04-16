@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { IoMdReturnLeft } from "react-icons/io";
 import { FaSave } from "react-icons/fa";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -224,7 +223,7 @@ const EditarUsuario = () => {
         </div>
 
         <div className="mt-5 px-2 row d-flex justify-content-center">
-          <button type="submit" className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1">Guardar Cambios</button>
+          <button type="submit" className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1"><FaSave size="20"/>Guardar Cambios</button>
         </div>
       </form>
     </div>

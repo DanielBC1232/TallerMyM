@@ -212,7 +212,6 @@ const ListarUsuarios = () => {
                       </button>
                     )}
                   </div>
-
                 </td>
               </tr>
             ))
