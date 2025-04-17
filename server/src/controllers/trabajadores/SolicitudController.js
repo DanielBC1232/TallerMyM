@@ -101,20 +101,17 @@ const ObtenerVacacionxID = async (req, res) => {
   try {
     const { idVacaciones } = req.params; // Obtener el ID de la solicitud de vacaciones
 
-    if (!idVacaciones) {
-      return res.status(400).json({ error: "El ID de la solicitud es requerido" });
-    }
-
+   
     const vacacion = await solicitudRepo.getVacionPorIdVacacion(idVacaciones);
 
-    if (!vacacion || vacacion.length === 0) {
-      res.status(404).json({ error: "Solicitud de vacaciones no encontrada" });
-    } else {
-      res.status(200).json(vacacion[0]); // Devuelve la solicitud de vacaciones encontrada
-    }
+    if (!vacacion) {
+      res.status(400)
+      console.log("Error400")
+    };
+    res.status(200).json(vacacion)    
   } catch (error) {
-    console.error("Error al obtener solicitud de vacaciones por ID:", error);
-    res.status(500).json({ error: "Error al obtener solicitud de vacaciones por ID" });
+    console.error("Error al obtener solicitud de vacaciones por ID:controller", error);
+    res.status(500).json({ error: "Error al obtener solicitud de vacaciones por IDcontroller" });
   }
 };
 

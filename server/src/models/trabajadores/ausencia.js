@@ -11,19 +11,26 @@ export class Ausencia {
 
 export class AusenciaRepository {
   // Insertar ausencia
-  async insertAusencia(ausencia) {
+
+  async insertAusencia(idTrabajador, fechaAusencia, justificada) {
     try {
       const pool = await connectDB();
-      await pool
+      const idTrabajadorInt=parseInt(idTrabajador,10);
+      if (isNaN(idTrabajadorInt)) {
+        throw new Error("El ID del trabajador debe ser un número entero válido");
+      }
+      const result = await pool
         .request()
-        .input("idTrabajador", sql.Int, ausencia.idTrabajador)
-        .input("fechaAusencia", sql.Date, ausencia.fechaAusencia)
-        .input("justificada", sql.Bit, ausencia.justificada)
+        .input("idTrabajador", sql.Int, idTrabajadorInt)
+        .input("fechaAusencia", sql.Date, fechaAusencia)
+        .input("justificada", sql.Bit, justificada)
         .query(`
           INSERT INTO AUSENCIAS (idTrabajador, fechaAusencia, justificada)
           VALUES (@idTrabajador, @fechaAusencia, @justificada)
         `);
+
       console.log("Ausencia insertada exitosamente");
+      return result.rowsAffected[0];
     } catch (error) {
       console.error("Error al insertar ausencia:", error);
       throw new Error("Error al insertar ausencia");
@@ -80,8 +87,13 @@ export class AusenciaRepository {
     try {
       const pool = await connectDB();
       const result = await pool.request().query(`
-        SELECT idAusencia, idTrabajador, fechaAusencia, justificada
-        FROM AUSENCIAS
+        SELECT 
+        a.idAusencia, 
+        a.idTrabajador, 
+        a.fechaAusencia, 
+        a.justificada,
+        t.nombreCompleto as nombreTrabajador
+        FROM AUSENCIAS a JOIN TRABAJADOR t ON a.idTrabajador = t.idTrabajador
       `);
       return result.recordset;
     } catch (error) {

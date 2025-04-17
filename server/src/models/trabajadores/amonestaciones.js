@@ -81,6 +81,7 @@ export class AmonestacionRepository {
                     WHERE idAmonestacion = @idAmonestacion
                 `);
 
+
             return result.rowsAffected[0] > 0;
         } catch (error) {
             console.error("Error al actualizar amonestación:", error);
@@ -111,14 +112,15 @@ export class AmonestacionRepository {
             const pool = await connectDB();
             const result = await pool.request().query(`
                 SELECT 
-                    idAmonestacion,
-                    idTrabajador,
-                    fechaAmonestacion,
-                    tipoAmonestacion,
-                    motivo,
-                    accionTomada,
-                    fechaRegistro
-                FROM AMONESTACIONES
+                    a.idAmonestacion,
+                    a.idTrabajador,
+                    a.fechaAmonestacion,
+                    a.tipoAmonestacion,
+                    a.motivo,
+                    a.accionTomada,
+                    a.fechaRegistro,
+                    t.nombreCompleto AS nombreTrabajador
+                FROM AMONESTACIONES a JOIN Trabajador t ON a.idTrabajador = t.idTrabajador
             `);
             return result.recordset;
         } catch (error) {
@@ -131,7 +133,6 @@ export class AmonestacionRepository {
     async getAmonestacionPorId(idAmonestacion) {
         try {
             const pool = await connectDB();
-
             const result = await pool
                 .request()
                 .input("idAmonestacion", sql.Int, idAmonestacion)
@@ -142,11 +143,12 @@ export class AmonestacionRepository {
                         fechaAmonestacion,
                         tipoAmonestacion,
                         motivo,
-                        accionTomada,
-                        fechaRegistro
+                        accionTomada
                     FROM AMONESTACIONES
                     WHERE idAmonestacion = @idAmonestacion
                 `);
+                console.log("Paso por el modelo")
+                console.log(result);
 
             return result.recordset[0];
         } catch (error) {

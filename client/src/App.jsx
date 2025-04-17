@@ -30,12 +30,32 @@ import IndexFlujo from "./features/flujo/pages/Index.jsx";
 import DetallesOrden from "./features/flujo/pages/Detalles.jsx";
 import EditarOrden from "./features/flujo/pages/Editar.jsx";
 
-// Rutas para Trabajadores
-import IndexTrabajadores from "./features/trabajadores/pages/IndexTrabajadores.jsx";
-import AgregarTrabajador from "./features/trabajadores/pages/AgregarTrabajador.jsx";
-import EditarTrabajador from "./features/trabajadores/pages/EditarTrabajador.jsx";
-import AgregarAmonestacion from "./features/trabajadores/pages/AgregarAmonestacion.jsx";
-import AgregarAusencia from "./features/trabajadores/pages/AgregarAusencia.jsx";
+//Trabajadores
+//Admin-TRABAJADORES
+import IndexTrabajadoresAdmin from "./features/Trabajadores/TrabajadoresAdmin/Index/pages/IndexTrabAdmin.jsx";
+//amonestaciones
+import IndexAmonestaciones from "./features/Trabajadores/TrabajadoresAdmin/Amonestaciones/pages/IndexAmonest.jsx";
+import ListaAmonestaciones from "./features/Trabajadores/TrabajadoresAdmin/Amonestaciones/pages/ListaAmonest.jsx";
+import AgregarAmonestacion from "./features/Trabajadores/TrabajadoresAdmin/Amonestaciones/pages/AgregarAmonestacion.jsx";
+import EditarAmonestacion from "./features/Trabajadores/TrabajadoresAdmin/Amonestaciones/pages/EditarAmonestacion.jsx";
+//Ausencias
+import IndexAusencia from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/pages/IndexAusencias.jsx";
+import AgregarAusencia from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/pages/AgregarAusencia.jsx";
+import EditarAusencia from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/pages/EditarAusencia.jsx";
+import ListaAusencias from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/pages/ListaAusencias.jsx";
+import ListaAusenciasJustificar from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/pages/Lista-Ausencia-Justi.jsx";
+
+
+//Aprobar-rechazar Vacaciones
+import IndexVacaciones from "./features/Trabajadores/TrabajadoresAdmin/Vacaciones/pages/IndexVacaciones.jsx";
+import EditarVacaciones from "./features/Trabajadores/TrabajadoresAdmin/Vacaciones/pages/Editar-aprobar-rechVacaciones.jsx";
+//--Fin admin
+
+//User-TRABAJADORES----
+import IndexTrabajadoresUser from "./features/Trabajadores/TrabajadoresUser/Index/pages/IndexTrabUser.jsx";
+//Agregar Solicitud de vacaciones
+import SolicitarVacaciones from "./features/Trabajadores/TrabajadoresUser/Index/pages/SolicitarVacacaciones.jsx";
+//--FIN IMPORTS TRABAJADORES
 
 // Rutas para Clientes
 import IndexClientes from "./features/clientes/pages/IndexClientes.jsx";
@@ -89,12 +109,29 @@ const App = () => {
             <Route path="/gastos-operativos" element={<PrivateRoute element={<GastosOperativos />} />} />
             <Route path="/Dashboard" element={<PrivateRoute element={<Dashboard />} />} />
             <Route path="/Reportes" element={<PrivateRoute element={<Reportes />} />} />
-            {/* Rutas de Trabajadores */}
-            <Route path="/trabajadores" element={<IndexTrabajadores />} />
-            <Route path="/trabajadores-agregar" element={<AgregarTrabajador />} />
-            <Route path="/trabajadores-editar/:idTrabajador" element={<EditarTrabajador />} />
-            <Route path="/trabajadores-agregar-amonestacion" element={<AgregarAmonestacion />} />
-            <Route path="/trabajadores-registrar-ausencia" element={<AgregarAusencia />} />
+
+            {/*TRABAJADORES*/}
+            {/*--------ADMIN-TRABAJADORES-----------*/}
+            {/*Trabajadores*/}
+            <Route path="/trabajadores-admin" element={<IndexTrabajadoresAdmin />} />
+            {/*Amonestaciones*/}
+            <Route path="/index-amonestaciones" element={<IndexAmonestaciones />} />
+            <Route path="/amonestaciones-lista" element={<ListaAmonestaciones />} />
+            <Route path="/amonestaciones-agregar/:idTrabajador" element={<AgregarAmonestacion />} />
+            <Route path="/amonestaciones-editar/:idAmonestacion" element={<EditarAmonestacion />} />
+            {/*Ausencias*/}
+            <Route path="/Ausencias-Index" element={<IndexAusencia />} />
+            <Route path="/Lista-Ausencias" element={<ListaAusencias />} />
+            <Route path="/Lista-Ausencias-justificar" element={<ListaAusenciasJustificar />} />
+            <Route path="/Ausencias-Agregar/:idTrabajador" element={<AgregarAusencia />} />
+            <Route path="/Ausencias-Editar/:idAusencia" element={<EditarAusencia />} />
+            {/*Vacaciones*/}
+            <Route path="/Vacaciones-Index" element={<IndexVacaciones />} />
+            <Route path="/EditarVacaciones/:idVacaciones" element={<EditarVacaciones />} />
+            {/*-------- USER TRABAJADORES--------*/}
+           <Route path="/trabajadores-user" element={<IndexTrabajadoresUser />} />
+            {/*Solicitud-Vacaciones */}
+           <Route path="/AddSolicitudVacacion" element={<SolicitarVacaciones />} />
             {/* Rutas de Clientes */}
             <Route path="/clientes" element={<IndexClientes />} />
             <Route path="/cliente-editar/:cedula" element={<EditarCliente />} />
@@ -102,8 +139,8 @@ const App = () => {
             <Route path="/vehiculos" element={<IndexVehiculos />} />
             <Route path="/vehiculo-editar/:idVehiculo" element={<EditarVehiculo />} />
             {/* Rutas de Administracion (protegidas) */}
-            <Route path="/administracion" element={<PrivateRoute element={<IndexUsuarios />} />} />
-            <Route path="/usuario-editar/:idUsuario" element={<PrivateRoute element={<EditarUsuario />} />} />
+           <Route path="/administracion" element={<PrivateRoute element={<IndexUsuarios />} />} />
+           <Route path="/usuario-editar/:idUsuario" element={<PrivateRoute element={<EditarUsuario />} />} />
           </Routes>
         </Header>
       )}

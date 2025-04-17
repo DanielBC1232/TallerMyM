@@ -49,7 +49,7 @@ const DeleteAmonestacion = async (req, res) => {
   }
 };
 
-// Métodos Get
+// Métodos Get--------contiene ejemplo inner
 const ObtenerAmonestaciones = async (req, res) => {
   try {
     const amonestaciones = await amonestacionRepo.getAmonestaciones();
@@ -62,19 +62,15 @@ const ObtenerAmonestaciones = async (req, res) => {
 
 const ObtenerAmonestacionxID = async (req, res) => {
   try {
-    const { idAmonestacion } = req.params;
-
-    if (!idAmonestacion) {
-      return res.status(400).json({ error: "El ID de amonestación es requerido" });
-    }
+    const idAmonestacion = parseInt(req.params.idAmonestacion);
 
     const amonestacion = await amonestacionRepo.getAmonestacionPorId(idAmonestacion);
-
-    if (!amonestacion || amonestacion.length === 0) {
-      res.status(404).json({ error: "Amonestación no encontrada" });
-    } else {
-      res.status(200).json(amonestacion[0]);
-    }
+    
+    if(!amonestacion){
+      res.status(400)
+      console.log("Error400")
+    };      
+    res.status(200).json(amonestacion)
   } catch (error) {
     console.error("Error al obtener amonestación por ID:", error);
     res.status(500).json({ error: "Error al obtener amonestación por ID" });

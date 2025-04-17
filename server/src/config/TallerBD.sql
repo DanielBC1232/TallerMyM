@@ -69,7 +69,7 @@ CREATE TABLE HORARIO(
 )
 GO
 
-CREATE TABLE VACACIONES(
+CREATE TABLE VACACIONES(--no se modifico se uso esta misma tabla
 
     idVacaciones INT IDENTITY(1,1) PRIMARY KEY,
     solicitud VARCHAR(50) DEFAULT'en espera' NOT NULL,--en espera, rechazado, aceptado
@@ -356,3 +356,41 @@ CREATE TABLE GASTO_OPERATIVO(
     fecha DATE DEFAULT GETDATE() NOT NULL
 )
 GO
+--Ultimas tablas agregadas
+CREATE TABLE AMONESTACIONES (
+    idAmonestacion INT IDENTITY(1,1) PRIMARY KEY,
+    idTrabajador INT NOT NULL,
+    fechaAmonestacion DATE NOT NULL,
+    tipoAmonestacion VARCHAR(50) NOT NULL, -- Ej: Verbal, Escrita
+    motivo VARCHAR(255) NOT NULL,
+    accionTomada VARCHAR(255),
+    fechaRegistro DATETIME DEFAULT GETDATE(),
+
+    CONSTRAINT fkTrabajador FOREIGN KEY (idTrabajador)
+        REFERENCES Trabajador(idTrabajador) ON DELETE CASCADE
+)
+GO
+
+CREATE TABLE AUSENCIAS (
+    idAusencia INT IDENTITY(1,1) PRIMARY KEY,
+    idTrabajador INT NOT NULL,
+    fechaAusencia DATE NOT NULL,
+    justificada BIT DEFAULT 0, -- 0 = No justificada, 1 = Justificada
+
+    CONSTRAINT fkTrabajadorAusencias FOREIGN KEY (idTrabajador)
+        REFERENCES TRABAJADOR(idTrabajador) ON DELETE CASCADE
+);
+
+CREATE TABLE JUSTIFICACIONES_AUSENCIA (
+    idJustificacion INT IDENTITY(1,1) PRIMARY KEY,
+    idAusencia INT NOT NULL UNIQUE, -- solo una justificación por ausencia
+    motivo VARCHAR(255) NOT NULL,
+    fechaJustificacion DATE DEFAULT GETDATE(),
+    estado VARCHAR(20) DEFAULT 'Pendiente', -- Aprobada, Rechazada, etc.
+
+    CONSTRAINT fkAusencia FOREIGN KEY (idAusencia)
+        REFERENCES AUSENCIAS(idAusencia) ON DELETE CASCADE
+);
+
+
+--------------------------Ultimas Agregadas--------------------------------

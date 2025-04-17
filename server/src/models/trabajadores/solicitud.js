@@ -10,7 +10,7 @@ export class Solicitud {
 
     }
 }
-
+//SOLICITUD DE VACACIONES
 //Metodos CRUD
 export class SolicitudRepository {
     // Insertar nuevos clientes
@@ -117,15 +117,18 @@ export class SolicitudRepository {
         try {
             const pool = await connectDB();
 
-            const { motivoRechazo } = datosActualizados;
+            
+            console.log(datosActualizados)
 
 
             const result = await pool
                 .request()
                 .input("idVacaciones", sql.Int, idVacaciones)
-                .input("motivoRechazo", sql.VarChar, motivoRechazo)
+                .input("motivoRechazo", sql.VarChar, datosActualizados)
                 .query(`UPDATE VACACIONES SET solicitud = 'Rechazado', motivoRechazo = @motivoRechazo
                     WHERE idVacaciones = @idVacaciones`);
+                    console.log("Paso por el modelo")
+                    
 
             return result.rowsAffected[0] > 0;
         } catch (error) {
@@ -138,7 +141,16 @@ export class SolicitudRepository {
     async getVacacionesGest() {
         try {
             const pool = await connectDB();
-            const result = await pool.request().query("SELECT idVacaciones,solicitud,fechaInicio,fechaFin,motivoRechazo,idTrabajador FROM VACACIONES");
+            const result = await pool.request().query(`
+                SELECT 
+                v.idVacaciones,
+                v.solicitud,
+                v.fechaInicio,
+                v.fechaFin,
+                v.motivoRechazo,
+                v.idTrabajador,
+                t.nombreCompleto as nombreTrabajador
+                FROM VACACIONES v Join TRABAJADOR t ON v.idTrabajador = t.idTrabajador`);
             return result.recordset;
         } catch (error) {
             console.error("Error al obtener todas las solicitudes:", error);
@@ -149,14 +161,24 @@ export class SolicitudRepository {
     async getVacionPorIdVacacion(idVacaciones) {
         try {
             const pool = await connectDB();
-            const result = await pool.request()
-                .input("idVacaciones", sql.Int, idVacaciones)
-                .query(`SELECT idVacaciones,solicitud, fechaInicio, fechaFin, motivoRechazo,idTrabajador
-                        FROM VACACIONES WHERE idVacaciones = @idVacaciones`);
+            const result = await pool
+            .request()
+            .input("idVacaciones", sql.Int, idVacaciones)
+            .query(`SELECT 
+                idVacaciones,
+                solicitud,
+                fechaInicio, 
+                fechaFin,
+                motivoRechazo,
+                idTrabajador
+                  FROM VACACIONES 
+                  WHERE idVacaciones = @idVacaciones`);
+                  console.log("Paso por el modelo")
+                  console.log(result);
             return result.recordset[0];
         } catch (error) {
-            console.error("Error al obtener la solicitud:", error);
-            throw new Error("Error al obtener la solicitud");
+            console.error("Error al obtener la solicitud:model", error);
+            throw new Error("Error al obtener la solicitudmodel");
         }
     }
 }
