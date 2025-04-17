@@ -42,7 +42,7 @@ const Header = ({ children }) => {
     <div className={`wrapper ${sidebarCollapsed ? "collapsed" : ""}`}>
       <nav id="sidebar" className="sidebar shadow-sm">
         <div className="sidebar-content">
-          <Link className="sidebar-brand" to="/">
+          <Link className="sidebar-brand" to="/flujo">
             Taller MyM
           </Link>
           {/* icono *** */}
