@@ -18,47 +18,45 @@ const IndexFlujo = () => {
   return (
     <div className="">
       {/* OPCIONES */}
-      <Notificaciones modulo={'FLUJO'}/>
-      <nav className="p-4 rounded-3 shadow-sm p-2" style={{ maxWidth: "550px" }}>
+      <Notificaciones modulo={'FLUJO'} />
+      <div className="px-4 py-3">
         <ModalAgregarOrden />
-      </nav>
+      </div>
 
       {/* FLUJO */}
-      <div className="main rounded-3">
-        <div className="">
-          <Grid fluid>
-            <Row className="d-flex gap-3">
-              {/* COLUMNA EN PROCESO */}
-              <Col xs={8} className="flujo-col ">
-                <div className="bg-primary rounded-top-4 py-2 mb-4">
-                  <Text size="xxl" className="text-white pt-2">Pendiente</Text>
-                </div>
-                <div className="px-4 scrollable-container">
-                  <ColPendiente />
-                </div>
-              </Col>
-              {/* COLUMNA EN PROCESO */}
+      <div className="flujo-row">
+        {/* Pendiente */}
+        <div className="flujo-col">
+          <div className="bg-primary rounded-4 py-2 mb-4 h-100">
+            <Text size="xxl" className="text-white ps-4 py-1">Pendiente</Text>
+            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "75vh" }}>
+              <ColPendiente />
+            </div>
+          </div>
+        </div>
 
-              <Col xs={8} className="flujo-col ">
-              <div className="bg-primary rounded-top-4 py-2 mb-4">
-                  <Text size="xxl" className="text-white pt-2">En progreso</Text>
-                </div>
-                <div className="px-4 scrollable-container">
-                  <ColProgreso />
-                </div>
-              </Col>
-              <Col xs={8} className="flujo-col ">
-              <div className="bg-primary rounded-top-4 py-2 mb-4">
-                  <Text size="xxl" className="text-white pt-2">Listo</Text>
-                </div>
-                <div className="px-4 scrollable-container">
-                  <ColListo />
-                </div>
-              </Col>
-            </Row>
-          </Grid>
+        {/* En progreso */}
+        <div className="flujo-col">
+          <div className="bg-primary rounded-4 py-2 mb-4 h-100">
+            <Text size="xxl" className="text-white ps-4 py-1">En progreso</Text>
+            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "75vh" }}>
+              <ColProgreso />
+            </div>
+          </div>
+        </div>
+
+        {/* Listo */}
+        <div className="flujo-col">
+          <div className="bg-primary rounded-4 py-2 mb-4 h-100">
+            <Text size="xxl" className="text-white ps-4 py-1">Listo</Text>
+            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "75vh" }}>
+              <ColListo />
+            </div>
+          </div>
         </div>
       </div>
+
+
     </div>
   );
 };

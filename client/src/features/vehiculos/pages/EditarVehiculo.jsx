@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import SelectClientes from "../../clientes/components/SelectClientes";
 import Swal from "sweetalert2";
+import { IoMdSave } from "react-icons/io";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -115,76 +116,75 @@ const EditarVehiculo = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Editar Vehículo</h1>
-      <form onSubmit={handleSubmit} className="space-y-4 ms-5" style={{ maxWidth: "400px" }}>
-        <div>
-          <label className="block">Placa Vehículo:</label>
-          <input
-            type="text"
-            name="placaVehiculo"
-            value={vehiculo.placaVehiculo}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-            required
-          />
-        </div>
-        <div>
-          <label className="block">Modelo del Vehículo:</label>
-          <input
-            type="text"
-            name="modeloVehiculo"
-            value={vehiculo.modeloVehiculo}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-            required
-          />
-        </div>
-        <div>
-          <label className="block">Marca del Vehículo:</label>
-          <input
-            type="text"
-            name="marcaVehiculo"
-            value={vehiculo.marcaVehiculo}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-            required
-          />
-        </div>
-        <div>
-          <label className="block">Año del Vehículo:</label>
-          <input
-            type="text"
-            name="annoVehiculo"
-            value={vehiculo.annoVehiculo}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-            required
-          />
-        </div>
-        <div>
-          <label className="block">Tipo de Vehículo:</label>
-          <input
-            type="text"
-            name="tipoVehiculo"
-            value={vehiculo.tipoVehiculo}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-            required
-          />
-        </div>
-        <div>
-          <label className="block">Cliente:</label>
-          <SelectClientes
-            value={vehiculo.idCliente}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-          />
-        </div>
+    <div className="form-container p-4 rounded-4">
+      <div className="d-flex justify-content-center flex-column p-0">
+        <h2 className="text-primary font-bold mb-4 py-0">Editar Vehículo</h2>
+        <hr className="text-primary py-0 px-2" />
+      </div>
+      <form onSubmit={handleSubmit} >
+        <div className="d-flex justify-content-center flex-column gap-3 p-3">
+          <div>
+            <label className="d-flex">Placa Vehículo:</label>
+            <input
+              type="text"
+              name="placaVehiculo"
+              value={vehiculo.placaVehiculo}
+              onChange={handleChange}
+              className="form-control rounded-5"
+              required />
+          </div>
+          <div>
+            <label className="d-flex">Modelo del Vehículo:</label>
+            <input
+              type="text"
+              name="modeloVehiculo"
+              value={vehiculo.modeloVehiculo}
+              onChange={handleChange}
+              className="form-control rounded-5"
+              required />
+          </div>
+          <div>
+            <label className="d-flex">Marca del Vehículo:</label>
+            <input
+              type="text"
+              name="marcaVehiculo"
+              value={vehiculo.marcaVehiculo}
+              onChange={handleChange}
+              className="form-control rounded-5"
+              required />
+          </div>
+          <div>
+            <label className="d-flex">Año del Vehículo:</label>
+            <input
+              type="text"
+              name="annoVehiculo"
+              value={vehiculo.annoVehiculo}
+              onChange={handleChange}
+              className="form-control rounded-5"
+              required />
+          </div>
+          <div>
+            <label className="d-flex">Tipo de Vehículo:</label>
+            <input
+              type="text"
+              name="tipoVehiculo"
+              value={vehiculo.tipoVehiculo}
+              onChange={handleChange}
+              className="form-control rounded-5"
+              required />
+          </div>
+          <div>
+            <label className="d-flex">Cliente:</label>
+            <SelectClientes
+              value={vehiculo.idCliente}
+              onChange={handleChange}
+              className="form-control rounded-5"/>
+          </div>
 
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
-          Guardar Cambios
-        </button>
+          <button type="submit" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+            <IoMdSave size={20} />Guardar Cambios
+          </button>
+        </div>
       </form>
     </div>
   );

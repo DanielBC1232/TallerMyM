@@ -54,14 +54,12 @@ const ColPendiente = () => {
   return (
     <div>
       {datos.length === 0 ? (
-        <div className="alert alert-warning text-center" role="alert">
+        <div className="alert alert-success text-center" role="alert">
           <h5 className="alert-heading">Sin Ordenes</h5>
           <p>No se encontraron órdenes Pendientes.</p>
         </div>
       ) : (
-        <VStack className="d-grid gap-3" spacing={10} style={{ all: 'unset' }}>
-          <Orden datos={datos} />
-        </VStack>
+        <Orden datos={datos} />
       )}
     </div>
   );

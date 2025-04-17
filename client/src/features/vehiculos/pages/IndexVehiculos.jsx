@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import ModalAgregarVehiculo from "../components/ModalAgregarVehiculo";
+import { MdEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -136,56 +138,51 @@ const IndexVehiculos = () => {
   };
 
   return (
-    <div className="p-6 mt-5">
-
+    <div className="p-4 rounded-4 bg-darkest" style={{ minHeight: "88vh" }}>
       {/* Campo de búsqueda por placa */}
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Buscar por placa (ej: abc123)"
+      <div className="d-flex gap-3 align-items-center">
+        <input type="text" placeholder="Buscar por placa (ej: abc123)"
           value={filtroPlaca}
           onChange={(e) => setFiltroPlaca(e.target.value)}
-          className="border p-2 rounded me-3"
-        />
+          className=" rounded-5" />
         <ModalAgregarVehiculo />
       </div>
 
       {/* Tabla de vehículos */}
-      <table className="min-w-full bg-white border">
+      <table className="table table-hover">
         <thead>
           <tr>
-            <th className="py-2 px-4 border">Placa</th>
-            <th className="py-2 px-4 border">Modelo</th>
-            <th className="py-2 px-4 border">Marca</th>
-            <th className="py-2 px-4 border">Año</th>
-            <th className="py-2 px-4 border">Tipo</th>
-            <th className="py-2 px-4 border">Dueño</th>
-            <th className="py-2 px-4 border">Acciones</th>
+            <th className="py-2 px-4">Placa</th>
+            <th className="py-2 px-4">Modelo</th>
+            <th className="py-2 px-4 ">Marca</th>
+            <th className="py-2 px-4 ">Año</th>
+            <th className="py-2 px-4 ">Tipo</th>
+            <th className="py-2 px-4 ">Dueño</th>
+            <th className="py-2 px-4">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {vehiculosFiltrados.map((vehiculo) => (
             <tr key={vehiculo.idVehiculo}>
-              <td className="py-2 px-4 border">{vehiculo.placaVehiculo}</td>
-              <td className="py-2 px-4 border">{vehiculo.modeloVehiculo}</td>
-              <td className="py-2 px-4 border">{vehiculo.marcaVehiculo}</td>
-              <td className="py-2 px-4 border">{vehiculo.annoVehiculo}</td>
-              <td className="py-2 px-4 border">{vehiculo.tipoVehiculo}</td>
-              <td className="py-2 px-4 border">{vehiculo.nombreCliente}</td>
-              <td className="py-2 px-4 border">
-                {/* Botones para editar y eliminar */}
-                <button
-                  onClick={() => handleEditar(vehiculo.idVehiculo)}
-                  className="text-white p-2 rounded btn btn-secondary btn-sm"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => handleEliminar(vehiculo.idVehiculo)}
-                  className="text-white p-2 rounded btn btn-danger btn-sm"
-                >
-                  Eliminar
-                </button>
+              <td className="py-2 px-4 ">{vehiculo.placaVehiculo}</td>
+              <td className="py-2 px-4 ">{vehiculo.modeloVehiculo}</td>
+              <td className="py-2 px-4 ">{vehiculo.marcaVehiculo}</td>
+              <td className="py-2 px-4 ">{vehiculo.annoVehiculo}</td>
+              <td className="py-2 px-4 ">{vehiculo.tipoVehiculo}</td>
+              <td className="py-2 px-4 ">{vehiculo.nombreCliente}</td>
+              <td className="py-2 px-4 ">
+                <div className="d-flex gap-3">
+                  <button
+                    onClick={() => handleEliminar(vehiculo.idVehiculo)}
+                    className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                    <MdDelete size={20} />
+                  </button>
+                  <button
+                    onClick={() => handleEditar(vehiculo.idVehiculo)}
+                    className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                    <MdEdit size={20} />Editar
+                  </button>
+                </div>
               </td>
             </tr>
           ))}

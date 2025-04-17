@@ -69,7 +69,6 @@ const Notificaciones = ({ modulo }) => {
         obtenerNotificaciones();
     }, [modulo]);
 
-
     const [open, setOpen] = React.useState(false);
 
     const Eliminar = async (idNotificacion) => {
@@ -161,8 +160,8 @@ const Notificaciones = ({ modulo }) => {
                                 <div>{noti.cuerpo}</div>
                                 <div className="text-muted" style={{ fontSize: "0.8rem" }}>{noti.fecha}</div>
                                 <div className="text-end mt-2">
-                                    <button className="btn btn-danger btn-sm" onClick={() => Eliminar(noti.idNotificacion)}>
-                                        <MdDeleteSweep size={20} />
+                                    <button className="btn btn-sm rounded-5" onClick={() => Eliminar(noti.idNotificacion)}>
+                                        <MdDeleteSweep className="text-danger" size={20} />
                                     </button>
                                 </div>
                             </div>

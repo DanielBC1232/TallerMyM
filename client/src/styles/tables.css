@@ -82,5 +82,16 @@ tbody tr:last-child td:last-child {
 
 .select__control {
     border-radius: 1.75rem !important;
-  }
-  
+}
+
+.flujo-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.flujo-col {
+    flex: 1 1 350px;
+    max-width: 100%;
+}

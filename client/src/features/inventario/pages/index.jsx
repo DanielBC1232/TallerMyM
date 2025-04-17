@@ -10,7 +10,7 @@ import {
   useNavigate
 } from "react-router-dom";
 import axios from "axios";
-import { Row } from "rsuite";
+import { Row, Text } from "rsuite";
 import Notificaciones from "../../../components/Notificaciones";
 import "../styles/inv.css";
 import { IoAddSharp } from "react-icons/io5";
@@ -110,19 +110,19 @@ const IndexInventario = () => {
           <div className="row my-2">
             <Row className="d-flex gap-4 justify-content-start">
               <div>
-                <span>Categoria:</span>
+                <span><Text size={16} className="text-white">Categoria:</Text></span>
                 <SelectCategoria
                   value={formData.categoria}
                   onChange={handleChange} />
               </div>
               <div>
-                <span>Marca:</span>
+                <span><Text size={16} className="text-white">Marca:</Text></span>
                 <SelectMarca
                   value={formData.marca}
                   onChange={handleChange} />
               </div>
               <div>
-                <span>Stock:</span>
+                <span><Text size={16} className="text-white">Stock:</Text></span>
                 <select
                   className="form-select rounded-5 py-2 mt-2"
                   name="stock"
@@ -137,7 +137,7 @@ const IndexInventario = () => {
                 </select>
               </div>
               <div>
-                <span>Producto:</span>
+                <span><Text size={16} className="text-white">Producto:</Text></span>
                 <input
                   name="nombre"
                   className="form-control rounded-5 py-2 mt-2"
@@ -146,9 +146,9 @@ const IndexInventario = () => {
                   onChange={handleChange}
                 />
               </div>
-            </Row>
-            <Row className="d-flex gap-4 justify-content-start mt-4">
-              <RangoPrecio value={[formData.precioMin, formData.precioMax]} onChange={handleChange} />
+              <Row className="ms-3">
+                <RangoPrecio value={[formData.precioMin, formData.precioMax]} onChange={handleChange} />
+              </Row>
             </Row>
           </div>
           <hr className="text-primary" />

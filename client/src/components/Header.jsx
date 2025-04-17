@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Text } from "rsuite";
 import '../styles/tables.css';
@@ -37,6 +37,7 @@ const Header = ({ children }) => {
     e.preventDefault();
     setSidebarCollapsed((prev) => !prev);
   };
+  const idRol = localStorage.getItem('idRol');
   return (
     <div className={`wrapper ${sidebarCollapsed ? "collapsed" : ""}`}>
       <nav id="sidebar" className="sidebar shadow-sm">
@@ -50,78 +51,134 @@ const Header = ({ children }) => {
             {/* Flujo */}
             <li className="sidebar-header">Flujo de Trabajo</li>
             <li className="sidebar-item">
-              <Link className="sidebar-link" to="/flujo">
-                <MdCarRepair size="25" /> Ordenes
-              </Link>
+              <NavLink className="sidebar-link" to="/flujo">
+                {({ isActive }) => (
+                  <span className={isActive ? 'text-success' : ''}>
+                    <MdCarRepair className={isActive ? 'text-success' : ''} size={25} /> Ordenes
+                  </span>
+                )}
+              </NavLink>
             </li>
 
             {/* Clientes */}
             <li className="sidebar-header">Clientes</li>
             <li className="sidebar-item">
-              <Link className="sidebar-link" to="/clientes">
-                <MdPerson size="20" className="p-0" /> Lista de clientes
-              </Link>
+              <NavLink className="sidebar-link" to="/clientes">
+                {({ isActive }) => (
+                  <span className={isActive ? 'text-success' : ''}>
+                    <MdPerson className={isActive ? 'text-success' : ''} size={20} /> Lista de clientes
+                  </span>
+                )}
+              </NavLink>
             </li>
             <li className="sidebar-item">
-              <Link className="sidebar-link" to="/vehiculos">
-                <FaCar size="20" />Vehiculos
-              </Link>
+              <NavLink className="sidebar-link" to="/vehiculos">
+                {({ isActive }) => (
+                  <span className={isActive ? 'text-success' : ''}>
+                    <FaCar className={isActive ? 'text-success' : ''} size={20} />Vehiculos
+                  </span>
+                )}
+              </NavLink>
             </li>
 
             {/* Ventas */}
             <li className="sidebar-header">Ventas</li>
             <li className="sidebar-item">
-              <Link className="sidebar-link" to="/ventas">
-              <RiShoppingBagFill size={20}/>Lista de ventas
-              </Link>
+              <NavLink className="sidebar-link" to="/ventas">
+                {({ isActive }) => (
+                  <span className={isActive ? 'text-success' : ''}>
+                    <RiShoppingBagFill className={isActive ? 'text-success' : ''} size={20} />Lista de ventas
+                  </span>
+                )}
+              </NavLink>
             </li>
             <li className="sidebar-item">
-              <Link className="sidebar-link" to="/cotizacion">
-              <TbShoppingBagSearch size={20}/>Cotizar
-              </Link>
+              <NavLink className="sidebar-link" to="/cotizacion">
+                {({ isActive }) => (
+                  <span className={isActive ? 'text-success' : ''}>
+                    <TbShoppingBagSearch className={isActive ? 'text-success' : ''} size={20} />Cotizar
+                  </span>
+                )}
+              </NavLink>
             </li>
 
             {/* Inventario */}
             <li className="sidebar-header">Inventario</li>
             <li className="sidebar-item">
-              <Link className="sidebar-link" to="/inventario">
-              <MdInventory size={20}/>Catalogo de Inventario
-              </Link>
+              <NavLink className="sidebar-link" to="/inventario">
+                {({ isActive }) => (
+                  <span className={isActive ? 'text-success' : ''}>
+                    <MdInventory className={isActive ? 'text-success' : ''} size={20} />Catalogo de Inventario
+                  </span>
+                )}
+              </NavLink>
             </li>
             <li className="sidebar-item">
-              <Link className="sidebar-link" to="/solicitudes">
-              <LuMailSearch size={20}/>Solicitudes de repuestos
-              </Link>
+              <NavLink className="sidebar-link" to="/solicitudes">
+                {({ isActive }) => (
+                  <span className={isActive ? 'text-success' : ''}>
+                    <LuMailSearch className={isActive ? 'text-success' : ''} size={20} />Solicitudes de repuestos
+                  </span>
+                )}
+              </NavLink>
             </li>
 
+
             {/* Administracion */}
-            <li className="sidebar-header">Administracion</li>
-            <li className="sidebar-item">
-              <Link className="sidebar-link" to="/Dashboard">
-              <AiFillDashboard size={20}/>Dashboard
-              </Link>
-            </li>
-            <li className="sidebar-item">
-              <Link className="sidebar-link" to="/administracion">
-              <MdAdminPanelSettings size={20}/>Administracion
-              </Link>
-            </li>
-            <li className="sidebar-item">
-              <Link className="sidebar-link" to="/gastos-operativos">
-              <MdOutlineAttachMoney  size={20}/>Gastos Operativos
-              </Link>
-            </li>
-            <li className="sidebar-item">
-              <Link className="sidebar-link" to="/Reportes">
-              <TbReportAnalytics size={20}/>Reportes
-              </Link>
-            </li>
-            {/* Trabajadores - Administracion */}
-            <li className="sidebar-item">
-              <Link className="sidebar-link" to="/trabajadores">
-              <BsPersonGear size={20}/> Empleados
-              </Link>
-            </li>
+            <div>
+              {idRol != 2 && (
+                <>
+                  <li className="sidebar-header">Administracion</li>
+                  <li className="sidebar-item">
+                    <NavLink className="sidebar-link" to="/Dashboard">
+                      {({ isActive }) => (
+                        <span className={isActive ? 'text-success' : ''}>
+                          <AiFillDashboard className={isActive ? 'text-success' : ''} size={20} />Dashboard
+                        </span>
+                      )}
+                    </NavLink>
+                  </li>
+                  <li className="sidebar-item">
+                    <NavLink className="sidebar-link" to="/administracion">
+                      {({ isActive }) => (
+                        <span className={isActive ? 'text-success' : ''}>
+                          <MdAdminPanelSettings className={isActive ? 'text-success' : ''} size={20} />Administracion
+                        </span>
+                      )}
+                    </NavLink>
+                  </li>
+                  <li className="sidebar-item">
+                    <NavLink className="sidebar-link" to="/gastos-operativos">
+                      {({ isActive }) => (
+                        <span className={isActive ? 'text-success' : ''}>
+                          <MdOutlineAttachMoney className={isActive ? 'text-success' : ''} size={20} />Gastos Operativos
+                        </span>
+                      )}
+                    </NavLink>
+                  </li>
+                  <li className="sidebar-item">
+                    <NavLink className="sidebar-link" to="/Reportes">
+                      {({ isActive }) => (
+                        <span className={isActive ? 'text-success' : ''}>
+                          <TbReportAnalytics className={isActive ? 'text-success' : ''} size={20} />Reportes
+                        </span>
+                      )}
+                    </NavLink>
+                  </li>
+                  {/* Trabajadores - Administracion */}
+                  <li className="sidebar-item">
+                    <NavLink className="sidebar-link" to="/trabajadores">
+                      {({ isActive }) => (
+                        <span className={isActive ? 'text-success' : ''}>
+                          <BsPersonGear className={isActive ? 'text-success' : ''} size={20} /> Empleados
+                        </span>
+                      )}
+                    </NavLink>
+                  </li>
+                </>
+              )}
+            </div>
+
           </ul>
         </div>
       </nav>
@@ -132,8 +189,8 @@ const Header = ({ children }) => {
           <div className="navbar-collapse collapse">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle text-white me-2" role="button" id="userDropdown" data-bs-toggle="dropdown">
-                  <IoPersonCircle size="20" className="me-2" />{localStorage.getItem("username")}
+                <a className="nav-link dropdown-toggle text-white d-flex align-items-center justify-content-center gap-1" role="button" id="userDropdown" data-bs-toggle="dropdown">
+                  <IoPersonCircle size="20" className="me-2 text-success" />{localStorage.getItem("username")}
                 </a>
                 <div className="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="userDropdown">
                   <button id="logout-option" className="dropdown-item custom-logout" onClick={handleLogout}>

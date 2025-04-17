@@ -4,6 +4,7 @@ import SelectClientes from "../../clientes/components/SelectClientes";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Modal, Button, Grid, Row, Col } from "rsuite";
+import { FaCar } from "react-icons/fa";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -104,115 +105,101 @@ const ModalAgregarVehiculo = () => {
   return (
     <>
       <Button
-        style={{ minWidth: "80px", maxWidth: "350px" }}
-        className="btn btn-secondary btn-sm text-white"
-        onClick={handleOpen}
-      >
-        Registrar Vehículo
+        className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+        onClick={handleOpen}>
+        <FaCar size={20} />Registrar
       </Button>
 
       <Modal open={open} onClose={handleClose} size="lg">
         <Modal.Header>
-          <Modal.Title>Registrar Vehículo</Modal.Title>
+          <Modal.Title className="text-primary">Registrar Vehículo</Modal.Title>
+          <hr className="text-primary p-0"/>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit}>
-            <Grid fluid>
-              <Row gutter={16}>
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label className="form-label">Placa Vehículo:</label>
-                    <input
-                      type="text"
-                      name="placaVehiculo"
-                      value={formValue.placaVehiculo}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                      placeholder="* * * * * *"
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Modelo del Vehículo:</label>
-                    <input
-                      type="text"
-                      name="modeloVehiculo"
-                      value={formValue.modeloVehiculo}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                      placeholder="Ejemplo: Corolla, Sentra, ..."
-                    />
-                  </div>
-                </Col>
+            <Row className="px-4 py-2">
+              <Col xs={12}>
+                <div className="mb-3">
+                  <label className="form-label">Placa Vehículo:</label>
+                  <input
+                    type="text"
+                    name="placaVehiculo"
+                    value={formValue.placaVehiculo}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required
+                    placeholder="* * * * * *" />
+                </div>
 
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label className="form-label">Marca del Vehículo:</label>
-                    <input
-                      type="text"
-                      name="marcaVehiculo"
-                      value={formValue.marcaVehiculo}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                      placeholder="Ejemplo: BMW, Honda, Nissan,..."
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Año del Vehículo:</label>
-                    <input
-                      type="text"
-                      name="annoVehiculo"
-                      value={formValue.annoVehiculo}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                      placeholder="Ejemplo: 2020"
-                    />
-                  </div>
-                </Col>
-              </Row>
+                <div className="mb-3">
+                  <label className="form-label">Modelo del Vehículo:</label>
+                  <input
+                    type="text"
+                    name="modeloVehiculo"
+                    value={formValue.modeloVehiculo}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required
+                    placeholder="Ejemplo: Corolla, Sentra, ..." />
+                </div>
 
-              <Row gutter={16}>
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label className="form-label">Tipo de Vehículo:</label>
-                    <input
-                      type="text"
-                      name="tipoVehiculo"
-                      value={formValue.tipoVehiculo}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                      placeholder="Ejemplo: Sendán, Suv,..."
-                    />
-                  </div>
-                </Col>
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label className="form-label">Cliente:</label>
-                    <SelectClientes
-                      value={formValue.idCliente}
-                      onChange={handleChange}
-                      className="form-select-sm"
-                    />
-                  </div>
-                </Col>
-              </Row>
-            </Grid>
+                <div className="mb-3" style={{ maxWidth: "400px" }}>
+                  <label className="form-label">Cliente:</label>
+                  <SelectClientes
+                    value={formValue.idCliente}
+                    onChange={handleChange}
+                    className="p-0" />
+                </div>
 
-            <div className="d-flex justify-content-end mt-4">
-              <Button appearance="primary" type="submit">
-                Registrar Vehículo
+              </Col>
+
+              <Col xs={12}>
+                <div className="mb-3">
+                  <label className="form-label">Marca del Vehículo:</label>
+                  <input
+                    type="text"
+                    name="marcaVehiculo"
+                    value={formValue.marcaVehiculo}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required
+                    placeholder="Ejemplo: BMW, Honda, Nissan,..." />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Año del Vehículo:</label>
+                  <input
+                    type="text"
+                    name="annoVehiculo"
+                    value={formValue.annoVehiculo}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required
+                    placeholder="Ejemplo: 2020" />
+                </div>
+                
+                <div className="mb-3">
+                  <label className="form-label">Tipo de Vehículo:</label>
+                  <input
+                    type="text"
+                    name="tipoVehiculo"
+                    value={formValue.tipoVehiculo}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required
+                    placeholder="Ejemplo: Sendán, Suv,..." />
+                </div>
+
+              </Col>
+            </Row>
+            <div className="d-flex justify-content-center mt-4 row px-5">
+              <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+                <FaCar size={20} />Registrar Vehículo
               </Button>
             </div>
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose} appearance="default">
-            Cancelar
-          </Button>
         </Modal.Footer>
       </Modal>
     </>

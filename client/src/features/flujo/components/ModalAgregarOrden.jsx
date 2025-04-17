@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import SelectClientes from "../components/SelectClientes";
 import SelectTrabajadores from "../components/SelectTrabajadores";
 import SelectVehiculos from "../components/SelectVehiculos";
-
+import { IoMdAdd } from "react-icons/io";
 // URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -112,60 +112,54 @@ const ModalAgregarOrden = () => {
   const handleClose = () => setOpen(false);
   return (
     <>
-      <Button style={{ minWidth: "80px", maxWidth: "350px" }} className="btn btn-primary rounded-5 text-white"
-        onClick={handleOpen}>Agregar Orden</Button>
-      <Modal open={open} onClose={handleClose} size="lg">
+      <Button style={{ minWidth: "80px", maxWidth: "350px" }} className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+        onClick={handleOpen}><IoMdAdd size={20} />Agregar Orden</Button>
+      <Modal open={open} onClose={handleClose} size="sm">
         <Modal.Header className="p-3">
-          <Modal.Title>Agregar Orden</Modal.Title>
+          <Modal.Title className="text-primary text-center">Agregar Orden</Modal.Title>
           <hr className="text-primary px-3" />
         </Modal.Header>
         <Modal.Body>
-          <form className="p-3" onSubmit={handleSubmit}>
-            <Grid fluid>
-              <Row gutter={16}>
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label>Cliente:</label>
-                    <SelectClientes
-                      value={formData.idCliente}
-                      onChange={(e) =>
-                        setFormData(prev => ({ ...prev, idCliente: e.target.value }))
-                      }
-                      className="form-select-sm"
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label>Mecánico:</label>
-                    <SelectTrabajadores
-                      value={formData.idTrabajador}
-                      onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))}
-                      className="form-select-sm"
-                      required />
-                  </div>
-                </Col>
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label>Vehículo:</label>
-                    <SelectVehiculos
-                      idCliente={formData.idCliente}
-                      value={formData.idVehiculo}
-                      onChange={(e) => setFormData(prev => ({ ...prev, idVehiculo: e.target.value }))}
-                      className="form-select rounded-5"
-                      required />
-                  </div>
-                  <div className="mb-3">
-                    <label>Tiempo estimado:</label>
-                    <input
-                      type="date"
-                      name="tiempoEstimado"
-                      value={formData.tiempoEstimado}
-                      onChange={handleChange}
-                      className="form-control rounded-5"
-                      style={{ maxWidth: "355px" }}
-                      required />
-                  </div>
-                </Col>
+          <form onSubmit={handleSubmit}>
+            <div className="d-flex justify-content-center flex-column px-4">
+              <Row>
+                <div className="mb-3">
+                  <label>Cliente:</label>
+                  <SelectClientes
+                    value={formData.idCliente}
+                    onChange={(e) => setFormData(prev => ({ ...prev, idCliente: e.target.value }))}
+                    className="form-select-sm"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label>Mecánico:</label>
+                  <SelectTrabajadores
+                    value={formData.idTrabajador}
+                    onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))}
+                    className="form-select-sm"
+                    required />
+                </div>
+                <div className="mb-3">
+                  <label>Vehículo:</label>
+                  <SelectVehiculos
+                    idCliente={formData.idCliente}
+                    value={formData.idVehiculo}
+                    onChange={(e) => setFormData(prev => ({ ...prev, idVehiculo: e.target.value }))}
+                    className="form-select rounded-5"
+                    required />
+                </div>
+                <div className="mb-3">
+                  <label>Tiempo estimado:</label>
+                  <input
+                    type="date"
+                    name="tiempoEstimado"
+                    value={formData.tiempoEstimado}
+                    onChange={handleChange}
+                    className="form-control rounded-5 py-2"
+                    style={{ maxWidth: "550px" }}
+                    required />
+                </div>
               </Row>
               <div className="mb-3">
                 <label>Descripción:</label>
@@ -177,12 +171,12 @@ const ModalAgregarOrden = () => {
                   className="form-control rounded-4"
                   required />
               </div>
-              <div className="d-flex row justify-content-end">
-                <Button className="btn btn-primary rounded-5" type="submit">
-                  Agregar
-                </Button>
-              </div>
-            </Grid>
+            </div>
+            <div className="d-flex row justify-content-end px-4 mt-4">
+              <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+                <IoMdAdd size={25} />Agregar
+              </Button>
+            </div>
           </form>
         </Modal.Body>
         <Modal.Footer>

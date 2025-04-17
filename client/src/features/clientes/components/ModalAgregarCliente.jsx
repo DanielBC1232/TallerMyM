@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import { Modal, Button, Grid, Row, Col } from "rsuite";
+import { Modal, Button, Row, Col } from "rsuite";
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
+import { IoPersonAddSharp } from "react-icons/io5";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -52,7 +53,7 @@ const ModalAgregarCliente = () => {
           },
         }
       );
-    
+
       // Si la inserción es exitosa (HTTP 200 o 201)
       if (response.status === 200 || response.status === 201) {
         Swal.fire({
@@ -97,7 +98,7 @@ const ModalAgregarCliente = () => {
         Swal.fire("Error", "Hubo un problema con la conexión", "error");
       }
     }
-    
+
   };
 
   // Abre el modal
@@ -106,101 +107,91 @@ const ModalAgregarCliente = () => {
 
   return (
     <>
-      <Button
-        style={{ minWidth: "80px", maxWidth: "350px" }}
-        className="btn btn-secondary btn-sm text-white"
-        onClick={handleOpen}
-      >
-        Registrar Cliente
-      </Button>
+      <Button style={{ minWidth: "80px", maxWidth: "350px" }}
+        className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+        onClick={handleOpen}><IoPersonAddSharp size={20} />Registrar Cliente</Button>
 
       <Modal open={open} onClose={handleClose} size="lg">
         <Modal.Header>
           <Modal.Title>Registrar Cliente</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit}>
-            <Grid fluid>
-              <Row gutter={16}>
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label className="form-label">Nombre:</label>
-                    <input
-                      type="text"
-                      name="nombre"
-                      value={formValue.nombre}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Cédula:</label>
-                    <input
-                      type="text"
-                      name="cedula"
-                      value={formValue.cedula}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                    />
-                  </div>
-                </Col>
+          <form onSubmit={handleSubmit} className="p-4">
+            <Row>
+              <Col xs={24} md={12}>
+                <div className="mb-3">
+                  <label className="form-label">Nombre:</label>
+                  <input
+                    type="text"
+                    name="nombre"
+                    value={formValue.nombre}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Cédula:</label>
+                  <input
+                    type="text"
+                    name="cedula"
+                    value={formValue.cedula}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required
+                  />
+                </div>
+              </Col>
 
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label className="form-label">Apellido:</label>
-                    <input
-                      type="text"
-                      name="apellido"
-                      value={formValue.apellido}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Correo:</label>
-                    <input
-                      type="email"
-                      name="correo"
-                      value={formValue.correo}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                    />
-                  </div>
-                </Col>
-              </Row>
+              <Col xs={24} md={12}>
+                <div className="mb-3">
+                  <label className="form-label">Apellido:</label>
+                  <input
+                    type="text"
+                    name="apellido"
+                    value={formValue.apellido}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Correo:</label>
+                  <input
+                    type="email"
+                    name="correo"
+                    value={formValue.correo}
+                    onChange={handleChange}
+                    className="form-control rounded-5 py-2"
+                    required
+                  />
+                </div>
+              </Col>
+            </Row>
 
-              <Row gutter={16}>
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label className="form-label">Teléfono:</label>
-                    <input
-                      type="text"
-                      name="telefono"
-                      value={formValue.telefono}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                    />
-                  </div>
-                </Col>
-              </Row>
-            </Grid>
-
-            <div className="d-flex justify-content-end mt-4">
-              <Button appearance="primary" type="submit">
-                Registrar Cliente
+            <Row gutter={16}>
+              <Col xs={24} md={12}>
+                <div className="mb-3">
+                  <label className="form-label">Teléfono:</label>
+                  <input
+                    type="text"
+                    name="telefono"
+                    value={formValue.telefono}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required
+                  />
+                </div>
+              </Col>
+            </Row>
+            <div className="d-flex justify-content-end mt-4 row px-2">
+              <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+                <IoPersonAddSharp size={20} />Registrar Cliente
               </Button>
             </div>
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose} appearance="default">
-            Cancelar
-          </Button>
         </Modal.Footer>
       </Modal>
     </>

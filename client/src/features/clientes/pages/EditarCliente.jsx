@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button, Form, Schema } from "rsuite";
 import Swal from "sweetalert2";
 import "../styles/form.css";
+import { IoIosSave } from "react-icons/io";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 const { StringType } = Schema.Types;
@@ -75,7 +76,6 @@ const EditarCliente = () => {
     fetchCliente();
   }, [cedula]);
 
-
   const handleSubmit = async () => {
     if (!formRef.current.check()) {
       Swal.fire({
@@ -146,36 +146,35 @@ const EditarCliente = () => {
 
   return (
     <div className="form-container">
-      <Form
-        ref={formRef}
-        model={model}
-        onChange={setFormValue}
-        formValue={formValue}
-        fluid
-      >
+      <div className="d-flex justify-content-center flex-column p-0">
+        <h2 className="text-primary font-bold mb-4 py-0">Editar Cliente</h2>
+        <hr className="text-primary py-0 px-2" />
+      </div>
+      <Form className="p-3" ref={formRef} model={model} onChange={setFormValue}
+        formValue={formValue} fluid>
         <Form.Group>
           <Form.ControlLabel>Nombre</Form.ControlLabel>
-          <Form.Control name="nombre" />
+          <Form.Control className="rounded-5" name="nombre" />
         </Form.Group>
         <Form.Group>
           <Form.ControlLabel>Apellido</Form.ControlLabel>
-          <Form.Control name="apellido" />
+          <Form.Control className="rounded-5" name="apellido" />
         </Form.Group>
         <Form.Group>
           <Form.ControlLabel>Cédula</Form.ControlLabel>
-          <Form.Control name="cedula" />
+          <Form.Control className="rounded-5" name="cedula" />
         </Form.Group>
         <Form.Group>
           <Form.ControlLabel>Correo</Form.ControlLabel>
-          <Form.Control name="correo" type="email" />
+          <Form.Control className="rounded-5" name="correo" type="email" />
         </Form.Group>
         <Form.Group>
           <Form.ControlLabel>Teléfono</Form.ControlLabel>
-          <Form.Control name="telefono" />
+          <Form.Control className="rounded-5" name="telefono" />
         </Form.Group>
-        <Form.Group>
-          <Button appearance="primary" onClick={handleSubmit}>
-            Guardar Cambios
+        <Form.Group className="row px-2">
+          <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={handleSubmit}>
+            <IoIosSave size={20} />Guardar Cambios
           </Button>
         </Form.Group>
       </Form>

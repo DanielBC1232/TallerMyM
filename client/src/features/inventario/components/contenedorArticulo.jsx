@@ -14,7 +14,7 @@ const ContenedorProductos = ({ formData }) => {
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 500)); // Delay para evitar consumo innecesario
+        await new Promise((resolve) => setTimeout(resolve, 250)); // Delay para evitar consumo innecesario
         const { data } = await axios.post(
           `${BASE_URL}/productos`,
           formData,

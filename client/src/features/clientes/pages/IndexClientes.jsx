@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import ModalAgregarCliente from "../components/ModalAgregarCliente";
+import { BsPersonFillGear } from "react-icons/bs";
+import { MdDelete } from "react-icons/md";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -147,20 +149,12 @@ const IndexClientes = () => {
   if (error) return <p className="text-danger">{error}</p>;
 
   return (
-    <div className="container mt-5">
-
+    <div className="p-4 rounded-4 bg-darkest" style={{minHeight: "88vh"}}>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <input
-          type="text"
-          placeholder="Buscar por cédula"
-          value={filtroCedula}
+        <input type="text" placeholder="Buscar por cédula" value={filtroCedula}
           onChange={(e) => setFiltroCedula(e.target.value)}
-          className="form-control w-50 me-3"
-        />
+          className="form-control rounded-5 me-3"/>
         <ModalAgregarCliente />
-        <Link to="/cotizacion" className="btn btn-sm btn-secondary text-white">
-          Cotizaciones
-        </Link>
       </div>
       <table className="table table-bordered">
         <thead className="table-light">
@@ -182,19 +176,17 @@ const IndexClientes = () => {
                 <td>{cliente.cedula}</td>
                 <td>{cliente.correo}</td>
                 <td>{cliente.telefono}</td>
-                <td>
-                  <button
-                    onClick={() => handleEditar(cliente.cedula)}
-                    className="btn btn-primary btn-sm me-2 text-white"
-                  >
-                    Editar
+                <td >
+                  <div className="d-flex gap-2">
+                  <button onClick={() => handleEliminar(cliente.cedula)}
+                    className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                    <MdDelete  size={20}/>
                   </button>
-                  <button
-                    onClick={() => handleEliminar(cliente.cedula)}
-                    className="btn btn-danger btn-sm text-white"
-                  >
-                    Eliminar
+                  <button onClick={() => handleEditar(cliente.cedula)}
+                    className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                    <BsPersonFillGear size={20}/>Editar
                   </button>
+                  </div>
                 </td>
               </tr>
             ))
