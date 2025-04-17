@@ -7,7 +7,7 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 // Rutas para Inventario
-import Index from './components/Index.jsx';
+
 import Detalles from "./features/inventario/pages/Detalles";
 import IndexInventario from "./features/inventario/pages/index";
 import Editar from "./features/inventario/pages/Editar";
@@ -80,7 +80,7 @@ const App = () => {
     <div className="">
       {hideHeaderRoutes.includes(location.pathname) ? (
         <Routes>
-          <Route path="/" element={<Index />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
           <Route path="/verificar-correo" element={<VerificarCorreo />} />
@@ -89,7 +89,7 @@ const App = () => {
       ) : (
         <Header>
           <Routes>
-            <Route path="/" element={<Index />} />
+
             {/* Rutas de Inventario */}
             <Route path="/inventario-agregar" element={<Agregar />} />
             <Route path="/inventario" element={<IndexInventario />} />

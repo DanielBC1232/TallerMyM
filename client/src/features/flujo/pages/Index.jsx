@@ -27,9 +27,9 @@ const IndexFlujo = () => {
       <div className="flujo-row">
         {/* Pendiente */}
         <div className="flujo-col">
-          <div className="bg-primary rounded-4 py-2 mb-4 h-100">
+          <div className="bg-primary rounded-4 py-2 mb-4">
             <Text size="xxl" className="text-white ps-4 py-1">Pendiente</Text>
-            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "75vh" }}>
+            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "80vh" }}>
               <ColPendiente />
             </div>
           </div>
@@ -37,9 +37,9 @@ const IndexFlujo = () => {
 
         {/* En progreso */}
         <div className="flujo-col">
-          <div className="bg-primary rounded-4 py-2 mb-4 h-100">
+          <div className="bg-primary rounded-4 py-2 mb-4pb-0">
             <Text size="xxl" className="text-white ps-4 py-1">En progreso</Text>
-            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "75vh" }}>
+            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "80vh" }}>
               <ColProgreso />
             </div>
           </div>
@@ -47,9 +47,9 @@ const IndexFlujo = () => {
 
         {/* Listo */}
         <div className="flujo-col">
-          <div className="bg-primary rounded-4 py-2 mb-4 h-100">
+          <div className="bg-primary rounded-4 py-2 mb-4">
             <Text size="xxl" className="text-white ps-4 py-1">Listo</Text>
-            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "75vh" }}>
+            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "80vh" }}>
               <ColListo />
             </div>
           </div>
