@@ -9,63 +9,60 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const ListaTrabajadores = ({formData, trigger}) => {
 
     const [datos, setDatos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     useEffect(() => {
         const getTrabajadores = async () => {
           try {
-            const { data } = await axios.get(`${BASE_URL}/trabajadores/obtener-trabajadores/`);
+            setLoading(true);
+            setError(null);
+            
+            const { data } = await axios.get(
+              `${BASE_URL}/trabajadores/obtener-trabajadores/`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+              }
+            );
+      
             setDatos(data);
+      
           } catch (error) {
             console.error("Error al obtener trabajadores:", error);
+            setError("Error al cargar los trabajadores");
+            
+            if (error.response) {
+              const { status } = error.response;
+              
+              if (status === 401) {
+                Swal.fire("Sesión expirada", "Por favor inicie sesión nuevamente", "warning");
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+                return;
+              }
+              
+              if (status === 403) {
+                Swal.fire("Acceso denegado", "No tiene permisos para ver los trabajadores", "error");
+                return;
+              }
+            }
+      
+            Swal.fire("Error", "No se pudieron cargar los trabajadores", "error");
+            
+          } finally {
+            setLoading(false);
           }
         };
-        getTrabajadores();
-      }, [formData ,trigger]);
       
-    function deleteTrabajador(id) {
-        Swal.fire({
-            text: "¿Seguro que desea eliminar este trabajador?",
-            icon: "error",
-            showConfirmButton: true,
-            showCancelButton: true,
-            confirmButtonText: "Eliminar",
-            cancelButtonText: "Cancelar",
-            customClass: {
-                confirmButton: 'btn btn-danger text-white',
-                cancelButton: 'btn btn-secondary text-white'
-              }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axios.delete(`${BASE_URL}/trabajadores/eliminar-trabajador/${id}`)
-                    .then((res) => {
-                        if (res.status === 200) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Trabajador eliminado correctamente",
-                                showConfirmButton: false,
-                                timer: 1500,
-                            }).then(() => {
-                                setDatos(datos.filter(trabajador => trabajador.idTrabajador !== id));
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Error al eliminar trabajador",
-                                showConfirmButton: false,
-                                timer: 1000,
-                            });
-                        }
-                    })
-                    .catch(() => {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "No se pudo eliminar el trabajador",
-                            showConfirmButton: true,
-                        });
-                    });
-            }
-        });
-    }
+        getTrabajadores();
+      }, [formData, trigger]);
+
+
+      
+    
 
     return (
         <div className="p-5">

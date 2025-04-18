@@ -1,4 +1,5 @@
-import { Solicitud, SolicitudRepository } from "../../models/trabajadores/solicitud.js";
+import {  SolicitudRepository } from "../../models/trabajadores/solicitud.js";
+
 const solicitudRepo = new SolicitudRepository();
 
 //Solicitud de Vacaciones--
@@ -6,10 +7,9 @@ const solicitudRepo = new SolicitudRepository();
 const InsertSolicitudVacaciones = async (req, res) => {
   try {
     const { fechaInicio, fechaFin, idTrabajador } = req.body;
-    const newSolicitud = new Solicitud(fechaInicio, fechaFin, idTrabajador);
+    const newSolicitud = await solicitudRepo.InsertSolicitud(fechaInicio, fechaFin, idTrabajador);
 
-    await solicitudRepo.InsertSolicitud(newSolicitud);
-    res.status(201).json(newSolicitud);
+    res.status(201).json({message:"Vacaciones solicitadas correctamente",rowsAffected:newSolicitud});
   } catch (error) {
     console.error("Error al insertar solicitud controller:", error);
     res.status(500).json({ error: "Error al insertar solicitud controller" });

@@ -9,6 +9,7 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const ModalAgregarTrabajador = () => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [formValue, setFormValue] = useState({
     nombreCompleto: "",
     cedula: "",
@@ -35,38 +36,72 @@ const ModalAgregarTrabajador = () => {
   // Manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(formValue);
     if (!validateForm()) return;
-
+  
     try {
+      setLoading(true); // Activar estado de carga
+  
       const response = await axios.post(
-        `${BASE_URL}/trabajadores/agregar-trabajador`,
+        `${BASE_URL}/trabajadores/agregar-trabajador/`,
         formValue,
         {
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         }
       );
-
-      // Si la inserción es exitosa (HTTP 200 o 201)
-      if (response.status === 200 || response.status === 201) {
-        Swal.fire({
-          title: "Éxito",
-          text: "Trabajador registrado exitosamente",
-          icon: "success",
-          timer: 2000,
-          timerProgressBar: true,
-        });
-        window.location.reload();
-      }
+  
+      // Mostrar confirmación
+      await Swal.fire({
+        title: "¡Éxito!",
+        text: "Trabajador registrado correctamente",
+        icon: "success",
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false
+      });
+  
+      // Recargar la página o redirigir
+      window.location.reload();
+  
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        // Si el error es 409, es porque la cédula ya existe
-        Swal.fire("Advertencia", "La cédula ya está registrada", "warning");
+      console.error("Error al registrar trabajador:", error);
+      
+      // Manejo específico de errores
+      if (error.response) {
+        switch (error.response.status) {
+          case 401:
+            Swal.fire("Sesión expirada", "Por favor inicie sesión nuevamente", "warning");
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+            return;
+          case 403:
+            Swal.fire("Acceso denegado", "No tiene permisos para esta acción", "error");
+            return;
+          case 409:
+            Swal.fire("Advertencia", "La cédula ya está registrada", "warning");
+            return;
+            case 500:
+            Swal.fire("Advertencia", "Error 500 servidor", "warning");
+            case 501:
+            Swal.fire("Advertencia", "Error 501 servidor", "warning");
+            case 502:
+            Swal.fire("Advertencia", "Error 502 servidor", "warning");
+            return;
+          default:
+            Swal.fire(
+              "Error", 
+              error.response.data?.message || "Error al registrar el trabajador", 
+              "error"
+            );
+        }
       } else {
-        // En caso de otros errores
-        console.error(error);
-        Swal.fire("Error", "Hubo un error al registrar el Trabajador", "error");
+        Swal.fire("Error", "Problema de conexión con el servidor", "error");
       }
+    } finally {
+      setLoading(false); // Desactivar estado de carga
     }
   };
 

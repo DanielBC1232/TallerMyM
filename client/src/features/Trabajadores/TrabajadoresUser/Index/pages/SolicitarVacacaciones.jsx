@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Button, Form, Schema, SelectPicker, DatePicker } from "rsuite";
+import { Button, Form, Schema, SelectPicker, DatePicker, Loader } from "rsuite";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 import "../styles/agregar.css";
 import "../styles/form.css";
@@ -11,83 +12,183 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const { StringType, DateType } = Schema.Types;
 
 const model = Schema.Model({
-  FechaInicio: DateType().isRequired("La fecha de inicio es obligatoria"),
-  FechaFin: DateType().isRequired("La fecha de fin es obligatoria"),
+  FechaInicio: DateType()
+    .isRequired("La fecha de inicio es obligatoria")
+    .addRule((value, data) => {
+      if (value && new Date(value) < new Date().setHours(0, 0, 0, 0)) {
+        return "No se pueden solicitar vacaciones en fechas pasadas";
+      }
+      return true;
+    }),
+  FechaFin: DateType()
+    .isRequired("La fecha de fin es obligatoria")
+    .addRule((value, data) => {
+      if (value && data.FechaInicio && new Date(value) < new Date(data.FechaInicio)) {
+        return "La fecha fin no puede ser anterior a la fecha inicio";
+      }
+      return true;
+    }),
   idTrabajador: StringType().isRequired("El trabajador es obligatorio"),
 });
 
 const CreateSolicitud = () => {
   const navigate = useNavigate();
-
+  const [trabajadores, setTrabajadores] = useState([]);
+  const [loadingTrabajadores, setLoadingTrabajadores] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorTrabajadores, setErrorTrabajadores] = useState(null);
   const [formValue, setFormValue] = useState({
     FechaInicio: null,
     FechaFin: null,
     idTrabajador: "",
   });
 
-  const [trabajadores, setTrabajadores] = useState([]);
-
   useEffect(() => {
     const fetchTrabajadores = async () => {
       try {
-        const response = await fetch("http://localhost:3000/trabajadores/obteneTrabajadoresMenu");
-        if (!response.ok) throw new Error("Error al cargar trabajadores");
-        const data = await response.json();
+        setLoadingTrabajadores(true);
+        setErrorTrabajadores(null);
 
+        const response = await axios.get(`${BASE_URL}/trabajadores/obteneTrabajadoresMenu`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+
+        if (response.status !== 200) {
+          throw new Error(`Error al cargar trabajadores: ${response.status}`);
+        }
+
+        const data = response.data;
         setTrabajadores(
           data.map((trabajador) => ({
             label: trabajador.nombreCompleto,
-            value: trabajador.idTrabajador,
+            value: trabajador.idTrabajador.toString(), // Asegurar que sea string para el SelectPicker
           }))
         );
+
       } catch (error) {
         console.error("Error:", error);
-        Swal.fire("Error", "No se pudo cargar la lista de trabajadores", "error");
+        setErrorTrabajadores("Error al cargar la lista de trabajadores");
+
+        if (error.response) {
+          const { status } = error.response;
+          if (status === 401) {
+            await Swal.fire("Sesión expirada", "Por favor inicie sesión nuevamente", "warning");
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+            return;
+          }
+          if (status === 403) {
+            await Swal.fire("Acceso denegado", "No tiene permisos para ver los trabajadores", "error");
+            return;
+          }
+        }
+
+        await Swal.fire("Error", "No se pudo cargar la lista de trabajadores", "error");
+      } finally {
+        setLoadingTrabajadores(false);
       }
     };
 
     fetchTrabajadores();
   }, []);
 
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/trabajadores/Solicitud-Vacaciones", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fechaInicio: formValue.FechaInicio?.toISOString().split("T")[0],
-          fechaFin: formValue.FechaFin?.toISOString().split("T")[0],
-          idTrabajador: Number(formValue.idTrabajador),
-        }),
-      });
+  const formatDate = (date) => {
+    if (!date) return null;
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
-      if (!response.ok) throw new Error("Error al registrar la solicitud");
+  const handleSubmit = async () => {
+    if (!formValue.FechaInicio || !formValue.FechaFin || !formValue.idTrabajador) {
+      await Swal.fire("Error", "Por favor complete todos los campos", "error");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/trabajadores/Solicitud-Vacaciones`,
+        {
+          fechaInicio: formatDate(formValue.FechaInicio),
+          fechaFin: formatDate(formValue.FechaFin),
+          idTrabajador: parseInt(formValue.idTrabajador, 10),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status !== 201) {
+        throw new Error(`Error al registrar la solicitud: ${response.status}`);
+      }
 
       await Swal.fire({
         icon: "success",
-        title: "¡Registrado!",
-        text: "Solicitud registrada exitosamente.",
+        title: "¡Solicitud enviada!",
+        text: "Tu solicitud de vacaciones ha sido registrada correctamente.",
         confirmButtonText: "Aceptar",
       });
 
       navigate("/trabajadores-user");
+
     } catch (error) {
       console.error("Error en el envío:", error);
+      let errorMessage = "Hubo un error al registrar la solicitud.";
+
+      if (error.response) {
+        const { status, data } = error.response;
+        
+        if (status === 400 && data.error) {
+          errorMessage = data.error;
+        } else if (status === 401) {
+          await Swal.fire("Sesión expirada", "Por favor inicie sesión nuevamente", "warning");
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+          return;
+        } else if (status === 403) {
+          errorMessage = "No tiene permisos para realizar esta acción.";
+        }
+      }
+
       await Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Hubo un error al registrar la solicitud.",
+        text: errorMessage,
         confirmButtonText: "Aceptar",
       });
-
-      // Redirigir igualmente aunque haya error
-      navigate("/trabajadores-user");
+    } finally {
+      setSubmitting(false);
     }
   };
 
+  if (loadingTrabajadores) {
+    return (
+      <div style={{ textAlign: 'center', padding: '50px' }}>
+        <Loader size="lg" content="Cargando trabajadores..." />
+      </div>
+    );
+  }
+
   return (
     <div className="form-container">
-      <Form model={model} onChange={setFormValue} formValue={formValue} fluid>
+      <h3 style={{ marginBottom: '20px' }}>Solicitud de Vacaciones</h3>
+      
+      <Form 
+        model={model} 
+        onChange={setFormValue} 
+        formValue={formValue} 
+        fluid
+        onSubmit={handleSubmit}
+      >
         <Form.Group>
           <Form.ControlLabel>Fecha de Inicio</Form.ControlLabel>
           <DatePicker
@@ -97,7 +198,9 @@ const CreateSolicitud = () => {
             format="yyyy-MM-dd"
             oneTap
             block
+            disabledDate={date => date < new Date().setHours(0, 0, 0, 0)}
           />
+          <Form.HelpText>No se permiten fechas pasadas</Form.HelpText>
         </Form.Group>
 
         <Form.Group>
@@ -109,6 +212,7 @@ const CreateSolicitud = () => {
             format="yyyy-MM-dd"
             oneTap
             block
+            disabledDate={date => formValue.FechaInicio && date < formValue.FechaInicio}
           />
         </Form.Group>
 
@@ -121,15 +225,30 @@ const CreateSolicitud = () => {
             onChange={(value) => setFormValue({ ...formValue, idTrabajador: value })}
             placeholder="Seleccione un trabajador"
             block
+            loading={loadingTrabajadores}
           />
+          {errorTrabajadores && (
+            <Form.ErrorMessage show={!!errorTrabajadores}>
+              {errorTrabajadores}
+            </Form.ErrorMessage>
+          )}
         </Form.Group>
 
         <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-          <Button appearance="primary" onClick={handleSubmit}>
-            Registrar
+          <Button 
+            appearance="primary" 
+            type="submit" 
+            loading={submitting}
+            disabled={submitting || !formValue.FechaInicio || !formValue.FechaFin || !formValue.idTrabajador}
+          >
+            {submitting ? 'Enviando...' : 'Enviar Solicitud'}
           </Button>
-          <Button appearance="default" onClick={() => navigate("/trabajadores-user")}>
-            Regresar
+          <Button 
+            appearance="default" 
+            onClick={() => navigate("/trabajadores-user")}
+            disabled={submitting}
+          >
+            Cancelar
           </Button>
         </div>
       </Form>

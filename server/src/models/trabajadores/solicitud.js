@@ -14,21 +14,21 @@ export class Solicitud {
 //Metodos CRUD
 export class SolicitudRepository {
     // Insertar nuevos clientes
-    async InsertSolicitud(solicitud) {
-        console.log(solicitud)
+    async InsertSolicitud(fechaInicio, fechaFin, idTrabajador) {
+        
         try {
             const pool = await connectDB();
-            await pool
+            const result = await pool
                 .request()
-                .input("fechaInicio", sql.Date, solicitud.fechaInicio)
-                .input("fechaFin", sql.Date, solicitud.fechaFin)
-                .input("idTrabajador", sql.Int, solicitud.idTrabajador)
-
+                .input("fechaInicio", sql.Date, fechaInicio)
+                .input("fechaFin", sql.Date, fechaFin)
+                .input("idTrabajador", sql.Int, idTrabajador)
                 .query(`
                     INSERT INTO VACACIONES (fechaInicio, fechaFin, idTrabajador)
                     VALUES (@fechaInicio, @fechaFin, @idTrabajador)
                 `);
-            console.log("La solicitud ha sido insertado exitosamente");
+                return result.rowsAffected[0];
+              
         } catch (error) {
             console.error("Error en insert:", error);
             throw new Error("Error al insertar solicitud");
