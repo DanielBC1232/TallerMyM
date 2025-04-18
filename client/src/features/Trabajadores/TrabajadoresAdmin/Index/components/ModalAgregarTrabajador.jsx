@@ -76,92 +76,76 @@ const ModalAgregarTrabajador = () => {
 
   return (
     <>
-      <Button
-        style={{
-          width:"300px",
-          height: "100px",
-          margin: "5px"
-        }}
-        className="btn btn-secondary btn-sm text-white"
-        onClick={handleOpen}
-      >
-        <IoPersonAdd size={24} />
+      <button
+        className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+        onClick={handleOpen}>
+        <IoPersonAdd size={20} />
         Registrar-Trabajador
-      </Button>
+      </button>
 
       <Modal open={open} onClose={handleClose} size="lg">
         <Modal.Header>
           <Modal.Title>Registrar Trabajador</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit}>
-            <Grid fluid>
-              <Row gutter={16}>
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label className="form-label">Nombre Completo:</label>
-                    <input
-                      type="text"
-                      name="nombreCompleto"
-                      value={formValue.nombreCompleto}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Cédula:</label>
-                    <input
-                      type="text"
-                      name="cedula"
-                      value={formValue.cedula}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                    />
-                  </div>
-                </Col>
+          <form onSubmit={handleSubmit} className="p-3">
+            <Row gutter={16} className="d-flex justify-content-center">
+              <Col xs={24} md={12}>
+                <div className="mb-3">
+                  <label className="form-label">Nombre Completo:</label>
+                  <input
+                    type="text"
+                    name="nombreCompleto"
+                    value={formValue.nombreCompleto}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Cédula:</label>
+                  <input
+                    type="text"
+                    name="cedula"
+                    value={formValue.cedula}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required />
+                </div>
+              </Col>
 
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label className="form-label">Salario:</label>
-                    <input
-                      type="number"
-                      name="salario"
-                      value={formValue.salario}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      step="0.01"
-                      min="0"
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Seguro Social:</label>
-                    <input
-                      type="text"
-                      name="seguroSocial"
-                      value={formValue.seguroSocial}
-                      onChange={handleChange}
-                      className="form-control form-select-sm"
-                      required
-                    />
-                  </div>
-                </Col>
-              </Row>
-            </Grid>
-
-            <div className="d-flex justify-content-end mt-4">
-              <Button appearance="primary" type="submit">
-                Registrar Trabajador
-              </Button>
-            </div>
+              <Col xs={24} md={12}>
+                <div className="mb-3">
+                  <label className="form-label">Salario:</label>
+                  <input
+                    type="number"
+                    name="salario"
+                    value={formValue.salario}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    step="0.01"
+                    min="0"
+                    required />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Seguro Social:</label>
+                  <input
+                    type="text"
+                    name="seguroSocial"
+                    value={formValue.seguroSocial}
+                    onChange={handleChange}
+                    className="form-control rounded-5"
+                    required />
+                </div>
+              </Col>
+            </Row>
+              <div className="d-flex justify-content-center row px-5 mt-5">
+                <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+                  Registrar Trabajador
+                </Button>
+              </div>
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose} appearance="default">
-            Cancelar
-          </Button>
         </Modal.Footer>
       </Modal>
     </>

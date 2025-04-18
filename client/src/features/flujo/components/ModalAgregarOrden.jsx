@@ -112,8 +112,9 @@ const ModalAgregarOrden = () => {
   const handleClose = () => setOpen(false);
   return (
     <>
-      <Button style={{ minWidth: "80px", maxWidth: "350px" }} className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+      <Button  className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
         onClick={handleOpen}><IoMdAdd size={20} />Agregar Orden</Button>
+
       <Modal open={open} onClose={handleClose} size="sm">
         <Modal.Header className="p-3">
           <Modal.Title className="text-primary text-center">Agregar Orden</Modal.Title>

@@ -123,7 +123,20 @@ const Header = ({ children }) => {
               </NavLink>
             </li>
 
-
+            {idRol != 2 && (
+              <>
+                <li className="sidebar-header">Mi Perfil</li>
+                <li className="sidebar-item">
+                  <NavLink className="sidebar-link" to="/trabajadores-user">
+                    {({ isActive }) => (
+                      <span className={isActive ? 'text-success' : ''}>
+                        <BsPersonGear className={isActive ? 'text-success' : ''} size={20} /> {localStorage.getItem("username")}
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+              </>
+            )}
             {/* Administracion */}
             <div>
               {idRol != 2 && (
@@ -167,7 +180,7 @@ const Header = ({ children }) => {
                   </li>
                   {/* Trabajadores - Administracion */}
                   <li className="sidebar-item">
-                    <NavLink className="sidebar-link" to="/trabajadores">
+                    <NavLink className="sidebar-link" to="/trabajadores-admin">
                       {({ isActive }) => (
                         <span className={isActive ? 'text-success' : ''}>
                           <BsPersonGear className={isActive ? 'text-success' : ''} size={20} /> Empleados
@@ -175,6 +188,11 @@ const Header = ({ children }) => {
                       )}
                     </NavLink>
                   </li>
+
+
+
+
+
                 </>
               )}
             </div>

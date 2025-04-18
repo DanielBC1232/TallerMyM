@@ -3,7 +3,6 @@ import Swal from "sweetalert2";
 import { Modal, Button, Grid, Row, Col } from "rsuite";
 import axios from "axios";
 import DatePicker from "rsuite/DatePicker";
-import "rsuite/dist/rsuite.min.css";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;

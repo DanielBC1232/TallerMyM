@@ -30,66 +30,29 @@ const IndexTrabajadores = () => {
   };
 
   return (
-    <div className="grid-container">
-      <nav
-        className="sidebar p-4 rounded-3 shadow-sm" style={{
-          Width: "150px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "5px",
-        }}>
-          
-        <ModalAgregarTrabajador/>
+    <div className="bg-darkest p-4 rounded-4" style={{minHeight: "88vh"}}>
 
-        <Button
-          className="btn btn-sm btn-secondary text-white"
-          style={{
-            width: "300px",
-            height: "100px",
-            margin: "5px",
-          }}>
-          <Link to="/index-amonestaciones" className="btn-link">
-            <HiDocumentAdd size={24} style={{ color: "#fc8c03" }} />
-            Generar Amonestación
-          </Link>
-        </Button>
+      <div className="mb-3 d-flex gap-4">
+        <ModalAgregarTrabajador />
+        <Link to="/index-amonestaciones" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+          <HiDocumentAdd size={24} />
+          Generar Amonestación
+        </Link>
 
-        <Button
-          className="btn btn-sm btn-secondary text-white"
-          style={{
-            width: "300px",
-            height: "100px",
-            margin: "5px",
-          }}>
-          <Link to="/Ausencias-Index" className="btn-link">
-            <LuListTodo size={24} style={{ color: "#62fc03",margin:"5px" }} />
-            Registrar Ausencias
-          </Link>
-        </Button>
+        <Link to="/Ausencias-Index" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+          <LuListTodo size={25} />
+          Registrar Ausencias
+        </Link>
 
-        <Button
-          className="btn btn-sm btn-secondary text-white"
-          style={{
-            width: "300px",
-            height: "100px",
-            margin: "5px",
-          }}>
-          <Link to="/Vacaciones-Index" className="btn-link">
-            <FaPlane size={24} style={{ color: "#7db5fa",margin:"5px" }} />
-            Vacaciones
-          </Link>
-        </Button>
+        <Link to="/Vacaciones-Index" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+          <FaPlane size={20} />
+          Vacaciones
+        </Link>
+      </div>
 
-
-      </nav>
-
-          {/*--Lista Trabajadores Activos--*/}
-      <div className="main rounded-3">
-        <div className="article-scroll">
-          <h2>Lista Trabajadores Activos</h2>
-          <ListaTrabajadores />
-        </div>
+      {/*--Lista Trabajadores Activos--*/}
+      <div className="">
+        <ListaTrabajadores />
       </div>
 
     </div>

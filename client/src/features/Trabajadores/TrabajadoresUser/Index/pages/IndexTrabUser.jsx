@@ -9,6 +9,8 @@ import "../styles/gtr.css";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
+const idUsuario = localStorage.getItem("idUsuario");
+
 const IndexTrabajadores = () => {
   const navigate = useNavigate();
 

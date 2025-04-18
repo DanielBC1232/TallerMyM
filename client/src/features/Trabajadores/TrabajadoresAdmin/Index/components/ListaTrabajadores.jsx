@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import EditarTrabajadorModal from "../components/EditarTrabajadorModal.jsx";
+import { MdDelete } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -29,40 +31,40 @@ const ListaTrabajadores = ({ formData, trigger }) => {
         );
         setDatos(data);
 
-     
+
       } catch (error) {
-            if (error.response) {
-              if (error.response.status === 401) {
-                Swal.fire({
-                  icon: "warning",
-                  title: "Advertencia",
-                  text: "Operación no Autorizada",
-                  showConfirmButton: false,
-                });
-                window.location.reload(); // Recarga la página si no está autorizado
-              } else if (error.response.status === 403) {
-                Swal.fire({
-                  icon: "warning",
-                  title: "Autenticación",
-                  text: "Sesión expirada",
-                  showConfirmButton: false,
-                });
-                localStorage.clear();
-                window.location.href = "/login"; // Redirige al login si la sesión ha expirado
-              } else if (error.response.status === 409) {
-                // Si el error es 409, es porque la cédula ya está registrada
-                Swal.fire("Advertencia", "La cédula ya está registrada", "warning");
-              } else {
-                // En caso de otros errores
-                console.error(error);
-                Swal.fire("Error", "Hubo un error al registrar el Cliente", "error");
-              }
-            } else {
-              // En caso de no recibir respuesta (error de red, etc.)
-              console.error(error);
-              Swal.fire("Error", "Hubo un problema con la conexión", "error");
-            }
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operación no Autorizada",
+              showConfirmButton: false,
+            });
+            window.location.reload(); // Recarga la página si no está autorizado
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            window.location.href = "/login"; // Redirige al login si la sesión ha expirado
+          } else if (error.response.status === 409) {
+            // Si el error es 409, es porque la cédula ya está registrada
+            Swal.fire("Advertencia", "La cédula ya está registrada", "warning");
+          } else {
+            // En caso de otros errores
+            console.error(error);
+            Swal.fire("Error", "Hubo un error al registrar el Cliente", "error");
           }
+        } else {
+          // En caso de no recibir respuesta (error de red, etc.)
+          console.error(error);
+          Swal.fire("Error", "Hubo un problema con la conexión", "error");
+        }
+      }
     };
     getTrabajadores();
   }, [formData, trigger]);
@@ -80,11 +82,11 @@ const ListaTrabajadores = ({ formData, trigger }) => {
       confirmButtonText: "Eliminar",
       cancelButtonText: "Cancelar",
       customClass: {
-        confirmButton: "btn btn-danger text-white",
-        cancelButton: "btn btn-secondary text-white",
+        confirmButton: "btn btn-danger text-white rounded-5",
+        cancelButton: "btn btn-secondary text-white rounded-5",
       },
     });
-  
+
     if (result.isConfirmed) {
       try {
         const res = await axios.delete(`${BASE_URL}/trabajadores/eliminar-trabajador/${id}`, {
@@ -93,7 +95,7 @@ const ListaTrabajadores = ({ formData, trigger }) => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-  
+
         if (res.status === 200) {
           await Swal.fire({
             icon: "success",
@@ -101,7 +103,7 @@ const ListaTrabajadores = ({ formData, trigger }) => {
             showConfirmButton: false,
             timer: 1500,
           });
-  
+
           setDatos(datos.filter((t) => t.idTrabajador !== id));
         } else {
           Swal.fire({
@@ -133,8 +135,8 @@ const ListaTrabajadores = ({ formData, trigger }) => {
       }
     }
   }
-  
-//Fin
+
+  //Fin
 
   // Abrir modal de edición con datos del trabajador
   const handleOpenModal = (trabajador) => {
@@ -143,8 +145,8 @@ const ListaTrabajadores = ({ formData, trigger }) => {
   };
 
   return (
-    <div className="p-5">
-      <table className="table table-hover table-striped shadow-sm">
+    <div className="">
+      <table className="table table-hover">
         <thead>
           <tr>
             <th>Nombre Completo</th>
@@ -162,19 +164,17 @@ const ListaTrabajadores = ({ formData, trigger }) => {
               <td>{"₡ " + trabajador.salario}</td>
               <td>{trabajador.seguroSocial}</td>
               <td>
-                <button
-                  type="button"
-                  onClick={() => deleteTrabajador(trabajador.idTrabajador)}
-                  className="btn btn-danger btn-sm text-white me-3"
-                >
-                  Eliminar
-                </button>
-                <button
-                  className="btn btn-secondary btn-sm text-white"
-                  onClick={() => handleOpenModal(trabajador)}
-                >
-                  Editar
-                </button>
+                <div className="d-flex gap-3">
+                  <button type="button"
+                    onClick={() => deleteTrabajador(trabajador.idTrabajador)}
+                    className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                    <MdDelete size={20} /> Eliminar
+                  </button>
+                  <button className="btn btn-warning text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                    onClick={() => handleOpenModal(trabajador)}>
+                    <MdEdit size={20} /> Editar
+                  </button>
+                </div>
               </td>
             </tr>
           ))}

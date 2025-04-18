@@ -36,7 +36,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const { data, status } = await axios.put(
         `${BASE_URL}/trabajadores/actualizar-trabajador`,
@@ -48,7 +48,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
           },
         }
       );
-  
+
       if (status === 200) {
         Swal.fire({
           icon: "success",
@@ -67,7 +67,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
     } catch (error) {
       if (error.response) {
         const { status } = error.response;
-  
+
         if (status === 401) {
           Swal.fire("Advertencia", "Operación no autorizada", "warning");
           window.location.reload();
@@ -87,7 +87,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
       }
     }
   };
-  
+
 
   if (!show) return null;
 
@@ -95,7 +95,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
     // Fondo oscuro
     <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
       <div className="modal-dialog">
-        <div className="modal-content">
+        <div className="modal-content bg-white">
           {/* Header */}
           <div className="modal-header">
             <h5 className="modal-title">Editar Trabajador</h5>
@@ -104,7 +104,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
 
           {/* Body del modal */}
           <form onSubmit={handleSubmit}>
-            <div className="modal-body">
+            <div className="p-4 d-flex flex-column justify-content-center">
 
               {/* Select de trabajadores existentes con opción de escribir nuevo */}
               <div className="mb-3">
@@ -114,13 +114,10 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
                   name="nombreCompleto"
                   value={formData.nombreCompleto || ""}
                   onChange={handleChange}
-                  className="form-control"
-                  placeholder="Escriba o seleccione un nombre"
-                />
+                  className="form-control rounded-5"
+                  placeholder="Escriba o seleccione un nombre"/>
                 <datalist id="lista-trabajadores">
-                  {trabajadoresExistentes.map((t) => (
-                    <option key={t.idTrabajador} value={t.nombreCompleto} />
-                  ))}
+                  {trabajadoresExistentes.map((t) => (<option key={t.idTrabajador} value={t.nombreCompleto} />))}
                 </datalist>
               </div>
 
@@ -131,8 +128,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
                   name="cedula"
                   value={formData.cedula || ""}
                   onChange={handleChange}
-                  className="form-control"
-                />
+                  className="form-control rounded-5"/>
               </div>
 
               <div className="mb-3">
@@ -142,8 +138,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
                   name="salario"
                   value={formData.salario || ""}
                   onChange={handleChange}
-                  className="form-control"
-                />
+                  className="form-control rounded-5"/>
               </div>
 
               <div className="mb-3">
@@ -153,17 +148,16 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
                   name="seguroSocial"
                   value={formData.seguroSocial || ""}
                   onChange={handleChange}
-                  className="form-control"
-                />
+                  className="form-control rounded-5"/>
               </div>
             </div>
 
             {/* Footer */}
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
+            <div className="modal-footer d-flex justify-content-around">
+              <button type="button" className="btn btn-secondary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={onClose}>
                 Cancelar
               </button>
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
                 Guardar Cambios
               </button>
             </div>
