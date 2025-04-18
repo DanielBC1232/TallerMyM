@@ -7,6 +7,9 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 
 import SelectTrabajadores from "../components/SelectTrabajadores";
 import SelectVehiculos from "../components/SelectVehiculos";
+import { MdDelete } from "react-icons/md";
+import { IoMdSave } from "react-icons/io";
+import { IoIosReturnLeft } from "react-icons/io";
 
 //URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -178,8 +181,8 @@ const Editar = () => {
           showCancelButton: true,
           customClass: {
             actions: 'my-actions',
-            confirmButton: 'btn btn-warning btn-sm text-white order-2',
-            cancelButton: 'btn btn-sm btn-outline-dark order-1',
+            confirmButton: 'btn btn-warning rounded-5 text-white order-2',
+            cancelButton: 'btn rounded-5 btn-outline-dark order-1',
           },
         });
 
@@ -255,8 +258,8 @@ const Editar = () => {
         showCancelButton: true,
         customClass: {
           actions: 'my-actions',
-          confirmButton: 'btn btn-warning btn-sm text-white order-2',
-          cancelButton: 'btn btn-sm btn-outline-dark order-1',
+          confirmButton: 'btn btn-danger rounded-5 text-white order-2',
+          cancelButton: 'btn rounded-5 btn-outline-dark order-1',
         },
       });
 
@@ -321,93 +324,74 @@ const Editar = () => {
   };
 
   return (
-    <div className="container main p-5">
-      <Grid fluid>
-        <Row
-          className="show-grid d-flex justify-content-center align-items-center"
-          gutter={16}
-        >
-          <Col
-            xs={16}
-            className="d-grid gap-3 bg-white shadow-sm p-5 rounded-3"
-          >
-            <Row gutter={16}>
-              <Col xs={12} className="column">
-                <span>
-                  Seleccionar un mecánico
-                  <SelectTrabajadores
-                    value={formData.idTrabajador}
-                    onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))}
-                  />
-                </span>
-                <span>
-                  Vehiculo:
-                  <SelectVehiculos
-                    idCliente={formData.idCliente}
-                    value={formData.idVehiculo}
-                    onChange={(e) => setFormData(prev => ({ ...prev, idVehiculo: e.target.value }))}
-                  />
-                </span>
-              </Col>
-              <Col xs={12} className="column">
-                <span>
-                  Estimado de finalización:
-                  <input
-                    type="date"
-                    className="form-control"
-                    style={{ maxWidth: "370px" }}
-                    name="tiempoEstimado"
-                    value={formData.tiempoEstimado}
-                    onChange={(e) => setFormData(prev => ({ ...prev, tiempoEstimado: e.target.value }))}
-                  />
-                </span>
-
-              </Col>
-
-            </Row>
-            <Row><span>
-              Descripción:
-              <textarea
-                className="form-control"
-                rows={6}
-                name="descripcion"
-                value={formData.descripcion}
-                onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))}
-              />
-            </span></Row>
-            <div className="row mt-4">
-              <div className="d-flex col justify-content-start">
-                <Link
-                  to={`/flujo-detalles/${idOrden}`}
-                  type="button"
-                  className="btn btn-outline-dark btn-sm"
-                  style={{ maxWidth: "120px" }}
-                >
-                  Volver Atrás
-                </Link>
-              </div>
-              <div className="d-flex col justify-content-end">
-                <button
-                  onClick={cancelarOrden}
-                  type="button"
-                  className="btn btn-danger btn-sm text-white me-3"
-                  style={{ maxWidth: "120px" }}
-                >
-                  Eliminar Orden
-                </button>
-                <button
-                  onClick={actualizarOrden}
-                  type="button"
-                  className="btn btn-sm btn-secondary text-white"
-                  style={{ maxWidth: "120px" }}
-                >
-                  Guardar Cambios
-                </button>
-              </div>
-            </div>
+    <div className="rounded-4 shadow-sm bg-white mx-auto" style={{ minHeight: "60vh", maxWidth: "90vh" }}>
+      <div className="d-flex justify-content-center p-4">
+        <h2 className="text-primary">Editar Orden</h2>
+        <hr className="text-primary" />
+      </div>
+      <div className="d-flex flex-column justify-content-center px-5 py-2">
+        <Row >
+          <Col xs={12} className="d-flex gap-3 flex-column">
+            <span>
+              Seleccionar un mecánico
+              <SelectTrabajadores
+                value={formData.idTrabajador}
+                onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))} />
+            </span>
+            <span>
+              Vehiculo:
+              <SelectVehiculos
+                idCliente={formData.idCliente}
+                value={formData.idVehiculo}
+                onChange={(e) => setFormData(prev => ({ ...prev, idVehiculo: e.target.value }))} />
+            </span>
+          </Col>
+          <Col xs={12} className="">
+            <span>
+              Estimado de finalización:
+              <input
+                type="date"
+                className="form-control rounded-5 py-2"
+                style={{ maxWidth: "370px" }}
+                name="tiempoEstimado"
+                value={formData.tiempoEstimado}
+                onChange={(e) => setFormData(prev => ({ ...prev, tiempoEstimado: e.target.value }))} />
+            </span>
           </Col>
         </Row>
-      </Grid>
+        <Row className="mt-3">
+          <span>
+            Descripción:
+            <textarea
+              className="form-control rounded-4"
+              rows={6}
+              name="descripcion"
+              value={formData.descripcion}
+              onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))} />
+          </span>
+        </Row>
+        <div className="row mt-4">
+          <div className="d-flex col justify-content-start">
+            <Link to={`/flujo-detalles/${idOrden}`}
+              type="button"
+              className="btn btn-dark text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+              <IoIosReturnLeft size={20} />Volver
+            </Link>
+          </div>
+          <div className="d-flex col justify-content-end">
+            <button onClick={cancelarOrden}
+              type="button"
+              className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+              <MdDelete size={20} /> Eliminar
+            </button>
+            <button onClick={actualizarOrden}
+              type="button"
+              className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1 ms-3">
+              <IoMdSave size={20} />Guardar
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

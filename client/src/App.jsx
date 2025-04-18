@@ -80,7 +80,7 @@ const App = () => {
     <div className="">
       {hideHeaderRoutes.includes(location.pathname) ? (
         <Routes>
-
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
           <Route path="/verificar-correo" element={<VerificarCorreo />} />

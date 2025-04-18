@@ -5,6 +5,8 @@ import { MdDeleteSweep } from "react-icons/md";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
+import { CiCircleQuestion } from "react-icons/ci";
+import { CiCalendarDate } from "react-icons/ci";
 
 //URL BASE
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -156,10 +158,10 @@ const Notificaciones = ({ modulo }) => {
                     {notificaciones.length > 0 ? (
                         notificaciones.map((noti) => (
                             <div key={noti.idNotificacion} className="rounded-4 row notification p-3 bg-white w-100 mb-2 shadow-sm">
-                                <div className="fw-bold">{noti.titulo}</div>
-                                <div>{noti.cuerpo}</div>
-                                <div className="text-muted" style={{ fontSize: "0.8rem" }}>{noti.fecha}</div>
-                                <div className="text-end mt-2">
+                                <div className="fw-bold"><CiCircleQuestion size={25} className="text-primary me-1"/> {noti.titulo}</div>
+                                <div className="mt-2 rounded-5">{noti.cuerpo}</div>
+                                <div className="text-muted mt-2" style={{ fontSize: "0.8rem" }}><CiCalendarDate size={15}/> {noti.fecha}</div>
+                                <div className="text-end">
                                     <button className="btn btn-sm rounded-5" onClick={() => Eliminar(noti.idNotificacion)}>
                                         <MdDeleteSweep className="text-danger" size={20} />
                                     </button>
