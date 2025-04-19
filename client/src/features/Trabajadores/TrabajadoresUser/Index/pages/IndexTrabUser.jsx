@@ -29,43 +29,19 @@ const IndexTrabajadores = () => {
   };
 
   return (
-    <div className="grid-container">
-      <nav
-        className="sidebar p-4 rounded-3 shadow-sm" style={{
-          Width: "150px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "5px",
-        }}>
-          
+    <div className="bg-darkest p-4 rounded-4" style={{minHeight: "88vh"}}>
 
-        <Button
-          className="btn btn-sm btn-secondary text-white"
-          style={{
-            width: "300px",
-            height: "100px",
-            margin: "5px",
-          }}>
-          <Link to="/AddSolicitudVacacion" className="btn-link">
+       <div className="mb-3 d-flex gap-4">
+
+          <Link to="/AddSolicitudVacacion" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
             <FaPlane size={24} style={{ color: "#fc8c03",margin:"5px" }} />
             Solicitar Vacaciones
           </Link>
-        </Button>
-
-     
-
-    
-
-
-      </nav>
-
-      <div className="main rounded-3">
-        <div className="article-scroll">
-          <h2>Lista Trabajadores Activos</h2>
+          </div>
+        
+          <h2  style={{ color: 'white' }}> Lista Trabajadores Activos</h2>
           <ListaTrabajadores />
-        </div>
-      </div>
+       
     </div>
   );
 };
