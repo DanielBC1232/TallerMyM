@@ -25,6 +25,7 @@ const IndexTrabajadores = () => {
   };
 
   return (
+
     <div className="p-4 rounded-4 bg-darkest" style={{ minHeight: "88vh" }}>
 
       <div className="d-flex justify-content-between row">
