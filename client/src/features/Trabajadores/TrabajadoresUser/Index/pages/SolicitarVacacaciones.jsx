@@ -4,9 +4,6 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-import "../styles/agregar.css";
-import "../styles/form.css";
-
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const { StringType, DateType } = Schema.Types;
@@ -182,14 +179,12 @@ const CreateSolicitud = () => {
     <div className="form-container">
       <h4 className="text-center text-primary">Solicitar vacaciones</h4>
       <hr className="text-primary" />
-
       <Form
         model={model}
         onChange={setFormValue}
         formValue={formValue}
         fluid
-        onSubmit={handleSubmit}
-      >
+        onSubmit={handleSubmit}>
         <Form.Group>
           <Form.ControlLabel>Fecha de Inicio</Form.ControlLabel>
           <DatePicker

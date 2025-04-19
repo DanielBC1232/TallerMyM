@@ -144,7 +144,7 @@ const IndexVehiculos = () => {
         <input type="text" placeholder="Buscar por placa (ej: abc123)"
           value={filtroPlaca}
           onChange={(e) => setFiltroPlaca(e.target.value)}
-          className=" rounded-5" />
+          className="form-control rounded-5" />
         <ModalAgregarVehiculo />
       </div>
 

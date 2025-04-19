@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useParams, useNavigate } from "react-router-dom";
+import { FaSave } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -23,21 +26,21 @@ const EditarVacaciones = () => {
     const cargarDatos = async () => {
       try {
         setLoading(true);
-        
+
         const authConfig = {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`
           }
         };
-  
+
         const [resTrabajadores, resVacacion] = await Promise.all([
           axios.get(`${BASE_URL}/trabajadores/obtener-trabajadores`, authConfig),
           idVacaciones && axios.get(`${BASE_URL}/trabajadores/obtenerSolicitudVacacion/${idVacaciones}`, authConfig)
         ]);
-  
+
         setTrabajadores(resTrabajadores.data);
-  
+
         if (resVacacion?.data) {
           const vacacion = resVacacion.data;
           setFormData({
@@ -48,13 +51,13 @@ const EditarVacaciones = () => {
             idTrabajador: vacacion.idTrabajador?.toString() || ""
           });
         }
-  
+
       } catch (error) {
         console.error("Error al cargar datos:", error);
-        
+
         if (error.response) {
           const { status } = error.response;
-          
+
           if (status === 401) {
             Swal.fire("Sesión expirada", "Por favor inicie sesión nuevamente", "warning");
             localStorage.removeItem("token");
@@ -65,15 +68,15 @@ const EditarVacaciones = () => {
             return;
           }
         }
-        
+
         Swal.fire("Error", "No se pudieron cargar los datos", "error");
         navigate("/Vacaciones-Index");
-        
+
       } finally {
         setLoading(false);
       }
     };
-  
+
     cargarDatos();
   }, [idVacaciones, navigate]);
 
@@ -87,19 +90,19 @@ const EditarVacaciones = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       setLoading(true);
-      
+
       // Preparar datos con formato correcto
       const datosActualizados = {
         ...formData,
         fechaInicio: new Date(formData.fechaInicio).toISOString(),
         fechaFin: new Date(formData.fechaFin).toISOString(),
         // Asegurar que idTrabajador sea número si es necesario
-        idTrabajador: Number(formData.idTrabajador) 
+        idTrabajador: Number(formData.idTrabajador)
       };
-  
+
       // Configuración de la petición con autenticación
       const response = await axios.put(
         `${BASE_URL}/trabajadores/Edit-Vacaciones/${idVacaciones}`,
@@ -111,7 +114,7 @@ const EditarVacaciones = () => {
           }
         }
       );
-  
+
       // Mostrar confirmación y redirigir
       await Swal.fire({
         title: "¡Éxito!",
@@ -120,15 +123,15 @@ const EditarVacaciones = () => {
         timer: 2000,
         showConfirmButton: false
       });
-  
+
       navigate("/Vacaciones-Index");
-  
+
     } catch (error) {
       console.error("Error al actualizar vacaciones:", error);
-      
+
       // Manejo específico de errores
       let errorMessage = "Error al actualizar la solicitud";
-      
+
       if (error.response) {
         // Errores de autenticación
         if (error.response.status === 401) {
@@ -137,20 +140,20 @@ const EditarVacaciones = () => {
           window.location.href = "/login";
           return;
         }
-        
+
         // Otros errores del servidor
         if (error.response.data?.message) {
           errorMessage = error.response.data.message;
         }
       }
-  
+
       await Swal.fire({
         title: "Error",
         text: errorMessage,
         icon: "error",
         confirmButtonText: "Entendido"
       });
-  
+
     } finally {
       setLoading(false);
     }
@@ -159,7 +162,7 @@ const EditarVacaciones = () => {
   const handleAprobar = async () => {
     try {
       setLoading(true); // Activar estado de carga
-      
+
       // Petición con autenticación
       await axios.put(
         `${BASE_URL}/trabajadores/Aprob-Vacaciones/${idVacaciones}`,
@@ -171,7 +174,7 @@ const EditarVacaciones = () => {
           }
         }
       );
-  
+
       // Feedback al usuario
       await Swal.fire({
         title: "¡Aprobada!",
@@ -180,16 +183,16 @@ const EditarVacaciones = () => {
         timer: 1500,
         showConfirmButton: false
       });
-  
+
       // Redirección
       navigate("/Vacaciones-Index");
-  
+
     } catch (error) {
       console.error("Error al aprobar vacaciones:", error);
-      
+
       // Manejo específico de errores
       let errorMessage = "Error al aprobar la solicitud";
-      
+
       if (error.response) {
         // Error de autenticación
         if (error.response.status === 401) {
@@ -198,20 +201,20 @@ const EditarVacaciones = () => {
           window.location.href = "/login";
           return;
         }
-        
+
         // Usar mensaje del servidor si está disponible
         if (error.response.data?.message) {
           errorMessage = error.response.data.message;
         }
       }
-  
+
       await Swal.fire({
         title: "Error",
         text: errorMessage,
         icon: "error",
         confirmButtonText: "Entendido"
       });
-  
+
     } finally {
       setLoading(false); // Desactivar estado de carga
     }
@@ -228,10 +231,10 @@ const EditarVacaciones = () => {
       });
       return;
     }
-  
+
     try {
       setLoading(true); // Activar estado de carga
-  
+
       // Preparar datos para el rechazo
       const datosRechazo = {
         motivoRechazo: formData.motivoRechazo.trim(),
@@ -239,7 +242,7 @@ const EditarVacaciones = () => {
         idVacaciones: idVacaciones,
         idTrabajador: formData.idTrabajador
       };
-  
+
       // Petición con autenticación
       const response = await axios.put(
         `${BASE_URL}/trabajadores/Rechazar-Vacaciones/${idVacaciones}`,
@@ -251,10 +254,10 @@ const EditarVacaciones = () => {
           }
         }
       );
-  
+
       // Log para desarrollo (opcional)
       console.log("Respuesta del servidor:", response.data);
-  
+
       // Feedback al usuario
       await Swal.fire({
         title: "¡Rechazada!",
@@ -263,16 +266,16 @@ const EditarVacaciones = () => {
         timer: 1500,
         showConfirmButton: false
       });
-  
+
       // Redirección
       navigate("/Vacaciones-Index");
-  
+
     } catch (error) {
       console.error("Error al rechazar vacaciones:", error);
-      
+
       // Manejo específico de errores
       let errorMessage = "Error al rechazar la solicitud";
-      
+
       if (error.response) {
         // Error de autenticación
         if (error.response.status === 401) {
@@ -281,116 +284,100 @@ const EditarVacaciones = () => {
           window.location.href = "/login";
           return;
         }
-        
+
         // Usar mensaje del servidor si está disponible
         if (error.response.data?.message) {
           errorMessage = error.response.data.message;
         }
       }
-  
+
       await Swal.fire({
         title: "Error",
         text: errorMessage,
         icon: "error",
         confirmButtonText: "Entendido"
       });
-  
+
     } finally {
       setLoading(false); // Desactivar estado de carga
     }
   };
 
-  if (loading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="container mt-4">
+    <div className="container mt-5 rounded-4">
       <div className="card shadow">
         <div className="card-header bg-primary text-white">
-          <h2 className="mb-0">Editar Solicitud de Vacaciones</h2>
+          <h2 className="mb-0 text-white">Editar Solicitud de Vacaciones</h2>
         </div>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="idTrabajador" className="form-label">Trabajador *</label>
-              <select
-                className="form-select"
-                id="idTrabajador"
-                name="idTrabajador"
-                value={formData.idTrabajador}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Seleccione trabajador</option>
-                {trabajadores.map(t => (
-                  <option key={t.idTrabajador} value={t.idTrabajador}>
-                    {t.nombreCompleto}
-                  </option>
-                ))}
-              </select>
-            </div>
 
-            <div className="mb-3">
-              <label htmlFor="solicitud" className="form-label">Solicitud</label>
-              <input
-                type="text"
-                className="form-control"
-                id="solicitud"
-                name="solicitud"
-                value={formData.solicitud}
-                onChange={handleChange}
-              />
-            </div>
+            <div className="row px-4">
 
-            <div className="mb-3">
-              <label htmlFor="fechaInicio" className="form-label">Fecha de Inicio</label>
-              <input
-                type="date"
-                className="form-control"
-                id="fechaInicio"
-                name="fechaInicio"
-                value={formData.fechaInicio}
-                onChange={handleChange}
-              />
-            </div>
+              <div className="col col-6">
+                <div className="mb-3">
+                  <label htmlFor="idTrabajador" className="form-label">Empleado:</label>
+                  <input
+                    className="form-control rounded-5"
+                    id="idTrabajador"
+                    name="idTrabajador"
+                    value={formData.nombreCompleto}
+                    onChange={handleChange}
+                    required />
+                </div>
 
-            <div className="mb-3">
-              <label htmlFor="fechaFin" className="form-label">Fecha de Fin</label>
-              <input
-                type="date"
-                className="form-control"
-                id="fechaFin"
-                name="fechaFin"
-                value={formData.fechaFin}
-                onChange={handleChange}
-              />
-            </div>
+                <div className="mb-3">
+                  <label htmlFor="solicitud" className="form-label">Solicitud</label>
+                  <input
+                    type="text"
+                    className="form-control rounded-5"
+                    id="solicitud"
+                    name="solicitud"
+                    value={formData.solicitud}
+                    onChange={handleChange} />
+                </div>
 
-            <div className="mb-3">
-              <label htmlFor="motivoRechazo" className="form-label">Motivo de Rechazo (si aplica)</label>
-              <textarea
-                className="form-control"
-                id="motivoRechazo"
-                name="motivoRechazo"
-                value={formData.motivoRechazo}
-                onChange={handleChange}
-              ></textarea>
-            </div>
+                <div className="mb-3">
+                  <label htmlFor="fechaInicio" className="form-label">Fecha de Inicio</label>
+                  <input
+                    type="date"
+                    className="form-control rounded-5"
+                    id="fechaInicio"
+                    name="fechaInicio"
+                    value={formData.fechaInicio}
+                    onChange={handleChange} />
+                </div>
 
-            <div className="d-flex justify-content-end gap-2">
-              <button type="button" className="btn btn-success" onClick={handleAprobar}>Aprobar</button>
-              <button type="button" className="btn btn-danger" onClick={handleRechazar}>Rechazar</button>
-              <button type="submit" className="btn btn-primary">Guardar Cambios</button>
-              <button type="button" className="btn btn-secondary" onClick={() => navigate("/Vacaciones-Index")}>
+                <div className="mb-3">
+                  <label htmlFor="fechaFin" className="form-label">Fecha de Fin</label>
+                  <input
+                    type="date"
+                    className="form-control rounded-5"
+                    id="fechaFin"
+                    name="fechaFin"
+                    value={formData.fechaFin}
+                    onChange={handleChange} />
+                </div>
+              </div>
+              <div className="col col-6">
+                <div className="mb-3">
+                  <label htmlFor="motivoRechazo" className="form-label">Motivo de Rechazo (si aplica)</label>
+                  <textarea
+                    className="form-control rounded-4"
+                    id="motivoRechazo"
+                    name="motivoRechazo"
+                    value={formData.motivoRechazo}
+                    onChange={handleChange} />
+                </div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-between mx-4 mt-5">
+              <button type="button" className="btn btn-secondary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={() => navigate("/Vacaciones-Index")}>
                 Cancelar
               </button>
+              <button type="button" className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={handleRechazar}><RxCross2 size={20} />Rechazar</button>
+              <button type="button" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={handleAprobar}><FaCheck size={20} />Aprobar</button>
+              <button type="submit" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"><FaSave size={20} />Guardar Cambios</button>
             </div>
           </form>
         </div>

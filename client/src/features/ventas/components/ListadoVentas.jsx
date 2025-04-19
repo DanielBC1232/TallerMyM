@@ -81,12 +81,12 @@ const ListadoVentas = () => {
         <>
             <div className="p-3 bg-darkest" style={{minHeight: "85vh"}}>
                 {/* Sección de filtros */}
-                <div className="d-flex gap-4">
+                <div className="d-flex gap-4 mb-2">
                     <span>
                         <label className="text-gray">Orden:</label>
                         <input
                             placeholder=" # de orden"
-                            className="form-control form-control-sm rounded-5"
+                            className="form-control rounded-5"
                             name="codigoOrden"
                             type="text"
                             value={filtroData.codigoOrden}
@@ -96,7 +96,7 @@ const ListadoVentas = () => {
                         <label className="text-gray">Cliente:</label>
                         <input
                             placeholder=" nombre de cliente"
-                            className="form-control form-control-sm rounded-5"
+                            className="form-control rounded-5"
                             name="nombreCliente"
                             type="text"
                             value={filtroData.nombreCliente}

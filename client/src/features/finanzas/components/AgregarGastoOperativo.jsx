@@ -117,7 +117,7 @@ const AgregarGastoOperativo = () => {
 
             <Modal open={open} onClose={handleClose}>
                 <Modal.Header className="p-3">
-                    <Modal.Title className="text-primary">Registrar Gasto Operativo</Modal.Title>
+                    <Modal.Title className="text-primary text-center">Registrar Gasto Operativo</Modal.Title>
                     <hr className="text-primary" />
                 </Modal.Header>
                 <Modal.Body className="px-3">
@@ -126,7 +126,6 @@ const AgregarGastoOperativo = () => {
                             <label>Tipo de gasto:</label>
                             <select className="form-select rounded-5"
                                 name="tipoGasto"
-                                style={{ height: "40px", fontSize: "16px" }}
                                 onChange={handleInputChange}
                                 value={formData.tipoGasto}>
                                 <option value="">Seleccione...</option>

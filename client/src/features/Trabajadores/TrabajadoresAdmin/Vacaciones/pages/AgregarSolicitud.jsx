@@ -3,9 +3,6 @@
 import { useState, useEffect } from "react";
 import { Button, Form, Schema, SelectPicker, DatePicker } from "rsuite";
 
-import "../styles/agregar.css";
-import "../styles/form.css";
-
 //Url
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -30,7 +27,7 @@ const CreateSolicitud = () => {
   useEffect(() => {
     const fetchTrabajadores = async () => {
       try {
-        const response = await fetch("http://localhost:3000/trabajadores/obteneTrabajadoresMenu");
+        const response = await fetch(`${BASE_URL}/trabajadores/obteneTrabajadoresMenu`);
         if (!response.ok) throw new Error("Error al cargar trabajadores");
         const data = await response.json();
 
@@ -49,12 +46,11 @@ const CreateSolicitud = () => {
     fetchTrabajadores();
   }, []);
 
-
   const handleSubmit = async () => {
     try {
       console.log("Datos enviados:", formValue);
   
-      const response = await fetch("http://localhost:3000/trabajadores/Solicitud-Vacaciones", {
+      const response = await fetch(`${BASE_URL}/trabajadores/Solicitud-Vacaciones`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -87,8 +83,7 @@ const CreateSolicitud = () => {
             onChange={(date) => setFormValue({ ...formValue, FechaInicio: date })}
             format="yyyy-MM-dd"
             oneTap
-            block
-          />
+            block/>
         </Form.Group>
 
         <Form.Group>
@@ -99,8 +94,7 @@ const CreateSolicitud = () => {
             onChange={(date) => setFormValue({ ...formValue, FechaFin: date })}
             format="yyyy-MM-dd"
             oneTap
-            block
-          />
+            block/>
         </Form.Group>
 
         <Form.Group>
@@ -111,8 +105,7 @@ const CreateSolicitud = () => {
             value={formValue.idTrabajador}
             onChange={(value) => setFormValue({ ...formValue, idTrabajador: value })}
             placeholder="Seleccione un trabajador"
-            block
-          />
+            block/>
         </Form.Group>
 
         <Button appearance="primary" onClick={handleSubmit}>

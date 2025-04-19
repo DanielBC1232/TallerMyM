@@ -34,7 +34,7 @@ const IndexTrabajadores = () => {
             <FaPlane size={20} />Solicitar Vacaciones</Link>
         </div>
         <div className="col">
-          <h4 className="text-center text-primary">Lista Trabajadores Activos</h4>
+          <h4 className="text-center text-primary">Lista de Trabajadores Activos</h4>
         </div>
         <div className="col"></div>
         <div className="d-flex justify-content-center row px-5">

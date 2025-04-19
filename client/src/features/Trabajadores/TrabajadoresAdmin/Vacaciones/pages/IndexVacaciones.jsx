@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate, Link } from "react-router-dom";
+import { IoIosReturnLeft } from "react-icons/io";
+import { FaSave } from "react-icons/fa";
+
 export const BASE_URL = import.meta.env.VITE_API_URL;
 const ListarGestVacaciones = () => {
   const [vacaciones, setVacaciones] = useState([]);
@@ -14,7 +17,7 @@ const ListarGestVacaciones = () => {
     try {
       setLoading(true);
       setError("");
-      
+
       const response = await axios.get(
         `${BASE_URL}/trabajadores/obtenerSolicitudVacaciones`,
         {
@@ -24,12 +27,12 @@ const ListarGestVacaciones = () => {
           }
         }
       );
-  
+
       setVacaciones(response.data);
-  
+
     } catch (error) {
       console.error("Error al obtener vacaciones:", error);
-      
+
       // Manejo específico de errores de autenticación
       if (error.response?.status === 401) {
         Swal.fire("Sesión expirada", "Por favor inicie sesión nuevamente", "warning");
@@ -37,12 +40,12 @@ const ListarGestVacaciones = () => {
         window.location.href = "/login";
         return;
       }
-  
+
       // Manejo de otros errores
       const errorMessage = error.response?.data?.message || "Error al obtener las solicitudes de vacaciones";
       setError(errorMessage);
       Swal.fire("Error", errorMessage, "error");
-  
+
     } finally {
       setLoading(false);
     }
@@ -62,76 +65,49 @@ const ListarGestVacaciones = () => {
     navigate(`/EditarVacaciones/${idVacaciones}`);
   };
 
-  if (loading) return <p>Cargando vacaciones...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
-
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Lista de vacaciones</h1>
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Buscar por ID de trabajador"
-          value={filtroTrabajador}
-          onChange={(e) => setfiltroTrabajador(e.target.value)}
-          className="border p-2 rounded"
-        />
+    <div className="p-4 bg-darkest rounded-4" style={{ minHeight: "88vh" }}>
+      <h4 className="text-center text-primary">Lista de vacaciones</h4>
+      <hr className="text-primary mt-3" />
+      <div className="mb-3">
+        <Link to="/trabajadores-admin" className="btn btn-secondary text-white rounded-5 d-flex align-items-bottom justify-content-center gap-1" style={{ width: "100px" }}>
+          <IoIosReturnLeft size={25} />Volver
+        </Link>
       </div>
-      <table className="min-w-full bg-white border">
+      <table className="table table-hover">
         <thead>
           <tr>
-            <th className="py-2 px-4 border">Solicitud</th>
-            <th className="py-2 px-4 border">Fecha Inicio</th>
-            <th className="py-2 px-4 border">Fecha Fin</th>
-            <th className="py-2 px-4 border">Motivo de Rechazo</th>
-            <th className="py-2 px-4 border">Id Trabajador</th>
-            <th className="py-2 px-4 border">Acciones</th>
+            <th className="py-2 px-4 ">Empleado</th>
+            <th className="py-2 px-4 ">Solicitud</th>
+            <th className="py-2 px-4 ">Fecha Inicio</th>
+            <th className="py-2 px-4 ">Fecha Fin</th>
+            <th className="py-2 px-4 ">Motivo de Rechazo</th>
+            <th className="py-2 px-4 ">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {vacacionesFiltrados.map((vacacion) => (
             <tr key={`${vacacion.idVacaciones}-${vacacion.idTrabajador}`}>
-              <td className="py-2 px-4 border">{vacacion.solicitud}</td>
-              <td className="py-2 px-4 border">
+
+              <td className="py-2 px-4 ">{vacacion.nombreTrabajador}</td>
+              <td className="py-2 px-4 ">{vacacion.solicitud}</td>
+              <td className="py-2 px-4 ">
                 {new Date(vacacion.fechaInicio).toLocaleDateString()}
               </td>
-              <td className="py-2 px-4 border">
+              <td className="py-2 px-4 ">
                 {new Date(vacacion.fechaFin).toLocaleDateString()}
               </td>
-              <td className="py-2 px-4 border">{vacacion.motivoRechazo}</td>
-              <td className="py-2 px-4 border">{vacacion.nombreTrabajador}</td>
-              <td className="py-2 px-4 border">
-                <button
-                  onClick={() => handleAprobar(vacacion.idVacaciones)}
-                  className="bg-blue-500 text-white p-2 rounded"
-                >
-                  Ver
+              <td className="py-2 px-4 ">{vacacion.motivoRechazo}</td>
+              <td className="py-2 px-4 ">
+                <button onClick={() => handleAprobar(vacacion.idVacaciones)}
+                  className="btn btn-primary text-white rounded-5 d-flex align-items-bottom justify-content-center gap-1">
+                  Editar
                 </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {vacacionesFiltrados.length === 0 && filtroTrabajador && (
-        <p className="text-red-500 mt-4">
-          No se encontraron vacaciones con ese ID de trabajador.
-        </p>
-      )}
-      <Link to="/trabajadores-admin">
-        <button
-          className="btn btn-secondary btn-sm text-white"
-          style={{
-            backgroundColor: "#4CAF50",
-            color: "white",
-            borderColor: "#d1d5db",
-            padding: "9px 10px",
-            fontSize: "18px",
-            margin: 10,
-          }}
-        >
-          Regresar
-        </button>
-      </Link>
     </div>
   );
 };
