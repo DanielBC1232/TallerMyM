@@ -1,18 +1,17 @@
-//Agregar solcitud de vacaciones
-//import React from "react";
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BrowserRouter as Router, Link } from "react-router-dom";
+import { FaList } from "react-icons/fa6";
+import { IoIosReturnLeft } from "react-icons/io";
+import { IoMdAdd } from "react-icons/io";
 
-import "../styles/agregar.css";
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const ListaTrabajadores = ({ formData, trigger }) => {
   const [datos, setDatos] = useState([]);
-  
+
   useEffect(() => {
     const getTrabajadores = async () => {
       try {
@@ -28,10 +27,10 @@ const ListaTrabajadores = ({ formData, trigger }) => {
         setDatos(data);
       } catch (error) {
         console.error("Error al obtener trabajadores:", error);
-        
+
         if (error.response) {
           const { status } = error.response;
-  
+
           if (status === 401) {
             Swal.fire("Advertencia", "Operación no autorizada", "warning");
             window.location.reload();
@@ -47,21 +46,22 @@ const ListaTrabajadores = ({ formData, trigger }) => {
         }
       }
     };
-    
+
     getTrabajadores();
   }, [formData, trigger]);
 
   return (
-    <div className="p-5">
-      <h4 style={{ textAlign: "center" }}>Listado Trabajadores</h4>
-      <br />
-
-      <div className="mb-3 text-start">
-        <Link to="/Lista-Ausencias" className="btn btn-primary">
-          + Listado de Ausencias
+    <div className="p-4 bg-darkest rounded-4 shadow-sm">
+      <h4 className="text-center text-primary">Listado Trabajadores</h4>
+      <hr className="text-primary" />
+      <div className="px-4 d-flex justify-content-between my-2">
+        <Link to={`/trabajadores-admin`} className="btn btn-secondary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "120px" }}>
+          <IoIosReturnLeft size={25} />Regresar
         </Link>
+        <Link to="/Lista-Ausencias" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "140px" }}>
+          <FaList size={17} /> Ausencias</Link>
       </div>
-      <table className="table table-hover table-striped shadow-sm">
+      <table className="table table-hover">
         <thead>
           <tr>
             <th>Nombre Completo</th>
@@ -74,40 +74,20 @@ const ListaTrabajadores = ({ formData, trigger }) => {
             <tr key={index}>
               <td>{trabajador.nombreCompleto}</td>
               <td>{trabajador.cedula}</td>
-
               <td>
-                <button className="btn btn-secondary btn-sm text-white">
-                  <Link
-                    to={`/Ausencias-Agregar/${trabajador.idTrabajador}`} // implementar backend
-                    className="btn-link"
-                  >
-                    Registrar Ausencia
-                  </Link>
-                </button>
+                <Link
+                  to={`/Ausencias-Agregar/${trabajador.idTrabajador}`} // implementar backend
+                  className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "200px" }}>
+                  <IoMdAdd size={25} />Registrar Ausencia
+                </Link>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <button
-        className="btn btn-secondary btn-sm text-white"
-        style={{
-          backgroundColor: "#4CAF50",
-          color: "white",
-          borderColor: "#d1d5db",
-          padding: "9px 10px",
-          fontSize: "18px",
-          margin: 10,
-        }}
-      >
-        <Link
-          to={`/trabajadores-admin`}
-          className="text-white text-decoration-none"
-        >
-          Regresar
-        </Link>
-      </button>
+
+
     </div>
   );
 };

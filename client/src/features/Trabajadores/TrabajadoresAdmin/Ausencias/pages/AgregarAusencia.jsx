@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Grid, Row, Col } from "rsuite";
-import { getHeight } from "rsuite/esm/DOMHelper";
+import { FaSave } from "react-icons/fa";
+import { IoIosReturnLeft } from "react-icons/io";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -33,15 +33,15 @@ const AgregarAusencia = () => {
               }
             }
           );
-          
+
           setNombreTrabajador(data.nombreCompleto);
-          
+
         } catch (error) {
           console.error("Error al obtener trabajador:", error);
-          
+
           if (error.response) {
             const { status } = error.response;
-            
+
             if (status === 401) {
               Swal.fire("Advertencia", "Operación no autorizada", "warning");
               window.location.reload();
@@ -58,11 +58,9 @@ const AgregarAusencia = () => {
         }
       }
     };
-  
+
     obtenerTrabajador();
   }, [formData.idTrabajador]);
-
-  //--
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -96,9 +94,9 @@ const AgregarAusencia = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Formulario Ausencias", formData);
-  
+
     if (!validarFormulario()) return;
-  
+
     try {
       const response = await axios.post(
         `${BASE_URL}/trabajadores/insert-ausencia`,
@@ -110,22 +108,22 @@ const AgregarAusencia = () => {
           }
         }
       );
-  
+
       await Swal.fire({
         icon: "success",
         title: "Ausencia registrada correctamente",
         showConfirmButton: false,
         timer: 1500
       });
-  
+
       navigate("/Ausencias-Index");
-  
+
     } catch (error) {
       console.error("Error al registrar ausencia:", error);
-      
+
       if (error.response) {
         const { status } = error.response;
-        
+
         if (status === 401) {
           Swal.fire("Advertencia", "Operación no autorizada", "warning");
           window.location.reload();
@@ -137,7 +135,7 @@ const AgregarAusencia = () => {
           return;
         }
       }
-      
+
       await Swal.fire({
         icon: "error",
         title: "Error al registrar ausencia",
@@ -148,75 +146,65 @@ const AgregarAusencia = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 bg-light py-5">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white rounded shadow p-5"
-        style={{ width: '600px' }}
-      >
-        <h3 className="mb-4 text-center">Registrar Nueva Ausencia</h3>
-  
-        <div className="mb-4">
-          <label htmlFor="idTrabajador" className="form-label">
-            idTrabajador *
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            value={nombreTrabajador}
-            disabled
-          />
+    <div className="p-4 bg-darkest rounded-4 shadow-sm mx-auto mt-5" style={{width: "50vh"}}>
+      <form onSubmit={handleSubmit}>
+        <h4 className="text-center text-primary">Registrar Ausencia</h4>
+        <hr className="text-primary" />
+        <div className="px-4">
+          <div className="mb-4">
+            <label htmlFor="idTrabajador" className="form-label text-white">
+              Empleado:
+            </label>
+            <input
+              type="text"
+              className="form-control rounded-5"
+              value={nombreTrabajador}
+              readOnly />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="fechaAusencia" className="form-label text-white">
+              Fecha de Ausencia:
+            </label>
+            <input
+              type="date"
+              className="form-control rounded-5"
+              id="fechaAusencia"
+              name="fechaAusencia"
+              value={formData.fechaAusencia}
+              onChange={handleChange}
+              required />
+          </div>
+
+          <div className="mb-4 form-check">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              id="justificada"
+              name="justificada"
+              checked={formData.justificada}
+              onChange={handleChange}
+            />
+            <label className="form-check-label text-white" htmlFor="justificada">
+              Justificada
+            </label>
+          </div>
         </div>
-  
-        <div className="mb-4">
-          <label htmlFor="fechaAusencia" className="form-label">
-            Fecha de Ausencia *
-          </label>
-          <input
-            type="date"
-            className="form-control"
-            id="fechaAusencia"
-            name="fechaAusencia"
-            value={formData.fechaAusencia}
-            onChange={handleChange}
-            required
-          />
-        </div>
-  
-        <div className="mb-4 form-check">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="justificada"
-            name="justificada"
-            checked={formData.justificada}
-            onChange={handleChange}
-          />
-          <label className="form-check-label" htmlFor="justificada">
-            Justificada
-          </label>
-        </div>
-  
-        <div className="d-flex gap-3">
+        <div className="d-flex gap-3 justify-content-between px-5">
+          <a href="/Ausencias-Index"
+            className="btn btn-secondary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+            <IoIosReturnLeft size={25} />Regresar
+          </a>
           <button
             type="submit"
-            className="btn btn-primary w-50"
-            style={{ backgroundColor: '#4CAF50' }}
-          >
-            Guadar
+            className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+            <FaSave size={20} />Guadar
           </button>
-          <a
-            href="/Ausencias-Index"
-            className="btn w-50 text-white"
-            style={{ backgroundColor: '#6c757d' }} // Cambiá este color a tu gusto
-          >
-            Regresar
-          </a>
         </div>
       </form>
     </div>
   );
-  
+
 };
 
 export default AgregarAusencia;

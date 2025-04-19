@@ -28,7 +28,7 @@ const Header = ({ children }) => {
     if (!token) {
       navigate("/login");
     }
-  }, [navigate]);
+  }, []);
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
@@ -113,17 +113,22 @@ const Header = ({ children }) => {
                 )}
               </NavLink>
             </li>
-            <li className="sidebar-item">
-              <NavLink className="sidebar-link" to="/solicitudes">
-                {({ isActive }) => (
-                  <span className={isActive ? 'text-success' : ''}>
-                    <LuMailSearch className={isActive ? 'text-success' : ''} size={20} />Solicitudes de repuestos
-                  </span>
-                )}
-              </NavLink>
-            </li>
 
-            {idRol != 2 && (
+            {idRol != 1 && (
+              <>
+                <li className="sidebar-item">
+                  <NavLink className="sidebar-link" to="/solicitudes">
+                    {({ isActive }) => (
+                      <span className={isActive ? 'text-success' : ''}>
+                        <LuMailSearch className={isActive ? 'text-success' : ''} size={20} />Solicitudes de repuestos
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {idRol != 1 && (
               <>
                 <li className="sidebar-header">Mi Perfil</li>
                 <li className="sidebar-item">

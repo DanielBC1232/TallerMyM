@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ListaTrabajadores from "../components/ListaTrabajadores"
-import axios from "axios";
-import { Button, Grid, Row, Col, FlexboxGrid, Divider } from "rsuite";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/gtr.css";
 import { HiDocumentAdd } from "react-icons/hi";
 import { LuListTodo } from "react-icons/lu";
 import { FaPlane } from "react-icons/fa";
 import ModalAgregarTrabajador from "../components/ModalAgregarTrabajador";
-//import ModalAgregarAmonestacion from "../../TrabajadoresAdmin/components/ModalAgregarAmonestacion";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 

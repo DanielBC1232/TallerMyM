@@ -146,7 +146,7 @@ const CreateSolicitud = () => {
 
       if (error.response) {
         const { status, data } = error.response;
-        
+
         if (status === 400 && data.error) {
           errorMessage = data.error;
         } else if (status === 401) {
@@ -180,12 +180,13 @@ const CreateSolicitud = () => {
 
   return (
     <div className="form-container">
-      <h3 style={{ marginBottom: '20px' }}>Solicitud de Vacaciones</h3>
-      
-      <Form 
-        model={model} 
-        onChange={setFormValue} 
-        formValue={formValue} 
+      <h4 className="text-center text-primary">Solicitar vacaciones</h4>
+      <hr className="text-primary" />
+
+      <Form
+        model={model}
+        onChange={setFormValue}
+        formValue={formValue}
         fluid
         onSubmit={handleSubmit}
       >
@@ -234,22 +235,20 @@ const CreateSolicitud = () => {
           )}
         </Form.Group>
 
-        <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-          <Button 
-            appearance="primary" 
-            type="submit" 
-            loading={submitting}
-            disabled={submitting || !formValue.FechaInicio || !formValue.FechaFin || !formValue.idTrabajador}
-          >
-            {submitting ? 'Enviando...' : 'Enviar Solicitud'}
-          </Button>
-          <Button 
-            appearance="default" 
+        <div className="d-flex justify-content-between gap-p">
+          <Button className="btn btn-secondary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
             onClick={() => navigate("/trabajadores-user")}
-            disabled={submitting}
-          >
+            disabled={submitting}>
             Cancelar
           </Button>
+
+          <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+            type="submit"
+            loading={submitting}
+            disabled={submitting || !formValue.FechaInicio || !formValue.FechaFin || !formValue.idTrabajador}>
+            {submitting ? 'Enviando...' : 'Enviar Solicitud'}
+          </Button>
+
         </div>
       </Form>
     </div>

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-import "../styles/agregar.css";
+import { IoIosReturnLeft } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -27,10 +29,10 @@ const ListaAusencias = ({ formData, trigger }) => {
         setDatos(data);
       } catch (error) {
         console.error("Error al obtener datos:", error);
-        
+
         if (error.response) {
           const { status } = error.response;
-  
+
           if (status === 401) {
             Swal.fire("Advertencia", "Operación no autorizada", "warning");
             window.location.reload();
@@ -42,7 +44,7 @@ const ListaAusencias = ({ formData, trigger }) => {
             return;
           }
         }
-        
+
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -53,7 +55,7 @@ const ListaAusencias = ({ formData, trigger }) => {
         setLoading(false);
       }
     };
-    
+
     getAusencias();
   }, [formData, trigger]);
 
@@ -82,7 +84,7 @@ const ListaAusencias = ({ formData, trigger }) => {
       cancelButtonColor: "#3085d6",
     }).then(async (result) => {
       if (!result.isConfirmed) return;
-  
+
       try {
         const response = await axios.delete(
           `${BASE_URL}/trabajadores/delete-ausencia/${idAusencia}`,
@@ -93,7 +95,7 @@ const ListaAusencias = ({ formData, trigger }) => {
             }
           }
         );
-  
+
         if (response.status === 200) {
           await Swal.fire({
             icon: "success",
@@ -102,16 +104,16 @@ const ListaAusencias = ({ formData, trigger }) => {
             showConfirmButton: false,
             timer: 1500
           });
-  
+
           // Actualizar el estado eliminando el registro
           setDatos(datos.filter(ausencia => ausencia.idAusencia !== idAusencia));
         }
       } catch (error) {
         console.error("Error al eliminar:", error);
-        
+
         if (error.response) {
           const { status } = error.response;
-          
+
           if (status === 401) {
             Swal.fire("Advertencia", "Operación no autorizada", "warning");
             window.location.reload();
@@ -123,7 +125,7 @@ const ListaAusencias = ({ formData, trigger }) => {
             return;
           }
         }
-  
+
         await Swal.fire({
           icon: "error",
           title: "Error",
@@ -139,9 +141,13 @@ const ListaAusencias = ({ formData, trigger }) => {
   }
 
   return (
-    <div className="p-5">
-      <h2>Lista de Ausencias</h2>
-      <table className="table table-hover table-striped shadow-sm">
+    <div className="p-4 bg-darkest rounded-4 shadow-sm" style={{minHeight: "88vh"}}>
+      <h4 className="text-center text-primary">Lista de ausencias</h4>
+      <hr className="text-primary" />
+      <Link to={`/Ausencias-Index`} className="btn btn-secondary my-2 text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+        style={{ width: "120px" }}><IoIosReturnLeft size={25} />Regresar
+      </Link>
+      <table className="table table-hover">
         <thead>
           <tr>
             <th>ID</th>
@@ -164,17 +170,14 @@ const ListaAusencias = ({ formData, trigger }) => {
               </td>
               <td>
                 <div className="d-flex gap-2">
-                  <button
-                    onClick={() => deleteAusencia(ausencia.idAusencia)}
-                    className="btn btn-danger btn-sm text-white"
-                  >
-                    Eliminar
+                  <button onClick={() => deleteAusencia(ausencia.idAusencia)}
+                    className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                  ><MdDelete size={20}/>Eliminar
                   </button>
                   <Link
                     to={`/ausencias-editar/${ausencia.idAusencia}`}
-                    className="btn btn-secondary btn-sm text-white text-decoration-none"
-                  >
-                    Editar
+                    className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                  ><MdEdit size={20}/>Editar
                   </Link>
                 </div>
               </td>
@@ -182,26 +185,9 @@ const ListaAusencias = ({ formData, trigger }) => {
           ))}
         </tbody>
       </table>
-      <button
-              className="btn btn-secondary btn-sm text-white"
-              style={{
-                backgroundColor: "#4CAF50",
-                color: "white",
-                borderColor: "#d1d5db",
-                padding: "9px 10px",
-                fontSize: "18px",
-                margin: 10,
-              }}
-            >
-              <Link
-                to={`/Ausencias-Index`}
-                className="text-white text-decoration-none"
-              >
-                Regresar
-              </Link>
-            </button>
+
     </div>
-    
+
   );
 };
 

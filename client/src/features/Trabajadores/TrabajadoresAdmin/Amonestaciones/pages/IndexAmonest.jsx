@@ -4,6 +4,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
+import { IoIosReturnLeft } from "react-icons/io";
+import { IoDocumentText } from "react-icons/io5";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -59,11 +61,15 @@ const ListaTrabajadores = ({ formData, trigger }) => {
   }, [formData, trigger]);
 
   return (
-    <div className="p-4 rounded-4 bg-darkest">
+    <div className="p-4 rounded-4 bg-darkest" style={{ minHeight: "88vh" }}>
 
-      <div className="mb-3 text-start">
-        <Link to="/amonestaciones-lista" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
-        <FaPlus size={15}/> Listado Amonestaciones
+      <div className="mb-3 d-flex gap-3 justify-content-between px-4">
+        <Link to={`/trabajadores-admin`} style={{ width: "120px" }}
+          className="btn btn-secondary rounded-5 d-flex align-items-center justify-content-center gap-1">
+          <IoIosReturnLeft size={25} />Volver
+        </Link>
+        <Link style={{ width: "120px" }} to="/amonestaciones-lista" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+        <IoDocumentText size={20}/>Historial
         </Link>
       </div>
       <table className="table table-hover table-striped shadow-sm">
@@ -71,7 +77,7 @@ const ListaTrabajadores = ({ formData, trigger }) => {
           <tr>
             <th>Nombre Completo</th>
             <th>Cédula</th>
-            <th>Acciones</th>
+            <th className="d-flex justify-content-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -79,40 +85,18 @@ const ListaTrabajadores = ({ formData, trigger }) => {
             <tr key={index}>
               <td>{trabajador.nombreCompleto}</td>
               <td>{trabajador.cedula}</td>
-
               <td>
-                <button className="btn btn-secondary btn-sm text-white">
+                <div className="d-flex justify-content-center">
                   <Link
                     to={`/amonestaciones-agregar/${trabajador.idTrabajador}`} // implementar backend
-                    className="btn-link"
-                  >
-                    Generar Amonestacion
-                  </Link>
-                </button>
+                    className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "200px" }}>
+                    <FaPlus size={15} />Generar Amonestacion
+                  </Link></div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      <button
-        className="btn btn-secondary btn-sm text-white"
-        style={{
-          backgroundColor: "#4CAF50",
-          color: "white",
-          borderColor: "#d1d5db",
-          padding: "9px 10px",
-          fontSize: "18px",
-          margin: 10,
-        }}
-      >
-        <Link
-          to={`/trabajadores-admin`}
-          className="text-white text-decoration-none"
-        >
-          Regresar
-        </Link>
-      </button>
     </div>
   );
 };

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-
-import "../styles/agregar.css";
+import { MdDelete } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
+import { IoIosReturnLeft } from "react-icons/io";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -27,7 +28,6 @@ const ListaAmonestaciones = ({ formData, trigger }) => {
     }
   }, [formData?.idTrabajador]); // Optimización de dependencias
 
-
   useEffect(() => {
     const getAmonestaciones = async () => {
       try {
@@ -45,7 +45,7 @@ const ListaAmonestaciones = ({ formData, trigger }) => {
       } catch (error) {
         if (error.response) {
           const { status } = error.response;
-  
+
           if (status === 401) {
             Swal.fire("Advertencia", "Operación no autorizada", "warning");
             window.location.reload();
@@ -70,10 +70,10 @@ const ListaAmonestaciones = ({ formData, trigger }) => {
         setLoading(false);
       }
     };
-  
+
     getAmonestaciones();
   }, [formData, trigger]);
-  
+
 
   const formatFecha = (fechaString) => {
     if (!fechaString) return "-";
@@ -81,81 +81,79 @@ const ListaAmonestaciones = ({ formData, trigger }) => {
     return fecha.toLocaleDateString("es-ES");
   };
 
- const deleteAmonestacion = (idAmonestacion) => {
-  Swal.fire({
-    title: "¿Confirmar eliminación?",
-    text: "¿Estás seguro de eliminar esta amonestación?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Sí, eliminar",
-    cancelButtonText: "Cancelar",
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const response = await axios.delete(
-          `${BASE_URL}/trabajadores/Elim-Amonestacion/${idAmonestacion}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          Swal.fire({
-            icon: "success",
-            title: "Eliminada",
-            text: "La amonestación fue eliminada correctamente",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          setDatos(
-            datos.filter(
-              (amonestacion) => amonestacion.idAmonestacion !== idAmonestacion
-            )
+  const deleteAmonestacion = (idAmonestacion) => {
+    Swal.fire({
+      title: "¿Confirmar eliminación?",
+      text: "¿Estás seguro de eliminar esta amonestación?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.delete(
+            `${BASE_URL}/trabajadores/Elim-Amonestacion/${idAmonestacion}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
           );
-        }
-      } catch (error) {
-        if (error.response) {
-          const { status } = error.response;
 
-          if (status === 401) {
-            Swal.fire("Advertencia", "Operación no autorizada", "warning");
-            window.location.reload();
-          } else if (status === 403) {
-            Swal.fire("Autenticación", "Sesión expirada", "warning");
-            localStorage.clear();
-            window.location.href = "/login";
-          } else {
-            console.error("Error al eliminar:", error);
+          if (response.status === 200) {
             Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: "No se pudo eliminar la amonestación",
-              showConfirmButton: true,
+              icon: "success",
+              title: "Eliminada",
+              text: "La amonestación fue eliminada correctamente",
+              showConfirmButton: false,
+              timer: 1500,
             });
+            setDatos(
+              datos.filter(
+                (amonestacion) => amonestacion.idAmonestacion !== idAmonestacion
+              )
+            );
           }
-        } else {
-          console.error("Error de red:", error);
-          Swal.fire("Error", "Problema de conexión con el servidor", "error");
+        } catch (error) {
+          if (error.response) {
+            const { status } = error.response;
+
+            if (status === 401) {
+              Swal.fire("Advertencia", "Operación no autorizada", "warning");
+              window.location.reload();
+            } else if (status === 403) {
+              Swal.fire("Autenticación", "Sesión expirada", "warning");
+              localStorage.clear();
+              window.location.href = "/login";
+            } else {
+              console.error("Error al eliminar:", error);
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "No se pudo eliminar la amonestación",
+                showConfirmButton: true,
+              });
+            }
+          } else {
+            console.error("Error de red:", error);
+            Swal.fire("Error", "Problema de conexión con el servidor", "error");
+          }
         }
       }
-    }
-  });
-};
-
-
+    });
+  };
   if (loading) {
     return <div className="p-5 text-center">Cargando amonestaciones...</div>;
   }
 
   return (
-    <div className="p-5">
-      <h2>Listado de Amonestaciones Creadas</h2>
-      <table className="table table-hover table-striped shadow-sm">
+    <div className="p-4 bg-darkest rounded-4" style={{minHeight: "88vh"}}>
+      <h2 className="text-white">Historial de Amonestaciones</h2>
+      <table className="table table-hover">
         <thead>
           <tr>
             <th>ID</th>
@@ -179,22 +177,16 @@ const ListaAmonestaciones = ({ formData, trigger }) => {
               <td>{amonestacion.accionTomada || "-"}</td>
               <td>
                 <div className="d-flex gap-2">
-                  <button
-                    onClick={() =>
-                      deleteAmonestacion(amonestacion.idAmonestacion)
-                    }
-                    className="btn btn-danger btn-sm text-white"
-                  >
-                    Eliminar
+                  <button onClick={() =>
+                    deleteAmonestacion(amonestacion.idAmonestacion)
+                  } className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                    <MdDelete size={20} />
                   </button>
-                  <button className="btn btn-secondary btn-sm text-white">
-                    <Link
-                      to={`/amonestaciones-editar/${amonestacion.idAmonestacion}`}
-                      className="text-white text-decoration-none"
-                    >
-                      Editar
-                    </Link>
-                  </button>
+                  <Link
+                    to={`/amonestaciones-editar/${amonestacion.idAmonestacion}`}
+                    className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                    <MdEdit size={20} />Editar
+                  </Link>
                 </div>
               </td>
             </tr>
@@ -202,25 +194,6 @@ const ListaAmonestaciones = ({ formData, trigger }) => {
         </tbody>
       </table>
 
-      <button
-        className="btn btn-secondary btn-sm text-white"
-        style={{
-          backgroundColor: "#4CAF50",
-          color: "white",
-          borderColor: "#d1d5db",
-          padding: "9px 10px",
-          fontSize: "18px",
-          margin: 10,
-        }}
-      >
-        <Link
-          to={`/index-amonestaciones`}
-          className="text-white text-decoration-none"
-        >
-          Regresar
-        </Link>
-      </button>
-      
     </div>
   );
 };

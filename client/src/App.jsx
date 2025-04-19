@@ -43,8 +43,6 @@ import IndexAusencia from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/p
 import AgregarAusencia from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/pages/AgregarAusencia.jsx";
 import EditarAusencia from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/pages/EditarAusencia.jsx";
 import ListaAusencias from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/pages/ListaAusencias.jsx";
-import ListaAusenciasJustificar from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/pages/Lista-Ausencia-Justi.jsx";
-
 
 //Aprobar-rechazar Vacaciones
 import IndexVacaciones from "./features/Trabajadores/TrabajadoresAdmin/Vacaciones/pages/IndexVacaciones.jsx";
@@ -122,12 +120,12 @@ const App = () => {
             {/*Ausencias*/}
             <Route path="/Ausencias-Index" element={<IndexAusencia />} />
             <Route path="/Lista-Ausencias" element={<ListaAusencias />} />
-            <Route path="/Lista-Ausencias-justificar" element={<ListaAusenciasJustificar />} />
             <Route path="/Ausencias-Agregar/:idTrabajador" element={<AgregarAusencia />} />
             <Route path="/Ausencias-Editar/:idAusencia" element={<EditarAusencia />} />
             {/*Vacaciones*/}
             <Route path="/Vacaciones-Index" element={<IndexVacaciones />} />
             <Route path="/EditarVacaciones/:idVacaciones" element={<EditarVacaciones />} />
+            
             {/*-------- USER TRABAJADORES--------*/}
            <Route path="/trabajadores-user" element={<IndexTrabajadoresUser />} />
             {/*Solicitud-Vacaciones */}

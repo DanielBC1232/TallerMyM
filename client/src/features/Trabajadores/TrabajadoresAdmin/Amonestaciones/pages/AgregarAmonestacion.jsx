@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Grid, Row, Col } from "rsuite";
-import "../styles/gtr.css";
+import {  Row, Col } from "rsuite";
+import { IoIosReturnLeft } from "react-icons/io";
+import { FaSave } from "react-icons/fa";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -40,7 +41,7 @@ const AgregarAmonestacion = () => {
         .catch((error) => {
           if (error.response) {
             const { status } = error.response;
-  
+
             if (status === 401) {
               Swal.fire("Advertencia", "Operación no autorizada", "warning");
               window.location.reload();
@@ -61,9 +62,7 @@ const AgregarAmonestacion = () => {
         });
     }
   }, [formData.idTrabajador]);
-  
 
-  //--
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -74,7 +73,7 @@ const AgregarAmonestacion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (validarFormulario()) {
       try {
         console.log(formData);
@@ -88,7 +87,7 @@ const AgregarAmonestacion = () => {
             },
           }
         );
-  
+
         if (response.status === 200 || response.status === 201) {
           Swal.fire({
             icon: "success",
@@ -108,7 +107,7 @@ const AgregarAmonestacion = () => {
       } catch (error) {
         if (error.response) {
           const { status } = error.response;
-  
+
           if (status === 401) {
             Swal.fire("Advertencia", "Operación no autorizada", "warning");
             window.location.reload();
@@ -129,7 +128,6 @@ const AgregarAmonestacion = () => {
       }
     }
   };
-  
 
   const validarFormulario = () => {
     if (!formData.idTrabajador) {
@@ -155,129 +153,99 @@ const AgregarAmonestacion = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="container main mx-auto p-5">
-        <Grid fluid>
-          <Row className="show-grid" gutter={16}>
-            <Col
-              xs={16}
-              className="d-grid gap-5 bg-white shadow-sm p-5 rounded-3"
-            >
-              <Row className="show-grid" gutter={16}>
-                <Col xs={12} className="column">
-                  {/*Select Inner*/}
-                  <div className="mb-3">
-                    <label htmlFor="idTrabajador" className="form-label">
-                      idTrabajador *
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={nombreTrabajador}
-                      disabled
-                    />
-                  </div>
+      <div className="bg-darkest rounded-4 p-4 mx-auto mt-5 shadow" style={{ height: "50vh", width: "80vh" }}>
+        <h3 className="text-white text-center">Nueva amonestación</h3>
+        <hr className="text-primary" />
+        <Row className="d-flex gap-4">
+          <Col xs={12} className="">
+            {/*Select Inner*/}
+            <div className="mb-3">
+              <label htmlFor="idTrabajador" className="form-label text-white">
+                Empleado:
+              </label>
+              <input
+                type="text"
+                className="form-control rounded-5"
+                value={nombreTrabajador}
+                readOnly />
+            </div>
 
-                  <div className="mb-3">
-                    <label htmlFor="fechaAmonestacion" className="form-label">
-                      Fecha de Amonestación *
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      id="fechaAmonestacion"
-                      name="fechaAmonestacion"
-                      value={formData.fechaAmonestacion}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+            <div className="mb-3">
+              <label htmlFor="fechaAmonestacion" className="form-label text-white">
+                Fecha de Amonestación:
+              </label>
+              <input
+                type="date"
+                className="form-control rounded-5"
+                id="fechaAmonestacion"
+                name="fechaAmonestacion"
+                value={formData.fechaAmonestacion}
+                onChange={handleChange}
+                required />
+            </div>
 
-                  <div className="mb-3">
-                    <label htmlFor="tipoAmonestacion" className="form-label">
-                      Tipo de Amonestación *
-                    </label>
-                    <select
-                      className="form-select"
-                      id="tipoAmonestacion"
-                      name="tipoAmonestacion"
-                      value={formData.tipoAmonestacion}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Seleccione un tipo</option>
-                      {tiposAmonestacion.map((tipo) => (
-                        <option key={tipo} value={tipo}>
-                          {tipo}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </Col>
+            <div className="mb-3">
+              <label htmlFor="tipoAmonestacion" className="form-label text-white">
+                Tipo de Amonestación:
+              </label>
+              <select
+                className="form-select rounded-5"
+                id="tipoAmonestacion"
+                name="tipoAmonestacion"
+                value={formData.tipoAmonestacion}
+                onChange={handleChange}
+                required>
+                <option value="">Seleccione un tipo</option>
+                {tiposAmonestacion.map((tipo) => (
+                  <option key={tipo} value={tipo}>
+                    {tipo}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </Col>
 
-                <Col xs={24} md={12}>
-                  <div className="mb-3">
-                    <label htmlFor="motivo" className="form-label">
-                      Motivo *
-                    </label>
-                    <textarea
-                      className="form-control"
-                      id="motivo"
-                      name="motivo"
-                      rows="3"
-                      value={formData.motivo}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+          <Col xs={12}>
+            <div className="mb-3">
+              <label htmlFor="motivo" className="form-label text-white">
+                Motivo:
+              </label>
+              <textarea
+                className="form-control rounded-4"
+                id="motivo"
+                name="motivo"
+                rows="3"
+                value={formData.motivo}
+                onChange={handleChange}
+                required />
+            </div>
 
-                  <div className="mb-3">
-                    <label htmlFor="accionTomada" className="form-label">
-                      Acción Tomada
-                    </label>
-                    <textarea
-                      className="form-control"
-                      id="accionTomada"
-                      name="accionTomada"
-                      rows="3"
-                      value={formData.accionTomada}
-                      onChange={handleChange}
-                    />
-                  </div>
+            <div className="mb-3">
+              <label htmlFor="accionTomada" className="form-label text-white">
+                Acción a tomar:
+              </label>
+              <textarea
+                className="form-control rounded-4"
+                id="accionTomada"
+                name="accionTomada"
+                rows="3"
+                value={formData.accionTomada}
+                onChange={handleChange} />
+            </div>
 
-                  <div className="mb-3">
-                    <button type="submit" className="btn btn-primary" style={{
-                        backgroundColor: "#004680",
-                        color: "white",
-                        borderColor: "#d1d5db",
-                        padding: "9px 10px",
-                        fontSize: "18px",
-                        margin: 10,
-                      }}>
-                      GUARDAR 
-                    </button>
-
-                    <button
-                      type="button"
-                      className="btn btn-secondary btn-sm text-white"
-                      style={{
-                        backgroundColor: "#4CAF50",
-                        color: "white",
-                        borderColor: "#d1d5db",
-                        padding: "9px 10px",
-                        fontSize: "18px",
-                        margin: 10,
-                      }}
-                      onClick={() => navigate("/index-amonestaciones")}
-                     
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Grid>
+          </Col>
+        </Row>
+            <div className="mt-5 d-flex justify-content-between px-4">
+              <button
+                type="button"
+                className="btn btn-secondary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                onClick={() => navigate("/index-amonestaciones")}>
+                <IoIosReturnLeft size={20}/>Volver
+              </button>
+              <button type="submit" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+              <FaSave size={20} />Guardar
+              </button>
+            </div>
       </div>
     </form>
   );

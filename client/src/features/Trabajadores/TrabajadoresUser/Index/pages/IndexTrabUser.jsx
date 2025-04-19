@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ListaTrabajadores from "../components/ListaTrabajadores.jsx";
-import axios from "axios";
 import { FaPlane } from "react-icons/fa";
-import { LuListTodo } from "react-icons/lu";
-import { Button, Grid, Row, Col, FlexboxGrid, Divider } from "rsuite";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/gtr.css";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -29,44 +25,24 @@ const IndexTrabajadores = () => {
   };
 
   return (
-    <div className="grid-container">
-      <nav
-        className="sidebar p-4 rounded-3 shadow-sm" style={{
-          Width: "150px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "5px",
-        }}>
-          
+    <div className="p-4 rounded-4 bg-darkest" style={{ minHeight: "88vh" }}>
 
-        <Button
-          className="btn btn-sm btn-secondary text-white"
-          style={{
-            width: "300px",
-            height: "100px",
-            margin: "5px",
-          }}>
-          <Link to="/AddSolicitudVacacion" className="btn-link">
-            <FaPlane size={24} style={{ color: "#fc8c03",margin:"5px" }} />
-            Solicitar Vacaciones
-          </Link>
-        </Button>
-
-     
-
-    
-
-
-      </nav>
-
-      <div className="main rounded-3">
-        <div className="article-scroll">
-          <h2>Lista Trabajadores Activos</h2>
-          <ListaTrabajadores />
+      <div className="d-flex justify-content-between row">
+        <div className="col">
+          <Link to="/AddSolicitudVacacion" className="btn btn-primary text-white rounded-5 d-flex align-items-bottom justify-content-center gap-1" style={{ width: "200px" }}>
+            <FaPlane size={20} />Solicitar Vacaciones</Link>
+        </div>
+        <div className="col">
+          <h4 className="text-center text-primary">Lista Trabajadores Activos</h4>
+        </div>
+        <div className="col"></div>
+        <div className="d-flex justify-content-center row px-5">
+          <hr className="text-primary mt-3" />
         </div>
       </div>
+      <ListaTrabajadores />
     </div>
+
   );
 };
 
