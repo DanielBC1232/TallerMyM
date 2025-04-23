@@ -43,7 +43,7 @@ const Header = ({ children }) => {
       <nav id="sidebar" className="sidebar shadow-sm">
         <div className="sidebar-content">
           <Link className="sidebar-brand" to="/flujo">
-            <img src="./../public/favicon.png" alt="Descripción del logo" height="60"/>Taller MyM
+            Taller MyM
           </Link>
           {/* icono *** */}
           <hr className="text-primary mx-3 m-0"></hr>
