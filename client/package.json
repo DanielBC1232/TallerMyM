@@ -12,6 +12,7 @@
     "tsc": "tsc",
     "dev-ts": "ts-node-dev src/services/app.ts"
   },
+  "homepage": ".",
   "dependencies": {
     "apexcharts": "^4.5.0",
     "axios": "^1.7.9",

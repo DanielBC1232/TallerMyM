@@ -31,39 +31,39 @@ dotenv.config({
     path: `.env.${process.env.NODE_ENV}` // Carga el archivo .env según el entorno
 });
 
-const __filename = fileURLToPath(import.meta.url); // nombre del archivo actual
-const __dirname = path.dirname(__filename); // directorio actual
-
 const app = express();
 
-// Sirve archivos estáticos desde la carpeta 'dist' (o 'build')
-app.use(express.static(path.join(__dirname, 'dist')));
+// Obtener __dirname en un entorno de módulos ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// Ruta absoluta a la carpeta 'client/dist'
+const clientDistPath = path.resolve(__dirname, '../../../client/dist');
 
-// Si no encuentra la ruta, redirige a index.html
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
+// Servir archivos estáticos desde 'client/dist'
+app.use(express.static(clientDistPath));
 
-app.use(express.json());
-const PORT = process.env.PORT || 3000; // Usa el puerto desde el archivo .env
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en puerto ${PORT}`);
-});
-
+// Configurar CORS antes de las rutas
+const allowedOrigins = [process.env.REACT_URL, 'http://localhost:5173'];
 app.use(cors({
-    origin: process.env.REACT_URL || 'http://localhost:5173/',//react
-    methods: 'GET, POST, PUT, PATCH, DELETE',
+  origin: (origin, callback) => {
+    // Permitir peticiones sin origen (p.ej. tools de prueba)
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Origin not allowed by CORS'));
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  credentials: true
 }));
-connectDB() // conexion BD
-    .then(() => console.log("Conectado a la base de datos"))
-    .catch((err) => {
-        if (err instanceof Error) {
-            console.error("Error en la conexión:", err.message);
-        }
-        else {
-            console.error("Error en la conexión:", err);
-        }
-    });
+
+// Analizar peticiones JSON
+app.use(express.json());
+
+// Conectar a la base de datos
+connectDB()
+  .then(() => console.log('Conectado a la base de datos'))
+  .catch(err => console.error('Error en la conexión:', err));
+
 //* Rutas Inventario
 app.use("/categorias", categoriaRoutes);
 app.use("/marcas", marcaRoutes);
@@ -99,13 +99,14 @@ app.use("/flujo", ordenRoutes);
 //reportes
 app.use("/reportes", reportesRoutes);
 
-//pruebas de enviar correo al arrancar app
-/*
-import { cambioEstadoOrden } from '../models/mailer/mailerBD.js';
 
-try {
-    cambioEstadoOrden();
-  } catch (err) {
-    console.error('Error al ejecutar cambioEstadoOrden:', err);
-  }
-    */
+// Servir archivos estáticos del frontend
+app.use(express.static(clientDistPath));
+// Enrutamiento SPA: todas las rutas no api sirven index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientDistPath, 'index.html'));
+});
+
+// Iniciar servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
