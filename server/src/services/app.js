@@ -2,6 +2,9 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import './tasksCron.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 import imgRoutes from '../routes/inventario/imgRoutes.js';
 import categoriaRoutes from '../routes/inventario/categoriaRoutes.js';
 import marcaRoutes from '../routes/inventario/marcaRoutes.js';
@@ -28,7 +31,19 @@ dotenv.config({
     path: `.env.${process.env.NODE_ENV}` // Carga el archivo .env según el entorno
 });
 
+const __filename = fileURLToPath(import.meta.url); // nombre del archivo actual
+const __dirname = path.dirname(__filename); // directorio actual
+
 const app = express();
+
+// Sirve archivos estáticos desde la carpeta 'dist' (o 'build')
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// Si no encuentra la ruta, redirige a index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
 app.use(express.json());
 const PORT = process.env.PORT || 3000; // Usa el puerto desde el archivo .env
 app.listen(PORT, () => {
