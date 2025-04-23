@@ -4,7 +4,7 @@ import './styles/tables.css';
 import React from "react";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute.jsx";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Router } from "react-router-dom";
 
 // Rutas para Inventario
 
@@ -76,72 +76,74 @@ const App = () => {
 
   return (
     <div className="">
-      {hideHeaderRoutes.includes(location.pathname) ? (
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
-          <Route path="/verificar-correo" element={<VerificarCorreo />} />
 
-        </Routes>
-      ) : (
-        <Header>
+        {hideHeaderRoutes.includes(location.pathname) ? (
           <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
+            <Route path="/verificar-correo" element={<VerificarCorreo />} />
 
-            {/* Rutas de Inventario */}
-            <Route path="/inventario-agregar" element={<Agregar />} />
-            <Route path="/inventario" element={<IndexInventario />} />
-            <Route path="/inventario-detalles/:idProducto" element={<Detalles />} />
-            <Route path="/inventario-editar/:idProducto" element={<Editar />} />
-            <Route path="/solicitudes" element={<Solicitudes />} />
-            {/* Rutas de Flujo */}
-            <Route path="/flujo" element={<IndexFlujo />} />
-            <Route path="/flujo-detalles/:idOrden" element={<DetallesOrden />} />
-            <Route path="/flujo-editar/:idOrden" element={<EditarOrden />} />
-            {/* Rutas de Ventas */}
-            <Route path="/ventas" element={<IndexVentas />} />
-            <Route path="/cotizacion" element={<IndexCotizacion />} />
-            <Route path="/cotizacion-editar/:idCotizacion" element={<EditarCotizacion />} />
-            <Route path="/detalles/:idVenta" element={<Venta />} />
-            {/* Rutas de Finanzas (protegidas) */}
-            <Route path="/gastos-operativos" element={<PrivateRoute element={<GastosOperativos />} />} />
-            <Route path="/Dashboard" element={<PrivateRoute element={<Dashboard />} />} />
-            <Route path="/Reportes" element={<PrivateRoute element={<Reportes />} />} />
-
-            {/*TRABAJADORES*/}
-            {/*--------ADMIN-TRABAJADORES-----------*/}
-            {/*Trabajadores*/}
-            <Route path="/trabajadores-admin" element={<IndexTrabajadoresAdmin />} />
-            {/*Amonestaciones*/}
-            <Route path="/index-amonestaciones" element={<IndexAmonestaciones />} />
-            <Route path="/amonestaciones-lista" element={<ListaAmonestaciones />} />
-            <Route path="/amonestaciones-agregar/:idTrabajador" element={<AgregarAmonestacion />} />
-            <Route path="/amonestaciones-editar/:idAmonestacion" element={<EditarAmonestacion />} />
-            {/*Ausencias*/}
-            <Route path="/Ausencias-Index" element={<IndexAusencia />} />
-            <Route path="/Lista-Ausencias" element={<ListaAusencias />} />
-            <Route path="/Ausencias-Agregar/:idTrabajador" element={<AgregarAusencia />} />
-            <Route path="/Ausencias-Editar/:idAusencia" element={<EditarAusencia />} />
-            {/*Vacaciones*/}
-            <Route path="/Vacaciones-Index" element={<IndexVacaciones />} />
-            <Route path="/EditarVacaciones/:idVacaciones" element={<EditarVacaciones />} />
-            
-            {/*-------- USER TRABAJADORES--------*/}
-           <Route path="/trabajadores-user" element={<IndexTrabajadoresUser />} />
-            {/*Solicitud-Vacaciones */}
-           <Route path="/AddSolicitudVacacion" element={<SolicitarVacaciones />} />
-            {/* Rutas de Clientes */}
-            <Route path="/clientes" element={<IndexClientes />} />
-            <Route path="/cliente-editar/:cedula" element={<EditarCliente />} />
-            {/* Rutas de Vehiculos */}
-            <Route path="/vehiculos" element={<IndexVehiculos />} />
-            <Route path="/vehiculo-editar/:idVehiculo" element={<EditarVehiculo />} />
-            {/* Rutas de Administracion (protegidas) */}
-           <Route path="/administracion" element={<PrivateRoute element={<IndexUsuarios />} />} />
-           <Route path="/usuario-editar/:idUsuario" element={<PrivateRoute element={<EditarUsuario />} />} />
           </Routes>
-        </Header>
-      )}
+        ) : (
+          <Header>
+            <Routes>
+
+              {/* Rutas de Inventario */}
+              <Route path="/inventario-agregar" element={<Agregar />} />
+              <Route path="/inventario" element={<IndexInventario />} />
+              <Route path="/inventario-detalles/:idProducto" element={<Detalles />} />
+              <Route path="/inventario-editar/:idProducto" element={<Editar />} />
+              <Route path="/solicitudes" element={<Solicitudes />} />
+              {/* Rutas de Flujo */}
+              <Route path="/flujo" element={<IndexFlujo />} />
+              <Route path="/flujo-detalles/:idOrden" element={<DetallesOrden />} />
+              <Route path="/flujo-editar/:idOrden" element={<EditarOrden />} />
+              {/* Rutas de Ventas */}
+              <Route path="/ventas" element={<IndexVentas />} />
+              <Route path="/cotizacion" element={<IndexCotizacion />} />
+              <Route path="/cotizacion-editar/:idCotizacion" element={<EditarCotizacion />} />
+              <Route path="/detalles/:idVenta" element={<Venta />} />
+              {/* Rutas de Finanzas (protegidas) */}
+              <Route path="/gastos-operativos" element={<PrivateRoute element={<GastosOperativos />} />} />
+              <Route path="/Dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+              <Route path="/Reportes" element={<PrivateRoute element={<Reportes />} />} />
+
+              {/*TRABAJADORES*/}
+              {/*--------ADMIN-TRABAJADORES-----------*/}
+              {/*Trabajadores*/}
+              <Route path="/trabajadores-admin" element={<IndexTrabajadoresAdmin />} />
+              {/*Amonestaciones*/}
+              <Route path="/index-amonestaciones" element={<IndexAmonestaciones />} />
+              <Route path="/amonestaciones-lista" element={<ListaAmonestaciones />} />
+              <Route path="/amonestaciones-agregar/:idTrabajador" element={<AgregarAmonestacion />} />
+              <Route path="/amonestaciones-editar/:idAmonestacion" element={<EditarAmonestacion />} />
+              {/*Ausencias*/}
+              <Route path="/Ausencias-Index" element={<IndexAusencia />} />
+              <Route path="/Lista-Ausencias" element={<ListaAusencias />} />
+              <Route path="/Ausencias-Agregar/:idTrabajador" element={<AgregarAusencia />} />
+              <Route path="/Ausencias-Editar/:idAusencia" element={<EditarAusencia />} />
+              {/*Vacaciones*/}
+              <Route path="/Vacaciones-Index" element={<IndexVacaciones />} />
+              <Route path="/EditarVacaciones/:idVacaciones" element={<EditarVacaciones />} />
+
+              {/*-------- USER TRABAJADORES--------*/}
+              <Route path="/trabajadores-user" element={<IndexTrabajadoresUser />} />
+              {/*Solicitud-Vacaciones */}
+              <Route path="/AddSolicitudVacacion" element={<SolicitarVacaciones />} />
+              {/* Rutas de Clientes */}
+              <Route path="/clientes" element={<IndexClientes />} />
+              <Route path="/cliente-editar/:cedula" element={<EditarCliente />} />
+              {/* Rutas de Vehiculos */}
+              <Route path="/vehiculos" element={<IndexVehiculos />} />
+              <Route path="/vehiculo-editar/:idVehiculo" element={<EditarVehiculo />} />
+              {/* Rutas de Administracion (protegidas) */}
+              <Route path="/administracion" element={<PrivateRoute element={<IndexUsuarios />} />} />
+              <Route path="/usuario-editar/:idUsuario" element={<PrivateRoute element={<EditarUsuario />} />} />
+            </Routes>
+          </Header>
+        )}
+
     </div>
   );
 };
