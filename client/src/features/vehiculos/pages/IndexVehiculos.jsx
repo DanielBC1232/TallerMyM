@@ -89,6 +89,11 @@ const IndexVehiculos = () => {
       showCancelButton: true,
       confirmButtonText: 'Eliminar',
       cancelButtonText: 'Cancelar',
+      customClass: {
+        confirmButton: 'btn btn-danger rounded-5 me-3',
+        cancelButton: 'btn btn-secondary rounded-5'
+      },
+      buttonsStyling: false,
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {

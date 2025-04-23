@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
-import { IoIosReturnLeft } from "react-icons/io";
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -59,7 +58,7 @@ const ListaAmonestaciones = ({ formData, trigger }) => {
               icon: "error",
               title: "Error",
               text: "No se pudieron cargar las amonestaciones",
-              showConfirmButton: true,
+              showConfirmButton: false,
             });
           }
         } else {

@@ -58,6 +58,7 @@ const ModalAgregarAmonestacion = ({ trabajadores }) => {
           icon: "success",
           timer: 2000,
           timerProgressBar: true,
+          showConfirmButton: false,
         });
         window.location.reload();
       }

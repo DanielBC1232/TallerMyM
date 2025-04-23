@@ -62,6 +62,8 @@ const IngresosChart = () => {
                         icon: "error",
                         title: "Error desconocido",
                         text: "Hubo un error de red o de conexión.",
+                        showConfirmButton: false,
+
                     });
                 }
             }

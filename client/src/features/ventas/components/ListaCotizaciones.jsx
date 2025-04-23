@@ -68,6 +68,11 @@ const ListaCotizaciones = () => {
             showCancelButton: true,
             confirmButtonText: "Eliminar",
             cancelButtonText: "Cancelar",
+            customClass: {
+                confirmButton: 'btn btn-danger rounded-5 me-3',
+                cancelButton: 'btn btn-secondary rounded-5'
+              },
+            buttonsStyling: false,
         }).then((result) => {
             if (result.isConfirmed) { // al confirmar
                 axios.delete(`${BASE_URL}/cotizacion/eliminar-cotizacion/${id}`, {
@@ -127,7 +132,7 @@ const ListaCotizaciones = () => {
                                 icon: "error",
                                 title: "Error de conexión",
                                 text: "Hubo un error al conectar con el servidor.",
-                                showConfirmButton: true,
+                                showConfirmButton: false,
                             });
                         }
                     });

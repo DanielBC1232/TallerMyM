@@ -60,6 +60,7 @@ const Login = () => {
                     icon: 'error',
                     title: 'Credenciales incorrectas',
                     text: message,
+                    showConfirmButton: false
                 });
             } else if (status === 423) {
                 Swal.fire({

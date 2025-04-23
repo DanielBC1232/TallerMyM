@@ -132,7 +132,7 @@ const CreateSolicitud = () => {
         icon: "success",
         title: "¡Solicitud enviada!",
         text: "Tu solicitud de vacaciones ha sido registrada correctamente.",
-        confirmButtonText: "Aceptar",
+        confirmButtonText: false,
       });
 
       navigate("/trabajadores-user");
@@ -160,7 +160,8 @@ const CreateSolicitud = () => {
         icon: "error",
         title: "Error",
         text: errorMessage,
-        confirmButtonText: "Aceptar",
+        showConfirmButton: false,
+
       });
     } finally {
       setSubmitting(false);

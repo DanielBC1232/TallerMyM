@@ -94,7 +94,11 @@ const Detalles = () => {
       text: "¡Este producto o servicio será eliminado permanentemente!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d9534f",
+      customClass: {
+        confirmButton: 'btn btn-danger rounded-5 me-3',
+        cancelButton: 'btn btn-secondary rounded-5'
+      },
+      buttonsStyling: false,
       confirmButtonText: "Eliminar",
       cancelButtonText: "Cancelar",
     }).then((result) => {
@@ -146,6 +150,7 @@ const Detalles = () => {
                   text: "Error al eliminar producto o servicio",
                   icon: "error",
                   showCancelButton: false,
+                  
                 });
                 console.error("Error al eliminar producto:", error);
               }
@@ -352,7 +357,7 @@ const Detalles = () => {
                   to={`/inventario-editar/${idProducto}`}
                   className="btn btn-warning text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
                   style={{ maxWidth: "120px", height: "31px" }}
-                ><MdModeEdit size="20"/> Editar</Link>
+                ><MdModeEdit size="20" /> Editar</Link>
               </div>
             </Row>
           </Col>

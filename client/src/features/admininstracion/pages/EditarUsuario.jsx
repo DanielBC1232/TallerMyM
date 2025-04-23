@@ -124,6 +124,7 @@ const EditarUsuario = () => {
         text: "Usuario actualizado correctamente",
         icon: "success",
         timer: 2000,
+        showConfirmButton: false,
         timerProgressBar: true,
       }).then(() => navigate("/administracion"));
     } catch (error) {

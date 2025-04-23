@@ -13,7 +13,6 @@ import axios from "axios";
 import { Row, Text } from "rsuite";
 import Notificaciones from "../../../components/Notificaciones";
 import "../styles/inv.css";
-import { IoAddSharp } from "react-icons/io5";
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 

@@ -146,7 +146,8 @@ const SelectProductos = ({ idVenta }) => {
         if (!formDataPost.cantidad > 0) {
             Swal.fire({
                 icon: 'warning',
-                title: 'Debe ingresar la cantidad del producto'
+                title: 'Debe ingresar la cantidad del producto',
+                showConfirmButton: false,
             });
             return false;
         }

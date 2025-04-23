@@ -87,6 +87,11 @@ const ListarUsuarios = () => {
       text: textoConfirmacion,
       icon: "warning",
       showCancelButton: true,
+      customClass: {
+        confirmButton: 'btn btn-danger rounded-5 me-3',
+        cancelButton: 'btn btn-secondary rounded-5',
+      },
+      buttonsStyling: false,
       confirmButtonText: `Sí, ${accion}`,
       cancelButtonText: "Cancelar",
     });

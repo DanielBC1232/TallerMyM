@@ -121,8 +121,11 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
       title: "¿Seguro que desea remover este producto?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#6c757d",
+      customClass: {
+        confirmButton: 'btn btn-danger rounded-5 me-3',
+        cancelButton: 'btn btn-secondary rounded-5'
+      },
+    buttonsStyling: false,
       confirmButtonText: "Remover",
       cancelButtonText: "Cancelar"
     }).then(async (result) => {
@@ -146,7 +149,8 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
             text: "Producto removido correctamente",
             icon: "success",
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
+            showConfirmButton: false,
           });
 
         } catch (error) {

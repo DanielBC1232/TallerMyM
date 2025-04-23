@@ -32,7 +32,7 @@ const ListaTrabajadores = ({ formData, trigger }) => {
           Swal.fire({
             icon: "error",
             title: "No se pudo obtener la lista de trabajadores",
-            showConfirmButton: true,
+            showConfirmButton: false,
           });
         }
       } catch (error) {

@@ -61,7 +61,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
         Swal.fire({
           icon: "error",
           title: "No se pudo actualizar el trabajador",
-          showConfirmButton: true,
+          showConfirmButton: false,
         });
       }
     } catch (error) {

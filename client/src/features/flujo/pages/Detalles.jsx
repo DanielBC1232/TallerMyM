@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Grid, Row, Col, Steps, Text, Divider } from "rsuite";
+import { Steps, Text, Divider } from "rsuite";
 import "../styles/flu.module.css";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";

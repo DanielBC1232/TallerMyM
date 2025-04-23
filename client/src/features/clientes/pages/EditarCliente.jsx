@@ -68,6 +68,7 @@ const EditarCliente = () => {
             icon: "error",
             title: "Error",
             text: "No se pudo cargar la información del cliente",
+            showConfirmButton: false,
           });
         }
       }
@@ -81,7 +82,9 @@ const EditarCliente = () => {
       Swal.fire({
         icon: "warning",
         title: "Validación",
-        text: "Por favor complete el formulario correctamente"
+        text: "Por favor complete el formulario correctamente",
+        showConfirmButton: false,
+
       });
       return;
     }
@@ -101,7 +104,9 @@ const EditarCliente = () => {
           Swal.fire({
             icon: "warning",
             title: "Cédula duplicada",
-            text: "Ya existe un cliente con esa cédula"
+            text: "Ya existe un cliente con esa cédula",
+            showConfirmButton: false,
+
           });
         } else if (res.status === 401) {
           Swal.fire({
@@ -138,7 +143,8 @@ const EditarCliente = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Hubo un error al actualizar el cliente"
+        text: "Hubo un error al actualizar el cliente",
+        showConfirmButton: false,
       });
     }
 

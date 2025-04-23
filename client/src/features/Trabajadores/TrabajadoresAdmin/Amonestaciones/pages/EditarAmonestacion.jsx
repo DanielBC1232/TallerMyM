@@ -136,7 +136,6 @@ const EditarAmonestacion = () => {
       icon: "error",
       title: "Error",
       text: mensaje,
-      confirmButtonText: "OK",
     });
   };
 
@@ -234,7 +233,7 @@ const EditarAmonestacion = () => {
             icon: "error",
             title: "Error",
             text: mensajeError,
-            showConfirmButton: true,
+            showConfirmButton: false,
           });
         }
       } else {
@@ -244,7 +243,7 @@ const EditarAmonestacion = () => {
           icon: "error",
           title: "Error de conexión",
           text: "Hubo un problema con la conexión al servidor",
-          showConfirmButton: true,
+          showConfirmButton: false,
         });
       }
     } finally {

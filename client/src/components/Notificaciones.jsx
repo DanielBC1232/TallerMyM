@@ -79,9 +79,13 @@ const Notificaciones = ({ modulo }) => {
             text: "¡Esta notificación desaparecerá de la lista!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#d9534f",
-            confirmButtonText: "Eliminar",
+            customClass: {
+                confirmButton: 'btn btn-danger rounded-5 me-3',
+                cancelButton: 'btn btn-secondary rounded-5'
+              },
+            buttonsStyling: false,
             cancelButtonText: "Cancelar",
+            confirmButtonText: "Eliminar",
         });
 
         if (result.isConfirmed) {

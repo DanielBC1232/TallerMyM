@@ -3,7 +3,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate, Link } from "react-router-dom";
 import { IoIosReturnLeft } from "react-icons/io";
-import { FaSave } from "react-icons/fa";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 const ListarGestVacaciones = () => {

@@ -82,8 +82,11 @@ const IndexClientes = () => {
       text: "Esta acción no se puede deshacer.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      customClass: {
+        confirmButton: 'btn btn-danger rounded-5 me-3',
+        cancelButton: 'btn btn-secondary rounded-5'
+      },
+      buttonsStyling: false,
       confirmButtonText: "Eliminar",
       cancelButtonText: "Cancelar"
     });
@@ -116,6 +119,8 @@ const IndexClientes = () => {
               icon: "warning",
               title: "Operación no autorizada",
               text: "No tienes permisos para realizar esta operación.",
+              showConfirmButton: false,
+
             });
             window.location.reload(); // Recargar si la autorización es inválida
           } else if (error.response.status === 403) {
@@ -123,6 +128,8 @@ const IndexClientes = () => {
               icon: "warning",
               title: "Sesión expirada",
               text: "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
+              showConfirmButton: false,
+
             });
             localStorage.clear();
             window.location.href = "/login"; // Redirigir al login si la sesión ha expirado
@@ -131,6 +138,8 @@ const IndexClientes = () => {
               icon: "error",
               title: "Error",
               text: "No se pudo eliminar el cliente.",
+              showConfirmButton: false,
+
             });
           }
         } else {
@@ -138,6 +147,8 @@ const IndexClientes = () => {
             icon: "error",
             title: "Error desconocido",
             text: "Hubo un error desconocido al eliminar el cliente.",
+            showConfirmButton: false,
+
           });
         }
       }
@@ -149,11 +160,11 @@ const IndexClientes = () => {
   if (error) return <p className="text-danger">{error}</p>;
 
   return (
-    <div className="p-4 rounded-4 bg-darkest" style={{minHeight: "88vh"}}>
+    <div className="p-4 rounded-4 bg-darkest" style={{ minHeight: "88vh" }}>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <input type="text" placeholder="Buscar por cédula" value={filtroCedula}
           onChange={(e) => setFiltroCedula(e.target.value)}
-          className="form-control rounded-5 me-3"/>
+          className="form-control rounded-5 me-3" />
         <ModalAgregarCliente />
       </div>
       <table className="table table-bordered">
@@ -178,14 +189,14 @@ const IndexClientes = () => {
                 <td>{cliente.telefono}</td>
                 <td >
                   <div className="d-flex gap-2">
-                  <button onClick={() => handleEliminar(cliente.cedula)}
-                    className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
-                    <MdDelete  size={20}/>
-                  </button>
-                  <button onClick={() => handleEditar(cliente.cedula)}
-                    className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
-                    <BsPersonFillGear size={20}/>Editar
-                  </button>
+                    <button onClick={() => handleEliminar(cliente.cedula)}
+                      className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                      <MdDelete size={20} />
+                    </button>
+                    <button onClick={() => handleEditar(cliente.cedula)}
+                      className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                      <BsPersonFillGear size={20} />Editar
+                    </button>
                   </div>
                 </td>
               </tr>

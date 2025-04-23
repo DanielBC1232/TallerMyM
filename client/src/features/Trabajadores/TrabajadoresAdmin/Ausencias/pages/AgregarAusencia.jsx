@@ -140,7 +140,7 @@ const AgregarAusencia = () => {
         icon: "error",
         title: "Error al registrar ausencia",
         text: error.response?.data?.message || "Por favor intente nuevamente",
-        showConfirmButton: true
+        showConfirmButton: false
       });
     }
   };

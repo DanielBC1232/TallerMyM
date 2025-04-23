@@ -143,6 +143,8 @@ export const Reportes = () => {
                         icon: "error",
                         title: "Error al descargar el reporte",
                         text: "No se pudo generar el archivo XLSX.",
+                        showConfirmButton: false,
+
                     });
                 }
             } else {
@@ -150,6 +152,8 @@ export const Reportes = () => {
                     icon: "error",
                     title: "Error al descargar el reporte",
                     text: "No se pudo generar el archivo XLSX.",
+                    showConfirmButton: false,
+
                 });
             }
         }
@@ -230,6 +234,8 @@ export const Reportes = () => {
                         icon: "error",
                         title: "Error al descargar el reporte",
                         text: "No se pudo generar el archivo XLSX.",
+                        showConfirmButton: false,
+
                     });
                 }
             } else {
@@ -238,6 +244,8 @@ export const Reportes = () => {
                     icon: "error",
                     title: "Error desconocido",
                     text: "Hubo un error al intentar obtener el reporte.",
+                    showConfirmButton: false,
+
                 });
             }
         }

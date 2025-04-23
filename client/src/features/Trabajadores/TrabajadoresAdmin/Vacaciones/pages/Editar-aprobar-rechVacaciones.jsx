@@ -151,7 +151,7 @@ const EditarVacaciones = () => {
         title: "Error",
         text: errorMessage,
         icon: "error",
-        confirmButtonText: "Entendido"
+        showConfirmButton: false,
       });
 
     } finally {
@@ -212,7 +212,8 @@ const EditarVacaciones = () => {
         title: "Error",
         text: errorMessage,
         icon: "error",
-        confirmButtonText: "Entendido"
+        showConfirmButton: false,
+
       });
 
     } finally {
@@ -227,7 +228,8 @@ const EditarVacaciones = () => {
         title: "Motivo requerido",
         text: "Debe ingresar un motivo de rechazo válido",
         icon: "warning",
-        confirmButtonText: "Entendido"
+        showConfirmButton: false,
+
       });
       return;
     }
@@ -295,7 +297,8 @@ const EditarVacaciones = () => {
         title: "Error",
         text: errorMessage,
         icon: "error",
-        confirmButtonText: "Entendido"
+        showConfirmButton: false,
+
       });
 
     } finally {

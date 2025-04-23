@@ -101,7 +101,7 @@ const AgregarAmonestacion = () => {
           Swal.fire({
             icon: "error",
             title: "No se pudo guardar la amonestación",
-            showConfirmButton: true,
+            showConfirmButton: false,
           });
         }
       } catch (error) {
