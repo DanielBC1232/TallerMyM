@@ -83,7 +83,7 @@ const ListadoVentas = () => {
                 {/* Sección de filtros */}
                 <div className="d-flex gap-4 mb-2">
                     <span>
-                        <label className="text-gray">Orden:</label>
+
                         <input
                             placeholder=" # de orden"
                             className="form-control rounded-5"
@@ -93,7 +93,7 @@ const ListadoVentas = () => {
                             onChange={handleChange}/>
                     </span>
                     <span>
-                        <label className="text-gray">Cliente:</label>
+
                         <input
                             placeholder=" nombre de cliente"
                             className="form-control rounded-5"

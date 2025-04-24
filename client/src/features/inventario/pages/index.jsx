@@ -104,7 +104,7 @@ const IndexInventario = () => {
   return (
     <div className="grid-container px-3 py-3">
       <Notificaciones modulo={'INVENTARIO'} />
-      <div className="p-4 rounded-3 shadow-sm py-5 background-darkest">
+      <div className="p-4 rounded-3 shadow-sm py-5 bg-darkest-secondary">
         <form onSubmit={handleSubmit}>
           <div className="row my-2">
             <Row className="d-flex gap-4 justify-content-start">

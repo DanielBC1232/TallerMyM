@@ -115,7 +115,7 @@ const ListarUsuarios = () => {
         Swal.fire(
           `${accion.charAt(0).toUpperCase() + accion.slice(1)}`,
           `El estado ha sido actualizado correctamente`,
-          "success"
+          "success",
         );
         ObtenerUsuarios(); // Refrescar usuarios
       } catch (error) {

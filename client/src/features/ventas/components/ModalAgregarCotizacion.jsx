@@ -118,7 +118,7 @@ const ModalAgregarCotizacion = ({ onClose, onSuccess }) => {
                     min="0"
                     value={formData.montoTotal}
                     onChange={handleChange}
-                    className="form-control rounded-5"
+                    className="form-control rounded-5 py-2"
                     placeholder="CRC"
                     required />
                 </div>
@@ -130,7 +130,7 @@ const ModalAgregarCotizacion = ({ onClose, onSuccess }) => {
                     min="0"
                     value={formData.montoManoObra}
                     onChange={handleChange}
-                    className="form-control rounded-5"
+                    className="form-control rounded-5 py-2"
                     placeholder="CRC"
                     required
                   />

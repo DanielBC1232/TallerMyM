@@ -75,11 +75,11 @@ export default function RangoPrecio({ value, onChange }) {
   return (
     <div>
       <div className="d-flex justify-content-between">
-        <span>Min:
+        <span className="text-white">Min:
           <p>₡ {localValue[0]}</p>
         </span>
         <div className="mx-5"></div>
-        <span>Max:
+        <span className="text-white">Max:
           <p>₡ {localValue[1]}</p>
         </span>
 

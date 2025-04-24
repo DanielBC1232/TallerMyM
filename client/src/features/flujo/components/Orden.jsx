@@ -12,7 +12,7 @@ const Orden = ({ datos }) => {
     return (
         datos.map((orden) => (
             <Link key={orden.idOrden} to={`/flujo-detalles/${orden.idOrden}`}>
-                <Card size="sm" className="card bg-darkest-secondary shadow-sm p-0" style={{
+                <Card size="sm" className="card bg-darkest-secondary shadow-sm p-0 rounded-4" style={{
                         width: '100%',
                         minHeight: '200px',
                         maxWidth: '100%',
