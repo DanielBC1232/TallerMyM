@@ -449,8 +449,8 @@ const Agregar = () => {
                       onChange={handleChange}
                     >
                       <option value="">Seleccione...</option>
-                      <option value="Producto">Producto</option>
-                      <option value="Servicio">Servicio</option>
+                      <option value="PRODUCTO">Producto</option>
+                      <option value="SERVICIO">Servicio</option>
                     </select>
                   </div>
                 </Col>

@@ -487,8 +487,8 @@ const Editar = () => {
                       onChange={handleChange}
                     >
                       <option value="">Seleccione el tipo</option>
-                      <option value="producto">Producto</option>
-                      <option value="servicio">Servicio</option>
+                      <option value="PRODUCTO">Producto</option>
+                      <option value="SERVICIO">Servicio</option>
                     </select>
                   </div>
                   <div className="mb-3">
