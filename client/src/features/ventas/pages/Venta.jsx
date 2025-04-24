@@ -108,6 +108,17 @@ const Venta = () => {
     return true;
   };
 
+  const verificarLista = () => {
+    if (formDataPago.total == 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Debe seleccionar al menos un producto",
+      });
+      return false;
+    }
+    return true;
+  };
+
   const verificarPagoCompleto = () => {
     if (formDataPago.monto < formDataPago.montoTotal) {
       Swal.fire({
@@ -127,7 +138,7 @@ const Venta = () => {
   const handleSubmitPago = async (e) => {
     e.preventDefault();
 
-    if (verificarMetodoPago() && verificarPagoCompleto()) {
+    if (verificarLista() && verificarMetodoPago() && verificarPagoCompleto()) {
       try {
         const res = await axios.post(`${BASE_URL}/finanzas/registrar-pago/`, formDataPago, {
           headers: {
@@ -246,9 +257,21 @@ const Venta = () => {
     return true;
   };
 
+  const verificarVentaConcretada = () => {
+    if (formDataPago.total == 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "No se ah concretado el pago de la venta",
+        text: "No se puede realizar una devolución sin un pago asociado.",
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmitDevolucion = async (e) => {
     e.preventDefault();
-    if (verificarMotivoDevolucion() && verificarDevolucionCompleta()) {
+    if (verificarVentaConcretada() && verificarMotivoDevolucion() && verificarDevolucionCompleta()) {
       try {
         const res = await axios.post(`${BASE_URL}/finanzas/registrar-devolucion/`, formDataDevolucion, {
           headers: {
@@ -493,7 +516,7 @@ const Venta = () => {
                   onClick={() => GenerarPago(formData.idVenta)}>
                   <MdPayment size={20} />Registrar Pago
                 </button>
-                <button class="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#productos">
+                <button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#productos">
                   <IoMdAdd size={20} />Producto/Servicio
                 </button>
                 <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
@@ -523,7 +546,7 @@ const Venta = () => {
           </div>
         </div>
 
-        <div class="offcanvas offcanvas-end px-0 bg-darkest" id="productos" style={{ width: "800px" }}>
+        <div className="offcanvas offcanvas-end px-0 bg-darkest" id="productos" style={{ width: "800px" }}>
           <div className="">
             <div className="d-flex justify-content-center bg-primary py-2">
               <Text size="xl" className="text-white">Agregar productos</Text>

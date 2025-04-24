@@ -82,7 +82,7 @@ const ListadoOrdenes = () => {
         if (!formData.detalles.trim()) {
             Swal.fire({
                 icon: 'error',
-                title: 'Debe seleccionar un método de pago'
+                title: 'Debe escribir un detalle',
             });
             return false;
         }
@@ -184,11 +184,13 @@ const ListadoOrdenes = () => {
                                 <td className="text-center">{rowData.codigoOrden}</td>
                                 <td className="text-center">{rowData.fechaIngreso}</td>
                                 <td className="text-center">{rowData.nombreCliente}</td>
-                                <td className="d-flex justify-content-center">
-                                    <button
-                                        className="text-white btn btn-primary rounded-4 d-flex align-items-center justify-content-center gap-1"
-                                        onClick={() => GenerarVenta(rowData.idOrden)}>
-                                        <IoMdAdd size={20} />Generar Venta</button>
+                                <td>
+                                    <div className="d-flex justify-content-center">
+                                        <button
+                                            className="text-white btn btn-primary rounded-4 d-flex align-items-center justify-content-center gap-1"
+                                            onClick={() => GenerarVenta(rowData.idOrden)}>
+                                            <IoMdAdd size={20} />Generar Venta</button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -213,7 +215,7 @@ const ListadoOrdenes = () => {
                                 name="detalles"
                                 className="form-control rounded-4"
                                 rows={4}
-                                placeholder="Espacio opcional"
+                                placeholder=""
                                 onChange={handleChange}
                                 value={formData.detalles}
                             ></textarea>
