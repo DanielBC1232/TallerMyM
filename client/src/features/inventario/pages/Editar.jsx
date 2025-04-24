@@ -429,8 +429,6 @@ const Editar = () => {
                 <Col xs={12} sm={6} className="">
                   <div className="mb-3">
                     <label htmlFor="precio" className="form-label">Precio:</label>
-                    <div className="input-group">
-                      <span className="input-group-text">₡</span>
                       <input
                         id="precio"
                         name="precio"
@@ -439,9 +437,7 @@ const Editar = () => {
                         step={0.01}
                         className="form-control rounded-5"
                         value={formData.precio}
-                        onChange={handleChange}
-                      />
-                    </div>
+                        onChange={handleChange}/>
                   </div>
                   <div className="mb-3">
                     <label htmlFor="fechaIngreso" className="form-label">Fecha de ingreso:</label>

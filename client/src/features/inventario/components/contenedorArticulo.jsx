@@ -69,11 +69,13 @@ const ContenedorProductos = ({ formData }) => {
   return (
     <div className="article-container mt-3">
       {listado.map((producto) => (
-        <div key={producto.idProducto} className="article card border-0 rounded rounded-4 pb-2" style={{ width: "300px" }}>
-          <div className="d-flex justify-content-center">
-            <Image src={getImg(producto.img)} fallbackSrc="/noResult.png" alt={producto.nombre}
-              style={{ width: "150px", height: "250px" }} />
-          </div>
+        <div key={producto.idProducto} className="article card border-0 rounded rounded-4 pb-2 overflow-hidden" style={{ width: "300px" }}>
+          <Image
+            src={getImg(producto.img)}
+            fallbackSrc="/noResult.png"
+            alt={producto.nombre}
+            style={{ width: "100%", height: "250px", objectFit: "cover" }}
+          />
           <div className="card-body p-3">
             <div className="text-center">
               <h5 className="fw-bolder text-secondary">{producto.nombre}</h5>
@@ -99,6 +101,7 @@ const ContenedorProductos = ({ formData }) => {
       ))}
     </div>
   );
+  
 };
 
 export default ContenedorProductos;
