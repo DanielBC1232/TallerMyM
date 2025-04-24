@@ -19,12 +19,13 @@ const ListaTrabajadores = ({ formData, trigger }) => {
 
         const cedula = localStorage.getItem("cedula");
         const { data } = await axios.post(
-          `${BASE_URL}/trabajadores/trabajador/cedula/`, { cedula },
+          `${BASE_URL}/trabajadores/trabajador/cedula`, // sin slash final
+          { cedula },
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
         );
 

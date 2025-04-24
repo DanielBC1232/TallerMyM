@@ -74,8 +74,7 @@ const ContenedorProductos = ({ formData }) => {
             src={getImg(producto.img)}
             fallbackSrc="/noResult.png"
             alt={producto.nombre}
-            style={{ width: "100%", height: "250px", objectFit: "cover" }}
-          />
+            style={{ width: "100%", height: "250px", objectFit: "cover" }}/>
           <div className="card-body p-3">
             <div className="text-center">
               <h5 className="fw-bolder text-secondary">{producto.nombre}</h5>
