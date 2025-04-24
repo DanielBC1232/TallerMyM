@@ -71,7 +71,7 @@ const Venta = () => {
     metodoPago: "",
     subtotal: 0,
     iva: 0,
-    total: 0,
+    total: 0
   });
   const [openPago, setOpenPago] = useState(false);
 
@@ -120,19 +120,16 @@ const Venta = () => {
   };
 
   const verificarPagoCompleto = () => {
-    if (formDataPago.monto < formDataPago.montoTotal) {
-      Swal.fire({
-        icon: "warning",
-        title: "El monto a pagar no es suficiente",
-      });
+    const { monto, total } = formDataPago;
+    if (monto < total) {
+      Swal.fire({ icon: "warning", title: "Monto insuficiente" });
       return false;
-    } else {
-      setFormDataPago((prevState) => ({
-        ...prevState,
-        dineroVuelto: parseFloat(prevState.monto - prevState.montoTotal),
-      }));
-      return true;
     }
+    setFormDataPago(prev => ({
+      ...prev,
+      dineroVuelto: parseFloat((monto - total).toFixed(2))
+    }));
+    return true;
   };
 
   const handleSubmitPago = async (e) => {
@@ -340,24 +337,22 @@ const Venta = () => {
   };
 
   /* ============= CALLBACK PARA ACTUALIZAR MONTO TOTAL ============= */
-  const handleUpdateMontoTotal = (nuevosubtotal) => {
+  const handleUpdateMontoTotal = nuevosubtotal => {
     setFormDataPago(prev => {
-      const nuevoIva = nuevosubtotal * 0.13;
-      const nuevoTotal = nuevosubtotal + nuevoIva;
-      const dineroVuelto = parseFloat(prev.monto)
-        ? parseFloat(prev.monto) - nuevoTotal
+      const iva = nuevosubtotal * 0.13;
+      const total = nuevosubtotal + iva;
+      const vuelto = prev.monto - total > 0
+        ? parseFloat((prev.monto - total).toFixed(2))
         : 0;
-
       return {
         ...prev,
         subtotal: nuevosubtotal,
-        iva: nuevoIva,
-        total: nuevoTotal,
-        dineroVuelto: parseFloat(dineroVuelto.toFixed(2)),
+        iva,
+        total,
+        dineroVuelto: vuelto
       };
     });
   };
-
   //* =========== GENERAR FACTURA =========== *//
   const GenerarFactura = async () => {
     try {
@@ -452,7 +447,6 @@ const Venta = () => {
       }
     }
   };
-
 
   /* ============= RENDER ============= */
   return (

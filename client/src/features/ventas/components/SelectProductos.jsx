@@ -325,11 +325,13 @@ const SelectProductos = ({ idVenta }) => {
                                         <td>{producto.nombre}</td>
                                         <td>{producto.marca}</td>
                                         <td>₡ {producto.precio}</td>
-                                        <td className="d-flex justify-content-center">
-                                            {/* USAR MODAL AGREGAR */}
-                                            <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
-                                                onClick={() => AgregarProducto(producto.idProducto)}
-                                            ><FaPlus size={15} />Agregar</button>
+                                        <td>
+                                            <div className="d-flex justify-content-center">
+                                                <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                                                    onClick={() => AgregarProducto(producto.idProducto)}>
+                                                    <FaPlus size={15} />Agregar
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

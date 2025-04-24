@@ -125,7 +125,7 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
         confirmButton: 'btn btn-danger rounded-5 me-3',
         cancelButton: 'btn btn-secondary rounded-5'
       },
-    buttonsStyling: false,
+      buttonsStyling: false,
       confirmButtonText: "Remover",
       cancelButtonText: "Cancelar"
     }).then(async (result) => {
@@ -206,20 +206,21 @@ const ListaProductosVenta = ({ onUpdateMontoTotal }) => {
                   <td className="text-center"> <Text size="lg" className="text-white">x {producto.cantidad}</Text></td>
                   <td className="text-center"><Text size="lg" className="text-white" weight="medium">₡ {producto.montoFinalUnitario}</Text></td>
                   <td className="text-center">
-                    {!existePago && (
-                      <button className="btn btn-sm text-white btn-danger rounded-5 d-flex align-items-center justify-content-center gap-1"
-                        onClick={() =>
-                          RemoverProductoVenta(
-                            producto.idProductoVenta,
-                            producto.idProducto,
-                            producto.cantidad
-                          )
-                        }><MdDelete size={20} /></button>
-                    )}
+                    <div>
+                      {!existePago && (
+                        <button className="btn btn-sm text-white btn-danger rounded-5 d-flex align-items-center justify-content-center gap-1"
+                          onClick={() =>
+                            RemoverProductoVenta(
+                              producto.idProductoVenta,
+                              producto.idProducto,
+                              producto.cantidad
+                            )
+                          }><MdDelete size={20} /></button>
+                      )}
+                    </div>
                   </td>
                 </tr>
-              ))}
-              <td className="p-1 bg-darkest border-0"></td>
+              ))}<tr><td className="p-1 bg-darkest border-0"></td></tr>
               {/* Fila Subtotal */}
               <tr>
                 <td colSpan="2" className="text-center">
