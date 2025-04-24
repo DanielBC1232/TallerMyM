@@ -45,6 +45,7 @@ const Login = () => {
                 localStorage.setItem('idUsuario', response.data.idUsuario);
                 localStorage.setItem('username', response.data.username);
                 localStorage.setItem('email', response.data.email);
+                localStorage.setItem('cedula', response.data.cedula);
                 localStorage.setItem('idRol', response.data.idRol);//1-admin,2-user
 
                 //console.log(response.data);

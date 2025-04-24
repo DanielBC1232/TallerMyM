@@ -5,8 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
-const idUsuario = localStorage.getItem("idUsuario");
-
 const IndexTrabajadores = () => {
   const navigate = useNavigate();
 
@@ -34,7 +32,7 @@ const IndexTrabajadores = () => {
             <FaPlane size={20} />Solicitar Vacaciones</Link>
         </div>
         <div className="col">
-          <h4 className="text-center text-primary">Lista de Trabajadores Activos</h4>
+          <h4 className="text-center text-primary">Mi cuenta</h4>
         </div>
         <div className="col"></div>
         <div className="d-flex justify-content-center row px-5">

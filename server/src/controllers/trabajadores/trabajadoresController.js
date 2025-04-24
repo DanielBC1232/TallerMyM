@@ -69,6 +69,21 @@ const getTrabajadorById = async (req, res) => {
     }
 };
 
+const getTrabajadorByCedula = async (req, res) => {
+    try {
+        const {cedula} = req.body;
+
+        // Usar el método de obtener trabajador por ID del repositorio
+        const trabajador = await TrabajadorRepo.getTrabajadorByCedula(cedula);
+
+        // Enviar la respuesta
+        res.status(200).json(trabajador);
+    } catch (error) {
+        console.error("Error al obtener trabajador:", error);
+        res.status(500).json({ error: "Error al obtener trabajador" });
+    }
+};
+
 const obtenerTrabajadoresMenuDesplegable = async (req, res) => {
     try {
         // Usar el método getMenu del repositorio
@@ -130,4 +145,4 @@ const getTrabajadoresEficientes = async (_req, res) => {
 };
 
 
-export { getTrabajadoresEficientes, insertTrabajador, getTrabajadores, getTrabajadorById, updateTrabajador, deleteTrabajador, obtenerTrabajadoresMenuDesplegable,getTrabxAmonest };
+export { getTrabajadoresEficientes, getTrabajadorByCedula, insertTrabajador, getTrabajadores, getTrabajadorById, updateTrabajador, deleteTrabajador, obtenerTrabajadoresMenuDesplegable,getTrabxAmonest };

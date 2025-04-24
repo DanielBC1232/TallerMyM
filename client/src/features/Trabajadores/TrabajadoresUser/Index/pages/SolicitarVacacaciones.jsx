@@ -1,168 +1,133 @@
-import { useState, useEffect } from "react";
-import { Button, Form, Schema, SelectPicker, DatePicker, Loader } from "rsuite";
+import { useState, useEffect} from "react";
+import { Loader } from "rsuite";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
-const { StringType, DateType } = Schema.Types;
-
-const model = Schema.Model({
-  FechaInicio: DateType()
-    .isRequired("La fecha de inicio es obligatoria")
-    .addRule((value, data) => {
-      if (value && new Date(value) < new Date().setHours(0, 0, 0, 0)) {
-        return "No se pueden solicitar vacaciones en fechas pasadas";
-      }
-      return true;
-    }),
-  FechaFin: DateType()
-    .isRequired("La fecha de fin es obligatoria")
-    .addRule((value, data) => {
-      if (value && data.FechaInicio && new Date(value) < new Date(data.FechaInicio)) {
-        return "La fecha fin no puede ser anterior a la fecha inicio";
-      }
-      return true;
-    }),
-  idTrabajador: StringType().isRequired("El trabajador es obligatorio"),
-});
-
 const CreateSolicitud = () => {
   const navigate = useNavigate();
-  const [trabajadores, setTrabajadores] = useState([]);
+  const [data, setData] = useState(null);
   const [loadingTrabajadores, setLoadingTrabajadores] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [errorTrabajadores, setErrorTrabajadores] = useState(null);
+
   const [formValue, setFormValue] = useState({
-    FechaInicio: null,
-    FechaFin: null,
-    idTrabajador: "",
+    FechaInicio: "",
+    FechaFin: "",
   });
 
   useEffect(() => {
-    const fetchTrabajadores = async () => {
+    const fetchTrabajador = async () => {
       try {
         setLoadingTrabajadores(true);
-        setErrorTrabajadores(null);
+        const cedula = localStorage.getItem("cedula");
+        const token = localStorage.getItem("token");
+        if (!cedula || !token) throw { response: { status: 401 } };
 
-        const response = await axios.get(`${BASE_URL}/trabajadores/obteneTrabajadoresMenu`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`
+        const res = await axios.post(
+          `${BASE_URL}/trabajadores/trabajador/cedula/`,
+          { cedula },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
-
-        if (response.status !== 200) {
-          throw new Error(`Error al cargar trabajadores: ${response.status}`);
-        }
-
-        const data = response.data;
-        setTrabajadores(
-          data.map((trabajador) => ({
-            label: trabajador.nombreCompleto,
-            value: trabajador.idTrabajador.toString(), // Asegurar que sea string para el SelectPicker
-          }))
         );
 
+        setData(res.data);
+        setFormValue(fv => ({
+          ...fv,
+          idTrabajador: res.data.idTrabajador,
+        }));
       } catch (error) {
-        console.error("Error:", error);
-        setErrorTrabajadores("Error al cargar la lista de trabajadores");
-
-        if (error.response) {
-          const { status } = error.response;
-          if (status === 401) {
-            await Swal.fire("Sesión expirada", "Por favor inicie sesión nuevamente", "warning");
-            localStorage.removeItem("token");
-            window.location.href = "/login";
-            return;
-          }
-          if (status === 403) {
-            await Swal.fire("Acceso denegado", "No tiene permisos para ver los trabajadores", "error");
-            return;
-          }
+        const status = error.response?.status;
+        if (status === 401) {
+          await Swal.fire("Sesión expirada", "Por favor inicie sesión nuevamente", "warning");
+          localStorage.removeItem("token");
+          return void (window.location.href = "/login");
         }
-
-        await Swal.fire("Error", "No se pudo cargar la lista de trabajadores", "error");
+        if (status === 403) {
+          await Swal.fire("Acceso denegado", "No tiene permisos para ver los trabajadores", "error");
+          return;
+        }
+        await Swal.fire("Error", "No se pudo cargar el trabajador", "error");
       } finally {
         setLoadingTrabajadores(false);
       }
     };
 
-    fetchTrabajadores();
+    fetchTrabajador();
   }, []);
 
-  const formatDate = (date) => {
-    if (!date) return null;
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+  const formatDate = (s) => {
+    // s: "YYYY-MM-DD"
+    return s;
   };
 
-  const handleSubmit = async () => {
-    if (!formValue.FechaInicio || !formValue.FechaFin || !formValue.idTrabajador) {
-      await Swal.fire("Error", "Por favor complete todos los campos", "error");
-      return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const { FechaInicio, FechaFin } = formValue;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (!FechaInicio || !FechaFin) {
+      return void Swal.fire("Error", "Complete todas las fechas", "error");
+    }
+    const inicio = new Date(FechaInicio);
+    const fin = new Date(FechaFin);
+
+    if (inicio < today) {
+      return void Swal.fire("Error", "No se pueden solicitar fechas pasadas", "error");
+    }
+    if (fin < inicio) {
+      return void Swal.fire("Error", "La fecha fin no puede ser anterior a la inicio", "error");
     }
 
     setSubmitting(true);
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         `${BASE_URL}/trabajadores/Solicitud-Vacaciones`,
         {
-          fechaInicio: formatDate(formValue.FechaInicio),
-          fechaFin: formatDate(formValue.FechaFin),
-          idTrabajador: parseInt(formValue.idTrabajador, 10),
+          fechaInicio: formatDate(FechaInicio),
+          fechaFin: formatDate(FechaFin),
+          idTrabajador: data.idTrabajador,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       if (response.status !== 201) {
-        throw new Error(`Error al registrar la solicitud: ${response.status}`);
+        throw new Error(`Error: ${response.status}`);
       }
 
       await Swal.fire({
         icon: "success",
         title: "¡Solicitud enviada!",
         text: "Tu solicitud de vacaciones ha sido registrada correctamente.",
-        confirmButtonText: false,
+        showConfirmButton: true,
       });
-
       navigate("/trabajadores-user");
-
     } catch (error) {
-      console.error("Error en el envío:", error);
-      let errorMessage = "Hubo un error al registrar la solicitud.";
-
-      if (error.response) {
-        const { status, data } = error.response;
-
-        if (status === 400 && data.error) {
-          errorMessage = data.error;
-        } else if (status === 401) {
-          await Swal.fire("Sesión expirada", "Por favor inicie sesión nuevamente", "warning");
-          localStorage.removeItem("token");
-          window.location.href = "/login";
-          return;
-        } else if (status === 403) {
-          errorMessage = "No tiene permisos para realizar esta acción.";
-        }
+      const status = error.response?.status;
+      let msg = "Hubo un error al registrar la solicitud.";
+      if (status === 400 && error.response.data.error) {
+        msg = error.response.data.error;
+      } else if (status === 401) {
+        await Swal.fire("Sesión expirada", "Por favor inicie sesión nuevamente", "warning");
+        localStorage.removeItem("token");
+        return void (window.location.href = "/login");
+      } else if (status === 403) {
+        msg = "No tiene permisos para realizar esta acción.";
       }
-
-      await Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: errorMessage,
-        showConfirmButton: false,
-
-      });
+      await Swal.fire("Error", msg, "error");
     } finally {
       setSubmitting(false);
     }
@@ -180,73 +145,67 @@ const CreateSolicitud = () => {
     <div className="form-container">
       <h4 className="text-center text-primary">Solicitar vacaciones</h4>
       <hr className="text-primary" />
-      <Form
-        model={model}
-        onChange={setFormValue}
-        formValue={formValue}
-        fluid
-        onSubmit={handleSubmit}>
-        <Form.Group>
-          <Form.ControlLabel>Fecha de Inicio</Form.ControlLabel>
-          <DatePicker
+
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="FechaInicio" className="form-label">
+            Fecha de Inicio
+          </label>
+          <input
+            type="date"
+            id="FechaInicio"
             name="FechaInicio"
+            className="form-control"
             value={formValue.FechaInicio}
-            onChange={(date) => setFormValue({ ...formValue, FechaInicio: date })}
-            format="yyyy-MM-dd"
-            oneTap
-            block
-            disabledDate={date => date < new Date().setHours(0, 0, 0, 0)}
+            onChange={(e) => setFormValue({ ...formValue, FechaInicio: e.target.value })}
+            min={new Date().toISOString().split("T")[0]}
           />
-          <Form.HelpText>No se permiten fechas pasadas</Form.HelpText>
-        </Form.Group>
-
-        <Form.Group>
-          <Form.ControlLabel>Fecha Fin</Form.ControlLabel>
-          <DatePicker
-            name="FechaFin"
-            value={formValue.FechaFin}
-            onChange={(date) => setFormValue({ ...formValue, FechaFin: date })}
-            format="yyyy-MM-dd"
-            oneTap
-            block
-            disabledDate={date => formValue.FechaInicio && date < formValue.FechaInicio}
-          />
-        </Form.Group>
-
-        <Form.Group>
-          <Form.ControlLabel>Seleccionar Trabajador</Form.ControlLabel>
-          <SelectPicker
-            data={trabajadores}
-            name="idTrabajador"
-            value={formValue.idTrabajador}
-            onChange={(value) => setFormValue({ ...formValue, idTrabajador: value })}
-            placeholder="Seleccione un trabajador"
-            block
-            loading={loadingTrabajadores}
-          />
-          {errorTrabajadores && (
-            <Form.ErrorMessage show={!!errorTrabajadores}>
-              {errorTrabajadores}
-            </Form.ErrorMessage>
-          )}
-        </Form.Group>
-
-        <div className="d-flex justify-content-between gap-p">
-          <Button className="btn btn-secondary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
-            onClick={() => navigate("/trabajadores-user")}
-            disabled={submitting}>
-            Cancelar
-          </Button>
-
-          <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
-            type="submit"
-            loading={submitting}
-            disabled={submitting || !formValue.FechaInicio || !formValue.FechaFin || !formValue.idTrabajador}>
-            {submitting ? 'Enviando...' : 'Enviar Solicitud'}
-          </Button>
-
+          <div className="form-text">No se permiten fechas pasadas</div>
         </div>
-      </Form>
+
+        <div className="mb-3">
+          <label htmlFor="FechaFin" className="form-label">
+            Fecha Fin
+          </label>
+          <input
+            type="date"
+            id="FechaFin"
+            name="FechaFin"
+            className="form-control"
+            value={formValue.FechaFin}
+            onChange={(e) => setFormValue({ ...formValue, FechaFin: e.target.value })}
+            min={formValue.FechaInicio || new Date().toISOString().split("T")[0]}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Empleado</label>
+          <input
+            type="text"
+            className="form-control rounded-3"
+            readOnly
+            value={data?.nombreCompleto || ""}
+          />
+        </div>
+
+        <div className="d-flex justify-content-between gap-2">
+          <button
+            type="button"
+            className="btn btn-secondary text-white rounded-5"
+            onClick={() => navigate("/trabajadores-user")}
+            disabled={submitting}
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            className="btn btn-primary text-white rounded-5"
+            disabled={submitting || !formValue.FechaInicio || !formValue.FechaFin}
+          >
+            {submitting ? "Enviando..." : "Enviar Solicitud"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

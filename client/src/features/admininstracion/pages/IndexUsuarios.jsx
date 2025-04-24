@@ -173,6 +173,7 @@ const ListarUsuarios = () => {
           <tr>
             <th className="py-2 px-4">Nombre Usuario</th>
             <th className="py-2 px-4">Email</th>
+            <th className="py-2 px-4">Cedula</th>
             <th className="py-2 px-4">Estado</th>
             <th className="py-2 px-4">Último cambio de contraseña</th>
             <th className="py-2 px-4">Acciones</th>
@@ -192,6 +193,7 @@ const ListarUsuarios = () => {
               <tr key={usuario.idUsuario}>
                 <td className="py-2 px-4">{usuario.username}</td>
                 <td className="py-2 px-4">{usuario.email}</td>
+                <td className="py-2 px-4">{usuario.cedula}</td>
                 <td className="py-2 px-4">{usuario.isLocked ? "Bloqueado" : "Activo"}</td>
                 <td className="py-2 px-4">{usuario.lastPasswordChange ? new Date(usuario.lastPasswordChange).toLocaleDateString() : 'Ninguno'}</td>
                 <td className="py-2 px-4">

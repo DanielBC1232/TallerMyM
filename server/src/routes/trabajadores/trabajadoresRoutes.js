@@ -16,7 +16,7 @@ router.delete("/eliminar-trabajador/:id",authMiddleware, trabajadorController.de
 //Rutas Obtener
 router.get("/obtener-trabajadores",authMiddleware, trabajadorController.getTrabajadores);
 router.get("/obtener-trabajador/:id",authMiddleware, trabajadorController.getTrabajadorById);
-
+router.get("/trabajador/cedula/:cedula",authMiddleware, trabajadorController.getTrabajadorByCedula);
 
 //TRABAJAORES-VACACIONES
 // Rutas CRUD Vacaciones

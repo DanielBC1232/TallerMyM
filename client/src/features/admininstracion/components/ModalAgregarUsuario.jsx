@@ -13,6 +13,7 @@ const ModalAgregarUsuario = () => {
     const [formValue, setFormValue] = useState({
         username: "",
         email: "",
+        cedula: "",
         password: "",
         password2: "",
     });
@@ -25,8 +26,8 @@ const ModalAgregarUsuario = () => {
     const handleSubmit = async (e) => { //SUBBMIT FORM
 
         e.preventDefault();
-        const { username, email, password, password2 } = formValue;
-        if (!username || !email || !password || !password2) {
+        const { username, email, cedula, password, password2 } = formValue;
+        if (!username || !email || !cedula ||!password || !password2) {
             Swal.fire({
                 icon: "warning",
                 title: "Advertencia",
@@ -48,7 +49,7 @@ const ModalAgregarUsuario = () => {
             });
             return;
         }
-        const payload = { username, email, password };
+        const payload = { username, email, cedula, password };
         try {
             const response = await axios.post(// PETICION POST
                 `${BASE_URL}/admin/registrar-usuario`,
@@ -73,6 +74,7 @@ const ModalAgregarUsuario = () => {
                     setFormValue({
                         username: "",
                         email: "",
+                        cedula: "",
                         password: "",
                         password2: "",
                     });
@@ -101,10 +103,18 @@ const ModalAgregarUsuario = () => {
                 navigate("/login"); //No autenticado
             }
             else if (error.response && error.response.status === 409) {
+                const reason = error.response.data?.reason;
+
+                let mensaje = "Conflicto";
+                if (reason === "email_exists") {
+                    mensaje = "El correo ya existe";
+                } else if (reason === "cedula_exists") {
+                    mensaje = "La cédula ya existe";
+                }
                 Swal.fire({
                     icon: "warning",
                     title: "Advertencia",
-                    text: "El correo ya existe",
+                    text: mensaje,
                     showConfirmButton: false,
                 });
             } else {
@@ -127,7 +137,7 @@ const ModalAgregarUsuario = () => {
             <Modal open={open} onClose={handleClose} size="sm">
                 <Modal.Header>
                     <Modal.Title className="text-primary">Registrar Usuario</Modal.Title>
-                    <hr className="text-primary p-0"/>
+                    <hr className="text-primary p-0" />
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={handleSubmit}>
@@ -137,14 +147,13 @@ const ModalAgregarUsuario = () => {
                                     Nombre de usuario:
                                 </label>
                                 <input
-                                    style={{ height: "35px"}}
+                                    style={{ height: "35px" }}
                                     type="text"
                                     className="form-control rounded-5"
                                     name="username"
                                     value={formValue.username}
                                     onChange={handleChange}
-                                    required
-                                />
+                                    required/>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label">
@@ -156,8 +165,19 @@ const ModalAgregarUsuario = () => {
                                     name="email"
                                     value={formValue.email}
                                     onChange={handleChange}
-                                    required
-                                />
+                                    required/>
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="email" className="form-label">
+                                    Cedula:
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control rounded-5"
+                                    name="cedula"
+                                    value={formValue.cedula}
+                                    onChange={handleChange}
+                                    required/>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="password" className="form-label">
@@ -169,8 +189,7 @@ const ModalAgregarUsuario = () => {
                                     name="password"
                                     value={formValue.password}
                                     onChange={handleChange}
-                                    required
-                                />
+                                    required/>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="password2" className="form-label">

@@ -28,6 +28,7 @@ CREATE TABLE USUARIO (
 
     username NVARCHAR(50) NOT NULL UNIQUE, -- Nombre de usuario
     email NVARCHAR(100) NOT NULL UNIQUE, -- Correo electrónico
+	cedula VARCHAR(10) NOT NULL UNIQUE,
     password NVARCHAR(255) NOT NULL, -- Contraseña (hash)
     idRol INT NOT NULL DEFAULT 2, -- FK al rol del usuario, DEFAULT "user"
 
@@ -391,6 +392,5 @@ CREATE TABLE JUSTIFICACIONES_AUSENCIA (
     CONSTRAINT fkAusencia FOREIGN KEY (idAusencia)
         REFERENCES AUSENCIAS(idAusencia) ON DELETE CASCADE
 );
-
 
 --------------------------Ultimas Agregadas--------------------------------

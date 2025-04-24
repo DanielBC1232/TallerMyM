@@ -318,16 +318,6 @@ const EditarVacaciones = () => {
             <div className="row px-4">
 
               <div className="col col-6">
-                <div className="mb-3">
-                  <label htmlFor="idTrabajador" className="form-label">Empleado:</label>
-                  <input
-                    className="form-control rounded-5"
-                    id="idTrabajador"
-                    name="idTrabajador"
-                    value={formData.nombreCompleto}
-                    onChange={handleChange}
-                    required />
-                </div>
 
                 <div className="mb-3">
                   <label htmlFor="solicitud" className="form-label">Solicitud</label>

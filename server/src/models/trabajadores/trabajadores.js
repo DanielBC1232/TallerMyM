@@ -39,8 +39,8 @@ export class TrabajadorRepository {
       const pool = await connectDB();
       const result = await pool.request().input("cedula", sql.VarChar, cedula)
         .query(`
-                    SELECT * FROM TRABAJADOR
-                    WHERE cedula = @cedula`);
+        SELECT * FROM TRABAJADOR
+         WHERE cedula = @cedula`);
       // Si no hay registros, result.recordset estara vacío
       return result.recordset.length > 0 ? result.recordset[0] : null;
     } catch (error) {
@@ -116,14 +116,24 @@ export class TrabajadorRepository {
     }
   }
 
+    // Obtener trabajador por ID
+    async getTrabajadorByCedula(cedula) {
+      try {
+        const pool = await connectDB();
+        const result = await pool
+          .request()
+          .input("cedula", sql.VarChar(50), cedula)
+          .query(`SELECT * FROM TRABAJADOR
+           WHERE cedula = @cedula`);
+        return result.recordset[0]; // Devuelve el registro (el primero si existe)
+      } catch (error) {
+        console.error("Error en obtener trabajador:", error);
+        throw new Error("Error en obtener trabajador");
+      }
+    }
+
   // Actualizar trabajador
-  async updateTrabajador(
-    idTrabajador,
-    nombreCompleto,
-    cedula,
-    salario,
-    seguroSocial
-  ) {
+  async updateTrabajador(idTrabajador,nombreCompleto,cedula,salario,seguroSocial) {
     try {
       const pool = await connectDB();
       const result = await pool

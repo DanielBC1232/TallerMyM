@@ -6,10 +6,11 @@ import { JWT_SECRET } from '../../services/jwtUtils.js';
 import { enviarCorreoVerificacion } from '../../config/mailerConfig.js';
 
 export class Usuario {
-  constructor(username, email, password, idRol) {
+  constructor(username, email, cedula, password, idRol) {
     this.idUsuario = 0; // Se generará automáticamente en la BD
     this.username = username;
     this.email = email;
+    this.cedula = cedula;
     this.password = password; // Se recomienda almacenar un hash en lugar del texto plano
     this.idRol = idRol;
     this.failedLoginAttempts = 0;
@@ -46,7 +47,7 @@ export class UsuarioRepository {
       .input("email", sql.NVarChar, email)
       .query(`
         SELECT 
-          idUsuario, username, email, password, idRol, isLocked, failedLoginAttempts 
+          idUsuario, username, email, cedula, password, idRol, isLocked, failedLoginAttempts 
         FROM USUARIO 
         WHERE email = @email
       `);
@@ -80,11 +81,11 @@ export class UsuarioRepository {
         `);
 
       // Creamos el token JWT
-      const { idUsuario, username, email, idRol } = usuario;
+      const { idUsuario, username, email, cedula, idRol } = usuario;
       const token = jwt.sign(
-        { idUsuario, username, email, idRol },
+        { idUsuario, username, email, cedula, idRol },
         JWT_SECRET,
-        { expiresIn: "1h" } // El token expira en 1 hora
+        { expiresIn: "2h" } // El token expira en 2 horas
       );
 
       return {
@@ -93,6 +94,7 @@ export class UsuarioRepository {
           idUsuario,
           username,
           email,
+          cedula,
           idRol,
           token  //JWT generado
         }
@@ -129,15 +131,38 @@ export class UsuarioRepository {
     }
   }
 
-  // Insertar nuevos usuarios
-  async insertUser(username, email, password) {
+  async existeCedula(cedula) {
     try {
-      const existe = await this.existeCorreo(email);
-      if (existe) {
+      const pool = await connectDB();
+      const result = await pool
+        .request()
+        .input("cedula", sql.VarChar(500), cedula)
+        .query("SELECT 1 FROM USUARIO WHERE cedula = @cedula");
+      return result.recordset.length > 0;
+    } catch (error) {
+      console.error("Error al verificar el correo:", error);
+      throw new Error("Error al verificar existencia de correo");
+    }
+  }
+
+  // Insertar nuevos usuarios
+  async insertUser(username, email, cedula, password) {
+    try {
+      const existeCorreo = await this.existeCorreo(email);
+    if (existeCorreo) {
         const conflict = new Error("Ya existe un usuario con este correo");
         conflict.status = 409;
+        conflict.reason = "email_exists";
         throw conflict;
-      }
+    }
+
+    const existeCedula = await this.existeCedula(cedula);
+    if (existeCedula) {
+        const conflict = new Error("Ya existe un usuario con esta cédula");
+        conflict.status = 409;
+        conflict.reason = "cedula_exists";
+        throw conflict;
+    }
 
       // Hashear la contraseña
       const hashedPassword = await this.sha1Hash(password);
@@ -147,9 +172,10 @@ export class UsuarioRepository {
         .request()
         .input("username", sql.NVarChar(50), username)
         .input("email", sql.NVarChar(100), email)
+        .input("cedula", sql.VarChar(50), cedula)
         .input("password", sql.NVarChar(255), hashedPassword)
-        .query(`INSERT INTO USUARIO (username, email, password)
-                VALUES (@username, @email, @password)`);
+        .query(`INSERT INTO USUARIO (username, email, cedula, password)
+        VALUES (@username, @email, @cedula, @password)`);
     } catch (error) {
       console.error("Error en insert:", error);
       throw new Error("Error al insertar usuario");
@@ -205,6 +231,7 @@ export class UsuarioRepository {
         U.idUsuario,
         U.username,
         U.email,
+        U.cedula,
         U.idRol,
         U.isLocked,
         u.lastPasswordChange,
@@ -230,6 +257,7 @@ export class UsuarioRepository {
         idUsuario,
         username,
         email,
+        cedula,
         idRol
         FROM USUARIO WHERE idUsuario = @idUsuario`);
       return result.recordset[0];

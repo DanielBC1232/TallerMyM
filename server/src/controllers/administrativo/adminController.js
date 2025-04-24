@@ -5,14 +5,17 @@ const UsuarioRepo = new UsuarioRepository();
 // Registrar un usuario
 const registrarUsuario = async (req, res) => {
   try {
-    const { username, email, password } = req.body;//parametros
+    const { username, email, cedula, password } = req.body;//parametros
     //------
-    await UsuarioRepo.insertUser(username, email, password);
+    await UsuarioRepo.insertUser(username, email, cedula, password);
 
     res.status(201).json();
   } catch (error) {
     if (error.status === 409) {
-      return res.status(409).json({ error: error.message });
+      return res.status(409).json({ 
+        error: error.message,
+        reason: error.reason || "conflict"
+      });
     }
     console.error("Error al insertar usuario:", error);
     res.status(500).json({ error: "Error al insertar el usuario" });
