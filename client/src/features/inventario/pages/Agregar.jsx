@@ -437,6 +437,22 @@ const Agregar = () => {
                     <label htmlFor="proveedor" className="form-label">Proveedor:</label>
                     <SelectProveedor value={formData.proveedor} onChange={handleChange} />
                   </div>
+                  <div className="mb-3">
+                    <label htmlFor="tipo" className="form-label">
+                      Tipo:
+                    </label>
+                    <select
+                      id="tipo"
+                      name="tipo"
+                      className="form-select rounded-5"
+                      value={formData.tipo}
+                      onChange={handleChange}
+                    >
+                      <option value="">Seleccione...</option>
+                      <option value="Producto">Producto</option>
+                      <option value="Servicio">Servicio</option>
+                    </select>
+                  </div>
                 </Col>
               </Row>
               <Row className="px-5">

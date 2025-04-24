@@ -40,7 +40,6 @@ export class AmonestacionRepository {
                         @accionTomada
                     )
                 `);
-            console.log("Amonestación insertada exitosamente");
         } catch (error) {
             console.error("Error al insertar amonestación:", error);
             throw new Error("Error al insertar amonestación");
@@ -51,7 +50,6 @@ export class AmonestacionRepository {
     async UpdateAmonestacion(idAmonestacion, datosActualizados) {
         try {
             const pool = await connectDB();
-
             const {
                 idTrabajador,
                 fechaAmonestacion,
@@ -59,9 +57,7 @@ export class AmonestacionRepository {
                 motivo,
                 accionTomada
             } = datosActualizados;
-
             const fechaSQL = fechaAmonestacion ? new Date(fechaAmonestacion) : null;
-
             const result = await pool
                 .request()
                 .input("idAmonestacion", sql.Int, idAmonestacion)
@@ -80,8 +76,6 @@ export class AmonestacionRepository {
                         accionTomada = @accionTomada
                     WHERE idAmonestacion = @idAmonestacion
                 `);
-
-
             return result.rowsAffected[0] > 0;
         } catch (error) {
             console.error("Error al actualizar amonestación:", error);
@@ -147,9 +141,6 @@ export class AmonestacionRepository {
                     FROM AMONESTACIONES
                     WHERE idAmonestacion = @idAmonestacion
                 `);
-                console.log("Paso por el modelo")
-                console.log(result);
-
             return result.recordset[0];
         } catch (error) {
             console.error("Error al obtener amonestación por ID:", error);

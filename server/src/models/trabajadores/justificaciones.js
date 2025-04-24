@@ -31,7 +31,6 @@ export class JustificacionRepository {
             @estado
           )
         `);
-      console.log("Justificación insertada exitosamente");
     } catch (error) {
       console.error("Error al insertar justificación:", error);
       throw new Error("Error al insertar justificación");

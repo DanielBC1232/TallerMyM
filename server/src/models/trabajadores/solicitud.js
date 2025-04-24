@@ -116,20 +116,12 @@ export class SolicitudRepository {
     async RechazarSolicitud(idVacaciones, datosActualizados) {
         try {
             const pool = await connectDB();
-
-            
-            console.log(datosActualizados)
-
-
             const result = await pool
                 .request()
                 .input("idVacaciones", sql.Int, idVacaciones)
                 .input("motivoRechazo", sql.VarChar, datosActualizados)
                 .query(`UPDATE VACACIONES SET solicitud = 'Rechazado', motivoRechazo = @motivoRechazo
                     WHERE idVacaciones = @idVacaciones`);
-                    console.log("Paso por el modelo")
-                    
-
             return result.rowsAffected[0] > 0;
         } catch (error) {
             console.error("Error al rechazar la solicitud:", error);
