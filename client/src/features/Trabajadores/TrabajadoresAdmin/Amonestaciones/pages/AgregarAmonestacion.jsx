@@ -153,7 +153,7 @@ const AgregarAmonestacion = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="bg-darkest rounded-4 p-4 mx-auto mt-5 shadow" style={{ height: "50vh", width: "80vh" }}>
+      <div className="bg-darkest rounded-4 p-4 mx-auto mt-5 shadow" style={{ minHeight: "50vh", width: "80vh" }}>
         <h3 className="text-white text-center">Nueva amonestación</h3>
         <hr className="text-primary" />
         <Row className="d-flex gap-4">

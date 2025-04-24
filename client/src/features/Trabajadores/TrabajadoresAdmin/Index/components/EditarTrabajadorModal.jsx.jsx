@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { Link, useNavigate } from "react-router-dom";
 
 // URL base
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -8,6 +9,7 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
   const [formData, setFormData] = useState({ ...trabajador });
   const [trabajadoresExistentes, setTrabajadoresExistentes] = useState([]);
+  const navigate = useNavigate();
 
   // Cargar trabajadores existentes para el select
   useEffect(() => {
@@ -57,6 +59,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
           showConfirmButton: false,
         });
         onSave(data); // Actualiza lista en componente padre
+        navigate(0); // Recarga la página para reflejar cambios
       } else {
         Swal.fire({
           icon: "error",
