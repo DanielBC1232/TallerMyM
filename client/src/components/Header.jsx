@@ -19,6 +19,8 @@ import { MdAdminPanelSettings } from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
 import { BsPersonGear } from "react-icons/bs";
 import { MdOutlineAttachMoney } from "react-icons/md";
+import { IoIosCheckbox } from "react-icons/io";
+
 //Iconos
 const Header = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -175,6 +177,15 @@ const Header = ({ children }) => {
                     </NavLink>
                   </li>
                   <li className="sidebar-item">
+                    <NavLink className="sidebar-link" to="/solicitudes">
+                      {({ isActive }) => (
+                        <span className={isActive ? 'text-success' : ''}>
+                          <IoIosCheckbox className={isActive ? 'text-success' : ''} size={20} />Solicitudes de Repuestos
+                        </span>
+                      )}
+                    </NavLink>
+                  </li>
+                  <li className="sidebar-item">
                     <NavLink className="sidebar-link" to="/Reportes">
                       {({ isActive }) => (
                         <span className={isActive ? 'text-success' : ''}>
@@ -193,11 +204,6 @@ const Header = ({ children }) => {
                       )}
                     </NavLink>
                   </li>
-
-
-
-
-
                 </>
               )}
             </div>
