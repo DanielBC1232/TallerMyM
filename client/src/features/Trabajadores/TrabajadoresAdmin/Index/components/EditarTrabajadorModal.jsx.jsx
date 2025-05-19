@@ -131,7 +131,9 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
                   name="cedula"
                   value={formData.cedula || ""}
                   onChange={handleChange}
-                  className="form-control rounded-5"/>
+                  className="form-control rounded-5"
+                  readOnly disabled
+                  />
               </div>
 
               <div className="mb-3">

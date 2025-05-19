@@ -163,7 +163,7 @@ BEGIN
     INSERT INTO NOTIFICACIONES (titulo, cuerpo, modulo, tipo)
     SELECT 
         'Orden Atrasada', 
-        'La orden con c�digo ' + O.codigoOrden + ' se encuentra atrasada.', 
+        'La orden con codigo ' + O.codigoOrden + ' se encuentra atrasada.', 
         'flujo', 
         'error'
     FROM @OrdenesAtrasadas OA
@@ -173,7 +173,7 @@ BEGIN
         FROM NOTIFICACIONES N 
         WHERE N.titulo = 'Orden Atrasada' 
         AND N.modulo = 'flujo' 
-        AND N.cuerpo LIKE '%c�digo ' + O.codigoOrden + '%'
+        AND N.cuerpo LIKE '%codigo ' + O.codigoOrden + '%'
     );
 
     -- Marcar �rdenes como NO atrasadas (en condicional contraria)

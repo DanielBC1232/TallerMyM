@@ -168,11 +168,11 @@ const EditarCliente = () => {
         </Form.Group>
         <Form.Group>
           <Form.ControlLabel>Cédula</Form.ControlLabel>
-          <Form.Control className="rounded-5" name="cedula" />
+          <Form.Control className="rounded-5" name="cedula" readOnly disabled/>
         </Form.Group>
         <Form.Group>
           <Form.ControlLabel>Correo</Form.ControlLabel>
-          <Form.Control className="rounded-5" name="correo" type="email" />
+          <Form.Control className="rounded-5" name="correo" type="email"  />
         </Form.Group>
         <Form.Group>
           <Form.ControlLabel>Teléfono</Form.ControlLabel>

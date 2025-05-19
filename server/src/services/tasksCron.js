@@ -11,11 +11,6 @@ const job = new CronJob('0 * * * *', async () => {
 
         //---------------
 
-        console.log('[CRON] Ejecutando ACTUALIZAR_ORDENES_ATRASADAS...');
-        await pool.request().execute('ACTUALIZAR_ORDENES_ATRASADAS');
-
-        //---------------
-
         console.log('[CRON] Ejecutando SP_NOTIFICACION_PAGO_ATRASADO...');
         await pool.request().execute('SP_NOTIFICACION_PAGO_ATRASADO');
 
@@ -23,6 +18,11 @@ const job = new CronJob('0 * * * *', async () => {
 
         console.log('[CRON] Ejecutando SP_BLOQUEO_INACTIVIDAD...');
         await pool.request().execute('SP_BLOQUEO_INACTIVIDAD');
+
+        //---------------
+
+        console.log('[CRON] Ejecutando ACTUALIZAR_ORDENES_ATRASADAS...');
+        await pool.request().execute('ACTUALIZAR_ORDENES_ATRASADAS');
 
         console.log('[CRON] - Ejecuciones exitosas');
     } catch (error) {

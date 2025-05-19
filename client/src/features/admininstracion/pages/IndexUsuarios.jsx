@@ -76,11 +76,21 @@ const ListarUsuarios = () => {
   };
 
   const handleCambiarEstado = async (idUsuario, estado) => {
-    const accion = estado === 1 ? "activar" : "desactivar";
-    const textoConfirmacion =
-      estado === 1
-        ? "Esta acción activará al usuario."
-        : "Esta acción desactivará al usuario.";
+
+    console.log(estado);
+
+
+    var accion = "";
+    var textoConfirmacion = "";
+
+    if (estado === 0) {
+      accion = "activar";
+      textoConfirmacion = "Esta acción activará al usuario."
+
+    } else if (estado === 1) {
+      accion = "desactivar";
+      textoConfirmacion = "Esta acción desactivará al usuario."
+    }
 
     const confirmacion = await Swal.fire({
       title: "¿Estás seguro?",

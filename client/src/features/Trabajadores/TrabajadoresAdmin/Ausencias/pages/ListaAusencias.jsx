@@ -153,7 +153,7 @@ const ListaAusencias = ({ formData, trigger }) => {
       <table className="table table-hover">
         <thead>
           <tr>
-            <th>ID</th>
+
             <th>Trabajador</th>
             <th>Fecha Ausencia</th>
             <th>Estado</th>
@@ -163,7 +163,6 @@ const ListaAusencias = ({ formData, trigger }) => {
         <tbody>
           {datos.map((ausencia) => (
             <tr key={ausencia.idAusencia}>
-              <td>{ausencia.idAusencia}</td>
               <td>{ausencia.nombreTrabajador}</td>
               <td>{formatFecha(ausencia.fechaAusencia)}</td>
               <td>
