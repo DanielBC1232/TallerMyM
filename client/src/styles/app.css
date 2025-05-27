@@ -2,6 +2,7 @@
 [data-bs-theme=light] {
     --bs-darkest: rgb(34, 47, 61);
     --bs-darkest-secondary: rgb(44, 57, 71);
+    --bs-success-dark: #354e47;
     --bs-blue: #3b7ddd;
     --bs-indigo: #0a0a0a;
     --bs-purple: #6f42c1;
@@ -121,6 +122,10 @@
     --bs-form-invalid-border-color: #dc3545
 }
 
+.rs-modal-body{
+    overflow: hidden !important;
+}
+
 .article-container {
     display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
@@ -131,7 +136,7 @@
 .login-page {
     position: relative;
     min-height: 100vh;
-    background-image: url('../../public/taller-mecanico.png');
+    background-image: url('/taller-mecanico.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -207,13 +212,13 @@ button:active {
 .floating-button {
     width: 55px;
     height: 55px;
-    background-color: #3B7CDC;
+    background-color: var(--bs-success);
     color: #fff;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 2px 2px 3px #999;
+    box-shadow: 2px 2px 3px #2c3c44;
     border: none;
     cursor: pointer;
     padding: 0;
@@ -222,21 +227,23 @@ button:active {
 }
 
 .floating-button:hover {
-    color: #005aa3;
+    color: var(--bs-success);
     background-color: #fff;
+    background-color: #2e4c5a;
+
 }
 
 .notification-badge {
     position: absolute;
     top: -5px;
     right: -5px;
-    background-color: red;
+    background-color: rgb(199, 24, 106);
     color: white;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: bold;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -251,7 +258,6 @@ button:active {
 .sidebar {
     width: 250px;
     min-width: 250px;
-    background: #f8f9fa;
     overflow-x: hidden;
     transition: width 0.5s ease, opacity 0.3s ease;
     opacity: 1;
@@ -6514,7 +6520,11 @@ fieldset:disabled .btn {
 
 .border-light {
     --bs-border-opacity: 1;
-    border-color: rgba(var(--bs-light-rgb), var(--bs-border-opacity)) !important
+    border-color: #354352 !important
+}
+
+.border-green{
+    border-color: #4c7279 !important
 }
 
 .border-dark {
@@ -8093,9 +8103,19 @@ fieldset:disabled .btn {
     background-color: rgb(34, 47, 61) !important
 }
 
+.bg-dark-green {
+    --bs-bg-opacity: 1;
+    background-color: #4c7279 !important
+}
+
 .bg-darkest-secondary {
     --bs-bg-opacity: 1;
     background-color: rgb(44, 57, 71) !important
+}
+
+.bg-success-dark {
+    --bs-bg-opacity: 1;
+    background-color: rgb(6,31,31) !important
 }
 
 .bg-black {

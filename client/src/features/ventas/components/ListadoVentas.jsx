@@ -79,28 +79,28 @@ const ListadoVentas = () => {
 
     return (
         <>
-            <div className="p-3 bg-darkest" style={{minHeight: "85vh"}}>
+            <div className="p-3 bg-darkest" style={{ minHeight: "85vh" }}>
                 {/* Sección de filtros */}
                 <div className="d-flex gap-4 mb-2">
                     <span>
 
                         <input
-                            placeholder=" # de orden"
+                            placeholder=" Código de Orden"
                             className="form-control rounded-5"
                             name="codigoOrden"
                             type="text"
                             value={filtroData.codigoOrden}
-                            onChange={handleChange}/>
+                            onChange={handleChange} />
                     </span>
                     <span>
-
                         <input
-                            placeholder=" nombre de cliente"
+                            placeholder=" Nombre del cliente"
                             className="form-control rounded-5"
                             name="nombreCliente"
                             type="text"
                             value={filtroData.nombreCliente}
-                            onChange={handleChange}/>
+                            onChange={handleChange}
+                        />
                     </span>
                 </div>
                 {/* Tabla de ventas o mensaje "Sin resultados" */}
@@ -108,7 +108,7 @@ const ListadoVentas = () => {
                     <table className="table table-hover">
                         <thead>
                             <tr>
-                                <th className="text-center">Codigo de Orden</th>
+                                <th className="text-center">Código de Orden</th>
                                 <th className="text-center">Cliente</th>
                                 <th className="text-center">Fecha de venta</th>
                                 <th className="text-center">Acción</th>
@@ -125,11 +125,13 @@ const ListadoVentas = () => {
                                         <td className="text-center">{rowData.codigoOrden}</td>
                                         <td className="text-center">{rowData.nombreCliente}</td>
                                         <td className="text-center">{fechaFormateada}</td>
-                                        <td className="d-flex justify-content-center">
-                                            <Link to={`/detalles/${rowData.idVenta}`} style={{ width: "200px" }}
-                                                className="btn btn-primary rounded-4 d-flex align-items-center justify-content-center gap-1">
-                                                <MdOutlineManageSearch size={20} />Gestionar Venta
-                                            </Link>
+                                        <td className="text-center">
+                                            <div className="d-flex justify-content-center">
+                                                <Link to={`/detalles/${rowData.idVenta}`} style={{ width: "200px" }}
+                                                    className="btn btn-primary rounded-4 d-flex align-items-center justify-content-center gap-1">
+                                                    <MdOutlineManageSearch size={20} />Gestionar Venta
+                                                </Link>
+                                            </div>
                                         </td>
                                     </tr>
                                 );
