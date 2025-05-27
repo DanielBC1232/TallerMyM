@@ -355,7 +355,10 @@ const Editar = () => {
                 style={{ maxWidth: "370px" }}
                 name="tiempoEstimado"
                 value={formData.tiempoEstimado}
-                onChange={(e) => setFormData(prev => ({ ...prev, tiempoEstimado: e.target.value }))} />
+                onChange={(e) => setFormData(prev => ({ ...prev, tiempoEstimado: e.target.value }))}
+                // solo de hoy en adelante
+                min={new Date().toISOString().split("T")[0]} // Formato YYYY-MM-DD
+              />
             </span>
           </Col>
         </Row>

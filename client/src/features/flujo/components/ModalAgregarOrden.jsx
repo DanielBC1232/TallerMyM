@@ -112,13 +112,13 @@ const ModalAgregarOrden = () => {
   const handleClose = () => setOpen(false);
   return (
     <>
-      <Button  className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+      <Button className="btn me-3 btn-success mb-2 text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
         onClick={handleOpen}><IoMdAdd size={20} />Agregar Orden</Button>
 
       <Modal open={open} onClose={handleClose} size="sm">
         <Modal.Header className="p-3">
-          <Modal.Title className="text-primary text-center">Agregar Orden</Modal.Title>
-          <hr className="text-primary px-3" />
+          <Modal.Title className="text-success text-center">Agregar una nueva Orden</Modal.Title>
+          <hr className="text-success px-3" />
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit}>
@@ -159,7 +159,10 @@ const ModalAgregarOrden = () => {
                     onChange={handleChange}
                     className="form-control rounded-5 py-2"
                     style={{ maxWidth: "550px" }}
-                    required />
+                    required
+                    // solo de hoy en adelante
+                    min={new Date().toISOString().split("T")[0]} // Formato YYYY-MM-DD
+                    />
                 </div>
               </Row>
               <div className="mb-3">
@@ -174,7 +177,7 @@ const ModalAgregarOrden = () => {
               </div>
             </div>
             <div className="d-flex row justify-content-end px-4 mt-4">
-              <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+              <Button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
                 <IoMdAdd size={25} />Agregar
               </Button>
             </div>

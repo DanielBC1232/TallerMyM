@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { IoIosReturnLeft } from "react-icons/io";
 import { FaArrowRight } from "react-icons/fa";
 import { IoMdPerson } from "react-icons/io";
-import { IoTime } from "react-icons/io5"; 
+import { IoTime } from "react-icons/io5";
 import { FaCar } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 
@@ -23,6 +23,7 @@ const Detalles = () => {
     const { idOrden } = useParams();
     const navigate = useNavigate(); // Hook para navegar
     const [orden, setOrden] = useState([]);
+    const [allowNext, setAllowNext] = useState(true);
     const [fase, setFase] = useState({
         idOrden: idOrden,
         estadoOrden: 0
@@ -89,6 +90,21 @@ const Detalles = () => {
         obtenerOrden(); // llamar funcion
     }, [idOrden, reload]);//cargar al tener id // al cambiar fase
 
+    //useEffect para verificar si se puede avanzar a la siguiente fase
+    useEffect(() => {
+
+        //si el estado es del 1 al 4 (en progreso, finalizado o venta) se puede avanzar
+        if (fase.estadoOrden <= 1 && fase.estadoOrden >= 3) {
+            setAllowNext(true);
+
+            //si el estado es 4 (venta) no se puede avanzar
+        } else if (fase.estadoOrden === 4) {
+            setAllowNext(false);
+            return;
+        }
+
+    }, [fase.estadoOrden]);
+
     //numero de estado ==> texto de proximo estado
     const estadoTexto = useMemo(() => {
         const estados = {
@@ -100,7 +116,14 @@ const Detalles = () => {
         return estados[fase.estadoOrden]; // No hay "default"
     }, [fase.estadoOrden]);
 
+    //metodo para avanzar a la siguiente fase
     const siguienteFase = async () => {
+
+        //si el estado es 4 (el ultimo) desaparece el boton de siguiente fase
+        if (allowNext === false) {
+            return;
+        }
+
         try {
             const result = await Swal.fire({
                 text: `Avanzar orden a la fase "${estadoTexto}"?`,
@@ -116,6 +139,7 @@ const Detalles = () => {
             });
 
             if (result.isConfirmed) {
+
                 const resFase = await axios.put(`${BASE_URL}/flujo/actualizar-fase-orden/`, fase, {
                     headers: {
                         "Authorization": `Bearer ${localStorage.getItem('token')}` // Incluir JWT en el encabezado
@@ -197,30 +221,30 @@ const Detalles = () => {
 
                     <div className="col-12 col-md-4 d-flex flex-column gap-3">
                         <span>
-                            <Text size="xl"><IoMdPerson className="mb-1"/> Cliente:</Text>
+                            <Text size="xl"><IoMdPerson className="mb-1" /> Cliente:</Text>
                             <Text size="lg" muted>{orden.nombreCliente}</Text>
                         </span>
                         <span>
-                            <Text size="xl"><IoMdPerson className="mb-1"/> Mecánico:</Text>
+                            <Text size="xl"><IoMdPerson className="mb-1" /> Mecánico:</Text>
                             <Text size="lg" muted>{orden.nombreMecanico}</Text>
                         </span>
                         <span>
-                            <Text size="xl"><FaCar className="mb-1"/> Vehículo:</Text>
+                            <Text size="xl"><FaCar className="mb-1" /> Vehículo:</Text>
                             <Text size="lg" muted>{orden.vehiculo}</Text>
                         </span>
                         <span>
-                            <Text size="xl"><IoTime className="mb-1"/> Fecha de ingreso:</Text>
+                            <Text size="xl"><IoTime className="mb-1" /> Fecha de ingreso:</Text>
                             <Text size="lg" muted>{orden.fechaIngreso}</Text>
                         </span>
                     </div>
 
                     <div className="col-12 col-md-4 d-flex flex-column gap-3">
                         <span>
-                            <Text size="xl"><IoTime className="mb-1"/> Estimado de finalización:</Text>
+                            <Text size="xl"><IoTime className="mb-1" /> Estimado de finalización:</Text>
                             <Text size="lg" muted>{orden.tiempoEstimado}</Text>
                         </span>
                         <span>
-                            <Text size="xl"><IoTime className="mb-1"/> Tiempo Restante:</Text>
+                            <Text size="xl"><IoTime className="mb-1" /> Tiempo Restante:</Text>
                             <Text size="lg" style={orden.estadoAtrasado === true ? { color: "#F50025" } : { color: "#717273" }}>
                                 {orden.TiempoRestante}
                             </Text>
@@ -235,22 +259,25 @@ const Detalles = () => {
                 <div className="row px-3 px-md-5 mt-4 justify-content-around">
                     <div className="col-auto mb-2">
                         <Link to={`/flujo`} className="btn btn-dark text-white rounded-5 d-flex align-items-center justify-content-center gap-1 ms-3">
-                            <IoIosReturnLeft size={25}/>Volver
+                            <IoIosReturnLeft size={25} />Volver
                         </Link>
                     </div>
                     <div className="col-auto mb-2">
-                        <button
-                            onClick={siguienteFase}
-                            type="button"
-                            className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1 ms-3">
-                            Siguiente Fase<FaArrowRight size={20}/>
-                        </button>
+                        {/* si allowNext es true, renderiza el boton siguiente fase */}
+
+                        {allowNext && (
+                            <button
+                                className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1 ms-3"
+                                onClick={siguienteFase}>
+                                <FaArrowRight size={20} />Siguiente fase
+                            </button>
+                        )}
                     </div>
                     <div className="col-auto mb-2">
                         <Link
                             to={`/flujo-editar/${idOrden}`}
                             className="btn btn-warning text-white rounded-5 d-flex align-items-center justify-content-center gap-1 ms-3">
-                            <MdEdit size={20}/>Editar
+                            <MdEdit size={20} />Editar
                         </Link>
                     </div>
                 </div>

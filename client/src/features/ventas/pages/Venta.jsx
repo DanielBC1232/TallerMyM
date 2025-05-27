@@ -507,7 +507,9 @@ const Venta = () => {
               <div className="d-flex justify-content-between px-4">
                 {/* BTN ABRIR MODAL REGISTRAR PAGO */}
                 <button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
-                  onClick={() => GenerarPago(formData.idVenta)}>
+                  onClick={() => GenerarPago(formData.idVenta)}
+
+                >
                   <MdPayment size={20} />Registrar Pago
                 </button>
                 <button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#productos">
