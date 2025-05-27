@@ -1,12 +1,11 @@
 .main {
-    background-color: #2d3946 !important;
+    background-color: rgb(239, 239, 240) !important;
     /* fondo oscuro elegante */
 }
 
-nav .header-border{
-    border: 10px;
-    border-bottom: #5a6b7d;
-    color: #5a6b7d;
+.main {
+    background-color: rgb(229, 229, 230) !important;
+    /* fondo oscuro elegante */
 }
 
 table {
@@ -20,15 +19,14 @@ thead th {
     padding: 10px !important;
     text-align: left !important;
     color: #fff !important;
-    border-top: 1px solid #4d727800 !important;
-    border-bottom: 1px solid #4D7278 !important;
+    border: none !important;
 }
 
 tbody td {
     background-color: rgb(44, 57, 71) !important;
     padding: 10px !important;
     color: #fff !important;
-    border-top: 1px solid #4D7278 !important;
+    border-top: 1px solid #5a6b7d !important;
     /* línea horizontal más clara */
     border-left: none !important;
     border-right: none !important;

@@ -10,6 +10,7 @@ import { FaCar } from "react-icons/fa";
 import { MdCarRepair } from "react-icons/md";
 import { MdPerson } from "react-icons/md";
 import { RiShoppingBagFill } from "react-icons/ri";
+import { IoIosCheckmarkCircle } from "react-icons/io";
 import { TbShoppingBagSearch } from "react-icons/tb";
 import { MdInventory } from "react-icons/md";
 import { LuMailSearch } from "react-icons/lu";
@@ -41,9 +42,11 @@ const Header = ({ children }) => {
   const idRol = localStorage.getItem('idRol');
   return (
     <div className={`wrapper ${sidebarCollapsed ? "collapsed" : ""}`}>
-      <nav id="sidebar" className="sidebar border border-3 border-light border-top-0 border-bottom-0 border-start-0">
-        <div className="">
-          <Link className="sidebar-brand" to="/flujo">Taller MyM</Link>
+      <nav id="sidebar" className="sidebar shadow-sm">
+        <div className="sidebar-content">
+          <Link className="sidebar-brand" to="/flujo">
+            Taller MyM
+          </Link>
           {/* icono *** */}
           <hr className="text-primary mx-3 m-0"></hr>
           <ul className="sidebar-nav">
@@ -53,7 +56,7 @@ const Header = ({ children }) => {
               <NavLink className="sidebar-link" to="/flujo">
                 {({ isActive }) => (
                   <span className={isActive ? 'text-success' : ''}>
-                    <MdCarRepair className={isActive ? 'text-success' : ''} size={25} /> Órdenes
+                    <MdCarRepair className={isActive ? 'text-success' : ''} size={25} /> Ordenes
                   </span>
                 )}
               </NavLink>
@@ -74,7 +77,7 @@ const Header = ({ children }) => {
               <NavLink className="sidebar-link" to="/vehiculos">
                 {({ isActive }) => (
                   <span className={isActive ? 'text-success' : ''}>
-                    <FaCar className={isActive ? 'text-success' : ''} size={20} />Vehículos
+                    <FaCar className={isActive ? 'text-success' : ''} size={20} />Vehiculos
                   </span>
                 )}
               </NavLink>
@@ -107,7 +110,7 @@ const Header = ({ children }) => {
               <NavLink className="sidebar-link" to="/inventario">
                 {({ isActive }) => (
                   <span className={isActive ? 'text-success' : ''}>
-                    <MdInventory className={isActive ? 'text-success' : ''} size={20} />Catálogo de Inventario
+                    <MdInventory className={isActive ? 'text-success' : ''} size={20} />Catalogo de Inventario
                   </span>
                 )}
               </NavLink>
@@ -145,7 +148,7 @@ const Header = ({ children }) => {
             <div>
               {idRol != 2 && (
                 <>
-                  <li className="sidebar-header">Administración</li>
+                  <li className="sidebar-header">Administracion</li>
                   <li className="sidebar-item">
                     <NavLink className="sidebar-link" to="/Dashboard">
                       {({ isActive }) => (
@@ -159,7 +162,7 @@ const Header = ({ children }) => {
                     <NavLink className="sidebar-link" to="/administracion">
                       {({ isActive }) => (
                         <span className={isActive ? 'text-success' : ''}>
-                          <MdAdminPanelSettings className={isActive ? 'text-success' : ''} size={20} />Administración
+                          <MdAdminPanelSettings className={isActive ? 'text-success' : ''} size={20} />Administracion
                         </span>
                       )}
                     </NavLink>
@@ -210,7 +213,7 @@ const Header = ({ children }) => {
       </nav>
 
       <div className="main">
-        <nav className="navbar navbar-expand bg-darkest-secondary border border-3 border-light border-top-0 border-end-0 border-start-0">
+        <nav className="navbar navbar-expand shadow-sm bg-darkest-secondary">
           <a className="sidebar-toggle text-dark" onClick={toggleSidebar}><GiHamburgerMenu className="text-white" size="xxl" /></a>
           <div className="navbar-collapse collapse">
             <ul className="navbar-nav ms-auto">

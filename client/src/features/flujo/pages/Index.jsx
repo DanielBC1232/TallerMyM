@@ -11,9 +11,6 @@ import ColProgreso from "../components/ColProgreso";
 import ColListo from "../components/ColListo";
 import Notificaciones from "../../../components/Notificaciones";
 import ModalAgregarOrden from "../components/ModalAgregarOrden";
-import { MdOutlinePendingActions } from "react-icons/md";
-import { RiProgress3Line } from "react-icons/ri";
-import { IoMdDoneAll } from "react-icons/io";
 
 const IndexFlujo = () => {
   const navigate = useNavigate(); // Hook para navegar
@@ -22,20 +19,17 @@ const IndexFlujo = () => {
     <div className="">
       {/* OPCIONES */}
       <Notificaciones modulo={'FLUJO'} />
+      <div className="px-4 py-3">
+        <ModalAgregarOrden />
+      </div>
+
       {/* FLUJO */}
       <div className="flujo-row">
         {/* Pendiente */}
         <div className="flujo-col">
-          <div className="bg-dark-green rounded-4 py-2 mb-4 border border-green border-3" style={{ maxWidth: "520px", minWidth: "310px" }}>
-            <div className="d-flex justify-content-between align-items-center ">
-              {/* icono MdOutlinePendingActions y al lado texto de Pendiente */}
-              <Text size="xxl" className="text-white ps-4 py-1 d-flex align-items-center">
-                <MdOutlinePendingActions className="me-2" />
-                Pendiente</Text>
-
-              <ModalAgregarOrden />
-            </div>
-            <div className="p-3 scrollable-container bg-darkest" style={{ minHeight: "80vh", maxWidth: "650px", minWidth: "300px" }}>
+          <div className="bg-primary rounded-4 py-2 mb-4">
+            <Text size="xxl" className="text-white ps-4 py-1">Pendiente</Text>
+            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "80vh" }}>
               <ColPendiente />
             </div>
           </div>
@@ -43,9 +37,9 @@ const IndexFlujo = () => {
 
         {/* En progreso */}
         <div className="flujo-col">
-          <div className="bg-dark-green rounded-4 py-2 mb-4 border border-green border-3" style={{ maxWidth: "520px", minWidth: "310px" }}>
-            <Text size="xxl" className="text-white ps-4 py-1 d-flex align-items-center"><RiProgress3Line className="me-2"/> En progreso</Text>
-            <div className="p-3 scrollable-container bg-darkest" style={{ minHeight: "80vh" }}>
+          <div className="bg-primary rounded-4 py-2 mb-4pb-0">
+            <Text size="xxl" className="text-white ps-4 py-1">En progreso</Text>
+            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "80vh" }}>
               <ColProgreso />
             </div>
           </div>
@@ -53,9 +47,9 @@ const IndexFlujo = () => {
 
         {/* Listo */}
         <div className="flujo-col">
-          <div className="bg-dark-green rounded-4 py-2 mb-4 border border-green border-3" style={{ maxWidth: "520px", minWidth: "310px" }}>
-            <Text size="xxl" className="text-white ps-4 py-1 d-flex align-items-center"><IoMdDoneAll className="me-2"/> Listo</Text>
-            <div className="p-3 scrollable-container bg-darkest" style={{ minHeight: "80vh" }}>
+          <div className="bg-primary rounded-4 py-2 mb-4">
+            <Text size="xxl" className="text-white ps-4 py-1">Listo</Text>
+            <div className="p-3 scrollable-container bg-white shadow" style={{ minHeight: "80vh" }}>
               <ColListo />
             </div>
           </div>

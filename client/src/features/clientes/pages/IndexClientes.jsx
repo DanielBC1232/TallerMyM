@@ -167,7 +167,7 @@ const IndexClientes = () => {
           className="form-control rounded-5 me-3" />
         <ModalAgregarCliente />
       </div>
-      <table className="table table-hover">
+      <table className="table table-bordered">
         <thead className="table-light">
           <tr>
             <th>Nombre</th>
