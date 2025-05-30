@@ -163,8 +163,8 @@ const EditarUsuario = () => {
 
   return (
     <div className="p-4 rounded-4 bg-darkest shadow-sm" style={{minHeight: "85vh"}}>
-      <h2 className="text-center mb-4 text-primary">Editar Usuario</h2>
-      <hr className="text-primary"/>
+      <h2 className="text-center mb-4 text-success">Editar Usuario</h2>
+      <hr className="text-success"/>
       <form onSubmit={handleSubmit} style={{ maxWidth: "400px" }} className="mx-auto mt-5">
         <div className="mb-3">
           <label htmlFor="username" className="form-label">Nombre de usuario:</label>
@@ -224,7 +224,7 @@ const EditarUsuario = () => {
         </div>
 
         <div className="mt-5 px-2 row d-flex justify-content-center">
-          <button type="submit" className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1"><FaSave size="20"/>Guardar Cambios</button>
+          <button type="submit" className="btn btn-success rounded-5 d-flex align-items-center justify-content-center gap-1"><FaSave size="20"/>Guardar Cambios</button>
         </div>
       </form>
     </div>

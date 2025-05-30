@@ -77,11 +77,8 @@ const ListarUsuarios = () => {
 
   const handleCambiarEstado = async (idUsuario, estado) => {
 
-    console.log(estado);
-
-
-    var accion = "";
-    var textoConfirmacion = "";
+    let accion = "";
+    let textoConfirmacion = "";
 
     if (estado === 0) {
       accion = "activar";
@@ -108,8 +105,7 @@ const ListarUsuarios = () => {
 
     if (confirmacion.isConfirmed) {
       try {
-        const response = await axios.put(
-          `${BASE_URL}/admin/cambiar-estado-usuario`,
+        await axios.put(`${BASE_URL}/admin/cambiar-estado-usuario`,
           {
             idUsuario,
             isLocked: estado,
@@ -161,10 +157,10 @@ const ListarUsuarios = () => {
     }
   };
   if (loading) return <p>Cargando usuarios...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (error) return <p className="text-danger">{error}</p>;
   return (
-    <div className="p-4 bg-darkest rounded-4" style={{ minHeight: "87vh" }}>
-      <div className="mb-4">
+    <div className="bg-darkest rounded-4" style={{ minHeight: "87vh" }}>
+      <div className="mb-4 pt-4 px-4">
         <Row className="d-flex align-items-center">
           <Col>
             <input type="text" placeholder="Buscar usuario"
@@ -178,63 +174,62 @@ const ListarUsuarios = () => {
           </Col>
         </Row>
       </div>
-      <table className="table table-hover table-fluid">
-        <thead>
-          <tr>
-            <th className="py-2 px-4">Nombre Usuario</th>
-            <th className="py-2 px-4">Email</th>
-            <th className="py-2 px-4">Cedula</th>
-            <th className="py-2 px-4">Estado</th>
-            <th className="py-2 px-4">Último cambio de contraseña</th>
-            <th className="py-2 px-4">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {UsuariosFiltrados.length === 0 ? (
+      <div className="px-2">
+        <table className="table table-hover table-fluid">
+          <thead>
             <tr>
-              <td colSpan="3" className="text-center text-muted py-3">
-                {FiltroUsuario
-                  ? "No se encontraron usuarios con ese nombre."
-                  : "No hay usuarios registrados."}
-              </td>
+              <th className="py-2 px-4">Nombre Usuario</th>
+              <th className="py-2 px-4">Email</th>
+              <th className="py-2 px-4">Cedula</th>
+              <th className="py-2 px-4">Estado</th>
+              <th className="py-2 px-4">Último cambio de contraseña</th>
+              <th className="py-2 px-4">Acciones</th>
             </tr>
-          ) : (
-            UsuariosFiltrados.map((usuario) => (
-              <tr key={usuario.idUsuario}>
-                <td className="py-2 px-4">{usuario.username}</td>
-                <td className="py-2 px-4">{usuario.email}</td>
-                <td className="py-2 px-4">{usuario.cedula}</td>
-                <td className="py-2 px-4">{usuario.isLocked ? "Bloqueado" : "Activo"}</td>
-                <td className="py-2 px-4">{usuario.lastPasswordChange ? new Date(usuario.lastPasswordChange).toLocaleDateString() : 'Ninguno'}</td>
-                <td className="py-2 px-4">
-                  <div className="d-flex">
-                    <button
-                      className="btn btn-warning rounded-5 d-flex align-items-center justify-content-center gap-1 me-2"
-                      onClick={() => handleEditar(usuario.idUsuario)}>
-                      <MdModeEdit size="20" /> Editar
-                    </button>
-                    {usuario.isLocked ? (
-                      <button
-                        className="btn btn-success rounded-5 d-flex align-items-center justify-content-center gap-1"
-                        onClick={() => handleCambiarEstado(usuario.idUsuario, 0)}
-                      >
-                        <IoIosRadioButtonOn size={20} />Activar
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-danger rounded-5 d-flex align-items-center justify-content-center gap-1"
-                        onClick={() => handleCambiarEstado(usuario.idUsuario, 1)}
-                      >
-                        <IoIosRadioButtonOff size={20} /> Desactivar
-                      </button>
-                    )}
-                  </div>
+          </thead>
+          <tbody>
+            {UsuariosFiltrados.length === 0 ? (
+              <tr>
+                <td colSpan="3" className="text-center text-muted py-3">
+                  {FiltroUsuario
+                    ? "No se encontraron usuarios con ese nombre."
+                    : "No hay usuarios registrados."}
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              UsuariosFiltrados.map((usuario) => (
+                <tr key={usuario.idUsuario}>
+                  <td className="py-2 px-4">{usuario.username}</td>
+                  <td className="py-2 px-4">{usuario.email}</td>
+                  <td className="py-2 px-4">{usuario.cedula}</td>
+                  <td className="py-2 px-4">{usuario.isLocked ? "Bloqueado" : "Activo"}</td>
+                  <td className="py-2 px-4">{usuario.lastPasswordChange ? new Date(usuario.lastPasswordChange).toLocaleDateString() : 'Ninguno'}</td>
+                  <td className="py-2 px-4">
+                    <div className="d-flex">
+                      <button
+                        className="btn btn-outline-warning rounded-5 text-white d-flex align-items-center justify-content-center gap-1 me-2"
+                        onClick={() => handleEditar(usuario.idUsuario)}>
+                        <MdModeEdit size="20" /> Editar</button>
+                      {usuario.isLocked ? (
+                        <button
+                          className="btn btn-success rounded-5 d-flex align-items-center justify-content-center gap-1"
+                          onClick={() => handleCambiarEstado(usuario.idUsuario, 0)}>
+                          <IoIosRadioButtonOn size={20} />Activar
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-danger rounded-5 d-flex align-items-center justify-content-center gap-1"
+                          onClick={() => handleCambiarEstado(usuario.idUsuario, 1)}>
+                          <IoIosRadioButtonOff size={20} /> Desactivar
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

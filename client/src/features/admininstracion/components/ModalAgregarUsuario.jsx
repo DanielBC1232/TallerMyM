@@ -132,12 +132,12 @@ const ModalAgregarUsuario = () => {
     const handleClose = () => setOpen(false);
     return (
         <>
-            <Button style={{ minWidth: "80px", maxWidth: "350px" }} className="btn btn-primary rounded-5 text-white d-flex align-items-center justify-content-center gap-1"
+            <Button style={{ minWidth: "80px", maxWidth: "350px" }} className="btn btn-success rounded-5 text-white d-flex align-items-center justify-content-center gap-1"
                 onClick={handleOpen}><IoMdAdd size={20} /> Registrar Usuario</Button>
             <Modal open={open} onClose={handleClose} size="sm">
                 <Modal.Header>
-                    <Modal.Title className="text-primary">Registrar Usuario</Modal.Title>
-                    <hr className="text-primary p-0" />
+                    <Modal.Title className="text-success text-center mt-2">Registrar Usuario</Modal.Title>
+                    <hr className="text-success p-0" />
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={handleSubmit}>
@@ -203,7 +203,7 @@ const ModalAgregarUsuario = () => {
                                     required />
                             </div>
                             <div className="d-flex justify-content-start mt-4">
-                                <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+                                <button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
                                     <IoMdAdd size={20} /> Registrar</button>
                             </div>
                         </div>
