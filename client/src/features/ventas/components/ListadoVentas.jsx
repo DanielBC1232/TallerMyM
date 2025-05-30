@@ -79,9 +79,9 @@ const ListadoVentas = () => {
 
     return (
         <>
-            <div className="p-3 bg-darkest" style={{ minHeight: "85vh" }}>
+            <div className="py-3 bg-darkest" style={{ minHeight: "85vh" }}>
                 {/* Sección de filtros */}
-                <div className="d-flex gap-4 mb-2">
+                <div className="ps-3 d-flex gap-4 mb-2">
                     <span>
 
                         <input
@@ -120,6 +120,7 @@ const ListadoVentas = () => {
                                 const fechaFormateada = `${fecha.getFullYear()}-${(fecha.getMonth() + 1)
                                     .toString()
                                     .padStart(2, "0")}-${fecha.getDate().toString().padStart(2, "0")}`;
+
                                 return (
                                     <tr key={rowData.idVenta}>
                                         <td className="text-center">{rowData.codigoOrden}</td>
@@ -127,9 +128,13 @@ const ListadoVentas = () => {
                                         <td className="text-center">{fechaFormateada}</td>
                                         <td className="text-center">
                                             <div className="d-flex justify-content-center">
-                                                <Link to={`/detalles/${rowData.idVenta}`} style={{ width: "200px" }}
-                                                    className="btn btn-primary rounded-4 d-flex align-items-center justify-content-center gap-1">
-                                                    <MdOutlineManageSearch size={20} />Gestionar Venta
+                                                <Link
+                                                    to={`/detalles/${rowData.idVenta}`}
+                                                    style={{ width: "170px" }}
+                                                    className="btn btn-success rounded-4 d-flex align-items-center justify-content-center gap-1"
+                                                >
+                                                    <MdOutlineManageSearch size={20} />
+                                                    Gestionar Venta
                                                 </Link>
                                             </div>
                                         </td>

@@ -1,10 +1,4 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Link,
-  useNavigate,
-} from "react-router-dom";
-import { Grid, Row, Col, Text } from "rsuite";
+import { Text } from "rsuite";
 import "../styles/flu.module.css";
 import ColPendiente from "../components/ColPendiente";
 import ColProgreso from "../components/ColProgreso";
@@ -16,7 +10,6 @@ import { RiProgress3Line } from "react-icons/ri";
 import { IoMdDoneAll } from "react-icons/io";
 
 const IndexFlujo = () => {
-  const navigate = useNavigate(); // Hook para navegar
 
   return (
     <div className="">
@@ -44,7 +37,7 @@ const IndexFlujo = () => {
         {/* En progreso */}
         <div className="flujo-col">
           <div className="bg-dark-green rounded-4 py-2 mb-4 border border-green border-3" style={{ maxWidth: "520px", minWidth: "310px" }}>
-            <Text size="xxl" className="text-white ps-4 py-1 d-flex align-items-center"><RiProgress3Line className="me-2"/> En progreso</Text>
+            <Text size="xxl" className="text-white ps-4 py-1 d-flex align-items-center"><RiProgress3Line className="me-2" /> En progreso</Text>
             <div className="p-3 scrollable-container bg-darkest" style={{ minHeight: "80vh" }}>
               <ColProgreso />
             </div>
@@ -54,7 +47,7 @@ const IndexFlujo = () => {
         {/* Listo */}
         <div className="flujo-col">
           <div className="bg-dark-green rounded-4 py-2 mb-4 border border-green border-3" style={{ maxWidth: "520px", minWidth: "310px" }}>
-            <Text size="xxl" className="text-white ps-4 py-1 d-flex align-items-center"><IoMdDoneAll className="me-2"/> Listo</Text>
+            <Text size="xxl" className="text-white ps-4 py-1 d-flex align-items-center"><IoMdDoneAll className="me-2" /> Listo</Text>
             <div className="p-3 scrollable-container bg-darkest" style={{ minHeight: "80vh" }}>
               <ColListo />
             </div>

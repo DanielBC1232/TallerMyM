@@ -82,7 +82,7 @@ const Notificaciones = ({ modulo }) => {
             customClass: {
                 confirmButton: 'btn btn-danger rounded-5 me-3',
                 cancelButton: 'btn btn-secondary rounded-5'
-              },
+            },
             buttonsStyling: false,
             cancelButtonText: "Cancelar",
             confirmButtonText: "Eliminar",
@@ -142,45 +142,50 @@ const Notificaciones = ({ modulo }) => {
 
     return (
         <>
-        <div className="floating-button-wrapper">
-            <button onClick={() => setOpen(true)} className="floating-button position-relative">
-                <IoIosNotifications size={28} />
-                {notificaciones.length > 0 && (
-                    <span className="notification-badge">{notificaciones.length}</span>
-                )}
-            </button>
-        </div>
-
-        <Drawer open={open} onClose={() => setOpen(false)}>
-            <Drawer.Header className="px-5 bg-primary">
-                <Drawer.Title className="text-white">
-                    Notificaciones ({notificaciones.length})
-                </Drawer.Title>
-            </Drawer.Header>
-            <Drawer.Body className="p-4" style={{ background: "#EEE" }}>
-                <Stack spacing={10} direction="column" alignItems="flex-start" className="row ms-1 me-1">
-                    {notificaciones.length > 0 ? (
-                        notificaciones.map((noti) => (
-                            <div key={noti.idNotificacion} className="rounded-4 row notification p-3 bg-white w-100 mb-2 shadow-sm">
-                                <div className="fw-bold"><CiCircleQuestion size={25} className="text-primary me-1"/> {noti.titulo}</div>
-                                <div className="mt-2 rounded-5">{noti.cuerpo}</div>
-                                <div className="text-muted mt-2" style={{ fontSize: "0.8rem" }}><CiCalendarDate size={15}/> {noti.fecha}</div>
-                                <div className="text-end">
-                                    <button className="btn btn-sm rounded-5" onClick={() => Eliminar(noti.idNotificacion)}>
-                                        <MdDeleteSweep className="text-danger" size={20} />
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <Message type="info">
-                            <strong>Sin Notificaciones</strong> No tienes nuevas notificaciones en este momento.
-                        </Message>
+            <div className="floating-button-wrapper">
+                <button onClick={() => setOpen(true)} className="floating-button position-relative">
+                    <IoIosNotifications size={28} />
+                    {notificaciones.length > 0 && (
+                        <span className="notification-badge">{notificaciones.length}</span>
                     )}
-                </Stack>
-            </Drawer.Body>
-        </Drawer>
-    </>
+                </button>
+            </div>
+
+            <Drawer open={open} onClose={() => setOpen(false)}>
+                <Drawer.Header className="px-5 bg-dark-green border-0">
+                    <Drawer.Title className="text-white">
+                        Notificaciones ({notificaciones.length})
+                    </Drawer.Title>
+                </Drawer.Header>
+                <Drawer.Body className="p-4 bg-darkest">
+                    <Stack spacing={15} direction="column" alignItems="flex-start" className="row ms-1 me-1">
+                        {notificaciones.length > 0 ? (
+                            notificaciones.map((noti) => (
+                                <div key={noti.idNotificacion} className="rounded-4 row notification w-100 mb-2 shadow article">
+                                    <div className="bg-dark-green py-2 rounded-top-4 d-flex justify-content-between">
+                                        <div>
+                                            <CiCircleQuestion size={30} className="text-warning me-2" />
+                                            <strong className="text-white">{noti.titulo}</strong>
+                                        </div>
+                                        <div>
+                                            <button className="btn rounded-5 text-white muted" onClick={() => Eliminar(noti.idNotificacion)}>X</button>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex flex-column gap-1 px-3 py-3">
+                                        <div>{noti.cuerpo}</div>
+                                        <div className="text-muted" style={{ fontSize: "0.8rem" }}><CiCalendarDate size={15} /> {noti.fecha}</div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <Message type="info">
+                                <strong>Sin Notificaciones</strong> No tienes nuevas notificaciones en este momento.
+                            </Message>
+                        )}
+                    </Stack>
+                </Drawer.Body>
+            </Drawer>
+        </>
     )
 }
 export default Notificaciones;

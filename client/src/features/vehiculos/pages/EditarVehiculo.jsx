@@ -118,8 +118,8 @@ const EditarVehiculo = () => {
   return (
     <div className="form-container p-4 rounded-4">
       <div className="d-flex justify-content-center flex-column p-0">
-        <h2 className="text-primary font-bold mb-4 py-0">Editar Vehículo</h2>
-        <hr className="text-primary py-0 px-2" />
+        <h2 className="text-success font-bold mb-4 py-0">Editar Vehículo</h2>
+        <hr className="text-success py-0 px-2" />
       </div>
       <form onSubmit={handleSubmit} >
         <div className="d-flex justify-content-center flex-column gap-3 p-3">
@@ -181,7 +181,7 @@ const EditarVehiculo = () => {
               className="form-control rounded-5"/>
           </div>
 
-          <button type="submit" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+          <button type="submit" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
             <IoMdSave size={20} />Guardar Cambios
           </button>
         </div>

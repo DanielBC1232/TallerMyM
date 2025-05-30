@@ -103,7 +103,7 @@ const ModalSolicitarProducto = () => {
     <>
       <Button
         style={{ minWidth: "80px", maxWidth: "350px" }}
-        className="btn btn-primary rounded-5 text-white d-flex align-items-center justify-content-center gap-1"
+        className="btn btn-success rounded-5 text-white d-flex align-items-center justify-content-center gap-1"
         onClick={handleOpen}>
         Solicitar Producto</Button>
 
@@ -137,7 +137,7 @@ const ModalSolicitarProducto = () => {
           ></textarea>
         </Modal.Body>
         <Modal.Footer className="p-3 row">
-          <Button onClick={handleSubmit} className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1" type="button">
+          <Button onClick={handleSubmit} className="btn btn-success rounded-5 d-flex align-items-center justify-content-center gap-1" type="button">
             <FaSave size="20"/> Guardar
           </Button>
         </Modal.Footer>

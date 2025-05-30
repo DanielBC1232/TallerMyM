@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectMarca from "../components/SelectMarca";
 import SelectProveedor from "../components/SelectProveedor";
@@ -255,7 +255,6 @@ const Agregar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //console.log(formData);
 
     if (verificacion()) {
       axios
@@ -469,8 +468,7 @@ const Agregar = () => {
                         name="descripcion"
                         className="form-control rounded-4"
                         value={formData.descripcion}
-                        onChange={handleChange}
-                      />
+                        onChange={handleChange}/>
                     </div>
                   </div>
                 </Col>

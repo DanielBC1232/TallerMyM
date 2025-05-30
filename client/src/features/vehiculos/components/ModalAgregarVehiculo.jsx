@@ -105,15 +105,16 @@ const ModalAgregarVehiculo = () => {
   return (
     <>
       <Button
-        className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+        className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
         onClick={handleOpen}>
         <FaCar size={20} />Registrar
       </Button>
 
       <Modal open={open} onClose={handleClose} size="lg">
-        <Modal.Header>
-          <Modal.Title className="text-primary">Registrar Vehículo</Modal.Title>
-          <hr className="text-primary p-0"/>
+        <Modal.Header className="p-3">
+          <Modal.Title className="text-success text-center">Registrar Vehículo</Modal.Title>
+          <hr className="text-success px-3" />
+
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit}>
@@ -177,7 +178,7 @@ const ModalAgregarVehiculo = () => {
                     required
                     placeholder="Ejemplo: 2020" />
                 </div>
-                
+
                 <div className="mb-3">
                   <label className="form-label">Tipo de Vehículo:</label>
                   <input
@@ -192,8 +193,8 @@ const ModalAgregarVehiculo = () => {
 
               </Col>
             </Row>
-            <div className="d-flex justify-content-center mt-4 row px-5">
-              <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+            <div className="d-flex justify-content-center mt-4 row px-5 mt-5">
+              <Button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
                 <FaCar size={20} />Registrar Vehículo
               </Button>
             </div>

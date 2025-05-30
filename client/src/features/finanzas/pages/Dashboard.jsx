@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Stat, StatGroup, HStack } from "rsuite";
 import axios from "axios";
 import IngresosChart from "../components/IngresosChart";
 import TopVentasChart from "../components/TopVentasChart";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -78,7 +78,6 @@ export const Dashboard = () => {
         getFinanzas();
         getGastos();
     }, []);
-
 
     return (
         <div>

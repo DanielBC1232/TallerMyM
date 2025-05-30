@@ -143,8 +143,8 @@ const CreateSolicitud = () => {
 
   return (
     <div className="form-container">
-      <h4 className="text-center text-primary">Solicitar vacaciones</h4>
-      <hr className="text-primary" />
+      <h4 className="text-center text-success">Solicitar vacaciones</h4>
+      <hr className="text-success" />
 
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -199,7 +199,7 @@ const CreateSolicitud = () => {
           </button>
           <button
             type="submit"
-            className="btn btn-primary text-white rounded-5"
+            className="btn btn-success text-white rounded-5"
             disabled={submitting || !formValue.FechaInicio || !formValue.FechaFin}
           >
             {submitting ? "Enviando..." : "Enviar Solicitud"}

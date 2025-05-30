@@ -112,7 +112,7 @@ const ModalAgregarTrabajador = () => {
   return (
     <>
       <button
-        className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+        className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
         onClick={handleOpen}>
         <IoPersonAdd size={20} />
         Registrar-Trabajador
@@ -174,7 +174,7 @@ const ModalAgregarTrabajador = () => {
               </Col>
             </Row>
               <div className="d-flex justify-content-center row px-5 mt-5">
-                <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+                <Button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
                   Registrar Trabajador
                 </Button>
               </div>

@@ -2,12 +2,13 @@ import sql from 'mssql';
 import { connectDB } from '../../config/database.js';
 
 export class Venta {
-    constructor(idVenta, fechaVenta, montoTotal, detalles, idOrden) {
+    constructor(idVenta, fechaVenta, montoTotal, detalles, idOrden, ventaConsumada) {
         this.idVenta = idVenta;
         this.fechaVenta = fechaVenta;
         this.montoTotal = montoTotal;
         this.detalles = detalles;
         this.idOrden = idOrden;
+        this.ventaConsumada = ventaConsumada;
     }
 }
 

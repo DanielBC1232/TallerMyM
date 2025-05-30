@@ -1,5 +1,4 @@
-import { Button, Grid, Row, Col } from "rsuite";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import {
@@ -59,7 +58,6 @@ const ListaCotizaciones = () => {
         getCotizaciones();
     }, []);
 
-
     function deleteCotizacion(id) {
         Swal.fire({
             text: "Seguro que desea eliminar esta cotización?",
@@ -71,7 +69,7 @@ const ListaCotizaciones = () => {
             customClass: {
                 confirmButton: 'btn btn-danger rounded-5 me-3',
                 cancelButton: 'btn btn-secondary rounded-5'
-              },
+            },
             buttonsStyling: false,
         }).then((result) => {
             if (result.isConfirmed) { // al confirmar
@@ -142,7 +140,6 @@ const ListaCotizaciones = () => {
     }
 
     const descargarCotizacion = async (id) => {
-        //console.log(id);
         try {
             const response = await axios.post(
                 `${BASE_URL}/reportes/descargar-cotizacion/${id}`,
@@ -229,7 +226,7 @@ const ListaCotizaciones = () => {
     }
     return (
         <div className="">
-            <table className="table table-hover table-striped shadow-sm">
+            <table className="table table-hover table-striped">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -243,7 +240,7 @@ const ListaCotizaciones = () => {
                 <tbody>
                     {datos.length === 0 ? (
                         <tr>
-                            <td colSpan="6" className="text-center text-muted py-3">
+                            <td colSpan="6" className="text-center py-3">
                                 No hay cotizaciones registradas.
                             </td>
                         </tr>
@@ -257,17 +254,21 @@ const ListaCotizaciones = () => {
                                 <td>{new Date(cotizacion.fecha).toLocaleDateString()}</td>
                                 <td>
                                     <div className="d-flex">
-                                        <button type="button" onClick={() => deleteCotizacion(cotizacion.idCotizacion)}
+                                        <button
+                                            type="button"
+                                            onClick={() => deleteCotizacion(cotizacion.idCotizacion)}
                                             className="btn btn-danger rounded-5 text-white me-3 d-flex align-items-center justify-content-center gap-1">
-                                            <MdDelete size={20} />Eliminar
+                                            <MdDelete size={20} />
                                         </button>
-                                        <Link to={`/cotizacion-editar/${cotizacion.idCotizacion}`} className="btn btn-warning rounded-5 text-white align-items-center justify-content-center gap-1">
+                                        <Link
+                                            to={`/cotizacion-editar/${cotizacion.idCotizacion}`}
+                                            className="btn btn-outline-warning rounded-5 text-white d-flex align-items-center justify-content-center gap-1">
                                             <MdEdit size={20} />Editar
                                         </Link>
                                         <button
                                             type="button"
                                             onClick={() => descargarCotizacion(cotizacion.idCotizacion)}
-                                            className="btn btn-success rounded-5 text-white ms-3 d-flex align-items-center justify-content-center gap-1">
+                                            className="btn btn-outline-success text-white rounded-5 ms-3 d-flex align-items-center justify-content-center gap-1">
                                             <IoIosDownload size={20} />Descargar
                                         </button>
                                     </div>
@@ -277,6 +278,7 @@ const ListaCotizaciones = () => {
                     )}
                 </tbody>
             </table>
+
 
         </div>
     );

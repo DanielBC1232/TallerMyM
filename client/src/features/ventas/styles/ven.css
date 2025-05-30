@@ -1,7 +1,4 @@
 .nav-btn{
-    background-color: rgb(13, 117, 202);
-    border: 0;
-    border-radius: 0;
     align-self: baseline;
     text-align: center;
     text-decoration: none;
@@ -10,7 +7,6 @@
 }
 
 .nav-btn:hover{
-    background-color: rgb(6, 101, 179);
     text-decoration: none;
 
 }

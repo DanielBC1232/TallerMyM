@@ -75,7 +75,7 @@ const ListarVehiculos = () => {
 
   // Mostrar mensaje de error
   if (error) {
-    return <p className="text-red-500">{error}</p>;
+    return <p className="text-danger">{error}</p>;
   }
 
   return (
@@ -122,7 +122,7 @@ const ListarVehiculos = () => {
 
       {/* Mensaje si no hay coincidencias */}
       {vehiculosFiltrados.length === 0 && filtroPlaca && (
-        <p className="text-red-500 mt-4">No se encontraron vehículos con esa placa.</p>
+        <p className="text-danger mt-4">No se encontraron vehículos con esa placa.</p>
       )}
     </div>
   );

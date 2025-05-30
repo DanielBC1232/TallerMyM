@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Modal, Button, Grid, Row, Col } from "rsuite";
+import { useState } from "react";
+import { Modal, Button, Row } from "rsuite";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -162,7 +162,7 @@ const ModalAgregarOrden = () => {
                     required
                     // solo de hoy en adelante
                     min={new Date().toISOString().split("T")[0]} // Formato YYYY-MM-DD
-                    />
+                  />
                 </div>
               </Row>
               <div className="mb-3">

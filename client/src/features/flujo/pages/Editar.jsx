@@ -324,21 +324,20 @@ const Editar = () => {
   };
 
   return (
-    <div className="rounded-4 shadow-sm bg-white mx-auto" style={{ minHeight: "60vh", maxWidth: "90vh" }}>
-      <div className="d-flex justify-content-center p-4">
-        <h2 className="text-primary">Editar Orden</h2>
-        <hr className="text-primary" />
+    <div className="rounded-5 shadow bg-darkest mx-auto" style={{ minHeight: "62vh", maxWidth: "90vh" }}>
+      <div className="rounded-top-4 bg-header d-flex justify-content-center pt-3">
+        <h2 className="text-success">Editar órden</h2>
       </div>
-      <div className="d-flex flex-column justify-content-center px-5 py-2">
-        <Row >
+      <div className="d-flex flex-column justify-content-center px-5 mt-5">
+        <Row>
           <Col xs={12} className="d-flex gap-3 flex-column">
-            <span>
+            <span className="text-white">
               Seleccionar un mecánico
               <SelectTrabajadores
                 value={formData.idTrabajador}
                 onChange={(e) => setFormData(prev => ({ ...prev, idTrabajador: e.target.value }))} />
             </span>
-            <span>
+            <span className="text-white">
               Vehiculo:
               <SelectVehiculos
                 idCliente={formData.idCliente}
@@ -346,8 +345,8 @@ const Editar = () => {
                 onChange={(e) => setFormData(prev => ({ ...prev, idVehiculo: e.target.value }))} />
             </span>
           </Col>
-          <Col xs={12} className="">
-            <span>
+          <Col xs={12}>
+            <span className="text-white">
               Estimado de finalización:
               <input
                 type="date"
@@ -363,7 +362,7 @@ const Editar = () => {
           </Col>
         </Row>
         <Row className="mt-3">
-          <span>
+          <span className="text-white">
             Descripción:
             <textarea
               className="form-control rounded-4"
@@ -373,7 +372,7 @@ const Editar = () => {
               onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))} />
           </span>
         </Row>
-        <div className="row mt-4">
+        <div className="row mt-5">
           <div className="d-flex col justify-content-start">
             <Link to={`/flujo-detalles/${idOrden}`}
               type="button"
@@ -389,7 +388,7 @@ const Editar = () => {
             </button>
             <button onClick={actualizarOrden}
               type="button"
-              className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1 ms-3">
+              className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1 ms-3">
               <IoMdSave size={20} />Guardar
             </button>
           </div>

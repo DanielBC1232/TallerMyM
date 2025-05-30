@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import swal from "sweetalert2";
 import SelectProveedor from "../../inventario/components/SelectProveedor";
 import axios from "axios";
@@ -38,7 +38,6 @@ const AgregarGastoOperativo = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //console.log(formData);
 
         // Validación mejorada: todos los campos son obligatorios
         if (!formData.tipoGasto) {
@@ -112,13 +111,13 @@ const AgregarGastoOperativo = () => {
         <>
             <button
                 style={{ minWidth: "80px", maxWidth: "350px" }}
-                className="btn btn-primary rounded-5 text-white d-flex align-items-center justify-content-center gap-1"
+                className="btn btn-success rounded-5 text-white d-flex align-items-center justify-content-center gap-1"
                 onClick={handleOpen}><TbCashRegister size={20} />Registrar</button>
 
             <Modal open={open} onClose={handleClose}>
                 <Modal.Header className="p-3">
-                    <Modal.Title className="text-primary text-center">Registrar Gasto Operativo</Modal.Title>
-                    <hr className="text-primary" />
+                    <Modal.Title className="text-success text-center">Registrar Gasto Operativo</Modal.Title>
+                    <hr className="text-success" />
                 </Modal.Header>
                 <Modal.Body className="px-3">
                     <form onSubmit={handleSubmit}>
@@ -131,6 +130,9 @@ const AgregarGastoOperativo = () => {
                                 <option value="">Seleccione...</option>
                                 <option value="Servicios Basicos">Servicios Básicos</option>
                                 <option value="Adquisicion Inventario">Adquisición de Inventario</option>
+                                <option value="Pago de Salario">Pago de Salario</option>
+                                <option value="Mantenimiento">Mantenimiento</option>
+                                <option value="Otros">Otros</option>
                             </select>
                         </div>
 
@@ -163,7 +165,7 @@ const AgregarGastoOperativo = () => {
                 <Modal.Footer className="p-3 row">
                     <button
                         onClick={handleSubmit}
-                        className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1"
+                        className="btn btn-success rounded-5 d-flex align-items-center justify-content-center gap-1"
                         type="button">
                         Registrar
                     </button>

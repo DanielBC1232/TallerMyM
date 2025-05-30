@@ -95,74 +95,69 @@ const IndexInventario = () => {
             : value,
     });
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    //console.log(formData);
-  };
-
   return (
     <div className="grid-container px-3 py-3">
       <Notificaciones modulo={'INVENTARIO'} />
-      <div className="p-4 rounded-3 shadow-sm py-5 bg-darkest-secondary">
-        <form onSubmit={handleSubmit}>
-          <div className="row my-2">
-            <Row className="d-flex gap-4 justify-content-start">
-              <div>
-                <span><Text size={16} className="text-white">Categoria:</Text></span>
-                <SelectCategoria
-                  value={formData.categoria}
-                  onChange={handleChange} />
-              </div>
-              <div>
-                <span><Text size={16} className="text-white">Marca:</Text></span>
-                <SelectMarca
-                  value={formData.marca}
-                  onChange={handleChange} />
-              </div>
-              <div>
-                <span><Text size={16} className="text-white">Stock:</Text></span>
-                <select
-                  className="form-select rounded-5 py-2 mt-2"
-                  name="stock"
-                  value={formData.stock}
-                  onChange={handleChange}>
-                  <option value="">Cualquiera</option>
-                  <option value="10">Menos de 10</option>
-                  <option value="50">Menos de 50</option>
-                  <option value="100">Menos de 100</option>
-                  <option value="500">Menos de 500</option>
-                  <option value="1000">Menos de 1000</option>
-                </select>
-              </div>
-              <div>
-                <span><Text size={16} className="text-white">Producto:</Text></span>
-                <input
-                  name="nombre"
-                  className="form-control rounded-5 py-2 mt-2"
-                  placeholder="Buscar por nombre"
-                  value={formData.nombre}
-                  onChange={handleChange}
-                />
-              </div>
-              <Row className="ms-3">
-                <RangoPrecio value={[formData.precioMin, formData.precioMax]} onChange={handleChange} />
-              </Row>
-            </Row>
+
+      <div className="p-4 rounded-4 shadow bg-darkset border border-success border-opacity-50">
+
+        <div className="d-flex flex-wrap justify-content-between gap-3 mb-3 px-5">
+          <div className="flex-grow-1" style={{ minWidth: "200px" }}>
+            <span><Text size={16} className="text-white">Categoria:</Text></span>
+            <SelectCategoria value={formData.categoria} onChange={handleChange} />
           </div>
-          <hr className="text-primary" />
-          <Row className="d-flex gap-4 justify-content-start">
-            <Link to="/inventario-agregar" className="btn btn-primary rounded-5 text-white d-flex align-items-center justify-content-center gap-1">
-              Agregar producto</Link>
+          <div className="flex-grow-1" style={{ minWidth: "200px" }}>
+            <span><Text size={16} className="text-white">Marca:</Text></span>
+            <SelectMarca value={formData.marca} onChange={handleChange} />
+          </div>
+          <div className="flex-grow-1" style={{ minWidth: "200px" }}>
+            <span><Text size={16} className="text-white">Stock:</Text></span>
+            <select
+              className="form-select rounded-5 py-2 mt-2"
+              name="stock"
+              value={formData.stock}
+              onChange={handleChange}>
+              <option value="">Cualquiera</option>
+              <option value="10">Menos de 10</option>
+              <option value="50">Menos de 50</option>
+              <option value="100">Menos de 100</option>
+              <option value="500">Menos de 500</option>
+              <option value="1000">Menos de 1000</option>
+            </select>
+          </div>
+          <div className="flex-grow-1" style={{ minWidth: "200px" }}>
+            <span><Text size={16} className="text-white">Producto:</Text></span>
+            <input
+              name="nombre"
+              className="form-control rounded-5 py-2 mt-2"
+              placeholder="Buscar por nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex-grow-1" style={{ minWidth: "250px" }}>
+            <RangoPrecio value={[formData.precioMin, formData.precioMax]} onChange={handleChange} />
+          </div>
+        </div>
+
+        <hr className="text-success" />
+
+        <div className="row px-2 px-md-5">
+          <div className="col-12 col-md-6 mb-3 mb-md-0 d-flex justify-content-center justify-content-md-start">
+            <Link to="/inventario-agregar"
+              className="btn btn-success rounded-5 text-white d-flex align-items-center justify-content-center gap-1">
+              Agregar producto
+            </Link>
+          </div>
+          <div className="col-12 col-md-6 d-flex justify-content-center justify-content-md-end">
             <ModalSolicitarProducto />
-          </Row>
-        </form>
+          </div>
+        </div>
       </div>
 
+
       <div className="mt-4">
-
         <ContenedorProductos formData={formData} />
-
       </div>
 
     </div>

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import swal from "sweetalert2";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -22,7 +21,7 @@ export const ListadoGastosOperativos = () => {
                     }
                 });
                 setGastosOperativos(data);
-                //console.log("Datos obtenidos:", data);
+
             } catch (error) {
                 if (error.response) {
                     if (error.response.status === 401) {
@@ -68,7 +67,7 @@ export const ListadoGastosOperativos = () => {
 
     return (
         <div className="" >
-            <table className="table-hover table-sm align-middle" style={{Minheight: "85vh"}}>
+            <table className="table-hover align-middle" style={{Minheight: "85vh"}}>
                 <thead className="table-light">
                     <tr>
                         <th>Tipo de Gasto</th>

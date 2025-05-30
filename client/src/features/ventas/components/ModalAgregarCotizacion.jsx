@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Modal, Button, Grid, Row, Col } from "rsuite";
+import { useState } from "react";
+import { Modal, Button, Row, Col } from "rsuite";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -97,14 +97,14 @@ const ModalAgregarCotizacion = ({ onClose, onSuccess }) => {
   return (
     <>
       <Button style={{ minWidth: "80px", maxWidth: "350px" }}
-        className="text-white btn btn-primary rounded-4 d-flex align-items-center justify-content-center gap-1"
+        className="text-white btn btn-success rounded-4 d-flex align-items-center justify-content-center gap-1"
         onClick={handleOpen}><FaPlus size={13} />Generar Cotización
       </Button>
 
       <Modal open={open} onClose={handleClose} size="lg">
         <Modal.Header>
-          <Modal.Title className="text-center text-primary">Generar Cotización</Modal.Title>
-          <hr className="text-primary" />
+          <Modal.Title className="text-center text-success">Generar Cotización</Modal.Title>
+          <hr className="text-success" />
         </Modal.Header>
         <Modal.Body className="p-3">
           <form onSubmit={handleSubmit}>
@@ -172,7 +172,7 @@ const ModalAgregarCotizacion = ({ onClose, onSuccess }) => {
               />
             </div>
             <div className="d-flex justify-content-center row mt-4">
-              <Button className="btn btn-primary rounded-4 d-flex align-items-center justify-content-center gap-1" type="submit">
+              <Button className="btn btn-success rounded-4 d-flex align-items-center justify-content-center gap-1" type="submit">
               <FaPlus size={15}/>Generar
               </Button>
             </div>

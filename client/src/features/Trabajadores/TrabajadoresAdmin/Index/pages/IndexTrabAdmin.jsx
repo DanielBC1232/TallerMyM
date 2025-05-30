@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ListaTrabajadores from "../components/ListaTrabajadores"
 import { Link, useNavigate } from "react-router-dom";
 import { HiDocumentAdd } from "react-icons/hi";
@@ -30,17 +30,17 @@ const IndexTrabajadores = () => {
 
       <div className="mb-3 d-flex gap-4">
         <ModalAgregarTrabajador />
-        <Link to="/index-amonestaciones" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+        <Link to="/index-amonestaciones" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
           <HiDocumentAdd size={24} />
           Generar Amonestación
         </Link>
 
-        <Link to="/Ausencias-Index" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+        <Link to="/Ausencias-Index" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
           <LuListTodo size={25} />
           Registrar Ausencias
         </Link>
 
-        <Link to="/Vacaciones-Index" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+        <Link to="/Vacaciones-Index" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
           <FaPlane size={20} />
           Vacaciones
         </Link>

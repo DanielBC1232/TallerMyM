@@ -199,17 +199,17 @@ const Detalles = () => {
     };
 
     return (
-        <div className="container p-4 bg-white rounded-4 shadow-sm mx-auto" style={{ minHeight: "88vh", maxWidth: "120vh" }}>
-            <div className="d-flex flex-column gap-5 p-4">
+        <div className="container bg-white rounded-5 shadow mx-auto p-0" style={{ minHeight: "88vh", maxWidth: "120vh" }}>
 
-                <div className="mx-auto justify-content-center text-center">
-                    <Text size="xxl" color="blue">Código de orden:</Text>
-                    <Text size="lg" muted>{orden.codigoOrden}</Text>
+            <div className="d-flex flex-column gap-4 p-0">
+                <div className="rounded-top-4 bg-header">
+                    <div className="mx-auto justify-content-center text-center py-3">
+                        <h1 className="text-success">Código de orden:</h1>
+                        <h3 className="text-white">{orden.codigoOrden}</h3>
+                    </div>
                 </div>
 
-                <Divider className="m-0 p-0 text bg-primary opacity-50" />
-
-                <div className="row px-3 px-md-5 gap-4 justify-content-center flex-wrap">
+                <div className="row px-3 px-md-5 gap-4 justify-content-center flex-wrap mt-5">
                     <div className="col-12 col-md-3">
                         <Steps current={orden.estadoOrden - 1} vertical style={styles}>
                             <Steps.Item title="Pendiente" description=" " />
@@ -221,42 +221,42 @@ const Detalles = () => {
 
                     <div className="col-12 col-md-4 d-flex flex-column gap-3">
                         <span>
-                            <Text size="xl"><IoMdPerson className="mb-1" /> Cliente:</Text>
-                            <Text size="lg" muted>{orden.nombreCliente}</Text>
+                            <Text size="xxl"><IoMdPerson className="mb-1" /> Cliente:</Text>
+                            <Text size="xl" muted>{orden.nombreCliente}</Text>
                         </span>
                         <span>
-                            <Text size="xl"><IoMdPerson className="mb-1" /> Mecánico:</Text>
-                            <Text size="lg" muted>{orden.nombreMecanico}</Text>
+                            <Text size="xxl"><IoMdPerson className="mb-1" /> Mecánico:</Text>
+                            <Text size="xl" muted>{orden.nombreMecanico}</Text>
                         </span>
                         <span>
-                            <Text size="xl"><FaCar className="mb-1" /> Vehículo:</Text>
-                            <Text size="lg" muted>{orden.vehiculo}</Text>
+                            <Text size="xxl"><FaCar className="mb-1" /> Vehículo:</Text>
+                            <Text size="xl" muted>{orden.vehiculo}</Text>
                         </span>
                         <span>
-                            <Text size="xl"><IoTime className="mb-1" /> Fecha de ingreso:</Text>
-                            <Text size="lg" muted>{orden.fechaIngreso}</Text>
+                            <Text size="xxl"><IoTime className="mb-1" /> Fecha de ingreso:</Text>
+                            <Text size="xl" muted>{orden.fechaIngreso}</Text>
                         </span>
                     </div>
 
                     <div className="col-12 col-md-4 d-flex flex-column gap-3">
                         <span>
-                            <Text size="xl"><IoTime className="mb-1" /> Estimado de finalización:</Text>
-                            <Text size="lg" muted>{orden.tiempoEstimado}</Text>
+                            <Text size="xxl"><IoTime className="mb-1" /> Estimado de finalización:</Text>
+                            <Text size="xl" muted>{orden.tiempoEstimado}</Text>
                         </span>
                         <span>
-                            <Text size="xl"><IoTime className="mb-1" /> Tiempo Restante:</Text>
-                            <Text size="lg" style={orden.estadoAtrasado === true ? { color: "#F50025" } : { color: "#717273" }}>
+                            <Text size="xxl"><IoTime className="mb-1" /> Tiempo Restante:</Text>
+                            <Text size="xl" style={orden.estadoAtrasado === true ? { color: "#F50025" } : { color: "#717273" }}>
                                 {orden.TiempoRestante}
                             </Text>
                         </span>
                         <span>
-                            <Text size="xl">Descripción:</Text>
-                            <Text size="lg" muted>{orden.descripcion}</Text>
+                            <Text size="xxl">Descripción:</Text>
+                            <Text size="xl" muted>{orden.descripcion}</Text>
                         </span>
                     </div>
                 </div>
 
-                <div className="row px-3 px-md-5 mt-4 justify-content-around">
+                <div className="row py-sm-4 px-md-5 mt-4 justify-content-between pt-5">
                     <div className="col-auto mb-2">
                         <Link to={`/flujo`} className="btn btn-dark text-white rounded-5 d-flex align-items-center justify-content-center gap-1 ms-3">
                             <IoIosReturnLeft size={25} />Volver

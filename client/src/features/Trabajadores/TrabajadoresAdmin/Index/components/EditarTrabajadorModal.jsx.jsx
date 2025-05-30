@@ -162,7 +162,7 @@ const EditarTrabajadorModal = ({ show, onClose, trabajador, onSave }) => {
               <button type="button" className="btn btn-secondary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={onClose}>
                 Cancelar
               </button>
-              <button type="submit" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+              <button type="submit" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
                 Guardar Cambios
               </button>
             </div>

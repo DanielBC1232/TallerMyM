@@ -122,7 +122,11 @@
     --bs-form-invalid-border-color: #dc3545
 }
 
-.rs-modal-body{
+.bg-header {
+    background-color: #2e4c5a
+}
+
+.rs-modal-body {
     overflow: hidden !important;
 }
 
@@ -6523,7 +6527,7 @@ fieldset:disabled .btn {
     border-color: #354352 !important
 }
 
-.border-green{
+.border-green {
     border-color: #4c7279 !important
 }
 
@@ -8115,7 +8119,7 @@ fieldset:disabled .btn {
 
 .bg-success-dark {
     --bs-bg-opacity: 1;
-    background-color: rgb(6,31,31) !important
+    background-color: rgb(6, 31, 31) !important
 }
 
 .bg-black {

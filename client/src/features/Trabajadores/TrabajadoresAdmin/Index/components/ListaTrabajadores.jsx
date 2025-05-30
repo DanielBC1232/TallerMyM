@@ -168,9 +168,9 @@ const ListaTrabajadores = ({ formData, trigger }) => {
                   <button type="button"
                     onClick={() => deleteTrabajador(trabajador.idTrabajador)}
                     className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
-                    <MdDelete size={20} /> Eliminar
+                    <MdDelete size={20} />
                   </button>
-                  <button className="btn btn-warning text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                  <button className="btn btn-outline-warning text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
                     onClick={() => handleOpenModal(trabajador)}>
                     <MdEdit size={20} /> Editar
                   </button>

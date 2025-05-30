@@ -148,8 +148,8 @@ const AgregarAusencia = () => {
   return (
     <div className="p-4 bg-darkest rounded-4 shadow-sm mx-auto mt-5" style={{width: "50vh"}}>
       <form onSubmit={handleSubmit}>
-        <h4 className="text-center text-primary">Registrar Ausencia</h4>
-        <hr className="text-primary" />
+        <h4 className="text-center text-success">Registrar Ausencia</h4>
+        <hr className="text-success" />
         <div className="px-4">
           <div className="mb-4">
             <label htmlFor="idTrabajador" className="form-label text-white">
@@ -197,7 +197,7 @@ const AgregarAusencia = () => {
           </a>
           <button
             type="submit"
-            className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+            className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
             <FaSave size={20} />Guadar
           </button>
         </div>

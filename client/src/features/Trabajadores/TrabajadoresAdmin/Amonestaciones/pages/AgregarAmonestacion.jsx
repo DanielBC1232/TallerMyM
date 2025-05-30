@@ -155,7 +155,7 @@ const AgregarAmonestacion = () => {
     <form onSubmit={handleSubmit}>
       <div className="bg-darkest rounded-4 p-4 mx-auto mt-5 shadow" style={{ minHeight: "50vh", width: "80vh" }}>
         <h3 className="text-white text-center">Nueva amonestación</h3>
-        <hr className="text-primary" />
+        <hr className="text-success" />
         <Row className="d-flex gap-4">
           <Col xs={12} className="">
             {/*Select Inner*/}
@@ -242,7 +242,7 @@ const AgregarAmonestacion = () => {
                 onClick={() => navigate("/index-amonestaciones")}>
                 <IoIosReturnLeft size={20}/>Volver
               </button>
-              <button type="submit" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+              <button type="submit" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
               <FaSave size={20} />Guardar
               </button>
             </div>

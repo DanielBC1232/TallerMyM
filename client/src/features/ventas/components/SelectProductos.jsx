@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Text, Modal, Button } from "rsuite";
+import { useState, useEffect } from "react";
+import { Text, Modal } from "rsuite";
 import axios from "axios";
 import Swal from "sweetalert2";
 import SelectMarca from "../../inventario/components/SelectMarca";
@@ -266,7 +266,7 @@ const SelectProductos = ({ idVenta }) => {
                         </div>
                     </div>
                     <div className="mt-3 px-4">
-                        <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={handleBuscar}><FaSearch size={15} />Buscar</button>
+                        <button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={handleBuscar}><FaSearch size={15} />Buscar</button>
                     </div>
                 </div>
             </div>
@@ -275,11 +275,11 @@ const SelectProductos = ({ idVenta }) => {
                 <form onSubmit={handleSubmit}>
                     <Modal.Header className="px-3 pt-3">
                         <Modal.Title className="text-center">
-                            <Text size="xxl" className="text-primary">
+                            <Text size="xxl" className="text-success">
                                 Agregar Producto
                             </Text>
                         </Modal.Title>
-                        <hr className="text-primary p-0" />
+                        <hr className="text-success p-0" />
                     </Modal.Header>
                     <Modal.Body className="px-3">
                         <div>
@@ -295,7 +295,7 @@ const SelectProductos = ({ idVenta }) => {
                         </div>
                     </Modal.Body>
                     <Modal.Footer className="mb-3 d-flex justify-content-center">
-                        <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+                        <button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
                             <FaPlus size={15} />Generar
                         </button>
                     </Modal.Footer>
@@ -304,7 +304,6 @@ const SelectProductos = ({ idVenta }) => {
 
             {/* Listado de productos */}
             <div className="p-4 px-2">
-
                 {loading ? (
                     <div></div>
                 ) : (
@@ -327,7 +326,7 @@ const SelectProductos = ({ idVenta }) => {
                                         <td>₡ {producto.precio}</td>
                                         <td>
                                             <div className="d-flex justify-content-center">
-                                                <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                                                <button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
                                                     onClick={() => AgregarProducto(producto.idProducto)}>
                                                     <FaPlus size={15} />Agregar
                                                 </button>

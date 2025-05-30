@@ -183,7 +183,7 @@ const ListaAmonestaciones = ({ formData, trigger }) => {
                   </button>
                   <Link
                     to={`/amonestaciones-editar/${amonestacion.idAmonestacion}`}
-                    className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                    className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
                     <MdEdit size={20} />Editar
                   </Link>
                 </div>

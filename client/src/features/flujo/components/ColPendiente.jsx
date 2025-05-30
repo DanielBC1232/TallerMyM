@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { VStack } from "rsuite";
 import Orden from "./Orden";
 
 // URL Base

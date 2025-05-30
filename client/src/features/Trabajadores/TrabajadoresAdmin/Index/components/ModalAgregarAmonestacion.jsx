@@ -176,7 +176,7 @@ const ModalAgregarAmonestacion = ({ trabajadores }) => {
             </Grid>
 
             <div className="d-flex justify-content-end mt-4">
-              <Button appearance="primary" type="submit">
+              <Button appearance="success" type="submit">
                 Registrar Amonestación
               </Button>
             </div>

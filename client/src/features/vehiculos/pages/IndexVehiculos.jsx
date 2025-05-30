@@ -132,7 +132,6 @@ const IndexVehiculos = () => {
             Swal.fire('Error', 'Hubo un problema al eliminar el vehículo', 'error'); // Error genérico
           }
         }
-
       }
     });
   };
@@ -143,57 +142,61 @@ const IndexVehiculos = () => {
   };
 
   return (
-    <div className="p-4 rounded-4 bg-darkest" style={{ minHeight: "88vh" }}>
+    <div className="rounded-4 bg-darkest" style={{ minHeight: "88vh" }}>
       {/* Campo de búsqueda por placa */}
-      <div className="d-flex gap-3 align-items-center">
-        <input type="text" placeholder="Buscar por placa (ej: abc123)"
-          value={filtroPlaca}
-          onChange={(e) => setFiltroPlaca(e.target.value)}
-          className="form-control rounded-5" />
-        <ModalAgregarVehiculo />
+      <div className="px-4 py-3 rounded-top-4 bg-header">
+
+        <div className="d-flex gap-3 align-items-center">
+          <input type="text" placeholder="Buscar por placa (ej: abc123)"
+            value={filtroPlaca}
+            onChange={(e) => setFiltroPlaca(e.target.value)}
+            className="form-control rounded-5" />
+          <ModalAgregarVehiculo />
+        </div>
       </div>
 
-      {/* Tabla de vehículos */}
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th className="py-2 px-4">Placa</th>
-            <th className="py-2 px-4">Modelo</th>
-            <th className="py-2 px-4 ">Marca</th>
-            <th className="py-2 px-4 ">Año</th>
-            <th className="py-2 px-4 ">Tipo</th>
-            <th className="py-2 px-4 ">Dueño</th>
-            <th className="py-2 px-4">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {vehiculosFiltrados.map((vehiculo) => (
-            <tr key={vehiculo.idVehiculo}>
-              <td className="py-2 px-4 ">{vehiculo.placaVehiculo}</td>
-              <td className="py-2 px-4 ">{vehiculo.modeloVehiculo}</td>
-              <td className="py-2 px-4 ">{vehiculo.marcaVehiculo}</td>
-              <td className="py-2 px-4 ">{vehiculo.annoVehiculo}</td>
-              <td className="py-2 px-4 ">{vehiculo.tipoVehiculo}</td>
-              <td className="py-2 px-4 ">{vehiculo.nombreCliente}</td>
-              <td className="py-2 px-4 ">
-                <div className="d-flex gap-3">
-                  <button
-                    onClick={() => handleEliminar(vehiculo.idVehiculo)}
-                    className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
-                    <MdDelete size={20} />
-                  </button>
-                  <button
-                    onClick={() => handleEditar(vehiculo.idVehiculo)}
-                    className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
-                    <MdEdit size={20} />Editar
-                  </button>
-                </div>
-              </td>
+      <div className="p-2">
+        {/* Tabla de vehículos */}
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th className="py-2 px-4">Placa</th>
+              <th className="py-2 px-4">Modelo</th>
+              <th className="py-2 px-4 ">Marca</th>
+              <th className="py-2 px-4 ">Año</th>
+              <th className="py-2 px-4 ">Tipo</th>
+              <th className="py-2 px-4 ">Dueño</th>
+              <th className="py-2 px-4">Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
+          </thead>
+          <tbody>
+            {vehiculosFiltrados.map((vehiculo) => (
+              <tr key={vehiculo.idVehiculo}>
+                <td className="py-2 px-4 ">{vehiculo.placaVehiculo}</td>
+                <td className="py-2 px-4 ">{vehiculo.modeloVehiculo}</td>
+                <td className="py-2 px-4 ">{vehiculo.marcaVehiculo}</td>
+                <td className="py-2 px-4 ">{vehiculo.annoVehiculo}</td>
+                <td className="py-2 px-4 ">{vehiculo.tipoVehiculo}</td>
+                <td className="py-2 px-4 ">{vehiculo.nombreCliente}</td>
+                <td className="py-2 px-4 ">
+                  <div className="d-flex gap-3">
+                    <button
+                      onClick={() => handleEliminar(vehiculo.idVehiculo)}
+                      className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                      <MdDelete size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleEditar(vehiculo.idVehiculo)}
+                      className="btn btn-outline-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                      <MdEdit size={20} />Editar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {/* Mensaje si no hay coincidencias */}
       {vehiculosFiltrados.length === 0 && filtroPlaca && (
         <p className="text-red-500 mt-4">No se encontraron vehículos.</p>

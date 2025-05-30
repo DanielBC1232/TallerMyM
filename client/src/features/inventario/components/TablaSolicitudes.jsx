@@ -11,8 +11,6 @@ const TablaSolicitudes = () => {
   const navigate = useNavigate();
 
   const [data, setData] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
 
   // Obtener listado
   useEffect(() => {
@@ -24,6 +22,7 @@ const TablaSolicitudes = () => {
       })
       .then((response) => {
         setData(response.data);
+
       })
       .catch((error) => {
         if (error.response) {
@@ -114,18 +113,6 @@ const TablaSolicitudes = () => {
     }
 
   };
-
-  // Abrir modal y setear la fila seleccionada
-  const handleOpen = (rowData) => {
-    setSelectedRow(rowData);
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedRow(null);
-  };
-
   return (
     <>
       <div className="p-3 bg-darkest rounded-4" style={{ minHeight: "90vh" }}>
@@ -140,42 +127,50 @@ const TablaSolicitudes = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((rowData) => (
-              <tr key={rowData.idSolicitud}>
-                <td>{rowData.titulo}</td>
-                <td className="d-none d-md-table-cell">{rowData.usuario}</td>
-                <td className="d-none d-xl-table-cell">
-                  <input
-                    type="date"
-                    style={{ maxWidth: "150px" }}
-                    className="form-control rounded-5"
-                    value={rowData.fecha ? rowData.fecha.split("T")[0] : ""}
-                    readOnly />
-                </td>
-                <td className="d-none d-md-table-cell">
-                  {rowData.cuerpo}
-                </td>
-                <td>
-                  <div className="d-flex gap-2">
-                    <button
-                      className="btn btn-success rounded-5"
-                      onClick={() => handleDecision(rowData.idSolicitud, true)}>
-                      Aprobar
-                    </button>
-                    <button
-                      className="btn btn-danger rounded-5"
-                      onClick={() => handleDecision(rowData.idSolicitud, false)}>
-                      Rechazar
-                    </button>
-                  </div>
-                </td>
+            {data && data.length > 0 ? (
+              data.map((rowData) => (
+                <tr key={rowData.idSolicitud}>
+                  <td>{rowData.titulo}</td>
+                  <td className="d-none d-md-table-cell">{rowData.usuario}</td>
+                  <td className="d-none d-xl-table-cell">
+                    <input
+                      type="date"
+                      style={{ maxWidth: "150px" }}
+                      className="form-control rounded-5"
+                      value={rowData.fecha ? rowData.fecha.split("T")[0] : ""}
+                      readOnly
+                    />
+                  </td>
+                  <td className="d-none d-md-table-cell">
+                    {rowData.cuerpo}
+                  </td>
+                  <td>
+                    <div className="d-flex gap-2">
+                      <button
+                        className="btn btn-success rounded-5"
+                        onClick={() => handleDecision(rowData.idSolicitud, true)}>
+                        Aprobar
+                      </button>
+                      <button
+                        className="btn btn-danger rounded-5"
+                        onClick={() => handleDecision(rowData.idSolicitud, false)}>
+                        Rechazar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="text-center">Sin resultados</td>
               </tr>
-            ))}
+            )}
           </tbody>
+
         </table>
       </div>
     </>
   );
-};
+}
 
 export default TablaSolicitudes;

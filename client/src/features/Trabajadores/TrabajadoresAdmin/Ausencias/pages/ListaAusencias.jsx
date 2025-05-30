@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
@@ -145,15 +145,14 @@ const ListaAusencias = ({ formData, trigger }) => {
 
   return (
     <div className="p-4 bg-darkest rounded-4 shadow-sm" style={{ minHeight: "88vh" }}>
-      <h4 className="text-center text-primary">Lista de ausencias</h4>
-      <hr className="text-primary" />
+      <h4 className="text-center text-success">Lista de ausencias</h4>
+      <hr className="text-success" />
       <Link to={`/Ausencias-Index`} className="btn btn-secondary my-2 text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
         style={{ width: "120px" }}><IoIosReturnLeft size={25} />Regresar
       </Link>
       <table className="table table-hover">
         <thead>
           <tr>
-
             <th>Trabajador</th>
             <th>Fecha Ausencia</th>
             <th>Estado</th>
@@ -174,11 +173,11 @@ const ListaAusencias = ({ formData, trigger }) => {
                 <div className="d-flex gap-2">
                   <button onClick={() => deleteAusencia(ausencia.idAusencia)}
                     className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
-                  ><MdDelete size={20} />Eliminar
+                  ><MdDelete size={20} />
                   </button>
                   <Link
                     to={`/ausencias-editar/${ausencia.idAusencia}`}
-                    className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                    className="btn btn-outline-warning text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
                   ><MdEdit size={20} />Editar
                   </Link>
                 </div>

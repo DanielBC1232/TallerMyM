@@ -60,7 +60,6 @@ const IndexClientes = () => {
     }
   };
 
-
   useEffect(() => {
     obtenerClientes();
   }, []);
@@ -160,57 +159,59 @@ const IndexClientes = () => {
   if (error) return <p className="text-danger">{error}</p>;
 
   return (
-    <div className="p-4 rounded-4 bg-darkest" style={{ minHeight: "88vh" }}>
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <input type="text" placeholder="Buscar por cédula" value={filtroCedula}
+    <div className="rounded-4 bg-darkest" style={{ minHeight: "88vh" }}>
+      <div className="p-4 d-flex justify-content-between align-items-center mb-3">
+        <input type="text" name="cedula" placeholder="Numero de cédula" value={filtroCedula}
           onChange={(e) => setFiltroCedula(e.target.value)}
-          className="form-control rounded-5 me-3" />
+          className="form-control rounded-5 me-2 py-1" />
         <ModalAgregarCliente />
       </div>
-      <table className="table table-hover">
-        <thead className="table-light">
-          <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Cédula</th>
-            <th>Correo</th>
-            <th>Teléfono</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clientesFiltrados.length > 0 ? (
-            clientesFiltrados.map((cliente) => (
-              <tr key={cliente.idCliente}>
-                <td>{cliente.nombre}</td>
-                <td>{cliente.apellido}</td>
-                <td>{cliente.cedula}</td>
-                <td>{cliente.correo}</td>
-                <td>{cliente.telefono}</td>
-                <td >
-                  <div className="d-flex gap-2">
-                    <button onClick={() => handleEliminar(cliente.cedula)}
-                      className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
-                      <MdDelete size={20} />
-                    </button>
-                    <button onClick={() => handleEditar(cliente.cedula)}
-                      className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
-                      <BsPersonFillGear size={20} />Editar
-                    </button>
-                  </div>
+      <div className="px-2">
+        <table className="table table-hover">
+          <thead className="table-light">
+            <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Cédula</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {clientesFiltrados.length > 0 ? (
+              clientesFiltrados.map((cliente) => (
+                <tr key={cliente.idCliente}>
+                  <td>{cliente.nombre}</td>
+                  <td>{cliente.apellido}</td>
+                  <td>{cliente.cedula}</td>
+                  <td>{cliente.correo}</td>
+                  <td>{cliente.telefono}</td>
+                  <td >
+                    <div className="d-flex gap-2">
+                      <button onClick={() => handleEliminar(cliente.cedula)}
+                        className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                        <MdDelete size={20} />
+                      </button>
+                      <button onClick={() => handleEditar(cliente.cedula)}
+                        className="btn btn-outline-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1">
+                        <BsPersonFillGear size={20} />Editar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center">
+                  Sin resultados...
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center">
-                Sin resultados...
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div >
   );
 };
 

@@ -259,7 +259,7 @@ const EditarAmonestacion = () => {
         className="d-flex justify-content-center align-items-center"
         style={{ height: "50vh" }}
       >
-        <div className="spinner-border text-primary" role="status">
+        <div className="spinner-border text-success" role="status">
           <span className="visually-hidden">Cargando...</span>
         </div>
       </div>
@@ -269,7 +269,7 @@ const EditarAmonestacion = () => {
   return (
     <div className="bg-darkest rounded-4 p-4 mx-auto mt-5 shadow" style={{ height: "50vh", width: "80vh" }}>
       <h3 className="text-white text-center">Editar amonestación</h3>
-      <hr className="text-primary" />
+      <hr className="text-success" />
       <div className="card-body">
         <form onSubmit={handleSubmit}>
           <Row className="d-flex gap-4">
@@ -376,7 +376,7 @@ const EditarAmonestacion = () => {
               Cancelar
             </button>
 
-            <button type="submit" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"><FaSave size={20} />Guardar
+            <button type="submit" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"><FaSave size={20} />Guardar
             </button>
           </div>
         </form>

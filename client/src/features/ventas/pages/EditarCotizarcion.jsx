@@ -1,5 +1,5 @@
 import { Button, Text } from "rsuite";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -205,7 +205,7 @@ const EditarCotizacion = () => {
             </span>
           </div>
           <div className="d-flex justify-content-center mt-5 row px-5">
-            <Button type="submit" className="btn btn-primary rounded-5 text-white align-items-center justify-content-center gap-1">
+            <Button type="submit" className="btn btn-success rounded-5 text-white align-items-center justify-content-center gap-1">
               Guardar
             </Button>
           </div>

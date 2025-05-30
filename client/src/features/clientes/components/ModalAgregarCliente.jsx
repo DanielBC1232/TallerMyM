@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Swal from "sweetalert2";
 import { Modal, Button, Row, Col } from "rsuite";
 import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { IoPersonAddSharp } from "react-icons/io5";
 
 // URL Base
@@ -109,12 +109,13 @@ const ModalAgregarCliente = () => {
   return (
     <>
       <Button style={{ minWidth: "80px", maxWidth: "350px" }}
-        className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+        className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
         onClick={handleOpen}><IoPersonAddSharp size={20} />Registrar Cliente</Button>
 
       <Modal open={open} onClose={handleClose} size="lg">
-        <Modal.Header>
-          <Modal.Title>Registrar Cliente</Modal.Title>
+        <Modal.Header className="p-3">
+          <Modal.Title className="text-success text-center">Registrar Cliente</Modal.Title>
+          <hr className="text-success px-3" />
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit} className="p-4">
@@ -128,8 +129,7 @@ const ModalAgregarCliente = () => {
                     value={formValue.nombre}
                     onChange={handleChange}
                     className="form-control rounded-5"
-                    required
-                  />
+                    required/>
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Cédula:</label>
@@ -139,8 +139,7 @@ const ModalAgregarCliente = () => {
                     value={formValue.cedula}
                     onChange={handleChange}
                     className="form-control rounded-5"
-                    required
-                  />
+                    required/>
                 </div>
               </Col>
 
@@ -153,8 +152,7 @@ const ModalAgregarCliente = () => {
                     value={formValue.apellido}
                     onChange={handleChange}
                     className="form-control rounded-5"
-                    required
-                  />
+                    required/>
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Correo:</label>
@@ -164,13 +162,12 @@ const ModalAgregarCliente = () => {
                     value={formValue.correo}
                     onChange={handleChange}
                     className="form-control rounded-5 py-2"
-                    required
-                  />
+                    required/>
                 </div>
               </Col>
             </Row>
 
-            <Row gutter={16}>
+            <Row>
               <Col xs={24} md={12}>
                 <div className="mb-3">
                   <label className="form-label">Teléfono:</label>
@@ -180,13 +177,12 @@ const ModalAgregarCliente = () => {
                     value={formValue.telefono}
                     onChange={handleChange}
                     className="form-control rounded-5"
-                    required
-                  />
+                    required/>
                 </div>
               </Col>
             </Row>
             <div className="d-flex justify-content-end mt-4 row px-2">
-              <Button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
+              <Button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
                 <IoPersonAddSharp size={20} />Registrar Cliente
               </Button>
             </div>

@@ -1,6 +1,6 @@
 import "../styles/ven.css";
-import React, { useState, useEffect } from "react";
-import { Text, Row, Col, Modal, Button } from "rsuite";
+import { useState, useEffect } from "react";
+import { Text, Row, Col, Modal } from "rsuite";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import SelectProductos from "../components/SelectProductos";
@@ -19,7 +19,7 @@ const Venta = () => {
   const { idVenta } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
-
+  const [ventaConsumada, setVentaConsumada] = useState(false);
   // Estado general para la venta (detalles)
   useEffect(() => {
     const obtenerDatos = async () => {
@@ -30,6 +30,8 @@ const Venta = () => {
           }
         });
         setFormData(data);
+        setVentaConsumada(data.ventaConsumada)
+
       } catch (error) {
         if (error.response) {
           if (error.response.status === 401) {
@@ -202,7 +204,6 @@ const Venta = () => {
 
     }
   };
-
   /* ============= DEVOLUCIÓN ============= */
   const [formDataDevolucion, setFormDataDevolucion] = useState({
     idVenta: parseInt(idVenta),
@@ -355,108 +356,124 @@ const Venta = () => {
   };
   //* =========== GENERAR FACTURA =========== *//
   const GenerarFactura = async () => {
-    try {
-      // Combina los datos de venta y pago en un solo objeto
-      const payload = { ...formData, ...formDataPago };
 
-      const response = await axios.post(
-        `${BASE_URL}/reportes/generar-factura/`,
-        payload,
-        {
-          responseType: 'blob',
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem('token')}`, // Agregar el JWT en el header
-          },
-        }
-      );
+    Swal.fire({
+      title: '¿Descargar Factura?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Descargar',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        confirmButton: 'btn btn-success rounded-5 me-3',
+        cancelButton: 'btn btn-secondary rounded-5'
+      },
+      buttonsStyling: false,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
 
-      if (response.status === 200 || response.status === 201) {
-        await Swal.fire({
-          icon: "success",
-          title: "Factura generada exitosamente",
-          showConfirmButton: false,
-          timer: 1000,
-        });
+        try {
+          // Combina los datos de venta y pago en un solo objeto
+          const payload = { ...formData, ...formDataPago };
 
-        const blob = new Blob([response.data], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        });
+          const response = await axios.post(
+            `${BASE_URL}/reportes/generar-factura/`,
+            payload,
+            {
+              responseType: 'blob',
+              headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`, // Agregar el JWT en el header
+              },
+            }
+          );
 
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
+          if (response.status === 200 || response.status === 201) {
+            await Swal.fire({
+              icon: "success",
+              title: "Factura generada exitosamente",
+              showConfirmButton: false,
+              timer: 1000,
+            });
 
-        // Intentar obtener el nombre del archivo desde el header
-        const contentDisposition = response.headers['content-disposition'];
-        let fileName = '';
-        if (contentDisposition) {
-          const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
-          if (fileNameMatch && fileNameMatch.length === 2) {
-            fileName = fileNameMatch[1];
+            const blob = new Blob([response.data], {
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+
+            // Intentar obtener el nombre del archivo desde el header
+            const contentDisposition = response.headers['content-disposition'];
+            let fileName = '';
+            if (contentDisposition) {
+              const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+              if (fileNameMatch && fileNameMatch.length === 2) {
+                fileName = fileNameMatch[1];
+              }
+            }
+
+            // Si no se recibió el nombre, se genera uno con la fecha actual
+            if (!fileName) {
+              const fechaActual = new Date().toISOString().split('T')[0];
+              fileName = `Factura-${fechaActual}.xlsx`;
+            }
+
+            link.setAttribute('download', fileName);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(downloadUrl);
+          }
+        } catch (error) {
+          if (error.response) {
+            if (error.response.status === 401) {
+              Swal.fire({
+                icon: "warning",
+                title: "Advertencia",
+                text: "Operacion no Autorizada",
+                showConfirmButton: false,
+              });
+              navigate(0); // Redirigir a login si no está autorizado
+            } else if (error.response.status === 403) {
+              Swal.fire({
+                icon: "warning",
+                title: "Autenticación",
+                text: "Sesión expirada",
+                showConfirmButton: false,
+              });
+              localStorage.clear();
+              navigate("/login"); // Redirigir a login si la sesión ha expirado
+            } else {
+              console.error("Error al generar la factura:", error);
+              Swal.fire({
+                icon: "error",
+                title: "Error al generar la factura",
+                text: "No se pudo generar el archivo XLSX.",
+              });
+            }
+          } else {
+            // Manejo de errores si no hay respuesta del servidor (por ejemplo, error de red)
+            console.error("Error desconocido al generar factura:", error);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Hubo un problema desconocido, por favor intente nuevamente.",
+              showConfirmButton: false,
+            });
           }
         }
+      };
+    });
+  }
 
-        // Si no se recibió el nombre, se genera uno con la fecha actual
-        if (!fileName) {
-          const fechaActual = new Date().toISOString().split('T')[0];
-          fileName = `Factura-${fechaActual}.xlsx`;
-        }
-
-        link.setAttribute('download', fileName);
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(downloadUrl);
-      }
-    } catch (error) {
-      if (error.response) {
-        if (error.response.status === 401) {
-          Swal.fire({
-            icon: "warning",
-            title: "Advertencia",
-            text: "Operacion no Autorizada",
-            showConfirmButton: false,
-          });
-          navigate(0); // Redirigir a login si no está autorizado
-        } else if (error.response.status === 403) {
-          Swal.fire({
-            icon: "warning",
-            title: "Autenticación",
-            text: "Sesión expirada",
-            showConfirmButton: false,
-          });
-          localStorage.clear();
-          navigate("/login"); // Redirigir a login si la sesión ha expirado
-        } else {
-          console.error("Error al generar la factura:", error);
-          Swal.fire({
-            icon: "error",
-            title: "Error al generar la factura",
-            text: "No se pudo generar el archivo XLSX.",
-          });
-        }
-      } else {
-        // Manejo de errores si no hay respuesta del servidor (por ejemplo, error de red)
-        console.error("Error desconocido al generar factura:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Hubo un problema desconocido, por favor intente nuevamente.",
-          showConfirmButton: false,
-        });
-      }
-    }
-  };
-
-  /* ============= RENDER ============= */
   return (
     <div className="p-4 bg-darkest rounded-4">
       <Row>
         {/* COLUMNA DETALLES DE VENTA */}
 
         <div className="">
-          <div className="d-flex justify-content-center bg-success py-2 rounded-4">
-            <Text size="xxl" className="text-white">Detalles de Venta</Text>
+          <div className="bg-dark-green py-2 rounded-4">
+            <Text size="xxl" className="text-white text-center">Detalles de Venta</Text>
           </div>
           <div className="p-4">
             <Row>
@@ -506,21 +523,24 @@ const Venta = () => {
             <Row>
               <div className="d-flex justify-content-between px-4">
                 {/* BTN ABRIR MODAL REGISTRAR PAGO */}
-                <button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
-                  onClick={() => GenerarPago(formData.idVenta)}
-
+                <button
+                  className={ventaConsumada ? "btn btn-outline-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1 disabled" : "btn btn-outline-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"}
+                  //</div>className="btn btn-outline-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                  type="button" data-bs-toggle="offcanvas" data-bs-target="#productos"
                 >
-                  <MdPayment size={20} />Registrar Pago
-                </button>
-                <button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#productos">
                   <IoMdAdd size={20} />Producto/Servicio
                 </button>
-                <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                <button
+                  className={ventaConsumada ? "btn btn-outline-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1 disabled" : "btn btn-outline-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"}
+                  onClick={() => GenerarPago(formData.idVenta)}>
+                  <MdPayment size={20} />Registrar Pago
+                </button>
+                <button className="btn btn-outline-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
                   onClick={() => GenerarFactura()}>
                   <IoDocumentTextOutline size={20} />Generar Factura
                 </button>
                 {/* BTN ABRIR MODAL DE DEVOLUCIÓN */}
-                <button className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
+                <button className="btn btn-outline-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
                   onClick={() => GenerarDevolucion(formData.idVenta)}>
                   <TbCreditCardPay size={20} />Realizar reembolso</button>
               </div>
@@ -544,7 +564,7 @@ const Venta = () => {
 
         <div className="offcanvas offcanvas-end px-0 bg-darkest" id="productos" style={{ width: "800px" }}>
           <div className="">
-            <div className="d-flex justify-content-center bg-primary py-2">
+            <div className="d-flex justify-content-center bg-success py-2">
               <Text size="xl" className="text-white">Agregar productos</Text>
             </div>
             <div className="p-2 pt-3">
@@ -618,9 +638,9 @@ const Venta = () => {
         <form onSubmit={handleSubmitDevolucion}>
           <Modal.Header className="px-3 pt-3">
             <Modal.Title className="text-center">
-              <Text size="xxl" className="text-primary">Registrar Devolución</Text>
+              <Text size="xxl" className="text-success">Registrar Devolución</Text>
             </Modal.Title>
-            <hr className="text-primary" />
+            <hr className="text-success" />
           </Modal.Header>
           <Modal.Body className="px-4 d-flex flex-column gap-4">
             <div className="row">
@@ -638,7 +658,7 @@ const Venta = () => {
             </div>
           </Modal.Body>
           <Modal.Footer className="p-3 mb-3 row">
-            <button className="btn text-white btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">Generar</button>
+            <button className="btn text-white btn-success rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">Generar</button>
           </Modal.Footer>
         </form>
       </Modal>

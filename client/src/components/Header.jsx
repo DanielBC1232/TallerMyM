@@ -34,10 +34,6 @@ const Header = ({ children }) => {
     localStorage.clear();
     navigate("/login");
   };
-  const toggleSidebar = (e) => {
-    e.preventDefault();
-    setSidebarCollapsed((prev) => !prev);
-  };
   const idRol = localStorage.getItem('idRol');
   return (
     <div className={`wrapper ${sidebarCollapsed ? "collapsed" : ""}`}>
@@ -211,7 +207,6 @@ const Header = ({ children }) => {
 
       <div className="main">
         <nav className="navbar navbar-expand bg-darkest-secondary border border-3 border-light border-top-0 border-end-0 border-start-0">
-          <a className="sidebar-toggle text-dark" onClick={toggleSidebar}><GiHamburgerMenu className="text-white" size="xxl" /></a>
           <div className="navbar-collapse collapse">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item dropdown">

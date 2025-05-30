@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BrowserRouter as Router, Link } from "react-router-dom";
@@ -52,13 +52,13 @@ const ListaTrabajadores = ({ formData, trigger }) => {
 
   return (
     <div className="p-4 bg-darkest rounded-4 shadow-sm">
-      <h4 className="text-center text-primary">Listado Trabajadores</h4>
-      <hr className="text-primary" />
+      <h4 className="text-center text-success">Listado Trabajadores</h4>
+      <hr className="text-success" />
       <div className="px-4 d-flex justify-content-between my-2">
         <Link to={`/trabajadores-admin`} className="btn btn-secondary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "120px" }}>
           <IoIosReturnLeft size={25} />Regresar
         </Link>
-        <Link to="/Lista-Ausencias" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "140px" }}>
+        <Link to="/Lista-Ausencias" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "140px" }}>
           <FaList size={17} /> Ausencias</Link>
       </div>
       <table className="table table-hover">
@@ -77,7 +77,7 @@ const ListaTrabajadores = ({ formData, trigger }) => {
               <td>
                 <Link
                   to={`/Ausencias-Agregar/${trabajador.idTrabajador}`} // implementar backend
-                  className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "200px" }}>
+                  className="btn btn-outline-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "200px" }}>
                   <IoMdAdd size={25} />Registrar Ausencia
                 </Link>
               </td>

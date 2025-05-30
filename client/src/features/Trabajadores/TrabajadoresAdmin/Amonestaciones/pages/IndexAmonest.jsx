@@ -89,7 +89,7 @@ const ListaTrabajadores = ({ formData, trigger }) => {
                 <div className="d-flex justify-content-center">
                   <Link
                     to={`/amonestaciones-agregar/${trabajador.idTrabajador}`} // implementar backend
-                    className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "200px" }}>
+                    className="btn text-white btn-outline-success rounded-5 d-flex align-items-center justify-content-center gap-1" style={{ width: "200px" }}>
                     <FaPlus size={15} />Generar Amonestacion
                   </Link></div>
               </td>

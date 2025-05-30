@@ -252,6 +252,7 @@ AS BEGIN
 		V.fechaVenta,
 		V.montoTotal,
 		V.detalles as VentaDetalles,
+        V.ventaConsumada,
 	--Orden
 		O.codigoOrden,
 		O.descripcion as descripcionOrden,

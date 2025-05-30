@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Row, Col } from "rsuite";
 import Swal from "sweetalert2";
@@ -258,7 +258,7 @@ export const Reportes = () => {
                     {/* Reportes Clientes inactivos */}
                     <div className="row">
                         <h3 className="text-white">Clientes Inactivos</h3>
-                        <button className="btn btn-primary rounded-5 "
+                        <button className="btn btn-success rounded-5 "
                             onClick={() => descargarReporteClientes()}><FaFileDownload size={20}/> Generar Reporte</button>
                         <table className="table table-hover mt-3">
                             <thead>
@@ -292,7 +292,7 @@ export const Reportes = () => {
                     {/* Reporte Trabajadores Eficientes (Mecánicos) */}
                     <div className="row ms-3">
                         <h3 className="text-white">Mejores Empleados</h3>
-                        <button className="btn btn-primary rounded-5" onClick={descargarReporteTrabajadores}>
+                        <button className="btn btn-success rounded-5" onClick={descargarReporteTrabajadores}>
                         <FaFileDownload size={20}/> Generar Reporte
                         </button>
                         <table className="table table-hover mt-3">

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useNavigate, useParams, Link } from "react-router-dom";
-import { Row, Col } from "rsuite";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaSave } from "react-icons/fa";
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -158,7 +157,7 @@ const EditarAusencia = () => {
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>
-        <div className="spinner-border text-primary" role="status">
+        <div className="spinner-border text-success" role="status">
           <span className="visually-hidden">Cargando...</span>
         </div>
       </div>
@@ -168,8 +167,8 @@ const EditarAusencia = () => {
   return (
     <div className="p-4 bg-darkest rounded-4 shadow mx-auto mt-5" style={{ maxWidth: "70vh" }}>
       <div className="">
-        <h4 className="text-center text-primary">Editar ausencia</h4>
-        <hr className="text-primary" />
+        <h4 className="text-center text-success">Editar ausencia</h4>
+        <hr className="text-success" />
       </div>
       <form onSubmit={handleSubmit}>
         <div className="row d-flex justify-content-center px-4">
@@ -236,7 +235,7 @@ const EditarAusencia = () => {
             disabled={loading}>
             Cancelar
           </button>
-          <button type="submit" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"><FaSave size={20} />Guardar
+          <button type="submit" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"><FaSave size={20} />Guardar
           </button>
         </div>
 
