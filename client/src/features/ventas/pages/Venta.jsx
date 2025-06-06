@@ -12,6 +12,7 @@ import { IoMdAdd } from "react-icons/io";
 import { MdPayment } from "react-icons/md";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { TbCreditCardPay } from "react-icons/tb";
+import { prefix } from "rsuite/esm/internals/utils";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -20,6 +21,14 @@ const Venta = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const [ventaConsumada, setVentaConsumada] = useState(false);
+  const [monto, setMonto] = useState(null); // Pago
+  const [formDataDevolucion, setFormDataDevolucion] = useState({
+    idVenta: parseInt(idVenta),
+    monto: monto, // Asignar el monto obtenido del pago
+    motivo: ""
+  });
+  const [openDevolucion, setOpenDevolucion] = useState(false);
+
   // Estado general para la venta (detalles)
   useEffect(() => {
     const obtenerDatos = async () => {
@@ -62,8 +71,30 @@ const Venta = () => {
       }
 
     };
-    if (idVenta) obtenerDatos();
+    const obtenerMonto = async () => {
+      try {
+        const { data } = await axios.get(`${BASE_URL}/finanzas/obtener-pago/${idVenta}`, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}` // Añadimos el JWT en el header
+          }
+        });
+        setMonto(data.monto); // Asignamos el monto recibido
+      } catch (error) {
+        console.error("Error al obtener el monto:", error);
+      }
+    }
+    if (idVenta) obtenerDatos()
+    obtenerMonto(); // Llamamos a la función para obtener los datos y el monto si idVenta está definido
   }, [idVenta]);
+
+  useEffect(() => {
+    //actualizar el estado de formDataDevolucion con el monto obtenido
+    setFormDataDevolucion((prev) => ({
+      ...prev,
+      monto: monto // Asignar el monto obtenido del pago
+    }));
+
+  }, [monto]); // Dependencia para actualizar cuando el monto cambie
 
   /* ============= PAGO ============= */
   const [formDataPago, setFormDataPago] = useState({
@@ -205,14 +236,7 @@ const Venta = () => {
     }
   };
   /* ============= DEVOLUCIÓN ============= */
-  const [formDataDevolucion, setFormDataDevolucion] = useState({
-    idVenta: parseInt(idVenta),
-    monto: 0,
-    dineroVuelto: 0,
-    montoTotal: 0,
-    motivo: ""
-  });
-  const [openDevolucion, setOpenDevolucion] = useState(false);
+
 
   const handleChangeDevolucion = (e) => {
     const { name, value } = e.target;
@@ -245,11 +269,13 @@ const Venta = () => {
   };
 
   const verificarDevolucionCompleta = () => {
-    if (formDataDevolucion.monto <= 0) {
-      Swal.fire({
-        icon: "warning",
-        title: "El monto a devolver debe ser mayor a 0",
-      });
+    console.log(monto);
+    console.log(formDataDevolucion.monto);
+
+    if (formDataDevolucion.monto === formData.monto) {
+      return false;
+    }
+    if (formDataDevolucion.monto === 0) {
       return false;
     }
     return true;
@@ -644,11 +670,14 @@ const Venta = () => {
           </Modal.Header>
           <Modal.Body className="px-4 d-flex flex-column gap-4">
             <div className="row">
+
               <span>Monto:</span>
               <input type="number" min="0" name="monto"
                 className="form-control rounded-5"
-                onChange={handleChangeDevolucion}
-                value={formDataDevolucion.monto} />
+                value={parseFloat(monto).toFixed(2)}
+                readOnly
+              />
+
             </div>
             <div className="row">
               <span>Motivo:</span>

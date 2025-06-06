@@ -90,7 +90,7 @@ const Login = () => {
                             <div className='card-header bg-white'>
                                 <h1 className='text-center text-primary mb-3'><strong>Taller MyM</strong></h1>
                             </div>
-                            <div className="card-body">
+                            <div className="card-body px-4">
                                 <form onSubmit={handleSubmit}>
                                     <div className="mb-3">
                                         <label htmlFor="email" className="form-label">

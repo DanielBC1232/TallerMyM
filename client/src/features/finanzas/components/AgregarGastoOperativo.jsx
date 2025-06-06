@@ -121,6 +121,11 @@ const AgregarGastoOperativo = () => {
                 </Modal.Header>
                 <Modal.Body className="px-3">
                     <form onSubmit={handleSubmit}>
+                        <div className="mb-3" style={{ maxWidth: "400px" }}>
+                            <label>Proveedor ("Ninguno" si no aplica):</label>
+                            <SelectProveedor onChange={handleInputChange} value={formData.proveedor} />
+                        </div>
+                        
                         <div className="mb-3">
                             <label>Tipo de gasto:</label>
                             <select className="form-select rounded-5"
@@ -156,10 +161,6 @@ const AgregarGastoOperativo = () => {
                                 min={0} />
                         </div>
 
-                        <div className="mb-3" style={{ maxWidth: "400px" }}>
-                            <label>Proveedor ("Ninguno" si no aplica):</label>
-                            <SelectProveedor onChange={handleInputChange} value={formData.proveedor} />
-                        </div>
                     </form>
                 </Modal.Body>
                 <Modal.Footer className="p-3 row">

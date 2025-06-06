@@ -118,7 +118,7 @@ const SelectProveedor = ({ value, onChange }) => {
   };
 
   return (
-    <div className="">
+    <div className="" >
       <Select
         id="proveedor"
         name="proveedor"
@@ -129,9 +129,15 @@ const SelectProveedor = ({ value, onChange }) => {
         onChange={handleChange}
         placeholder="Seleccione..."
         noOptionsMessage={() => "No hay proveedores disponibles"}
-        styles={customSelectStyles}
+        styles={{
+          ...customSelectStyles,
+          menuPortal: base => ({
+            ...base,
+            zIndex: 9999
+          })
+        }}
       />
-    </div>
+    </div >
   );
 };
 

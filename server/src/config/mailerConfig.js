@@ -61,7 +61,18 @@ async function enviarCorreoVerificacion(email, token) {
         from: 'mymtaller.cr@gmail.com', // Correo del sistema
         to: email, // Correo del cliente
         subject: `Cambio de contraseña`,
-        text: `Saludos, \n\nSu código de verificacion es: ${token} \n\n El codigo expira en 1 hora.`
+        html: `
+        <div style="font-family: Arial, sans-serif; background-color: #2b2f32; padding: 20px;">
+            <h2 style="color: #fff;">Saludos,</h2>
+            <p style="color: #fff;">Su código de verificación es:</p>
+            <hr style="border: 1px solid #1cbb8c;">
+            <p style="font-size: 24px; font-weight: bold; color: #1cbb8c;">${token}</p>
+            <hr style="border: 1px solid #1cbb8c;">
+            <p style="color: #fff;">Este código expirará en <strong>1 hora</strong>.</p>
+            <hr>
+            <p style="font-size: 12px; color: #fff;">Este es un mensaje automático, no responda a este correo.</p>
+        </div>
+    `
     };
 
     try {

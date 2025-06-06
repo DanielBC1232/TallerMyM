@@ -6,7 +6,7 @@ const PrivateRoute = ({ element }) => {
 
     // Si el rol es 2 (user), redirige a "/login"
     if (idRol === '2' || idRol === 2) {
-        return <Navigate to="/" replace />;
+        return token ? <Outlet /> : <Navigate to="/login" />;
     }
 
     return element;

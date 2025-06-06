@@ -62,7 +62,6 @@ const ListarUsuarios = () => {
     }
   };
 
-
   useEffect(() => {
     ObtenerUsuarios();
   }, []);

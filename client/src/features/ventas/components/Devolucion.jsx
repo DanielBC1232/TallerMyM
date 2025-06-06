@@ -67,7 +67,7 @@ const Devolucion = () => {
     obtenerDatos(); // Llamar la función para obtener los datos
   }, [idVenta]);
 
-
+  // Si no hay datos o el monto es nulo, no renderiza nada
   if (!formData) {
     return <div></div>;
   }

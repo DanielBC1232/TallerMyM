@@ -1,7 +1,6 @@
 import "rsuite/dist/rsuite.min.css";
 import './styles/app.css';
 import './styles/tables.css';
-import React from "react";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import { Routes, Route, useLocation, Router } from "react-router-dom";
@@ -47,13 +46,10 @@ import ListaAusencias from "./features/Trabajadores/TrabajadoresAdmin/Ausencias/
 //Aprobar-rechazar Vacaciones
 import IndexVacaciones from "./features/Trabajadores/TrabajadoresAdmin/Vacaciones/pages/IndexVacaciones.jsx";
 import EditarVacaciones from "./features/Trabajadores/TrabajadoresAdmin/Vacaciones/pages/Editar-aprobar-rechVacaciones.jsx";
-//--Fin admin
 
-//User-TRABAJADORES----
+//Empleados-TRABAJADORES----
 import IndexTrabajadoresUser from "./features/Trabajadores/TrabajadoresUser/Index/pages/IndexTrabUser.jsx";
-//Agregar Solicitud de vacaciones
 import SolicitarVacaciones from "./features/Trabajadores/TrabajadoresUser/Index/pages/SolicitarVacacaciones.jsx";
-//--FIN IMPORTS TRABAJADORES
 
 // Rutas para Clientes
 import IndexClientes from "./features/clientes/pages/IndexClientes.jsx";
@@ -69,6 +65,7 @@ import EditarUsuario from "./features/admininstracion/pages/EditarUsuario.jsx";
 import Login from "./components/Login.jsx";
 import CambiarContrasena from "./components/CambiarContrasena.jsx";
 import VerificarCorreo from "./components/EnviarCorreoRecuperacion.jsx";
+import { Error } from "./components/Error.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -83,6 +80,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
           <Route path="/verificar-correo" element={<VerificarCorreo />} />
+          <Route path="*" element={<Error />} />
 
         </Routes>
       ) : (
@@ -140,6 +138,10 @@ const App = () => {
             {/* Rutas de Administracion (protegidas) */}
             <Route path="/administracion" element={<PrivateRoute element={<IndexUsuarios />} />} />
             <Route path="/usuario-editar/:idUsuario" element={<PrivateRoute element={<EditarUsuario />} />} />
+
+            <Route path="*" element={<Error />} />
+
+
           </Routes>
         </Header>
       )}

@@ -62,6 +62,7 @@ const Pago = () => {
     return <div></div>; // No muestra nada si no hay resultados
   }
 
+
   return (
     <div className="mt-3 d-flex flex-column gap-3">
       <span>

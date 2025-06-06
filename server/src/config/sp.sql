@@ -149,7 +149,7 @@ BEGIN
     SET NOCOUNT ON;
 
     -- Capturar ordenes que se van a marcar como atrasadas
-    DECLARE @OrdenesAtrasadas TABLE (idOrden INT);
+    DECLARE @OrdenesAtrasadas TABLE (idOrden VARCHAR(50));
 
     -- Marcar ordenes como atrasadas si la fecha estimada ya vencio
     UPDATE ORDEN
@@ -213,9 +213,9 @@ BEGIN
     DECLARE @top NVARCHAR(10);
 
     IF @codigoOrden IS NULL AND @nombreCliente IS NULL
-        SET @top = N'TOP 15';
+        SET @top = N'TOP 13';
     ELSE
-        SET @top = N'TOP 30';
+        SET @top = N'TOP 50';
 
     -- Filtros dinamicos
     IF @codigoOrden IS NOT NULL
@@ -235,7 +235,7 @@ BEGIN
     INNER JOIN ORDEN O ON O.idOrden = V.idOrden
     INNER JOIN CLIENTE C ON C.idCliente = O.idCliente
     ' + @where + N'
-    ORDER BY V.fechaVenta ASC;';
+    ORDER BY V.fechaVenta DESC;';
 
     -- Ejecutar SQL
     EXEC sp_executesql @sql, @paramDefinition, @codigoOrden = @codigoOrden, @nombreCliente = @nombreCliente;

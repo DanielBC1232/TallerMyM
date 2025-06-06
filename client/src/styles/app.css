@@ -126,6 +126,10 @@
     background-color: #2e4c5a
 }
 
+.MuiModal-root {
+  overflow: visible !important;
+}
+
 .rs-modal-body {
     overflow: hidden !important;
 }

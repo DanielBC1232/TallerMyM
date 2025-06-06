@@ -1,4 +1,4 @@
- import React, { useState } from "react";
+ import { useState } from "react";
 import { Modal, Button } from "rsuite";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -109,8 +109,8 @@ const ModalSolicitarProducto = () => {
 
       <Modal open={open} onClose={handleClose}>
         <Modal.Header className="p-3">
-          <Modal.Title className="text-primary">Solicitar Productos</Modal.Title>
-          <hr className="text-primary" />
+          <Modal.Title className="text-success text-center">Solicitar Productos</Modal.Title>
+          <hr className="text-success" />
         </Modal.Header>
         <Modal.Body className="px-3">
           <span>Título de solicitud:</span>
