@@ -31,7 +31,8 @@ router.get("/obtenerSolicitudVacacion/:idVacaciones",authMiddleware, SolicitudCo
 //aprobar y rechazar
 router.put("/Aprob-Vacaciones/:idVacaciones",authMiddleware, SolicitudController.AprobarSolicitudVacaciones);
 router.put("/Rechazar-Vacaciones/:idVacaciones",authMiddleware, SolicitudController.RechazarSolicitudVacaciones);
-
+// Rutas para obtener las solicitudes de vacaciones por cedula
+router.get("/ObtenerVacacioneCedula/:cedula", authMiddleware, SolicitudController.ObtenerVacacionesPorCedula);
 
 // AMONESATACIONES--
 // Operaciones CRUD

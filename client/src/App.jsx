@@ -50,6 +50,7 @@ import EditarVacaciones from "./features/Trabajadores/TrabajadoresAdmin/Vacacion
 //Empleados-TRABAJADORES----
 import IndexTrabajadoresUser from "./features/Trabajadores/TrabajadoresUser/Index/pages/IndexTrabUser.jsx";
 import SolicitarVacaciones from "./features/Trabajadores/TrabajadoresUser/Index/pages/SolicitarVacacaciones.jsx";
+import UserVacaciones from "./features/Trabajadores/TrabajadoresUser/Vacaciones/UserVacaciones.jsx";
 
 // Rutas para Clientes
 import IndexClientes from "./features/clientes/pages/IndexClientes.jsx";
@@ -126,6 +127,7 @@ const App = () => {
             <Route path="/EditarVacaciones/:idVacaciones" element={<EditarVacaciones />} />
 
             {/*-------- USER TRABAJADORES--------*/}
+            <Route path="/vacaciones" element={<UserVacaciones/>}></Route>
             <Route path="/trabajadores-user" element={<IndexTrabajadoresUser />} />
             {/*Solicitud-Vacaciones */}
             <Route path="/AddSolicitudVacacion" element={<SolicitarVacaciones />} />

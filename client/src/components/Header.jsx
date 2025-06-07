@@ -5,7 +5,6 @@ import { Text } from "rsuite";
 import '../styles/tables.css';
 // Iconos
 import { IoPersonCircle } from "react-icons/io5";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { FaCar } from "react-icons/fa";
 import { MdCarRepair } from "react-icons/md";
 import { MdPerson } from "react-icons/md";
@@ -19,6 +18,7 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { BsPersonGear } from "react-icons/bs";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { IoIosCheckbox } from "react-icons/io";
+import { FaPlane } from "react-icons/fa";
 
 //Iconos
 const Header = ({ children }) => {
@@ -26,7 +26,9 @@ const Header = ({ children }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    if (token) {
+      navigate("/flujo");
+    } else {
       navigate("/login");
     }
   }, []);
@@ -131,6 +133,16 @@ const Header = ({ children }) => {
                     {({ isActive }) => (
                       <span className={isActive ? 'text-success' : ''}>
                         <BsPersonGear className={isActive ? 'text-success' : ''} size={20} /> {localStorage.getItem("username")}
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+                <li className="sidebar-header">Vacaciones</li>
+                <li className="sidebar-item">
+                  <NavLink className="sidebar-link" to='/vacaciones'>
+                    {({ isActive }) => (
+                      <span className={isActive ? 'text-success' : ''}>
+                        <FaPlane className={isActive ? 'text-success' : ''} size={20} />Vacaciones
                       </span>
                     )}
                   </NavLink>

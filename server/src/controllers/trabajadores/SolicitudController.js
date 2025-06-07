@@ -1,4 +1,4 @@
-import {  SolicitudRepository } from "../../models/trabajadores/solicitud.js";
+import { SolicitudRepository } from "../../models/trabajadores/solicitud.js";
 
 const solicitudRepo = new SolicitudRepository();
 
@@ -9,7 +9,7 @@ const InsertSolicitudVacaciones = async (req, res) => {
     const { fechaInicio, fechaFin, idTrabajador } = req.body;
     const newSolicitud = await solicitudRepo.InsertSolicitud(fechaInicio, fechaFin, idTrabajador);
 
-    res.status(201).json({message:"Vacaciones solicitadas correctamente",rowsAffected:newSolicitud});
+    res.status(201).json({ message: "Vacaciones solicitadas correctamente", rowsAffected: newSolicitud });
   } catch (error) {
     console.error("Error al insertar solicitud controller:", error);
     res.status(500).json({ error: "Error al insertar solicitud controller" });
@@ -101,19 +101,35 @@ const ObtenerVacacionxID = async (req, res) => {
   try {
     const { idVacaciones } = req.params; // Obtener el ID de la solicitud de vacaciones
 
-   
+
     const vacacion = await solicitudRepo.getVacionPorIdVacacion(idVacaciones);
 
     if (!vacacion) {
       res.status(400)
       console.log("Error400")
     };
-    res.status(200).json(vacacion)    
+    res.status(200).json(vacacion)
   } catch (error) {
     console.error("Error al obtener solicitud de vacaciones por ID:controller", error);
     res.status(500).json({ error: "Error al obtener solicitud de vacaciones por IDcontroller" });
   }
-};
+}
+// Obtener vacaciones por cedula
+const ObtenerVacacionesPorCedula = async (req, res) => {
+  try {
+    const cedula = req.params.cedula; // Obtener la cédula del trabajador desde los parámetros de la solicitud
+    const vacaciones = await solicitudRepo.getVacacionesCedula(cedula); // Llamar al método del repositorio para obtener las vacaciones por cédula
+
+    if (!vacaciones) {
+      return res.status(404).json({ error: "No se encontraron vacaciones para esta cédula" });
+    }
+    
+    res.status(200).json(vacaciones);
+  } catch (error) {
+    console.error("Error al obtener vacaciones por cédula:", error);
+    res.status(500).json({ error: "Error al obtener vacaciones por cédula" });
+  }
+}
 
 export {
   InsertSolicitudVacaciones,
@@ -122,5 +138,6 @@ export {
   AprobarSolicitudVacaciones,
   RechazarSolicitudVacaciones,
   ObtenerVacacionesGest,
-  ObtenerVacacionxID
+  ObtenerVacacionxID,
+  ObtenerVacacionesPorCedula
 };
