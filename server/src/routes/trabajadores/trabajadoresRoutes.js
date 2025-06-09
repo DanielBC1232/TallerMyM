@@ -42,7 +42,7 @@ router.delete("/Elim-Amonestacion/:idAmonestacion",authMiddleware, AmonestacionC
 // Rutas Get
 router.get("/obtenerAmonestaciones",authMiddleware, AmonestacionController.ObtenerAmonestaciones);
 router.get("/obtenerAmonestacion/:idAmonestacion",authMiddleware, AmonestacionController.ObtenerAmonestacionxID);
-
+router.get("/historialAmonestaciones/:cedula",authMiddleware, AmonestacionController.ObtenerAmonestacionesPorCedula);
 
 // AUSENCIAS--
 // Operaciones CRUD

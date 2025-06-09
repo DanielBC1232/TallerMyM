@@ -35,6 +35,8 @@ BEGIN
     IF (@precioMin IS NOT NULL AND @precioMax IS NOT NULL)
         SET @SQL = @SQL + ' AND precio BETWEEN @precioMin-1 AND @precioMax+1';
 
+	SET @SQL = @SQL + 'AND estado = 1';
+
     -- Ejecutar la consulta dinamica con los parametros correctamente pasados
     EXEC sp_executesql 
         @SQL, 
@@ -360,7 +362,7 @@ AS BEGIN
 	FROM PRODUCTO_POR_VENTA PPV
 	INNER JOIN VENTA V ON V.idVenta = PPV.idVenta
 	INNER JOIN PRODUCTO_SERVICIO P ON P.idProducto = PPV.idProducto
-	WHERE V.idVenta = @idVenta;
+	WHERE V.idVenta = @idVenta
 
 END;
 GO

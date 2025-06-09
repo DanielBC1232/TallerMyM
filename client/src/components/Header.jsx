@@ -19,6 +19,7 @@ import { BsPersonGear } from "react-icons/bs";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { IoIosCheckbox } from "react-icons/io";
 import { FaPlane } from "react-icons/fa";
+import { IoDocumentText } from "react-icons/io5";
 
 //Iconos
 const Header = ({ children }) => {
@@ -137,12 +138,20 @@ const Header = ({ children }) => {
                     )}
                   </NavLink>
                 </li>
-                <li className="sidebar-header">Vacaciones</li>
                 <li className="sidebar-item">
                   <NavLink className="sidebar-link" to='/vacaciones'>
                     {({ isActive }) => (
                       <span className={isActive ? 'text-success' : ''}>
                         <FaPlane className={isActive ? 'text-success' : ''} size={20} />Vacaciones
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+                <li className="sidebar-item">
+                  <NavLink className="sidebar-link" to='/historial-amonestaciones'>
+                    {({ isActive }) => (
+                      <span className={isActive ? 'text-success' : ''}>
+                        <IoDocumentText className={isActive ? 'text-success' : ''} size={20} />Amonestaciones
                       </span>
                     )}
                   </NavLink>

@@ -2,7 +2,7 @@ import sql from 'mssql';
 import { connectDB } from '../../config/database.js';
 
 export class ProductoServicio {
-    constructor(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, stockMinimo) {
+    constructor(idProducto, nombre, marca, descripcion, precio, stock, fechaIngreso, ubicacionAlmacen, proveedor, categoria, vehiculosCompatibles, tipo, img, porcentajeDescuento, stockMinimo, estado) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.marca = marca;
@@ -18,6 +18,7 @@ export class ProductoServicio {
         this.img = img;
         this.porcentajeDescuento = porcentajeDescuento;
         this.stockMinimo = stockMinimo;
+        this.estado = estado;
     }
 }
 
@@ -69,7 +70,8 @@ export class ProductoRepository {
                     img,
                     porcentajeDescuento*100 as porcentajeDescuento,
                     stockMinimo
-                    FROM PRODUCTO_SERVICIO WHERE idProducto = @idProducto`);
+                    FROM PRODUCTO_SERVICIO WHERE idProducto = @idProducto
+                    AND estado = 1`); // Consulta SQL
             return result.recordset.length > 0 ? result.recordset[0] : null;
         }
         catch (error) {
@@ -148,6 +150,7 @@ export class ProductoRepository {
                         porcentajeDescuento = @porcentajeDescuento,
                         stockMinimo = @stockMinimo
                     WHERE idProducto = @idProducto
+                    AND estado = 1
                 `);
             console.log("Filas afectadas:", result.rowsAffected[0]);
             return result.rowsAffected[0];
@@ -161,9 +164,11 @@ export class ProductoRepository {
     async deleteProducto(idProducto) {
         try {
             const pool = await connectDB();
-            await pool.request().input("idProducto", sql.Int, idProducto).query(`
-                DELETE FROM PRODUCTO_SERVICIO WHERE idProducto = @idProducto
-            `);
+            await pool.request().input("idProducto", sql.Int, idProducto)
+                .query(`
+                UPDATE PRODUCTO_SERVICIO
+                SET estado = 0
+                WHERE idProducto = @idProducto`);
         }
         catch (error) {
             console.error("Error en delete:", error);
@@ -176,7 +181,7 @@ export class ProductoRepository {
             const pool = await connectDB();
             const result = await pool.request().query(`
                 SELECT MIN(precio) AS precioMin, MAX(precio) AS precioMax
-                FROM PRODUCTO_SERVICIO`);
+                FROM PRODUCTO_SERVICIO WHERE estado = 1`);
             return result.recordset;
         } catch (error) {
             console.error("Error en obtener:", error);

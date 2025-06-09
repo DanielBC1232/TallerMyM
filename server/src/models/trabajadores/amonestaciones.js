@@ -147,4 +147,32 @@ export class AmonestacionRepository {
             throw new Error("Error al obtener amonestación por ID");
         }
     }
+
+    //Obtener amonestaciones por cédula de trabajador
+    async getAmonestacionesPorCedula(cedula) {
+        try {
+            const pool = await connectDB();
+            const result = await pool
+                .request()
+                .input("cedula", sql.VarChar(20), cedula)
+                .query(`
+                    SELECT 
+                        a.idAmonestacion,
+                        a.idTrabajador,
+                        a.fechaAmonestacion,
+                        a.tipoAmonestacion,
+                        a.motivo,
+                        a.accionTomada,
+                        t.nombreCompleto AS nombreTrabajador
+                    FROM AMONESTACIONES a 
+                    JOIN Trabajador t ON a.idTrabajador = t.idTrabajador
+                    WHERE t.cedula = @cedula
+                    ORDER BY a.fechaAmonestacion DESC
+                `);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error al obtener amonestaciones por cédula:", error);
+            throw new Error("Error al obtener amonestaciones por cédula");
+        }
+    }
 }
