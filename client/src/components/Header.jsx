@@ -25,14 +25,7 @@ import { IoDocumentText } from "react-icons/io5";
 const Header = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/flujo");
-    } else {
-      navigate("/login");
-    }
-  }, []);
+
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");

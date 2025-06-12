@@ -445,11 +445,10 @@ const Agregar = () => {
                       name="tipo"
                       className="form-select rounded-5"
                       value={formData.tipo}
-                      onChange={handleChange}
-                    >
+                      onChange={handleChange}>
                       <option value="">Seleccione...</option>
-                      <option selected value="PRODUCTO">Producto</option>
-                      <option value="SERVICIO">Servicio</option>
+                      <option selected value="producto">Producto</option>
+                      <option value="servicio">Servicio</option>
                     </select>
                   </div>
                 </Col>

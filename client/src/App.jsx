@@ -3,7 +3,7 @@ import './styles/app.css';
 import './styles/tables.css';
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute.jsx";
-import { Routes, Route, useLocation, Router } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 // Rutas para Inventario
 
@@ -89,6 +89,14 @@ const App = () => {
         <Header>
           <Routes>
 
+            <Route
+              path="/"
+              element={
+                localStorage.getItem("token")
+                  ? <Navigate to="/flujo" replace />
+                  : <Navigate to="/login" replace />
+              }
+            />
             {/* Rutas de Inventario */}
             <Route path="/inventario-agregar" element={<Agregar />} />
             <Route path="/inventario" element={<IndexInventario />} />
@@ -129,7 +137,7 @@ const App = () => {
 
             {/*-------- USER TRABAJADORES--------*/}
             <Route path="/historial-amonestaciones" element={<HistorialAmonestaciones />} />
-            <Route path="/vacaciones" element={<UserVacaciones/>}></Route>
+            <Route path="/vacaciones" element={<UserVacaciones />}></Route>
             <Route path="/trabajadores-user" element={<IndexTrabajadoresUser />} />
             {/*Solicitud-Vacaciones */}
             <Route path="/AddSolicitudVacacion" element={<SolicitarVacaciones />} />
