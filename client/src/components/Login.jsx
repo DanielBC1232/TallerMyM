@@ -86,7 +86,7 @@ const Login = () => {
             <div className="container d-flex align-items-center justify-content-center min-vh-100">
                 <div className="row w-100">
                     <div className="col-12 col-md-6 col-lg-4 mx-auto">
-                        <div className="card shadow-sm">
+                        <div className="card py-4 px-3 shadow-sm">
                             <div className='card-header bg-white'>
                                 <h1 className='text-center text-primary mb-3'><strong>Taller MyM</strong></h1>
                             </div>
