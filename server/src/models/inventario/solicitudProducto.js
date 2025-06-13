@@ -90,4 +90,21 @@ export class SolicitudRepository {
             throw new Error("Error al obtener solicitudes", error);
         }
     }
+
+    //Get historial solicitudes
+    async getHistorialSolicitudes() {
+        try {
+            const pool = await connectDB();
+            const result = await pool
+                .request()
+                .query(`
+                    SELECT top 15 *
+                    FROM INV_REPUESTO_SOLICITUD
+                    ORDER BY fecha DESC`);
+            return result.recordset;
+        }
+        catch (error) {
+            throw new Error("Error al obtener historial de solicitudes", error);
+        }
+    }
 }

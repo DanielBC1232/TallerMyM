@@ -132,11 +132,15 @@ const IndexInventario = () => {
           <div className="col-12 col-md-6 mb-3 mb-md-0 d-flex justify-content-center justify-content-md-start">
             <Link to="/inventario-agregar"
               className="btn btn-success rounded-5 text-white d-flex align-items-center justify-content-center gap-1">
-              Agregar producto
+              Registrar producto
             </Link>
           </div>
           <div className="col-12 col-md-6 d-flex justify-content-center justify-content-md-end">
             <ModalSolicitarProducto />
+            <Link to="/historial-solicitudes"
+              className="btn btn-success rounded-5 text-white d-flex align-items-center justify-content-center gap-1 ms-3">
+              Historial Solicitudes
+            </Link>
           </div>
         </div>
       </div>

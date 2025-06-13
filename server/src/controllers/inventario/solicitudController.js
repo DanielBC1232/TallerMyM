@@ -64,10 +64,22 @@ const getSolicitudsCalificadas = async (_req, res) => {
     }
 };
 
+//controller getHistorialSolicitudes
+const getHistorialSolicitudes = async (_req, res) => {
+    try {
+        const historialSolicitudes = await SolicitudRepo.getHistorialSolicitudes();
+        res.json(historialSolicitudes);
+    } catch (error) {
+        console.error("Error al obtener historial de solicitudes:", error);
+        res.status(500).json({ error: "Error al obtener historial de solicitudes" });
+    }
+};
+
 // Se corrigió el nombre de la exportación para ser consistente con el nombre de la función
 export {
     getAllSolicitud,
     addSolicitud,
     updateSolicitud,
-    getSolicitudsCalificadas
+    getSolicitudsCalificadas,
+    getHistorialSolicitudes
 }

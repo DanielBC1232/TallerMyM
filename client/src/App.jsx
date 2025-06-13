@@ -12,6 +12,7 @@ import IndexInventario from "./features/inventario/pages/index";
 import Editar from "./features/inventario/pages/Editar";
 import Agregar from "./features/inventario/pages/Agregar";
 import Solicitudes from "./features/inventario/pages/Solicitudes";
+import HistorialSolicitudes from "./features/inventario/pages/HistorialSolicitudes.jsx";
 
 // Rutas para Ventas
 import IndexVentas from './features/ventas/pages/index.jsx';
@@ -103,6 +104,7 @@ const App = () => {
             <Route path="/inventario-detalles/:idProducto" element={<Detalles />} />
             <Route path="/inventario-editar/:idProducto" element={<Editar />} />
             <Route path="/solicitudes" element={<Solicitudes />} />
+            <Route path="/historial-solicitudes" element={<HistorialSolicitudes />} />
             {/* Rutas de Flujo */}
             <Route path="/flujo" element={<IndexFlujo />} />
             <Route path="/flujo-detalles/:idOrden" element={<DetallesOrden />} />
