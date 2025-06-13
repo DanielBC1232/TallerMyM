@@ -2,12 +2,12 @@ import sql from 'mssql';
 import { connectDB } from '../../config/database.js';
 
 export class Solicitud {
-    constructor(fechaInicio, fechaFin, idTrabajador) {
+    constructor(fechaInicio, fechaFin, idTrabajador, cedula) {
 
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.idTrabajador = idTrabajador;
-
+        this.cedula = cedula;
     }
 }
 //SOLICITUD DE VACACIONES
@@ -15,7 +15,7 @@ export class Solicitud {
 export class SolicitudRepository {
     // Insertar nuevos clientes
     async InsertSolicitud(fechaInicio, fechaFin, idTrabajador) {
-        
+
         try {
             const pool = await connectDB();
             const result = await pool
@@ -27,8 +27,8 @@ export class SolicitudRepository {
                     INSERT INTO VACACIONES (fechaInicio, fechaFin, idTrabajador)
                     VALUES (@fechaInicio, @fechaFin, @idTrabajador)
                 `);
-                return result.rowsAffected[0];
-              
+            return result.rowsAffected[0];
+
         } catch (error) {
             console.error("Error en insert:", error);
             throw new Error("Error al insertar solicitud");
@@ -150,13 +150,58 @@ export class SolicitudRepository {
         }
     }
 
+    //obtener idTrabajador por cedula
+    async getIdTrabajadorByCedula(cedula) {
+        try {
+            const pool = await connectDB();
+            const result = await pool
+                .request()
+                .input("cedula", sql.VarChar, cedula)
+                .query(`SELECT idTrabajador FROM TRABAJADOR WHERE cedula = @cedula`);
+            return result.recordset[0]?.idTrabajador || null; // Devuelve el idTrabajador o null si no se encuentra
+        } catch (error) {
+            console.error("Error al obtener el idTrabajador por cédula:", error);
+            throw new Error("Error al obtener el idTrabajador por cédula");
+        }
+    }
+
+    //Metodos Get vacaciones por cedula
+    async getVacacionesCedula(cedula) {
+        //obtener idTrabajador por cedula
+        const idTrabajador = await this.getIdTrabajadorByCedula(cedula);
+        if (!idTrabajador) {
+            throw new Error("Trabajador no encontrado con la cédula proporcionada");
+        }
+        // Obtener las vacaciones del trabajador por idTrabajador
+        try {
+            const pool = await connectDB();
+            const result = await pool
+                .request()
+                .input("idTrabajador", sql.Int, idTrabajador)
+                .query(`
+                    SELECT 
+                    idVacaciones,
+                    solicitud,
+                    fechaInicio, 
+                    fechaFin,
+                    motivoRechazo,
+                    idTrabajador
+                    FROM VACACIONES 
+                    WHERE idTrabajador = @idTrabajador`);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error al obtener las vacaciones por cédula:", error);
+            throw new Error("Error al obtener las vacaciones por cédula");
+        }
+    }
+
     async getVacionPorIdVacacion(idVacaciones) {
         try {
             const pool = await connectDB();
             const result = await pool
-            .request()
-            .input("idVacaciones", sql.Int, idVacaciones)
-            .query(`SELECT 
+                .request()
+                .input("idVacaciones", sql.Int, idVacaciones)
+                .query(`SELECT 
                 idVacaciones,
                 solicitud,
                 fechaInicio, 
@@ -165,8 +210,8 @@ export class SolicitudRepository {
                 idTrabajador
                   FROM VACACIONES 
                   WHERE idVacaciones = @idVacaciones`);
-                  console.log("Paso por el modelo")
-                  console.log(result);
+            console.log("Paso por el modelo")
+            console.log(result);
             return result.recordset[0];
         } catch (error) {
             console.error("Error al obtener la solicitud:model", error);

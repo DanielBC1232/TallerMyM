@@ -68,7 +68,6 @@ const ObtenerAmonestacionxID = async (req, res) => {
     
     if(!amonestacion){
       res.status(400)
-      console.log("Error400")
     };      
     res.status(200).json(amonestacion)
   } catch (error) {
@@ -77,10 +76,28 @@ const ObtenerAmonestacionxID = async (req, res) => {
   }
 };
 
+//Obtener amonestaciones por cedula
+const ObtenerAmonestacionesPorCedula = async (req, res) => {
+  try {
+    const cedula = req.params.cedula;
+    const amonestaciones = await amonestacionRepo.getAmonestacionesPorCedula(cedula);
+    
+    if (!amonestaciones || amonestaciones.length === 0) {
+      return res.status(404).json({ message: "No se encontraron amonestaciones para esta cédula" });
+    }
+    
+    res.status(200).json(amonestaciones);
+  } catch (error) {
+    console.error("Error al obtener amonestaciones por cédula:", error);
+    res.status(500).json({ error: "Error al obtener amonestaciones por cédula" });
+  }
+}
+
 export {
   InsertAmonestacion,
   UpdateAmonestacion,
   DeleteAmonestacion,
   ObtenerAmonestaciones,
-  ObtenerAmonestacionxID
+  ObtenerAmonestacionxID,
+  ObtenerAmonestacionesPorCedula
 };

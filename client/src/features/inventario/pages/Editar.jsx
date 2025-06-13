@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectMarca from "../components/SelectMarca";
 import SelectProveedor from "../components/SelectProveedor";
@@ -16,14 +16,16 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Editar = () => {
   const navigate = useNavigate(); // Hook para navegar
+  const uploadRef = useRef(); // Referencia al componente SubirImagen
+  const [preview, setPreview] = useState(null); // Estado para la URL de previsualización
   const { idProducto } = useParams();
   const [formData, setFormData] = useState({
     idProducto: parseInt(idProducto),
     nombre: "",
     marca: "",
     descripcion: "",
-    precio: 0.00,
-    stock: 0,
+    precio: parseFloat(0.00) || '',
+    stock: parseInt(0) || '',
     fechaIngreso: "",
     ubicacionAlmacen: "",
     proveedor: "",
@@ -31,7 +33,7 @@ const Editar = () => {
     vehiculosCompatibles: [],
     img: "",
     tipo: "",
-    porcentajeDescuento: 0,
+    porcentajeDescuento: parseInt(0),
     stockMinimo: parseInt(0) || ''
   });
 
@@ -45,7 +47,10 @@ const Editar = () => {
         });
         const fechaFormateada = res.data.fechaIngreso.split("T")[0]; // Formateo de fecha
         setFormData({ ...res.data, fechaIngreso: fechaFormateada }); // Carga los datos en el formulario
-
+        // Si el producto ya tiene una imagen, se establece para la previsualización
+        if (res.data.img) {
+          setPreview(`${BASE_URL}/img/${res.data.img}`);
+        }
       } catch (error) {
         console.error("Error al obtener el producto:", error.message);
         if (error.response) {
@@ -303,66 +308,77 @@ const Editar = () => {
     return pass;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    //console.log(formData);
 
-    if (verificacion()) {
-      axios
-        .put(
-          `${BASE_URL}/productos/actualizar-producto/`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`, // Añadir el token JWT en el header
-            },
-          }
-        )
-        .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Producto editado correctamente",
-            showConfirmButton: false,
-            timer: 1000,
-          }).then(() => {
-            // Aquí podrías agregar alguna lógica si es necesario después del éxito
-          });
-        })
-        .catch((error) => {
-          console.error("Error al actualizar el producto:", error.message);
-          if (error.response) {
-            if (error.response.status === 401) {
-              Swal.fire({
-                icon: "warning",
-                title: "Advertencia",
-                text: "Operacion no Autorizada",
-                showConfirmButton: false,
-              });
-              navigate(0); // Redirigir si no autorizado
-            } else if (error.response.status === 403) {
-              Swal.fire({
-                icon: "warning",
-                title: "Autenticación",
-                text: "Sesión expirada",
-                showConfirmButton: false,
-              });
-              localStorage.clear();
-              navigate("/login"); // Redirigir si sesión expirada
-            } else {
-              Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Hubo un error al editar el producto",
-                showConfirmButton: false,
-              });
-            }
-          }
-        })
-        .finally(() => {
-          navigate(`/inventario-detalles/${idProducto}`); // Redirigir al detalle del producto después de la operación
-        });
+    if (!verificacion()) return;
+
+    let updatedFormData = { ...formData };
+
+    // Solo intentar subir la imagen si el usuario ha seleccionado una NUEVA imagen
+    // Es decir, si fileInfo en SubirImagen no es nulo Y es diferente de la imagen inicial
+    if (uploadRef.current && uploadRef.current.hasNewFileSelected()) {
+      const fileName = await uploadRef.current.uploadAll();
+      if (fileName) {
+        updatedFormData.img = fileName; // Se actualiza solo si hay un nuevo nombre de archivo
+      } else {
+        // Si la subida de una nueva imagen falló, podrías manejarlo aquí
+        // Por ahora, simplemente no actualizamos updatedFormData.img
+      }
+    } else if (uploadRef.current && uploadRef.current.isImageCleared()) {
+      // Esta condición es para si el usuario explícitamente borró la imagen
+      updatedFormData.img = ""; // O un valor que indique que no hay imagen
     }
+    // Si no se seleccionó una nueva imagen ni se borró la existente,
+    // updatedFormData.img mantiene el valor original de formData.img
 
+    axios.put(`${BASE_URL}/productos/actualizar-producto/`, updatedFormData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Producto editado correctamente",
+          showConfirmButton: false,
+          timer: 1000,
+        }).then(() => {
+          // Aquí podrías agregar alguna lógica si es necesario después del éxito
+        });
+      })
+      .catch((error) => {
+        console.error("Error al actualizar el producto:", error.message);
+        if (error.response) {
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirigir si no autorizado
+          } else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirigir si sesión expirada
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Hubo un error al editar el producto",
+              showConfirmButton: false,
+            });
+          }
+        }
+      }).finally(() => {
+        navigate(`/inventario-detalles/${idProducto}`); // Redirigir al detalle del producto después de la operación
+      });
   };
 
   return (
@@ -377,8 +393,10 @@ const Editar = () => {
                 <Col xs={6}>
                   <div className="position-relative">
                     <SubirImagen
-                      value={formData.img}
-                      onChange={(newPath) => setFormData((prev) => ({ ...prev, img: newPath }))}
+                      ref={uploadRef}
+                      preview={preview}
+                      setPreview={setPreview}
+                      currentImage={formData.img} // Pasa la imagen actual del producto
                       className="position-absolute top-0 end-0 p-2"
                     />
                   </div>
@@ -405,7 +423,7 @@ const Editar = () => {
                       className="rounded-5"
                     />
                   </div>
-                  <div style={{marginBottom: "11px"}}>
+                  <div style={{ marginBottom: "11px" }}>
                     <label htmlFor="vehiculos" className="form-label">Vehículos compatibles:</label>
                     <SelectVehiculos
                       value={formData.vehiculosCompatibles}
@@ -414,30 +432,31 @@ const Editar = () => {
                     />
                   </div>
                   <div className="mt-2">
-                      <label htmlFor="stockMinimo" className="form-label">Stock Mínimo:</label>
-                      <input
-                        type="number"
-                        name="stockMinimo"
-                        className="form-control rounded-5"
-                        value={formData.stockMinimo ?? 0}
-                        onChange={handleChange}
-                      />
-                    </div>
+                    <label htmlFor="stockMinimo" className="form-label">Stock Mínimo:</label>
+                    <input
+                      type="number"
+                      name="stockMinimo"
+                      className="form-control rounded-5"
+                      value={formData.stockMinimo ?? 0}
+                      onChange={handleChange}
+                    />
+                  </div>
                 </Col>
 
                 {/* Segunda columna de datos */}
                 <Col xs={12} sm={6} className="">
                   <div className="mb-3">
                     <label htmlFor="precio" className="form-label">Precio:</label>
-                      <input
-                        id="precio"
-                        name="precio"
-                        type="number"
-                        min={0}
-                        step={0.01}
-                        className="form-control rounded-5"
-                        value={formData.precio}
-                        onChange={handleChange}/>
+                    <input
+                      placeholder="CRC"
+                      id="precio"
+                      name="precio"
+                      type="number"
+                      min={0}
+                      step={0.01}
+                      className="form-control rounded-5"
+                      value={formData.precio || ''}
+                      onChange={(e) => handleChange(e, 'precio')} />
                   </div>
                   <div className="mb-3">
                     <label htmlFor="fechaIngreso" className="form-label">Fecha de ingreso:</label>
@@ -467,11 +486,11 @@ const Editar = () => {
                       id="stock"
                       name="stock"
                       type="number"
+                      placeholder="  #"
                       min={0}
                       className="form-control rounded-5"
-                      value={formData.stock}
-                      onChange={handleChange}
-                    />
+                      value={formData.stock || ''}
+                      onChange={(e) => handleChange(e, 'stock')} />
                   </div>
                 </Col>
 
@@ -487,8 +506,8 @@ const Editar = () => {
                       onChange={handleChange}
                     >
                       <option value="">Seleccione el tipo</option>
-                      <option value="PRODUCTO">Producto</option>
-                      <option value="SERVICIO">Servicio</option>
+                      <option value="producto">Producto</option>
+                      <option value="servicio">Servicio</option>
                     </select>
                   </div>
                   <div className="mb-3">
@@ -539,7 +558,7 @@ const Editar = () => {
                         rows={4}
                       />
                     </div>
-                    
+
                   </div>
                 </Col>
               </Row>
@@ -556,7 +575,7 @@ const Editar = () => {
                     type="submit"
                     className="btn btn-primary rounded-5 d-flex align-items-center justify-content-center gap-1"
                     style={{ maxWidth: "120px", height: "31px" }}>
-                    <FaSave size="20"/> Guardar </button>
+                    <FaSave size="20" /> Guardar </button>
                 </div>
               </Row>
             </Col>

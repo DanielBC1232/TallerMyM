@@ -110,4 +110,20 @@ const existePago = async (req, res) => {
     }
 };
 
-export { insertVenta, getVentas, getVentaById, agregarProducto, getProductosVenta, deleteProductoVenta, existePago };
+const actualizarProductoVenta = async (req, res) => {
+    try {
+        const { idProductoVenta, idProducto, cantidad, tipo } = req.body;
+        const rowsAffected = await VentaRepo.actualizarProductoVenta(idProductoVenta, idProducto, cantidad, tipo);
+
+        if (rowsAffected > 0) {
+            res.status(200).json({ message: "Producto actualizado correctamente" });
+        } else {
+            res.status(404).json({ error: "Producto no encontrado" });
+        }
+    } catch (error) {
+        console.error("Error actualizando producto:", error);
+        res.status(500).json({ error: "Error actualizando producto" });
+    }
+}
+
+export { insertVenta, getVentas, getVentaById, agregarProducto, getProductosVenta, deleteProductoVenta, existePago, actualizarProductoVenta };

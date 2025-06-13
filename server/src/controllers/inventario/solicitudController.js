@@ -3,7 +3,7 @@ import { SolicitudRepository } from "../../models/inventario/solicitudProducto.j
 const SolicitudRepo = new SolicitudRepository();
 
 // Obtener todas las solicitudes
-export const getAllSolicituds = async (_req, res) => {
+const getAllSolicitud = async (_req, res) => {
     try {
         const solicitud = await SolicitudRepo.getAllSolicitud(); // Get
         //validaciones
@@ -15,7 +15,7 @@ export const getAllSolicituds = async (_req, res) => {
 };
 
 // Registrar una nueva solicitud
-export const addSolicitud = async (req, res) => {
+const addSolicitud = async (req, res) => {
     try {
         // Obtener los datos del cuerpo de la solicitud
         const { titulo, cuerpo, usuario } = req.body;
@@ -35,7 +35,7 @@ export const addSolicitud = async (req, res) => {
 };
 
 // Actualizar una solicitud
-export const updateSolicitud = async (req, res) => {
+const updateSolicitud = async (req, res) => {
     try {
         // Obtener los datos del cuerpo de la solicitud
         const { idSolicitud, aprobado } = req.body;
@@ -53,21 +53,33 @@ export const updateSolicitud = async (req, res) => {
     }
 };
 
-// Eliminar una solicitud (se agregó esta función, aunque no estaba en el código original)
-export const deleteSolicitud = async (req, res) => {
+// obtener solicitudes calificadas
+const getSolicitudsCalificadas = async (_req, res) => {
     try {
-        const idSolicitud = parseInt(req.params.id);
-        const resultadoEliminacion = await SolicitudRepo.deleteSolicitud(idSolicitud);
-        if (resultadoEliminacion > 0) {
-            res.status(200).json({ message: "Solicitud eliminada exitosamente" });
-        } else {
-            res.status(404).json({ error: "Solicitud no encontrada" });
-        }
+        const solicitudesCalificadas = await SolicitudRepo.getSolicitudsCalificadas();
+        res.json(solicitudesCalificadas);
     } catch (error) {
-        console.error("Error al eliminar la solicitud:", error);
-        res.status(500).json({ error: "Error al eliminar la solicitud" });
+        console.error("Error al obtener solicitudes calificadas:", error);
+        res.status(500).json({ error: "Error al obtener solicitudes calificadas" });
+    }
+};
+
+//controller getHistorialSolicitudes
+const getHistorialSolicitudes = async (_req, res) => {
+    try {
+        const historialSolicitudes = await SolicitudRepo.getHistorialSolicitudes();
+        res.json(historialSolicitudes);
+    } catch (error) {
+        console.error("Error al obtener historial de solicitudes:", error);
+        res.status(500).json({ error: "Error al obtener historial de solicitudes" });
     }
 };
 
 // Se corrigió el nombre de la exportación para ser consistente con el nombre de la función
-export { getAllSolicituds as getAllSolicitud };
+export {
+    getAllSolicitud,
+    addSolicitud,
+    updateSolicitud,
+    getSolicitudsCalificadas,
+    getHistorialSolicitudes
+}

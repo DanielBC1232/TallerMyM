@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Modal } from "rsuite";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';

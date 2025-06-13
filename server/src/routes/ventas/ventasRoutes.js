@@ -11,6 +11,6 @@ router.post("/agregar-producto/",authMiddleware, ventasController.agregarProduct
 router.get("/obtener-productos-venta/:id",authMiddleware, ventasController.getProductosVenta);
 router.post("/eliminar-producto-venta/",authMiddleware, ventasController.deleteProductoVenta);
 router.get("/existe-pago/:id",authMiddleware, ventasController.existePago);
-
+router.post("/actualizar-producto-venta/",authMiddleware, ventasController.actualizarProductoVenta);
 // Exporta el router usando Module ES
 export default router;

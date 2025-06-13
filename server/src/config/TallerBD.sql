@@ -42,7 +42,6 @@ CREATE TABLE USUARIO (
 );
 GO
 
-select * from USUARIO
 INSERT INTO USUARIO(username, email, cedula, password, idRol)
 VALUES ('admin', 'adminMYM@gmail.com', '208370479', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8', 1);--password:password
 --select * from USUARIO
@@ -212,6 +211,7 @@ CREATE TABLE PRODUCTO_SERVICIO(
     proveedor VARCHAR(50) NOT NULL,
     categoria VARCHAR(50) NOT NULL,
     vehiculosCompatibles NVARCHAR(MAX) NOT NULL,--array
+	estado BIT NOT NULL DEFAULT 1,
 
     tipo VARCHAR(50) NOT NULL, --SERVICIO O PRODUCTO
     img NVARCHAR(255) NULL,
@@ -221,6 +221,7 @@ CREATE TABLE PRODUCTO_SERVICIO(
 	stockMinimo INT NULL
 )
 GO
+ALTER TABLE PRODUCTO_SERVICIO ADD estado BIT NOT NULL DEFAULT 1; --nuevo cambio
 
 CREATE TABLE AUDITORIA_TABLAS(
 

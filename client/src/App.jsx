@@ -3,7 +3,7 @@ import './styles/app.css';
 import './styles/tables.css';
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute.jsx";
-import { Routes, Route, useLocation, Router } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 // Rutas para Inventario
 
@@ -12,6 +12,7 @@ import IndexInventario from "./features/inventario/pages/index";
 import Editar from "./features/inventario/pages/Editar";
 import Agregar from "./features/inventario/pages/Agregar";
 import Solicitudes from "./features/inventario/pages/Solicitudes";
+import HistorialSolicitudes from "./features/inventario/pages/HistorialSolicitudes.jsx";
 
 // Rutas para Ventas
 import IndexVentas from './features/ventas/pages/index.jsx';
@@ -50,6 +51,8 @@ import EditarVacaciones from "./features/Trabajadores/TrabajadoresAdmin/Vacacion
 //Empleados-TRABAJADORES----
 import IndexTrabajadoresUser from "./features/Trabajadores/TrabajadoresUser/Index/pages/IndexTrabUser.jsx";
 import SolicitarVacaciones from "./features/Trabajadores/TrabajadoresUser/Index/pages/SolicitarVacacaciones.jsx";
+import UserVacaciones from "./features/Trabajadores/TrabajadoresUser/Vacaciones/UserVacaciones.jsx";
+import HistorialAmonestaciones from "./features/Trabajadores/TrabajadoresUser/Amonestaciones/HistorialAmonestaciones.jsx";
 
 // Rutas para Clientes
 import IndexClientes from "./features/clientes/pages/IndexClientes.jsx";
@@ -87,12 +90,21 @@ const App = () => {
         <Header>
           <Routes>
 
+            <Route
+              path="/"
+              element={
+                localStorage.getItem("token")
+                  ? <Navigate to="/flujo" replace />
+                  : <Navigate to="/login" replace />
+              }
+            />
             {/* Rutas de Inventario */}
             <Route path="/inventario-agregar" element={<Agregar />} />
             <Route path="/inventario" element={<IndexInventario />} />
             <Route path="/inventario-detalles/:idProducto" element={<Detalles />} />
             <Route path="/inventario-editar/:idProducto" element={<Editar />} />
             <Route path="/solicitudes" element={<Solicitudes />} />
+            <Route path="/historial-solicitudes" element={<HistorialSolicitudes />} />
             {/* Rutas de Flujo */}
             <Route path="/flujo" element={<IndexFlujo />} />
             <Route path="/flujo-detalles/:idOrden" element={<DetallesOrden />} />
@@ -126,6 +138,8 @@ const App = () => {
             <Route path="/EditarVacaciones/:idVacaciones" element={<EditarVacaciones />} />
 
             {/*-------- USER TRABAJADORES--------*/}
+            <Route path="/historial-amonestaciones" element={<HistorialAmonestaciones />} />
+            <Route path="/vacaciones" element={<UserVacaciones />}></Route>
             <Route path="/trabajadores-user" element={<IndexTrabajadoresUser />} />
             {/*Solicitud-Vacaciones */}
             <Route path="/AddSolicitudVacacion" element={<SolicitarVacaciones />} />

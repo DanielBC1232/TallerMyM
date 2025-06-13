@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ContenedorProductos from "../components/contenedorArticulo";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectMarca from "../components/SelectMarca";
@@ -10,7 +10,7 @@ import {
   useNavigate
 } from "react-router-dom";
 import axios from "axios";
-import { Row, Text } from "rsuite";
+import { Text } from "rsuite";
 import Notificaciones from "../../../components/Notificaciones";
 import "../styles/inv.css";
 //URL Base
@@ -49,7 +49,6 @@ const IndexInventario = () => {
           }));
         }
       } catch (error) {
-        console.error("Error obteniendo precios:", error);
         if (error.response) {
           if (error.response.status === 401) {
             Swal.fire({
@@ -60,21 +59,8 @@ const IndexInventario = () => {
             });
             navigate(0); // Redirigir si no autorizado
           } else if (error.response.status === 403) {
-            Swal.fire({
-              icon: "warning",
-              title: "Autenticación",
-              text: "Sesión expirada",
-              showConfirmButton: false,
-            });
             localStorage.clear();
             navigate("/login"); // Redirigir si sesión expirada
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: "Hubo un error al obtener los precios",
-              showConfirmButton: false,
-            });
           }
         }
       }
@@ -146,11 +132,15 @@ const IndexInventario = () => {
           <div className="col-12 col-md-6 mb-3 mb-md-0 d-flex justify-content-center justify-content-md-start">
             <Link to="/inventario-agregar"
               className="btn btn-success rounded-5 text-white d-flex align-items-center justify-content-center gap-1">
-              Agregar producto
+              Registrar producto
             </Link>
           </div>
           <div className="col-12 col-md-6 d-flex justify-content-center justify-content-md-end">
             <ModalSolicitarProducto />
+            <Link to="/historial-solicitudes"
+              className="btn btn-success rounded-5 text-white d-flex align-items-center justify-content-center gap-1 ms-3">
+              Historial Solicitudes
+            </Link>
           </div>
         </div>
       </div>

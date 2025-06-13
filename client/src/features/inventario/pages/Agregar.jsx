@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import SelectCategoria from "../components/SelectCategoria";
 import SelectMarca from "../components/SelectMarca";
 import SelectProveedor from "../components/SelectProveedor";
-import SubirImagen from "../components/SubirImagen";
 import SelectVehiculos from "../components/SelectVehiculos";
 import { Grid, Row, Col } from "rsuite";
 import "../styles/inv.css";
@@ -11,16 +10,19 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { IoMdReturnLeft } from "react-icons/io";
 import { IoMdAdd } from "react-icons/io";
+import SubirImagen from "../components/SubirImagen";
 //URL Base
 export const BASE_URL = import.meta.env.VITE_API_URL;
 
 const Agregar = () => {
   const navigate = useNavigate(); // Hook para navegar
+  const uploadRef = useRef(); // Referencia al componente SubirImagen
+  const [preview, setPreview] = useState(null);// Hook para navegar
   const [formData, setFormData] = useState({
     nombre: "",
     marca: "",
     descripcion: "",
-    precio: parseFloat(0) || '',
+    precio: parseFloat(0.00) || '',
     stock: parseInt(0) || '',
     fechaIngreso: "",
     ubicacionAlmacen: "",
@@ -253,73 +255,93 @@ const Agregar = () => {
     return pass;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (verificacion()) {
-      axios
-        .post(
-          `${BASE_URL}/productos/agregar-producto/`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT al header
-            }
+
+    if (!verificacion()) return;
+
+    let updatedFormData = { ...formData };
+
+    //Subir la imagen si hay una nueva seleccionada
+    if (uploadRef.current) {
+      const fileName = await uploadRef.current.uploadAll();
+      if (fileName) {
+        updatedFormData.img = fileName; // Actualiza el nombre de la imagen en los datos
+      } else if (preview === null && formData.img) {
+        // Si el usuario borró la imagen y no subió una nueva
+        updatedFormData.img = ""; // O un valor que indique que no hay imagen
+      }
+    }
+    try {
+      axios.post(
+        `${BASE_URL}/productos/agregar-producto/`, updatedFormData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` // Agregar el token JWT al header
           }
-        )
-        .then((res) => {
-          Swal.fire({
-            icon: "success",
-            title: "Producto agregado correctamente",
-            showConfirmButton: false,
-            timer: 1000,
-          }).then(() => {
-            navigate("/inventario");
-          });
-        })
-        .catch((error) => {
-          if (error.response) {
-            // Manejo de errores HTTP
-            if (error.response.status === 401) {
-              Swal.fire({
-                icon: "warning",
-                title: "Advertencia",
-                text: "Operacion no Autorizada",
-                showConfirmButton: false,
-              });
-              navigate(0); // Redirige si no está autorizado
-            }
-            else if (error.response.status === 403) {
-              Swal.fire({
-                icon: "warning",
-                title: "Autenticación",
-                text: "Sesión expirada",
-                showConfirmButton: false,
-              });
-              localStorage.clear();
-              navigate("/login"); // Redirige si la sesión ha expirado
-            } else {
-              Swal.fire({
-                icon: "error",
-                title: "Error al agregar un producto / servicio",
-                text: error.response.data || error.message,
-                showConfirmButton: false,
-                timer: 1000,
-              });
-            }
+        }
+      ).then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "¡Producto agregado!",
+          showConfirmButton: false,
+          timer: 1000,
+        }).then(() => {
+          navigate("/inventario");
+        });
+      }).catch((error) => {
+        if (error.response) {
+          // Manejo de errores HTTP
+          if (error.response.status === 401) {
+            Swal.fire({
+              icon: "warning",
+              title: "Advertencia",
+              text: "Operacion no Autorizada",
+              showConfirmButton: false,
+            });
+            navigate(0); // Redirige si no está autorizado
+          }
+          else if (error.response.status === 403) {
+            Swal.fire({
+              icon: "warning",
+              title: "Autenticación",
+              text: "Sesión expirada",
+              showConfirmButton: false,
+            });
+            localStorage.clear();
+            navigate("/login"); // Redirige si la sesión ha expirado
           } else {
-            // Manejo de errores desconocidos
             Swal.fire({
               icon: "error",
-              title: "Error desconocido",
-              text: error.message,
+              title: "Error al agregar un producto / servicio",
+              text: error.response.data || error.message,
               showConfirmButton: false,
               timer: 1000,
             });
           }
-        });
-    }
-  };
+        } else {
+          // Manejo de errores desconocidos
+          Swal.fire({
+            icon: "error",
+            title: "Error desconocido",
+            text: error.message,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
+      });
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al subir la imagen",
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    };
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -332,9 +354,11 @@ const Agregar = () => {
                 <Col xs={6}>
                   <div className="position-relative">
                     <SubirImagen
-                      value={formData.img}
-                      onChange={(newPath) => setFormData((prev) => ({ ...prev, img: newPath }))}
-                      className="position-absolute top-0 end-0 p-2" />
+                      ref={uploadRef}
+                      preview={preview}
+                      setPreview={setPreview}
+                      className="position-absolute top-0 end-0 p-2"
+                    />
                   </div>
                 </Col>
 
@@ -429,8 +453,8 @@ const Agregar = () => {
                       placeholder="  #"
                       min={0}
                       className="form-control rounded-5"
-                      value={formData.stock}
-                      onChange={handleChange} />
+                      value={formData.stock || ''}
+                      onChange={(e) => handleChange(e, 'stock')} />
                   </div>
                   <div className="mb-3">
                     <label htmlFor="proveedor" className="form-label">Proveedor:</label>
@@ -445,11 +469,10 @@ const Agregar = () => {
                       name="tipo"
                       className="form-select rounded-5"
                       value={formData.tipo}
-                      onChange={handleChange}
-                    >
+                      onChange={handleChange}>
                       <option value="">Seleccione...</option>
-                      <option selected value="PRODUCTO">Producto</option>
-                      <option value="SERVICIO">Servicio</option>
+                      <option selected value="producto">Producto</option>
+                      <option value="servicio">Servicio</option>
                     </select>
                   </div>
                 </Col>
@@ -468,7 +491,7 @@ const Agregar = () => {
                         name="descripcion"
                         className="form-control rounded-4"
                         value={formData.descripcion}
-                        onChange={handleChange}/>
+                        onChange={handleChange} />
                     </div>
                   </div>
                 </Col>

@@ -72,4 +72,39 @@ export class SolicitudRepository {
             throw error; // Re-lanzar el error para que lo maneje el llamador
         }
     }
+
+    //Get solicitud
+    async getSolicitudesCalificadas() {
+        try {
+            const pool = await connectDB();
+            const result = await pool
+                .request()
+                .query(`
+                    SELECT TOP 15 *
+                    FROM INV_REPUESTO_SOLICITUD
+                    WHERE aprobado IS NOT NULL
+                    ORDER BY fecha DESC`);
+            return result.recordset;
+        }
+        catch (error) {
+            throw new Error("Error al obtener solicitudes", error);
+        }
+    }
+
+    //Get historial solicitudes
+    async getHistorialSolicitudes() {
+        try {
+            const pool = await connectDB();
+            const result = await pool
+                .request()
+                .query(`
+                    SELECT top 15 *
+                    FROM INV_REPUESTO_SOLICITUD
+                    ORDER BY fecha DESC`);
+            return result.recordset;
+        }
+        catch (error) {
+            throw new Error("Error al obtener historial de solicitudes", error);
+        }
+    }
 }
