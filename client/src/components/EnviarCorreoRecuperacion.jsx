@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { createCookie, createCookieSessionStorage, useNavigate } from 'react-router-dom';
 import { Text } from "rsuite";
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -39,7 +39,9 @@ const VerificarCorreo = () => {
 
             if (response.status === 200) {
                 Swal.fire('Éxito', 'Código verificado correctamente', 'success');
-                localStorage.setItem("emailRecuperacion", email);
+                // guardar el email en cookie para usarlo en la siguiente página
+                document.cookie = `${email}; path=/; max-age=3600`; // 1 hora
+                //localStorage.setItem("emailRecuperacion", email);
                 navigate("/cambiar-contrasena");
             }
         } catch (error) {
@@ -54,7 +56,7 @@ const VerificarCorreo = () => {
                     <div className="col-12 col-md-6 col-lg-4 mx-auto">
                         <div className="card shadow-sm">
                             <div className='card-header bg-white mb-3'>
-                                <Text size='xxl' weight="bold" className='text-center text-primary'>Verificación</Text>
+                                <Text size='xxl' weight="bold" className='text-center text-success'>Verificación</Text>
                             </div>
                             <div className="card-body">
                                 <div className="mb-3">
@@ -68,7 +70,7 @@ const VerificarCorreo = () => {
                                         required
                                     />
                                     <div className="d-flex justify-content-center mt-3">
-                                        <button className="btn btn-primary text-white rounded-5" onClick={handleEnviarCorreo}>
+                                        <button className="btn btn-success text-white rounded-5" onClick={handleEnviarCorreo}>
                                             Enviar correo
                                         </button>
                                     </div>
@@ -83,7 +85,7 @@ const VerificarCorreo = () => {
                                         required
                                     />
                                     <div className="d-flex justify-content-center mt-3">
-                                        <button className="btn btn-primary text-white rounded-5" onClick={handleVerificarToken}>
+                                        <button className="btn btn-success text-white rounded-5" onClick={handleVerificarToken}>
                                             Verificar código
                                         </button>
                                     </div>

@@ -9,7 +9,7 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 const CorreoRecuperacion = () => {
     const navigate = useNavigate();
     const [formValue, setFormValue] = useState({
-        email: localStorage.getItem("emailRecuperacion"),
+        email: document.cookie, //obtener correo de cookie
         password: ''
     });
 
@@ -24,6 +24,9 @@ const CorreoRecuperacion = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { email, password, confirmPassword } = formValue;
+
+        console.log(email);
+
 
         if (!email || !password || !confirmPassword) {
             Swal.fire({
@@ -46,7 +49,7 @@ const CorreoRecuperacion = () => {
 
         try {
             const response = await axios.put(`${BASE_URL}/admin/actualizar-contrasena`, { email, password });
-            console.log(response);
+            //console.log(response);
 
             if (response.status === 200) {
                 Swal.fire({
@@ -72,7 +75,7 @@ const CorreoRecuperacion = () => {
                     <div className="col-12 col-md-6 col-lg-4 mx-auto">
                         <div className="card shadow-sm">
                             <div className='card-header bg-white'>
-                                <Text size='xxl' weight="bold" className='text-center text-primary mb-3'>Cambiar contraseña</Text>
+                                <Text size='xxl' weight="bold" className='text-center text-success mb-3'>Cambiar contraseña</Text>
                             </div>
                             <div className="card-body">
                                 <form onSubmit={handleSubmit}>
@@ -101,7 +104,7 @@ const CorreoRecuperacion = () => {
                                         />
                                     </div>
                                     <div className="d-flex justify-content-center mt-5">
-                                        <button className="btn btn-primary text-white rounded-5" type="submit">
+                                        <button className="btn btn-success text-white rounded-5" type="submit">
                                             Cambiar contraseña
                                         </button>
                                     </div>
