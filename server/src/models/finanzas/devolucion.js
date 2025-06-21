@@ -20,7 +20,7 @@ export class DevolucionRepository {
             // verificar que no exista ya una devolucion para la venta
             const checkDevolucion = await pool
                 .request()
-                .input('idVenta', sql.BigInt, idVenta)
+                .input('idVenta', sql.Int, idVenta)
                 .query(`SELECT COUNT(*) AS total FROM DEVOLUCION WHERE idVenta = @idVenta`);
             if (checkDevolucion.recordset[0].total > 0) {
                 return { error: true, status: 409, message: "Esta venta ya tiene una devolución registrada." };
@@ -29,7 +29,7 @@ export class DevolucionRepository {
             // Verificar que exista al menos un pago de cliente para la venta
             const checkPago = await pool
                 .request()
-                .input('idVenta', sql.BigInt, idVenta)
+                .input('idVenta', sql.Int, idVenta)
                 .query(`SELECT COUNT(*) AS total FROM PAGO_CLIENTE WHERE idVenta = @idVenta`);
             if (checkPago.recordset[0].total === 0) {
                 return { error: true, status: 400, message: "No se puede registrar devolución sin un pago de cliente." };
@@ -40,7 +40,7 @@ export class DevolucionRepository {
                 .request()
                 .input('monto', sql.Decimal(10, 2), monto)
                 .input('motivo', sql.NVarChar, motivo)
-                .input('idVenta', sql.BigInt, idVenta)
+                .input('idVenta', sql.Int, idVenta)
                 .query(`INSERT INTO DEVOLUCION(monto, motivo, idVenta)
                         VALUES(@monto, @motivo, @idVenta)`);
             return { error: false, rowsAffected: result.rowsAffected[0] };
@@ -55,7 +55,7 @@ export class DevolucionRepository {
             const pool = await connectDB();
             const result = await pool
                 .request()
-                .input('idVenta', sql.BigInt, idVenta)
+                .input('idVenta', sql.Int, idVenta)
                 .query(`SELECT * FROM DEVOLUCION WHERE idVenta = @idVenta`);
             return result.recordset[0]; // Devuelve el número de filas afectadas
         } catch (error) {

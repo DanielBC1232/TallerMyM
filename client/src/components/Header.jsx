@@ -37,7 +37,7 @@ const Header = ({ children }) => {
         <div className="">
           <Link className="sidebar-brand" to="/flujo">Taller MyM</Link>
           {/* icono *** */}
-          <hr className="text-primary mx-3 m-0"></hr>
+          <hr className="text-success mx-3 m-0"></hr>
           <ul className="sidebar-nav">
             {/* Flujo */}
             <li className="sidebar-header">Flujo de Trabajo</li>

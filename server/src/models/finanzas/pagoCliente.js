@@ -22,7 +22,7 @@ export class PagoClienteRepository {
             const pool = await connectDB();
             const existePago = await pool
                 .request()
-                .input('idVenta', sql.BigInt, idVenta)
+                .input('idVenta', sql.Int, idVenta)
                 .query('SELECT COUNT(*) AS total FROM PAGO_CLIENTE WHERE idVenta = @idVenta');
 
             const Total = existePago.recordset[0].total;
@@ -39,7 +39,7 @@ export class PagoClienteRepository {
                 .input('subtotal', sql.Decimal(10, 2), subtotal)
                 .input('iva', sql.Decimal(10, 2), iva)
                 .input('total', sql.Decimal(10, 2), total)
-                .input('idVenta', sql.BigInt, idVenta)
+                .input('idVenta', sql.Int, idVenta)
                 .query(`INSERT INTO PAGO_CLIENTE (monto, dineroVuelto, metodoPago, subtotal, iva, total, idVenta)
                         VALUES (@monto, @dineroVuelto, @metodoPago, @subtotal, @iva, @total, @idVenta)`);
             return result.rowsAffected[0];
@@ -54,7 +54,7 @@ export class PagoClienteRepository {
             const pool = await connectDB();
             const result = await pool
                 .request()
-                .input('idVenta', sql.BigInt, idVenta)
+                .input('idVenta', sql.Int, idVenta)
                 .query(`SELECT * FROM PAGO_CLIENTE WHERE idVenta = @idVenta`);
             return result.recordset[0]; // Devuelve el numero de filas afectadas
         } catch (error) {

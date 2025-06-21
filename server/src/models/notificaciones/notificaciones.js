@@ -36,7 +36,7 @@ export class NotificacionesRepository {
             const pool = await connectDB();
             const result = await pool
                 .request()
-                .input('idNotificacion', sql.BigInt, idNotificacion)
+                .input('idNotificacion', sql.Int, idNotificacion)
                 .query(`DELETE FROM NOTIFICACIONES
                     WHERE idNotificacion = @idNotificacion`);
             return result.rowsAffected; // Devuelve el número de filas afectadas

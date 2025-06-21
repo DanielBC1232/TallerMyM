@@ -38,7 +38,7 @@ export class GastoOperativoRepository {
             const pool = await connectDB();
             const result = await pool
                 .request()
-                .query(`SELECT TOP 15 * FROM GASTO_OPERATIVO`);
+                .query(`SELECT TOP 25 * FROM GASTO_OPERATIVO ORDER BY fecha DESC`);
             return result.recordset; // Devuelve el número de filas afectadas
         } catch (error) {
             console.error('Error en obtener GastoOperativo:', error);

@@ -115,17 +115,17 @@ const ModalAgregarTrabajador = () => {
         className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"
         onClick={handleOpen}>
         <IoPersonAdd size={20} />
-        Registrar-Trabajador
+        Registrar Trabajador
       </button>
 
       <Modal open={open} onClose={handleClose} size="lg">
         <Modal.Header>
-          <Modal.Title>Registrar Trabajador</Modal.Title>
+          <Modal.Title className="ms-4 text-success">Registrar Trabajador</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit} className="p-3">
-            <Row gutter={16} className="d-flex justify-content-center">
-              <Col xs={24} md={12}>
+            <Row gutter={16} className="d-flex justify-content-center px-3">
+              <Col xs={24} md={12} className="">
                 <div className="mb-3">
                   <label className="form-label">Nombre Completo:</label>
                   <input
@@ -173,7 +173,7 @@ const ModalAgregarTrabajador = () => {
                 </div>
               </Col>
             </Row>
-              <div className="d-flex justify-content-center row px-5 mt-5">
+              <div className="d-flex justify-content-center row px-4 mt-5">
                 <Button className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" type="submit">
                   Registrar Trabajador
                 </Button>
