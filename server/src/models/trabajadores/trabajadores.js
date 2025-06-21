@@ -40,7 +40,7 @@ export class TrabajadorRepository {
       const result = await pool.request().input("cedula", sql.VarChar, cedula)
         .query(`
         SELECT * FROM TRABAJADOR
-         WHERE cedula = @cedula where estado = 1`);
+         WHERE cedula = @cedula AND estado = 1`);
       // Si no hay registros, result.recordset estara vacío
       return result.recordset.length > 0 ? result.recordset[0] : null;
     } catch (error) {
@@ -92,7 +92,9 @@ export class TrabajadorRepository {
         a.tipoAmonestacion,
         a.motivo,
         a.accionTomada
-            FROM Amonestaciones a JOIN Trabajador t ON a.idTrabajador = t.idTrabajador where t.estado = 1
+            FROM Amonestaciones a
+            JOIN Trabajador t ON a.idTrabajador = t.idTrabajador
+            WHERE t.estado = 1
             ORDER BY a.fechaAmonestacion DESC`);
       return result.recordset; // Devuelve el listado (todos los resultados)
     } catch (error) {
@@ -108,7 +110,7 @@ export class TrabajadorRepository {
       const result = await pool
         .request()
         .input("idTrabajador", sql.Int, idTrabajador)
-        .query(`SELECT * FROM TRABAJADOR WHERE idTrabajador = @idTrabajador where estado = 1`);
+        .query(`SELECT * FROM TRABAJADOR WHERE idTrabajador = @idTrabajador AND estado = 1`);
       return result.recordset[0]; // Devuelve el registro (el primero si existe)
     } catch (error) {
       console.error("Error en obtener trabajador:", error);
@@ -123,7 +125,7 @@ export class TrabajadorRepository {
       const result = await pool
         .request()
         .input("cedula", sql.VarChar(50), cedula)
-        .query(`SELECT * FROM TRABAJADOR WHERE cedula = @cedula where estado = 1`);
+        .query(`SELECT * FROM TRABAJADOR WHERE cedula = @cedula AND estado = 1`);
       return result.recordset[0]; // Devuelve el registro (el primero si existe)
     } catch (error) {
       console.error("Error en obtener trabajador:", error);
@@ -142,13 +144,13 @@ export class TrabajadorRepository {
         .input("cedula", sql.VarChar, cedula)
         .input("salario", sql.Decimal(10, 2), salario)
         .input("seguroSocial", sql.VarChar, seguroSocial).query(`
-                    UPDATE TRABAJADOR
-                    SET nombreCompleto = @nombreCompleto,
-                        cedula = @cedula,
-                        salario = @salario,
-                        seguroSocial = @seguroSocial
-                    WHERE idTrabajador = @idTrabajador
-                    AND estado = 1`);
+                UPDATE TRABAJADOR
+                SET nombreCompleto = @nombreCompleto,
+                    cedula = @cedula,
+                    salario = @salario,
+                    seguroSocial = @seguroSocial
+                WHERE idTrabajador = @idTrabajador
+                AND estado = 1`);
       return result.rowsAffected[0]; // Devuelve el número de filas afectadas
     } catch (error) {
       console.error("Error en actualizar trabajador:", error);
@@ -177,19 +179,19 @@ export class TrabajadorRepository {
     try {
       const pool = await connectDB();
       const result = await pool.request().query(`SELECT
-                        T.nombreCompleto,
-                        T.cedula,
-                        COUNT(O.idOrden) AS totalOrdenes
-                    FROM TRABAJADOR T
-                    INNER JOIN ORDEN O ON O.idTrabajador = T.idTrabajador
-                    WHERE 
-                        O.estadoOrden IN (3, 4) AND
-                        O.fechaIngreso >= DATEADD(DAY, -30, GETDATE())
-                    GROUP BY
-                        T.nombreCompleto,
-                        T.cedula
-                    ORDER BY
-                        totalOrdenes DESC`);
+            T.nombreCompleto,
+            T.cedula,
+            COUNT(O.idOrden) AS totalOrdenes
+        FROM TRABAJADOR T
+        INNER JOIN ORDEN O ON O.idTrabajador = T.idTrabajador
+        WHERE 
+            O.estadoOrden IN (3, 4) AND
+            O.fechaIngreso >= DATEADD(DAY, -30, GETDATE())
+        GROUP BY
+            T.nombreCompleto,
+            T.cedula
+        ORDER BY
+            totalOrdenes DESC`);
       return result.recordset; // Devuelve el listado (todos los resultados)
     } catch (error) {
       console.error("Error en obtener trabajadores:", error);
