@@ -737,8 +737,8 @@ BEGIN
 
     -- consulta dinámica
     EXEC sp_executesql @sql,
-                       N'@idUsuario INT, @username NVARCHAR(50), @email NVARCHAR(100), @idRol INT,@password NVARCHAR(255)',
-                       @idUsuario, @username, @email, @idRol, @password;
+        N'@idUsuario INT, @username NVARCHAR(50), @email NVARCHAR(100), @idRol INT,@password NVARCHAR(255)',
+        @idUsuario, @username, @email, @idRol, @password;
 END;
 GO
 
