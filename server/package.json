@@ -6,7 +6,8 @@
   "main": "src/services/app.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production dotenv -e .env.production node src/services/app.js",
-    "dev": "cross-env NODE_ENV=development dotenv -e .env.development nodemon src/services/app.js"
+    "dev": "cross-env NODE_ENV=development dotenv -e .env.development nodemon src/services/app.js",
+    "start:render": "node src/services/app.js"
   },
   "keywords": [],
   "author": "",
