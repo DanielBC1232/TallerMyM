@@ -183,7 +183,7 @@ const EditarAusencia = () => {
               value={formData.idTrabajador}
               onChange={handleChange}
               required
-              disabled={loading}>
+              disabled>
               <option value="">Seleccione trabajador</option>
               {trabajadores.map(t => (
                 <option key={t.idTrabajador} value={t.idTrabajador}>

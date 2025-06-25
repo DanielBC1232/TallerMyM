@@ -309,7 +309,7 @@ const EditarVacaciones = () => {
   return (
     <div className="container mt-5 rounded-4">
       <div className="card shadow">
-        <div className="card-header bg-primary text-white">
+        <div className="card-header bg-success text-white">
           <h2 className="mb-0 text-white">Editar Solicitud de Vacaciones</h2>
         </div>
         <div className="card-body">
@@ -333,10 +333,12 @@ const EditarVacaciones = () => {
                 <div className="mb-3">
                   <label htmlFor="fechaInicio" className="form-label">Fecha de Inicio</label>
                   <input
+                    readOnly
                     type="date"
                     className="form-control rounded-5"
                     id="fechaInicio"
                     name="fechaInicio"
+                    min={new Date().toISOString().split("T")[0]} // Asegura que la fecha no sea anterior a hoy
                     value={formData.fechaInicio}
                     onChange={handleChange} />
                 </div>
@@ -344,11 +346,14 @@ const EditarVacaciones = () => {
                 <div className="mb-3">
                   <label htmlFor="fechaFin" className="form-label">Fecha de Fin</label>
                   <input
+                    readOnly
                     type="date"
                     className="form-control rounded-5"
                     id="fechaFin"
                     name="fechaFin"
                     value={formData.fechaFin}
+                    min={formData.fechaInicio || new Date().toISOString().split("T")[0]} // Asegura que la fecha de fin no sea anterior a la de inicio
+                    max={new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0]} // Asegura que la fecha de fin no sea más de un año en el futuro
                     onChange={handleChange} />
                 </div>
               </div>
@@ -369,8 +374,8 @@ const EditarVacaciones = () => {
                 Cancelar
               </button>
               <button type="button" className="btn btn-danger text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={handleRechazar}><RxCross2 size={20} />Rechazar</button>
-              <button type="button" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={handleAprobar}><FaCheck size={20} />Aprobar</button>
-              <button type="submit" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1"><FaSave size={20} />Guardar Cambios</button>
+              <button type="button" className="btn btn-primary text-white rounded-5 d-flex align-items-center justify-content-center gap-1" onClick={handleAprobar}><FaCheck size={20} />Aprobar</button>
+              <button type="submit" className="btn btn-success text-white rounded-5 d-flex align-items-center justify-content-center gap-1"><FaSave size={20} />Guardar Cambios</button>
             </div>
           </form>
         </div>
