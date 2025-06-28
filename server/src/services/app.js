@@ -43,6 +43,7 @@ const clientDistPath = path.resolve(__dirname, '../../../client/dist');
 app.use(express.static(clientDistPath));
 
 // Configurar CORS antes de las rutas
+/*
 const allowedOrigins = [process.env.REACT_URL, 'http://localhost:5173'];
 app.use(cors({
   origin: (origin, callback) => {
@@ -55,6 +56,17 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true
 }));
+*/
+
+// Cualquier origen -> no seguro
+app.use(cors({
+  origin: true, // Esto permite cualquier origen
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  credentials: true
+}));
+
+
+
 
 // Analizar peticiones JSON
 app.use(express.json());
