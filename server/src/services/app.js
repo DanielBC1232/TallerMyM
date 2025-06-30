@@ -43,7 +43,6 @@ const clientDistPath = path.resolve(__dirname, '../../../client/dist');
 app.use(express.static(clientDistPath));
 
 // Configurar CORS antes de las rutas
-/*
 const allowedOrigins = [process.env.REACT_URL, 'http://localhost:5173'];
 app.use(cors({
   origin: (origin, callback) => {
@@ -55,13 +54,6 @@ app.use(cors({
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true
-}));
-*/
-// CORS INSEGURO PARA PERMITIR DIFERENTES FRONTEND *******************
-app.use(cors({
-  origin: '*', // Permitir todas las solicitudes de origen
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // Métodos permitidos
-  credentials: true // Permitir credenciales
 }));
 
 // Analizar peticiones JSON
