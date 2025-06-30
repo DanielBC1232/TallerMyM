@@ -16,6 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Desplegar en Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./server
+          
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
@@ -25,16 +32,6 @@ jobs:
         run: npm install
         working-directory: ./server
 
-      - name: Compilar app (si aplica)
-        run: npm run build
-        working-directory: ./server
-
-      - name: Desplegar en Azure
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ./server
 
   deploy:
     runs-on: ubuntu-latest
@@ -67,4 +64,4 @@ jobs:
         with:
           app-name: 'ExpressMYM'
           slot-name: 'Production'
-          package: ../server
+          package: ./server
