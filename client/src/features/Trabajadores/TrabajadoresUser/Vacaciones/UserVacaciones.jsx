@@ -81,18 +81,26 @@ const UserVacaciones = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {vacaciones.map((vacacion) => (
-                            <tr key={`${vacacion.idVacaciones}-${vacacion.idTrabajador}`}>
-                                <td className="py-2 px-4">{vacacion.solicitud}</td>
-                                <td className="py-2 px-4">
-                                    {new Date(vacacion.fechaInicio).toLocaleDateString("es-ES")}
+                        {vacaciones.length > 0 ? (
+                            vacaciones.map((vacacion) => (
+                                <tr key={`${vacacion.idVacaciones}-${vacacion.idTrabajador}`}>
+                                    <td className="py-2 px-4">{vacacion.solicitud}</td>
+                                    <td className="py-2 px-4">
+                                        {new Date(vacacion.fechaInicio).toLocaleDateString("es-ES")}
+                                    </td>
+                                    <td className="py-2 px-4">
+                                        {new Date(vacacion.fechaFin).toLocaleDateString("es-ES")}
+                                    </td>
+                                    <td className="py-2 px-4">{vacacion.motivoRechazo}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={5} className="text-center text-muted">
+                                    Sin resultados
                                 </td>
-                                <td className="py-2 px-4">
-                                    {new Date(vacacion.fechaFin).toLocaleDateString("es-ES")}
-                                </td>
-                                <td className="py-2 px-4">{vacacion.motivoRechazo}</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             )}
